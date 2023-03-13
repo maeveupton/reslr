@@ -31,5 +31,5 @@ Plot data with measurement uncertainty
 }
 \examples{
 full_dataset <- load_input_data(NAACproxydata)
-plot_data(input_data = full_dataset)
+plot(input_data = full_dataset)
 }

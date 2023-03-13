@@ -10,8 +10,7 @@
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' input_data <- load_input_data(data = data)
 #' jags_output <- run_mcmc(input_data, model_type = "eiv_slr_t")
-#' plot_result(jags_output)
-#plot_result <- function(jags_output,
+#' plot(jags_output)
 plot.reslr_output <- function(jags_output,
                         plot_tide_gauges = FALSE) {
   Age <- RSL <- time_deriv_component_post_df <- mod_output_pred_df<-Age_err <- ID <- RSL_err <- lwr <- upr <- lwr_50 <- lwr_95 <- upr_50 <- upr_95 <- rate_y <- rate_lwr_95 <- rate_upr_95 <- SiteName <- data_type_id <- pred_y <- NULL
@@ -26,7 +25,7 @@ plot.reslr_output <- function(jags_output,
   # } else {
   #   data <- data
   # }
-
+  if(inherits(jags_output,"reslr_output") == TRUE){
   # EIV slr------------
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
     total_model_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_df
@@ -65,13 +64,6 @@ plot.reslr_output <- function(jags_output,
         strip.text.x = ggplot2::element_text(size = 10),
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
-      # ggplot2::theme(
-      #   legend.position = c(0.95, 0.01),
-      #   legend.justification = c(1, 0),
-      #   legend.spacing.y = ggplot2::unit(0.1, "cm"),
-      #   legend.title = ggplot2::element_blank(),
-      #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
-      # ) +
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
@@ -144,13 +136,6 @@ plot.reslr_output <- function(jags_output,
         strip.text.x = ggplot2::element_text(size = 10),
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
-      # ggplot2::theme(
-      #   legend.position = c(0.95, 0.01),
-      #   legend.justification = c(1, 0),
-      #   legend.spacing.y = ggplot2::unit(0.1, "cm"),
-      #   legend.title = ggplot2::element_blank(),
-      #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
-      # ) +
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
@@ -223,13 +208,6 @@ plot.reslr_output <- function(jags_output,
         strip.text.x = ggplot2::element_text(size = 10),
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
-      # ggplot2::theme(
-      #   legend.position = c(0.95, 0.01),
-      #   legend.justification = c(1, 0),
-      #   legend.spacing.y = ggplot2::unit(0.1, "cm"),
-      #   legend.title = ggplot2::element_blank(),
-      #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
-      # ) +
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
@@ -1360,6 +1338,6 @@ plot.reslr_output <- function(jags_output,
       all_components_CI_plot = all_components_CI_plot,
       all_components_CI_pred_plot = all_components_CI_pred_plot)
   }
-
+}
   return(output_plots)
 }

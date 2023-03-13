@@ -11,15 +11,14 @@
 #'
 #' @examples
 #' full_dataset <- load_input_data(NAACproxydata)
-#' plot_data(input_data = full_dataset)
-#plot_data <- function(input_data,
+#' plot(input_data = full_dataset)
 plot.reslr_input <- function(input_data,
                       title = "Plot of the raw data",
                       xlab = "Age (CE)",
                       ylab = "Relative Sea Level (m)",
                       plot_tide_gauges = FALSE
                       ) {
-
+  if(inherits(input_data,"reslr_input") == TRUE){
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <- NULL
   # Input data-------
   data <- input_data$data
@@ -68,6 +67,6 @@ plot.reslr_input <- function(input_data,
       plot.title = ggplot2::element_text(size = 18, face = "bold"),
       axis.title = ggplot2::element_text(size = 12, face = "bold"),
       legend.text = ggplot2::element_text(size = 10)
-    )
+    )}
   return(p)
 }

@@ -21,6 +21,7 @@ Imports:
     ggplot2,
     magrittr,
     ncdf4,
+    plyr,
     posterior,
     purrr,
     R2jags,

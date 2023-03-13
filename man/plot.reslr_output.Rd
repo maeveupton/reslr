@@ -27,7 +27,7 @@ Plotting the results for Noisy Input GAM decomposition
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 input_data <- load_input_data(data = data)
 jags_output <- run_mcmc(input_data, model_type = "eiv_slr_t")
-plot_result(jags_output)
+plot(jags_output)
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 input_data <- load_input_data(data = data)
 jags_output <- run_mcmc(input_data, model_type = "eiv_slr_t")

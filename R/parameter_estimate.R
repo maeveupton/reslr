@@ -218,13 +218,13 @@ parameter_estimate <- function(jags_output) {
       pred_y = apply(pred, 2, mean),
       lwr_95 = apply(pred, 2, stats::quantile, probs = 0.025),
       upr_95 = apply(pred, 2, stats::quantile, probs = 0.975),
-      rate_y = apply(w.ms, 2, stats::mean),
+      rate_y = apply(w.ms, 2,mean),
       rate_lwr_95 = apply(w.ms, 2, stats::quantile, probs = 0.025),
       rate_upr_95 = apply(w.ms, 2, stats::quantile, probs = 0.975)
     )
     # Estimated parameters
     mean_samps <- apply(w.ms, 1, mean)
-    w_summary <- tibble::tibble(
+    w_summary <- dplyr::tibble(
       variable = "overall_rate",
       mean = mean(mean_samps), sd = stats::sd(mean_samps),
       mad = stats::mad(mean_samps), q5 = stats::quantile(mean_samps, 0.05),
