@@ -1,0 +1,776 @@
+#' Adding Noisy Input to the dataframe
+#'
+#' @param model_run JAGS output
+#' @param model_type NIGAM in time or space time or the full decomposition
+#' @param data Input data
+#' @noRd
+add_noisy_input <- function(model_run, model_type, data) {
+  if (model_type == "ni_spline_t") {
+    #-----Get posterior samples for SL-----
+    b_t_post <- model_run$BUGSoutput$sims.list$b_t
+
+    pred_mean_calc <- function(t_new) {
+      # Create the regional basis functions
+      B_deriv_t <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age)
+      ) # nseg = 5)#20)# Automate this
+      #----Deriv----
+      return(B_deriv_t %*% colMeans(b_t_post))
+    }
+    #-------Now create derivatives----
+    h <- 0.001
+    t <- data$Age
+    deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
+  }
+
+  if (model_type == "ni_spline_st") {
+    b_st_post <- model_run$BUGSoutput$sims.list$b_st
+
+    pred_mean_calc <- function(t_new) {
+      B_time <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age)
+      ) # , nseg = 3,
+      # deg = 2)
+      B_space_1 <- bs_bbase(data$Latitude,
+        xl = min(data$Latitude),
+        xr = max(data$Latitude)
+      ) # , nseg = 3,
+      # deg = 2)
+      B_space_2 <- bs_bbase(data$Longitude,
+        xl = min(data$Longitude),
+        xr = max(data$Longitude)
+      ) # , nseg = 3,
+      # deg = 2)
+
+      B_l_deriv_full <- matrix(NA,
+        ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+        nrow = nrow(data)
+      )
+      regional_knots_loc <- rep(NA,
+        ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1)
+      )
+      count <- 1
+      for (i in 1:ncol(B_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_l_deriv_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero
+      B_l_deriv <- B_l_deriv_full[, -which(colSums(B_l_deriv_full) < 0.1)]
+      return(B_l_deriv %*% colMeans(b_st_post))
+    }
+    #-------Now create derivatives----
+    h <- 0.001
+    t <- data$Age
+    deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
+  }
+
+  if (model_type == "ni_gam_decomp") {
+    #-----Get posterior samples for SL-----
+    intercept_post <- model_run$BUGSoutput$sims.list$intercept
+    b_t_post <- model_run$BUGSoutput$sims.list$b_t
+    b_g_post <- model_run$BUGSoutput$sims.list$b_g
+
+    pred_mean_calc <- function(t_new) {
+      # Create the regional basis functions
+      B_t <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age)
+      ) # , nseg = 20)
+      #----Deriv----
+      return(intercept_post[data$SiteName] + B_t %*% colMeans(b_t_post) +
+        +b_g_post[data$SiteName] * (t_new))
+    }
+    #-------Now create derivatives----
+    h <- 0.01
+    t <- data$Age
+    deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
+  }
+
+  # Add this new term in - this is the extra standard deviation on each term----
+  data$NI_var_term <- sqrt(deriv^2 %*% data$Age_err^2)[, 1]
+
+  # Writing new dataframe with noisy extra column------
+  data <- data.frame(data)
+  message("Noise Added to data frame")
+  return(data)
+}
+
+
+#' Correcting data from EIV-IGP model
+#'
+#' @param data Input data
+#' @noRd
+
+igp_data <- function(data) {
+  Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
+  ############# Set up the grid for the GP ###################
+  tgrid <- seq(min(data$Age), max(data$Age), length.out = 50)
+  Ngrid <- length(tgrid)
+
+  ### Change data to lower zero for integration
+  min_t <- min(data$Age)
+  t <- data$Age - min_t
+  tstar <- tgrid - min_t
+
+  Dist <- fields::rdist(tstar) ### Distance matrix required for the model
+  D <- cbind(t, data$RSL) ### Combine the x,y data for the model
+
+  ######## Initialize quadrature for the integration########
+  N <- nrow(data)
+  L <- 30 ## this sets the precision of the integration quadrature (higher is better but more computationally expensive)
+  index <- 1:L
+  cosfunc <- cos(((2 * index - 1) * pi) / (2 * L))
+
+  quad1 <- array(dim = c(nrow = N, ncol = Ngrid, L))
+  quad2 <- array(dim = c(nrow = N, ncol = Ngrid, L))
+
+  for (j in 1:Ngrid)
+  {
+    for (k in 1:N)
+    {
+      quad1[k, j, ] <- abs((t[k] * cosfunc / 2) + (t[k] / 2) - tstar[j])^1.99
+      quad2[k, j, ] <- ((t[k] / 2) * (pi / L)) * (sqrt(1 - cosfunc^2))
+    }
+  }
+
+
+  return(list(
+    tstar = tstar,
+    N = N,
+    Ngrid = Ngrid,
+    Dist = Dist,
+    quad1 = quad1,
+    quad2 = quad2,
+    cosfunc = cosfunc,
+    ppi = pi,
+    L = L
+  ))
+}
+
+#' Creating basis function for splines
+#'
+#' @param data Input data
+#' @param predict_data Prediction data
+#' @param model_type Type of model
+#' @noRd
+
+
+spline_basis_fun <- function(data, predict_data, model_type) {
+  Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
+
+  if (model_type == "ni_spline_t") {
+    # t <- sort(data$Age)
+    t <- data$Age
+    # Basis functions in time for data-----------------------
+    B_t <- bs_bbase(t, xl = min(t), xr = max(t))
+    # nseg = 5,
+    # deg = 3)
+    # nseg = 20,deg = 3)
+
+    # matplot(t, B_t, type = "l", col = 1:length(B_t))
+    # plot(t, B_t[,2], type = "l")
+    # Finding derivative  of basis functions using first principals-----------
+    first_deriv_calc <- function(t_new) {
+      # Create the regional basis functions
+      B_t <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age)
+      ) # , nseg = 5)#20)
+      return(B_t)
+    }
+    # Now create derivatives----------------------
+    #h <- 0.001
+    h <- 0.01
+    # t = data$Age
+    first_deriv_step1 <- first_deriv_calc(t + h)
+    first_deriv_step2 <- first_deriv_calc(t - h)
+    B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
+    # matplot(t, B_t_deriv, type = "l", col = 1:length(B_t_deriv))
+    # plot(t, B_t_deriv[, 2], type = "l")
+
+    # Basis functions in time using prediction data frame-----------------------
+    t_pred <- sort(predict_data$Age)
+    # t_pred <- predict_data$Age
+    B_t_pred <- bs_bbase(t_pred,
+      xl = min(t), xr = max(t)
+    ) # check if this should be predict_data
+    # nseg = 20,deg = 3)
+    # nseg = 5,
+    # deg = 3)
+    # matplot(t_pred, B_t_pred, type = "l", col = 1:length(B_t_pred))
+    # plot(t_pred, B_t_pred[, 2], type = "l")
+
+    # Now create derivatives----------------------
+    #h <- 0.001
+    h <- 0.01
+    t_pred <- predict_data$Age
+    first_deriv_step1 <- first_deriv_calc(t_pred + h)
+    first_deriv_step2 <- first_deriv_calc(t_pred - h)
+    B_t_pred_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
+    # matplot(t_pred, B_t_pred_deriv, type = "l", col = 1:length(B_t_pred_deriv))
+    # plot(t_pred, B_t_pred_deriv[, 2], type = "l")
+
+    spline_basis_fun_list <- list(
+      B_t = B_t,
+      B_t_deriv = B_t_deriv,
+      B_t_pred = B_t_pred,
+      B_t_pred_deriv = B_t_pred_deriv
+    )
+
+    message("Basis functions created for the splines in time")
+  }
+
+
+  if (model_type == "ni_spline_st") {
+    # t <- sort(data$Age)
+    t <- data$Age
+    # Basis functions in space time for data-----------------------
+    B_time <- bs_bbase(t,
+      xl = min(t),
+      xr = max(t)
+    ) # nseg = 3,
+    # deg = 2)
+    B_space_1 <- bs_bbase(data$Latitude,
+      xl = min(data$Latitude),
+      xr = max(data$Latitude)
+    ) # , nseg = 3,
+    # deg = 2)
+    B_space_2 <- bs_bbase(data$Longitude,
+      xl = min(data$Longitude),
+      xr = max(data$Longitude)
+    ) # , nseg = 3,
+    # deg = 2)
+
+    B_st_full <- matrix(NA,
+      ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+      nrow = nrow(data)
+    )
+    regional_knots_loc <- rep(NA,
+      ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1)
+    )
+    count <- 1
+    for (i in 1:ncol(B_time)) {
+      for (j in 1:ncol(B_space_1)) {
+        for (k in 1:ncol(B_space_2)) {
+          regional_knots_loc[count] <- i
+          B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+          count <- count + 1
+        }
+      }
+    }
+
+    # Get rid of all the columns which are just zero
+    B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
+
+    # Find the index here that you remove then use this in the derivative
+    remove_col_index <- which(colSums(B_st_full) < 0.1)
+
+    first_deriv_calc <- function(t_new) {
+      # Now the local basis functions
+      B_time <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age)
+      ) # , nseg = 3,
+      # deg = 2)
+      B_space_1 <- bs_bbase(data$Latitude,
+        xl = min(data$Latitude),
+        xr = max(data$Latitude)
+      ) # , nseg = 3,
+      # deg = 2)
+      B_space_2 <- bs_bbase(data$Longitude,
+        xl = min(data$Longitude),
+        xr = max(data$Longitude)
+      ) # , nseg = 3,
+      # deg = 2)
+
+      B_st_full <- matrix(NA,
+        ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+        nrow = nrow(data)
+      )
+      regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
+      count <- 1
+      for (i in 1:ncol(B_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero
+      B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
+      return(B_st)
+    }
+    #-------Now create derivatives----
+    h <- 0.001
+    # t = data$Age
+
+    first_deriv_step1 <- first_deriv_calc(t + h)
+    first_deriv_step2 <- first_deriv_calc(t - h)
+    B_st_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
+
+
+    # Basis functions in space time using prediction data frame-----------------------
+    B_pred_time <- bs_bbase(predict_data$Age,
+      xl = min(data$Age),
+      xr = max(data$Age)
+    ) # , nseg = 3,
+    # deg = 2)
+    B_space_1 <- bs_bbase(predict_data$Latitude,
+      xl = min(data$Latitude),
+      xr = max(data$Latitude)
+    ) # , nseg = 3,
+    # deg = 2)
+    B_space_2 <- bs_bbase(predict_data$Longitude,
+      xl = min(data$Longitude),
+      xr = max(data$Longitude)
+    ) # , nseg = 3,#6
+    # deg = 2)
+
+    suppressWarnings({
+      B_st_pred_full <- matrix(NA,
+        ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1),
+        nrow = nrow(predict_data)
+      ) # Not sure here?? nrow(data)
+      regional_knots_loc <- rep(NA,
+        ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1)
+      )
+      count <- 1
+      for (i in 1:ncol(B_pred_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_st_pred_full[, count] <- B_pred_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero corresponding to the previous basis functions
+      B_st_pred <- B_st_pred_full[, -remove_col_index]
+    })
+    #-------Now create derivatives for prediciton----
+    first_deriv_calc <- function(t_new) {
+      # Now the local basis functions
+      B_time <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age)
+      ) # , nseg = 3,
+      # deg = 2)
+      B_space_1 <- bs_bbase(predict_data$Latitude,
+        xl = min(data$Latitude),
+        xr = max(data$Latitude)
+      ) # , nseg = 3,
+      # deg = 2)
+      B_space_2 <- bs_bbase(predict_data$Longitude,
+        xl = min(data$Longitude),
+        xr = max(data$Longitude)
+      ) # , nseg = 3,
+      # deg = 2)
+
+      B_st_full <- matrix(NA,
+        ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+        nrow = nrow(predict_data)
+      ) # nrow(data))
+      regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
+      count <- 1
+      for (i in 1:ncol(B_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero
+      # B_st <- B_st_full[,-which(colSums(B_st_full) < 0.1)]
+      B_st <- B_st_full[, -remove_col_index] # Not sure here
+      return(B_st)
+    }
+    h <- 0.001
+    t_pred <- predict_data$Age
+
+    first_deriv_step1 <- first_deriv_calc(t_pred + h)
+    first_deriv_step2 <- first_deriv_calc(t_pred - h)
+    B_st_deriv_pred <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
+
+    # All Basis Functions
+    spline_basis_fun_list <- list(
+      remove_col_index = remove_col_index,
+      B_st = B_st,
+      B_st_deriv = B_st_deriv,
+      B_st_pred = B_st_pred,
+      B_st_deriv_pred = B_st_deriv_pred
+    )
+
+    message("Basis functions created for the splines in space time")
+  }
+
+  if (model_type == "ni_gam_decomp") {
+    # Basis functions in time for data-----------------------
+    B_t <- bs_bbase(data$Age,
+      xl = min(data$Age), xr = max(data$Age)
+      # nseg = 20
+    )
+    # Finding derivative  of basis functions using first principals-----------
+    first_deriv_calc <- function(t_new) {
+      # Create the regional basis functions
+      B_t <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age)
+      ) # nseg = 20)
+      return(B_t)
+    }
+    # Now create derivatives----------------------
+    h <- 0.001
+    t <- data$Age
+    first_deriv_step1 <- first_deriv_calc(t + h)
+    first_deriv_step2 <- first_deriv_calc(t - h)
+    B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
+
+    # Basis functions in time using prediction data frame-----------------------
+    B_t_pred <- bs_bbase(predict_data$Age,
+      xl = min(data$Age), xr = max(data$Age), # check if this should be predict_data
+      # nseg = 20,
+      deg = 3
+    )
+    # Now create derivatives----------------------
+    h <- 0.001
+    t_pred <- predict_data$Age
+    first_deriv_step1 <- first_deriv_calc(t_pred + h)
+    first_deriv_step2 <- first_deriv_calc(t_pred - h)
+    B_t_pred_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
+
+
+    # Basis functions in space time for data-----------------------
+    B_time <- bs_bbase(data$Age,
+      xl = min(data$Age),
+      xr = max(data$Age), # nseg = 6,
+      #deg = 2
+    )
+    B_space_1 <- bs_bbase(data$Latitude,
+      xl = min(data$Latitude),
+      xr = max(data$Latitude), # nseg = 6,
+      #deg = 2
+    )
+    B_space_2 <- bs_bbase(data$Longitude,
+      xl = min(data$Longitude),
+      xr = max(data$Longitude), # nseg = 6,
+      #deg = 2
+    )
+
+    B_st_full <- matrix(NA,
+      ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+      nrow = nrow(data)
+    )
+    regional_knots_loc <- rep(NA,
+      ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1)
+    )
+    count <- 1
+    for (i in 1:ncol(B_time)) {
+      for (j in 1:ncol(B_space_1)) {
+        for (k in 1:ncol(B_space_2)) {
+          regional_knots_loc[count] <- i
+          B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+          count <- count + 1
+        }
+      }
+    }
+
+    # Get rid of all the columns which are just zero
+    B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
+
+    # Find the index here that you remove then use this in the derivative
+    remove_col_index <- which(colSums(B_st_full) < 0.1)
+
+    first_deriv_calc <- function(t_new) {
+      # Now the local basis functions
+      B_time <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age), # nseg = 6,
+        #deg = 2
+      )
+      B_space_1 <- bs_bbase(data$Latitude,
+        xl = min(data$Latitude),
+        xr = max(data$Latitude), # nseg = 6,
+        #deg = 2
+      )
+      B_space_2 <- bs_bbase(data$Longitude,
+        xl = min(data$Longitude),
+        xr = max(data$Longitude), # nseg = 6,
+        #deg = 2
+      )
+
+      B_st_full <- matrix(NA,
+        ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+        nrow = nrow(data)
+      )
+      regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
+      count <- 1
+      for (i in 1:ncol(B_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero
+      B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
+      return(B_st)
+    }
+    #-------Now create derivatives----
+    h <- 0.001
+    t <- data$Age
+
+    first_deriv_step1 <- first_deriv_calc(t + h)
+    first_deriv_step2 <- first_deriv_calc(t - h)
+    B_st_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
+
+
+    # Basis functions in space time using prediction data frame-----------------------
+    B_pred_time <- bs_bbase(predict_data$Age,
+      xl = min(data$Age),
+      xr = max(data$Age), # nseg = 6,
+      #deg = 2
+    )
+    B_space_1 <- bs_bbase(predict_data$Latitude,
+      xl = min(data$Latitude),
+      xr = max(data$Latitude), # nseg = 6,
+      #deg = 2
+    )
+    B_space_2 <- bs_bbase(predict_data$Longitude,
+      xl = min(data$Longitude),
+      xr = max(data$Longitude), # nseg = 6,
+      #deg = 2
+    )
+
+    suppressWarnings({
+      B_st_pred_full <- matrix(NA,
+        ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1),
+        nrow = nrow(predict_data)
+      ) # Not sure here?? nrow(data)
+      regional_knots_loc <- rep(NA,
+        ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1)
+      )
+      count <- 1
+      for (i in 1:ncol(B_pred_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_st_pred_full[, count] <- B_pred_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero corresponding to the previous basis functions
+      B_st_pred <- B_st_pred_full[, -remove_col_index]
+    })
+    #-------Now create derivatives for prediciton----
+    first_deriv_calc <- function(t_new) {
+      # Now the local basis functions
+      B_time <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age), # nseg = 6,
+        #deg = 2
+      )
+      B_space_1 <- bs_bbase(predict_data$Latitude,
+        xl = min(data$Latitude),
+        xr = max(data$Latitude), # nseg = 6,
+        #deg = 2
+      )
+      B_space_2 <- bs_bbase(predict_data$Longitude,
+        xl = min(data$Longitude),
+        xr = max(data$Longitude), # nseg = 6,
+        #deg = 2
+      )
+
+      B_st_full <- matrix(NA,
+        ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+        nrow = nrow(predict_data)
+      ) # nrow(data))
+      regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
+      count <- 1
+      for (i in 1:ncol(B_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero
+      # B_st <- B_st_full[,-which(colSums(B_st_full) < 0.1)]
+      B_st <- B_st_full[, -remove_col_index] # Not sure here
+      return(B_st)
+    }
+    h <- 0.001
+    t_pred <- predict_data$Age
+
+    first_deriv_step1 <- first_deriv_calc(t_pred + h)
+    first_deriv_step2 <- first_deriv_calc(t_pred - h)
+    B_st_deriv_pred <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
+
+    # Derivative of Basis function for the total model fit-----------------
+    first_deriv_calc <- function(t_new) {
+      # Create the regional basis functions
+      B_t <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age)
+      ) # nseg = 20)
+      colnames(B_t) <- c(paste("B_t", 1:ncol(B_t), sep = ""))
+
+      # Now the local basis functions
+      B_time <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age), # nseg = 6,
+        #deg = 2
+      )
+      B_space_1 <- bs_bbase(data$Latitude,
+        xl = min(data$Latitude),
+        xr = max(data$Latitude), # nseg = 6,
+        #deg = 2
+      )
+      B_space_2 <- bs_bbase(data$Longitude,
+        xl = min(data$Longitude),
+        xr = max(data$Longitude), # nseg = 6,
+        #deg = 2
+      )
+
+      B_st_full <- matrix(NA,
+        ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+        nrow = nrow(data)
+      )
+      regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
+      count <- 1
+      for (i in 1:ncol(B_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero
+      B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
+      colnames(B_st) <- c(paste("B_st", 1:ncol(B_st), sep = ""))
+      # Dummy matrix for intercept & GIA
+      B_h <- fastDummies::dummy_cols(data.frame(data$SiteName))
+      B_h <- B_h[, -1]
+      colnames(B_h) <- c(paste("B_h", 1:ncol(B_h), sep = ""))
+      B_g <- B_h * t_new
+      colnames(B_g) <- c(paste("B_g", 1:ncol(B_g), sep = ""))
+      # Basis function matrix with B_local & B_regional
+      output_B_tot <- cbind(
+        B_h, B_g,
+        B_t, B_st
+      )
+
+
+      return(output_B_tot)
+    }
+    #-------Now create derivatives----
+    h <- 0.001
+    t <- data$Age
+
+    first_deriv_step1 <- first_deriv_calc(t + h)
+    first_deriv_step2 <- first_deriv_calc(t - h)
+    B_tot_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
+
+    # New basis function for site specific vertical offset----------
+    B_h_deriv <- as.matrix(B_tot_deriv[, grepl("B_h", names(B_tot_deriv))])
+    # New Basis Functions for Random linear local component-Site Specific slope-------
+    B_deriv_g_re <- as.matrix(B_tot_deriv[, grepl("B_g", names(B_tot_deriv))])
+    # New Basis Functions for spline in time-------------------------
+    B_deriv_t <- as.matrix(B_tot_deriv[, grepl("B_t", names(B_tot_deriv))])
+    # New Basis Functions in Space time-------------------------------
+    B_deriv_st <- as.matrix(B_tot_deriv[, grepl("B_st", names(B_tot_deriv))])
+
+    # All Basis Functions
+    spline_basis_fun_list <- list(
+      remove_col_index = remove_col_index,
+      B_st = B_st,
+      B_st_deriv = B_st_deriv,
+      B_st_pred = B_st_pred,
+      B_st_deriv_pred = B_st_deriv_pred,
+      B_t = B_t,
+      B_t_deriv = B_t_deriv,
+      B_t_pred = B_t_pred,
+      B_t_pred_deriv = B_t_pred_deriv,
+      B_h_deriv= B_h_deriv,
+      B_deriv_g_re = B_deriv_g_re,
+      B_tot_deriv = B_tot_deriv,
+      B_deriv_t= B_deriv_t,
+      B_deriv_st = B_deriv_st
+    )
+
+  }
+
+
+
+  return(spline_basis_fun_list)
+}
+
+#' Creating spline basis functions
+#'
+#' @param x Age in years CE
+#' @param xl minimum Age
+#' @param xr maximum Age
+#' @param nseg number of sections
+#' @param deg Degree of polynomial
+#' @param data Input data
+#' @noRd
+bs_bbase <- function(x,
+                     xl = min(x),
+                     xr = max(x),
+                     deg = 3,
+                     nseg = 1){
+                     #nseg = 5){
+                     #nseg = 10){
+                     #nseg = 1) {
+                       # #' @param nseg number of sections
+  # Create basis functions------------------------------------------------------
+  nseg <- round(deg / (1 + deg / length(x))) #+ 10#Option 1
+  #df <- sqrt(length(x)) - 4
+  # too big
+  #nseg <- round(df/(1+df/length(x)))
+
+  # Compute the length of the partitions
+  dx <- (xr - xl) / nseg
+  # Create equally spaced knots
+  knots <- seq(xl - deg * dx,
+    xr + deg * dx,
+    by = dx
+  )
+  # Use bs() function to generate the B-spline basis
+  get_bs_matrix <- matrix(
+    splines::bs(x,
+      knots = knots,
+      degree = deg, Boundary.knots = c(knots[1], knots[length(knots)])
+    ),
+    nrow = length(x)
+  )
+  # Remove columns that contain zero only
+  bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  message(print(nseg))
+  return(bs_matrix)
+}

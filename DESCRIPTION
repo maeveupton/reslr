@@ -1,0 +1,34 @@
+Package: rslr
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("Maeve", "Upton", , "uptonmaeve010@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-3185-7731"))
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: 
+    R (>= 2.10)
+LazyData: true
+Imports: 
+    data.table,
+    dplyr,
+    fastDummies,
+    fields,
+    geosphere,
+    ggplot2,
+    magrittr,
+    ncdf4,
+    posterior,
+    purrr,
+    R2jags,
+    stringr,
+    tidybayes,
+    tidyr,
+    zoo
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
