@@ -12,7 +12,8 @@
 #' @examples
 #' full_dataset <- load_input_data(NAACproxydata)
 #' plot_data(input_data = full_dataset)
-plot_data <- function(input_data,
+#plot_data <- function(input_data,
+plot.reslr_input <- function(input_data,
                       title = "Plot of the raw data",
                       xlab = "Age (CE)",
                       ylab = "Relative Sea Level (m)",

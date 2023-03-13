@@ -534,7 +534,7 @@ spline_basis_fun <- function(data, predict_data, model_type) {
       return(B_st)
     }
     #-------Now create derivatives----
-    h <- 0.001
+    h <- 0.0001
     t <- data$Age
 
     first_deriv_step1 <- first_deriv_calc(t + h)
@@ -689,7 +689,7 @@ spline_basis_fun <- function(data, predict_data, model_type) {
       return(output_B_tot)
     }
     #-------Now create derivatives----
-    h <- 0.001
+    h <- 0.0001
     t <- data$Age
 
     first_deriv_step1 <- first_deriv_calc(t + h)
@@ -743,13 +743,13 @@ bs_bbase <- function(x,
                      xl = min(x),
                      xr = max(x),
                      deg = 3,
-                     nseg = 1){
+                     nseg = 5){
                      #nseg = 5){
                      #nseg = 10){
                      #nseg = 1) {
                        # #' @param nseg number of sections
   # Create basis functions------------------------------------------------------
-  nseg <- round(deg / (1 + deg / length(x))) #+ 10#Option 1
+  #nseg <- round(deg / (1 + deg / length(x))) #+ 10#Option 1
   #df <- sqrt(length(x)) - 4
   # too big
   #nseg <- round(df/(1+df/length(x)))

@@ -26,18 +26,8 @@ run_mcmc <- function(input_data,
                      n_chains = 3) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
-  # Tidy Original data--------------------------------------
-  # if(tide_gauge_included == TRUE){
-  #   data <- load_input_data(data,
-  #                         tide_gauge_included = TRUE)
-  # }
-  # else{
-  #   data <- load_input_data(data,
-  #                           tide_gauge_included = FALSE)
-  # }
-
   # Input Data -------------
-  data <- input_data$data
+  data <- input_data$data# Add the function here
   predict_data <- input_data$predict_data
 
   # Simple Linear Regression ----------------
@@ -86,7 +76,8 @@ run_mcmc <- function(input_data,
     )
 
     # Run JAGS------------------------
-    model_run <- suppressWarnings(R2jags::jags(
+    model_run <- #suppressWarnings(
+      R2jags::jags(
       data = jags_data,
       parameters.to.save = jags_pars,
       model.file = textConnection(model_file),
@@ -94,7 +85,8 @@ run_mcmc <- function(input_data,
       n.burnin = n_burnin,
       n.thin = n_thin,
       n.chains = n_chains
-    ))
+    )
+   # )
 
     # Output from mcmc------------------------
     mu_post_pred <- model_run$BUGSoutput$sims.list$mu_pred
@@ -106,10 +98,10 @@ run_mcmc <- function(input_data,
       data = data,
       predict_data = predict_data
     )
-    closeAllConnections()
+    #closeAllConnections()
 
     # Classing the JAGS output in NIGAM time--------------
-    class(jags_output) <- "eiv_slr_t"
+    class(jags_output) <- c("reslr_output","eiv_slr_t")
     message("JAGS model run finished for the EIV Simple Linear Regression")
   }
 
@@ -189,7 +181,7 @@ run_mcmc <- function(input_data,
     )
 
     # Classing the JAGS output in 1 Change Point--------------
-    class(jags_output) <- "eiv_cp1_t"
+    class(jags_output) <- c("reslr_output","eiv_cp1_t")
     message("JAGS model run finished for the EIV 1 Change Point model")
   }
 
@@ -291,7 +283,7 @@ run_mcmc <- function(input_data,
     )
 
     # Classing the JAGS output in 2 Change Point--------------
-    class(jags_output) <- "eiv_cp2_t"
+    class(jags_output) <- c("reslr_output","eiv_cp2_t")
     message("JAGS model run finished for the EIV 2 Change Point model")
   }
 
@@ -398,12 +390,12 @@ model{
     )
 
     # Classing the JAGS output in 3 Change Point--------------
-    class(jags_output) <- "eiv_cp3_t"
+    class(jags_output) <- c("reslr_output","eiv_cp3_t")
     message("JAGS model run finished for the EIV 3 Change Point model")
   }
 
   # Errors-in-Variables Integrated Gaussian Process------------------
-  if (model_type == "EIV_IGP") {
+  if (model_type == "eiv_igp_t") {
     model_file <-
       "model{
 
@@ -491,9 +483,9 @@ model{
       predict_data = predict_data
     )
 
-    # Classing the JAGS output for EIV_IGP--------------
-    class(jags_output) <- "EIV_IGP"
-    message("JAGS model run finished for the EIV_IGP")
+    # Classing the JAGS output for eiv_igp_t--------------
+    class(jags_output) <- c("reslr_output","eiv_igp_t")
+    message("JAGS model run finished for the eiv_igp_t")
   }
 
 
@@ -685,7 +677,7 @@ model{
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    closeAllConnections()
+    #closeAllConnections()
 
     # Output with everything-------------
     jags_output <- list(
@@ -697,7 +689,7 @@ model{
 
 
     # Classing the JAGS output in NIGAM time--------------
-    class(jags_output) <- "ni_spline_t"
+    class(jags_output) <- c("reslr_output", "ni_spline_t")
 
     message("JAGS model run finished for the NIGAM in time")
   }
@@ -877,7 +869,7 @@ model{
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    closeAllConnections()
+    #closeAllConnections()
 
     # Output with everything-------------
     jags_output <- list(
@@ -887,7 +879,7 @@ model{
       predict_data = predict_data
     )
     # Classing the JAGS output in NIGAM space time--------------
-    class(jags_output) <- "ni_spline_st"
+    class(jags_output) <- c("reslr_output","ni_spline_st")
     message("JAGS model run finished for the NIGAM in space time")
   }
 
@@ -1185,8 +1177,13 @@ model{
       "b_g",
       "intercept",
       "h_z_x",
+      "h_z_x_pred",
       "g_h_z_x",
+      "g_h_z_x_pred",
       "g_z_x",
+      "g_z_x_deriv",
+      "g_z_x_pred",
+      "g_z_x_pred_deriv",
       "r",
       "r_deriv",
       "r_pred",
@@ -1208,7 +1205,7 @@ model{
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    closeAllConnections()
+    #closeAllConnections()
 
     # Output with everything-------------
     jags_output <- list(
@@ -1219,7 +1216,7 @@ model{
     )
 
     # Classing the JAGS output in NIGAM for RSL decomposition--------------
-    class(jags_output) <- "ni_gam_decomp"
+    class(jags_output) <- c("reslr_output","ni_gam_decomp")
     message("JAGS model run finished for the NI GAM Decomposition")
   }
   return(jags_output)

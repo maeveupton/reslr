@@ -3,6 +3,7 @@
 #' @param data The data of interest
 #' @param n_prediction Predictions over every 100 years(default) can vary based on user preference
 #' @param tide_gauge_included Including decadaly average tide gauge data from PSMSL website
+#' @param input_Age_type The inputted age in years CE or year BCE
 #'
 #' @return A list containing data frame of data and prediction grid
 #' @export
@@ -12,7 +13,8 @@
 #' load_input_data(data = data)
 load_input_data <- function(data,
                             n_prediction = 100,
-                            tide_gauge_included = FALSE) {
+                            tide_gauge_included = FALSE,
+                            input_Age_type = "CE") {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
 
   # Tidy Original data-------------------------------
@@ -22,6 +24,13 @@ load_input_data <- function(data,
   }
   else{
     message("User must provide a site name and a region name")
+  }
+  if(input_Age_type == "BCE"){
+    data <- data %>%
+      dplyr::mutate(Age = 1950 - Age)
+  }
+  else{
+    data <- data
   }
 
   # Checking if user provided GIA rates----------
@@ -102,11 +111,14 @@ load_input_data <- function(data,
   #   data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
   #   message("Calculated GIA rate and uncertainty using the input data")
   # }
+
+  # Ensuring SiteName is a factor
   data <- data %>% dplyr::mutate(SiteName= as.factor(SiteName))
 
   input_data <- base::list(
     data = data,
     predict_data = predict_data
   )
+  class(input_data) <- "reslr_input"
   return(input_data)
 }

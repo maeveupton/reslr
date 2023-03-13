@@ -538,7 +538,7 @@ parameter_estimate <- function(jags_output) {
       lwr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.75),
       jags_output$predict_data$Age,
       jags_output$predict_data$SiteName,
-      ID = "Prediction Regional Component",
+      ID = "Regional Component",
       data_type_id = jags_output$predict_data$data_type_id
     )
     names(time_post_pred_component_df) <- c(
@@ -557,7 +557,7 @@ parameter_estimate <- function(jags_output) {
       lwr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
       jags_output$predict_data$Age,
       jags_output$predict_data$SiteName,
-      ID = "Derivative Prediction Regional Component",
+      ID = "Derivative Regional Component",
       data_type_id = jags_output$predict_data$data_type_id
     )
     names(time_post_pred_deriv_component_df) <- c(
@@ -596,19 +596,19 @@ parameter_estimate <- function(jags_output) {
 
     # Linear Local Component + Site-Specific vertical offset for prediction grid------------------
     g_h_component_pred_post_df <- data.frame(
-      RSL_mod = apply(g_h_component_post, 2, mean),
-      RSL_mod_upr = apply(g_h_component_post, 2, stats::quantile, probs = 0.025),
-      RSL_mod_lwr = apply(g_h_component_post, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(g_h_component_post, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(g_h_component_post, 2, stats::quantile, probs = 0.75),
-      jags_output$data$Age,
-      jags_output$data$SiteName,
+      RSL_mod = apply(g_h_component_pred_post, 2, mean),
+      RSL_mod_upr = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.025),
+      RSL_mod_lwr = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.975),
+      upr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.25),
+      lwr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.75),
+      jags_output$predict_data$Age,
+      jags_output$predict_data$SiteName,
       jags_output$predict_data$linear_rate,
       jags_output$predict_data$linear_rate_err,
       ID = "Linear Local Component and site-specific vertical offset",
        data_type_id = jags_output$predict_data$data_type_id
     )
-    names(g_h_component_post_df) <- c(
+    names(g_h_component_pred_post_df) <- c(
       "RSL",
       "upr",
       "lwr",
@@ -724,7 +724,7 @@ parameter_estimate <- function(jags_output) {
       time_post_pred_component_df = time_post_pred_component_df,
       time_post_pred_deriv_component_df = time_post_pred_deriv_component_df,
       g_h_component_post_df = g_h_component_post_df,
-      #g_h_component_pred_post_df= g_h_component_pred_post_df,
+      g_h_component_pred_post_df= g_h_component_pred_post_df,
       space_time_component_post_df = space_time_component_post_df,
       space_time_component_deriv_post_df = space_time_component_deriv_post_df,
       space_time_component_pred_post_df = space_time_component_pred_post_df,

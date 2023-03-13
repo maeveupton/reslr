@@ -4,7 +4,12 @@
 \alias{load_input_data}
 \title{Loading input data}
 \usage{
-load_input_data(data, n_prediction = 100, tide_gauge_included = FALSE)
+load_input_data(
+  data,
+  n_prediction = 100,
+  tide_gauge_included = FALSE,
+  input_Age_type = "CE"
+)
 }
 \arguments{
 \item{data}{The data of interest}
@@ -12,6 +17,8 @@ load_input_data(data, n_prediction = 100, tide_gauge_included = FALSE)
 \item{n_prediction}{Predictions over every 100 years(default) can vary based on user preference}
 
 \item{tide_gauge_included}{Including decadaly average tide gauge data from PSMSL website}
+
+\item{input_Age_type}{The inputted age in years CE or year BCE}
 }
 \value{
 A list containing data frame of data and prediction grid
