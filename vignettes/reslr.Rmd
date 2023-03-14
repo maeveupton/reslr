@@ -213,14 +213,14 @@ CedarIslandNC <- reslr::load_input_data(data = CedarIslandNC,
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
-plot(input_data = CedarIslandNC)
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+plot(x = CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
-  input_data  = CedarIslandNC,
+  x = CedarIslandNC,
   title = "Plot of the raw data",
   xlab = "Age (CE)",
   ylab = "Relative Sea Level (m)",
@@ -232,7 +232,7 @@ plot(
 **Step 3:** To run the the model the following code is used:
 ```{r,eval = TRUE}
 jags_output.eiv_slr_t <- reslr::run_mcmc(
-  input_data = CedarIslandNC,
+  x =  CedarIslandNC,
   model_type = "eiv_slr_t"
 )
 ```
@@ -240,26 +240,26 @@ This command takes the input data and the user specifies the statistical model, 
 
 
 **Step 4:** To examine if the algorithm has converged use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 reslr::check_convergence(jags_output = jags_output.eiv_slr_t)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
 **Step 5:** When the model has successfully converged, the user can view the parameter estimates using the following:
-```{r eval = FALSE}
+```{r eval = TRUE}
 params <- reslr::parameter_estimate(jags_output = jags_output.eiv_slr_t)
 params$par_summary
 ```
 The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept (alpha), the slope (beta) and the standard deviation of the model **How I explain this easily** (sigma). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. beta. In this example, the rate of sea-level change for Cedar Island North Carolina using the EIV simple linear regression model is estimated to be XXXX.
 
 **Step 6:** The results from the eiv_slr_t model can be visualised using the following function:
-```{r eval = FALSE}
+```{r eval = TRUE}
 plot(jags_output = jags_output.eiv_slr_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. 
 
 To examine the data creating the total model result plot, the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_fit <- params$output_dataframes$total_model_df
 ```
 
@@ -284,14 +284,14 @@ CedarIslandNC <- reslr::load_input_data(data = CedarIslandNC,
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
-plot(input_data = CedarIslandNC)
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+plot(x =  CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
-  input_data = CedarIslandNC,
+  x =  CedarIslandNC,
   title = "Plot of the raw data",
   xlab = "Age (CE)",
   ylab = "Relative Sea Level (m)",
@@ -309,7 +309,7 @@ jags_output.eiv_cp1_t <- reslr::run_mcmc(
 To note, for 2 change points the user should use:
 ```{r eval = TRUE}
 jags_output.eiv_cp2_t <- reslr::run_mcmc(
-  input_data = CedarIslandNC,
+  x =  CedarIslandNC,
   model_type = "eiv_cp_t", n_cp = 2
 )
 ```
@@ -359,13 +359,13 @@ In this function, the user can select to add tide gauge data by changing `tide_g
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(input_data = CedarIslandNC)
+plot(x =  CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
-  input_data = CedarIslandNC,
+  x =  CedarIslandNC,
   title = "Plot of the raw data",
   xlab = "Age (CE)",
   ylab = "Relative Sea Level (m)",
@@ -373,9 +373,9 @@ plot(
 )
 ```
 **Step 3:** To run the eiv_igp_t model the following function should be used:
-```{r eval = FALSE}
+```{r eval = TRUE}
 jags_output.eiv_igp_t <- reslr::run_mcmc(
-  input_data = CedarIslandNC,
+  x =  CedarIslandNC,
   model_type = "eiv_igp_t"
 )
 ```
@@ -383,31 +383,31 @@ This command takes the input data and the user specifies the statistical model, 
 
 
 **Step 4:** the convergence of the algorithm is inspected using:
-```{r eval = FALSE}
+```{r eval = TRUE}
 reslr::check_convergence(jags_output = jags_output.eiv_igp_t)
 ```
 
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run.
 
 **Step 5:** The user can examine the estimated parameters using:
-```{r eval = FALSE}
+```{r eval = TRUE}
 params <- reslr::parameter_estimate(jags_output = jags_output.eiv_igp_t)
 params$par_summary
 ```
 Where "phi" controls the... *Need to check these*, and "sigma"....
 
 **Step 6:** The results from the EIV IGP model can be illustrated using:
-```{r eval = FALSE}
+```{r eval = TRUE}
 plot(jags_output = jags_output.eiv_igp_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. In addition, the rate of change is plotted using this function.
 
 To examine the data creating the total model result plot, the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_fit <- params$output_dataframes$total_model_fit
 ```
 To examine the data creating the total model rate of change plot the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_rate_df <-params$output_dataframes$total_model_rate_df
 ```
 
@@ -432,13 +432,13 @@ In this function, the user can select to add tide gauge data by changing `tide_g
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(input_data = CedarIslandNC)
+plot(x =  CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
-  input_data = CedarIslandNC,
+  x =  CedarIslandNC,
   title = "Plot of the raw data",
   xlab = "Age (CE)",
   ylab = "Relative Sea Level (m)",
@@ -449,7 +449,7 @@ plot(
 **Step 3:** To run this model type use the following:
 
 ```{r,eval = TRUE}
-jags_output.ni_spline_t <- reslr::run_mcmc(input_data = CedarIslandNC,
+jags_output.ni_spline_t <- reslr::run_mcmc(x =  CedarIslandNC,
                                    model_type = "ni_spline_t")
 ```
 The output object `jags_output.ni_spline_t` stores the JAGS model run. 
@@ -501,13 +501,13 @@ In this function, the user can select to add tide gauge data by changing `tide_g
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(input_data = multi_site)
+plot(x =  multi_site)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
-  input_data = multi_site,
+  x =  multi_site,
   title = "Plot of the raw data",
   xlab = "Age (CE)",
   ylab = "Relative Sea Level (m)",
@@ -517,7 +517,7 @@ plot(
 
 **Step 3:** Run the model for the two sites.
 ```{r,eval = TRUE}
-jags_output.ni_spline_st <- reslr::run_mcmc(input_data = multi_site, model_type = "ni_spline_st")
+jags_output.ni_spline_st <- reslr::run_mcmc(x =  multi_site, model_type = "ni_spline_st")
 ```
 The output object `jags_output.ni_spline_st` stores the JAGS model run. 
 Note that additional computational run time is required for the model compared with the ni_spline_t. 
@@ -580,13 +580,13 @@ In this function, the user should select to add tide gauge data by changing `tid
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(input_data = multi_site)
+plot(x =  multi_site)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
-  input_data = multi_site,
+  x =  multi_site,
   title = "Plot of the raw data",
   xlab = "Age (CE)",
   ylab = "Relative Sea Level (m)",
@@ -597,7 +597,7 @@ plot(
 **Step 3:** Run the model
 ```{r,eval = TRUE}
 jags_output.ni_gam_decomp <- reslr::run_mcmc(
-  input_data = multi_site,
+  x =  multi_site,
   model_type = "ni_gam_decomp")
 ```
 The output object `jags_output.ni_gam_decomp` stores the JAGS model run. 
@@ -659,7 +659,7 @@ non_lin_local_model_rate_df <-params$output_dataframes$non_lin_local_model_rate_
 ### Plotting techniques
 In this section, we highlight additional information in regard to plotting the final results. For all our plots, the user is provided with the data - frame used to create the plot which can be accessed using the following function:
 ```{r,eval = TRUE}
-output_dataframes <- parameter_estimate(jags_output = run_mcmc(input_data = CedarIslandNC, model_type = "ni_spline_t"))
+output_dataframes <- parameter_estimate(jags_output = run_mcmc(x =  CedarIslandNC, model_type = "ni_spline_t"))
 total_model_fit_df <- output_dataframes$output_dataframe$total_model_df
 total_model_fit_df
 rate_fit_df <- output_dataframes$output_dataframe$total_model_rate_df
@@ -670,7 +670,7 @@ Note, the `model_type = "ni_spline_t` is used as an example and can be changed t
 In the package, all plot labels for results, i.e. x and y labels and titles, can be updated in the following manner:
 ```{r, eval = TRUE}
 # Example
-final_plots <- plot(jags_output = reslr::run_mcmc(input_data = CedarIslandNC, model_type = "ni_spline_t"))
+final_plots <- plot(jags_output = reslr::run_mcmc(x =  CedarIslandNC, model_type = "ni_spline_t"))
 final_plots$plot_result
 # Adding new title to the total model fit plot
 final_plots$plot_result + ggplot2::ggtitle("New Title Added as Example")

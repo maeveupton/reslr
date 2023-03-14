@@ -1,18 +1,19 @@
 #' Plot data with measurement uncertainty
 #'
-#' @param input_data Input data from the \code{\link{load_input_data}} function
+#' @param x An object created via the function  \code{\link{load_input_data}}
 #' @param title Title of the Plot
 #' @param xlab Labeling the x-axis
 #' @param ylab Labeling the y-axis
 #' @param plot_tide_gauges Plotting the tide gauge data with the proxy records
+#' @param ...  Not used
 #'
 #' @return Plot of the RSL data
 #' @export
 #'
 #' @examples
 #' full_dataset <- load_input_data(NAACproxydata)
-#' plot(input_data = full_dataset)
-plot.reslr_input <- function(input_data,
+#' plot(x = full_dataset)
+plot.reslr_input <- function(x,
                       title = "Plot of the raw data",
                       xlab = "Age (CE)",
                       ylab = "Relative Sea Level (m)",
@@ -21,6 +22,7 @@ plot.reslr_input <- function(input_data,
   #if(inherits(input_data,"reslr_input") == TRUE){
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <- NULL
   # Input data-------
+  input_data <- x
   data <- input_data$data
   predict_data <- input_data$predict_data
   # Not plotting the tide gauge data -------------

@@ -5,7 +5,7 @@
 \title{Plot data with measurement uncertainty}
 \usage{
 \method{plot}{reslr_input}(
-  input_data,
+  x,
   title = "Plot of the raw data",
   xlab = "Age (CE)",
   ylab = "Relative Sea Level (m)",
@@ -14,7 +14,7 @@
 )
 }
 \arguments{
-\item{input_data}{Input data from the \code{\link{load_input_data}} function}
+\item{x}{An object created via the function  \code{\link{load_input_data}}}
 
 \item{title}{Title of the Plot}
 
@@ -23,6 +23,8 @@
 \item{ylab}{Labeling the y-axis}
 
 \item{plot_tide_gauges}{Plotting the tide gauge data with the proxy records}
+
+\item{...}{Not used}
 }
 \value{
 Plot of the RSL data
@@ -32,5 +34,5 @@ Plot data with measurement uncertainty
 }
 \examples{
 full_dataset <- load_input_data(NAACproxydata)
-plot(input_data = full_dataset)
+plot(x = full_dataset)
 }

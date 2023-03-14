@@ -4,12 +4,14 @@
 \alias{plot.reslr_output}
 \title{Plotting the results for Noisy Input GAM decomposition}
 \usage{
-\method{plot}{reslr_output}(jags_output, plot_tide_gauges = FALSE, ...)
+\method{plot}{reslr_output}(x, plot_tide_gauges = FALSE, ...)
 }
 \arguments{
-\item{jags_output}{List of JAGS output}
+\item{x}{An object of class \code{reslr_output} and \code{model_type} created via \code{\link{run_mcmc}}}
 
 \item{plot_tide_gauges}{Plotting the tide gauge data as well as proxy data}
+
+\item{...}{Not used}
 }
 \value{
 Plot of model fit
@@ -19,7 +21,7 @@ Plotting the results for Noisy Input GAM decomposition
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
-input_data <- load_input_data(data = data)
-jags_output <- run_mcmc(input_data, model_type = "eiv_slr_t")
-plot(jags_output)
+x <- load_input_data(data = data)
+jags_output <- run_mcmc(x, model_type = "eiv_slr_t")
+plot(x =jags_output)
 }

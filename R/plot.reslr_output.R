@@ -1,17 +1,18 @@
 #' Plotting the results for Noisy Input GAM decomposition
 #'
-#' @param jags_output List of JAGS output
+#' @param x An object of class \code{reslr_output} and \code{model_type} created via \code{\link{run_mcmc}}
 #' @param plot_tide_gauges Plotting the tide gauge data as well as proxy data
+#' @param ...  Not used
 #'
 #' @return Plot of model fit
 #' @export
 #'
 #' @examples
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-#' input_data <- load_input_data(data = data)
-#' jags_output <- run_mcmc(input_data, model_type = "eiv_slr_t")
-#' plot(jags_output)
-plot.reslr_output <- function(jags_output,
+#' x <- load_input_data(data = data)
+#' jags_output <- run_mcmc(x, model_type = "eiv_slr_t")
+#' plot(x =jags_output)
+plot.reslr_output <- function(x,
                         plot_tide_gauges = FALSE,
                         ...) {
   Age <- RSL <- time_deriv_component_post_df <- mod_output_pred_df<-Age_err <- ID <- RSL_err <- lwr <- upr <- lwr_50 <- lwr_95 <- upr_50 <- upr_95 <- rate_y <- rate_lwr_95 <- rate_upr_95 <- SiteName <- data_type_id <- pred_y <- NULL
@@ -27,7 +28,7 @@ plot.reslr_output <- function(jags_output,
   #   data <- data
   # }
   #if(inherits(jags_output,"reslr_output") == TRUE){
-
+  jags_output <- x
   # EIV slr------------
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
     total_model_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_df
