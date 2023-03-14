@@ -12,7 +12,8 @@
 #' jags_output <- run_mcmc(input_data, model_type = "eiv_slr_t")
 #' plot(jags_output)
 plot.reslr_output <- function(jags_output,
-                        plot_tide_gauges = FALSE) {
+                        plot_tide_gauges = FALSE,
+                        ...) {
   Age <- RSL <- time_deriv_component_post_df <- mod_output_pred_df<-Age_err <- ID <- RSL_err <- lwr <- upr <- lwr_50 <- lwr_95 <- upr_50 <- upr_95 <- rate_y <- rate_lwr_95 <- rate_upr_95 <- SiteName <- data_type_id <- pred_y <- NULL
   # Not plotting the tide gauge data -------------
   # if (("data_type_id" %in% colnames(jags_output$data)) & plot_tide_gauges == FALSE) {
@@ -25,7 +26,8 @@ plot.reslr_output <- function(jags_output,
   # } else {
   #   data <- data
   # }
-  if(inherits(jags_output,"reslr_output") == TRUE){
+  #if(inherits(jags_output,"reslr_output") == TRUE){
+
   # EIV slr------------
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
     total_model_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_df
@@ -362,8 +364,9 @@ plot.reslr_output <- function(jags_output,
   # NIGAM time
   if (inherits(jags_output, "ni_spline_t") == TRUE) {
     # Dataframes to plot
-    total_model_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_df
-    total_model_rate_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_rate_df
+    output_dataframes <- parameter_estimate(jags_output = jags_output)
+    total_model_df <- output_dataframes$total_model_df
+    total_model_rate_df <- output_dataframes$total_model_rate_df
 
     # Plots
     plot_result <-
@@ -501,8 +504,9 @@ plot.reslr_output <- function(jags_output,
   # NIGAM space time
   if (inherits(jags_output, "ni_spline_st") == TRUE) {
     # Dataframes to plot
-    total_model_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_df
-    total_model_rate_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_rate_df
+    output_dataframes <- parameter_estimate(jags_output = jags_output)
+    total_model_df <- output_dataframes$total_model_df
+    total_model_rate_df <- output_dataframes$total_model_rate_df
     # Plots
     plot_result <-
       ggplot2::ggplot() +
@@ -1338,6 +1342,6 @@ plot.reslr_output <- function(jags_output,
       all_components_CI_plot = all_components_CI_plot,
       all_components_CI_pred_plot = all_components_CI_pred_plot)
   }
-}
+#}
   return(output_plots)
 }

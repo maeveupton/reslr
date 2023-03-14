@@ -1,10 +1,10 @@
 #' Plot data with measurement uncertainty
 #'
-#' @param input_data Input data from the load_input_data function
+#' @param input_data Input data from the \code{\link{load_input_data}} function
 #' @param title Title of the Plot
 #' @param xlab Labeling the x-axis
 #' @param ylab Labeling the y-axis
-#' @param  plot_tide_gauges Plotting the tide gauge data with the proxy records
+#' @param plot_tide_gauges Plotting the tide gauge data with the proxy records
 #'
 #' @return Plot of the RSL data
 #' @export
@@ -16,9 +16,9 @@ plot.reslr_input <- function(input_data,
                       title = "Plot of the raw data",
                       xlab = "Age (CE)",
                       ylab = "Relative Sea Level (m)",
-                      plot_tide_gauges = FALSE
-                      ) {
-  if(inherits(input_data,"reslr_input") == TRUE){
+                      plot_tide_gauges = FALSE,
+                      ...) {
+  #if(inherits(input_data,"reslr_input") == TRUE){
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <- NULL
   # Input data-------
   data <- input_data$data
@@ -67,6 +67,6 @@ plot.reslr_input <- function(input_data,
       plot.title = ggplot2::element_text(size = 18, face = "bold"),
       axis.title = ggplot2::element_text(size = 12, face = "bold"),
       legend.text = ggplot2::element_text(size = 10)
-    )}
-  return(p)
+    )#}
+  return(p)#     print(g)invisible(g)
 }

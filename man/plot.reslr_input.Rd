@@ -9,11 +9,12 @@
   title = "Plot of the raw data",
   xlab = "Age (CE)",
   ylab = "Relative Sea Level (m)",
-  plot_tide_gauges = FALSE
+  plot_tide_gauges = FALSE,
+  ...
 )
 }
 \arguments{
-\item{input_data}{Input data from the load_input_data function}
+\item{input_data}{Input data from the \code{\link{load_input_data}} function}
 
 \item{title}{Title of the Plot}
 
