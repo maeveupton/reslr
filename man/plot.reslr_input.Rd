@@ -14,7 +14,7 @@
 )
 }
 \arguments{
-\item{x}{An object created via the function  \code{\link{load_input_data}}}
+\item{x}{An object created via the function  \code{\link{reslr_load}}}
 
 \item{title}{Title of the Plot}
 
@@ -33,6 +33,6 @@ Plot of the RSL data
 Plot data with measurement uncertainty
 }
 \examples{
-full_dataset <- load_input_data(NAACproxydata)
-plot(x = full_dataset)
+full_dataset <- reslr_load(NAACproxydata)
+plot(full_dataset)
 }

@@ -1,6 +1,6 @@
 #' Noisy Input Generalised Additive Models
 #'
-#' @param input_data Input data from the load_input_data function
+#' @param input_data Input data from the reslr_load function
 #' @param model_type Statistical Model type
 #' @param n_iterations Number of iterations
 #' @param n_burnin Burnin value
@@ -14,9 +14,21 @@
 #'
 #' @examples
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-#' input_data <- load_input_data(data = data)
-#' run_mcmc(input_data = input_data, model_type = "eiv_slr_t")
-run_mcmc <- function(input_data,
+#' input_data <- reslr_load(data = data)
+#' reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
+reslr_mcmc <- function(input_data,
+                     model_type,
+                     n_cp = 1,
+                     igp_smooth = 0.2,
+                     n_iterations = 5000,
+                     n_burnin = 1000,
+                     n_thin = 4,
+                     n_chains = 3) {
+  UseMethod("reslr_mcmc")
+}
+
+#' @export
+reslr_mcmc.reslr_input <- function(input_data,
                      model_type,
                      n_cp = 1,
                      igp_smooth = 0.2,

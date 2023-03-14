@@ -10,8 +10,8 @@
 #'
 #' @examples
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-#' load_input_data(data = data)
-load_input_data <- function(data,
+#' reslr_load(data = data)
+reslr_load<- function(data,
                             n_prediction = 100,
                             tide_gauge_included = FALSE,
                             input_Age_type = "CE") {

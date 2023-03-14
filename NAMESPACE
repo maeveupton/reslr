@@ -2,9 +2,10 @@
 
 S3method(plot,reslr_input)
 S3method(plot,reslr_output)
+S3method(reslr_mcmc,reslr_input)
 export("%>%")
 export(check_convergence)
-export(load_input_data)
 export(parameter_estimate)
-export(run_mcmc)
+export(reslr_load)
+export(reslr_mcmc)
 importFrom(magrittr,"%>%")

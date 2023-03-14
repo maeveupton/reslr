@@ -17,6 +17,6 @@ Examining the parameter estimates from JAGS
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
-input_data <- load_input_data(data = data)
-parameter_estimate(jags_output = run_mcmc(input_data = input_data, model_type = "eiv_slr_t"))
+input_data <- reslr_load(data = data)
+parameter_estimate(jags_output = reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t"))
 }

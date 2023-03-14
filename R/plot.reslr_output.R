@@ -1,6 +1,6 @@
 #' Plotting the results for Noisy Input GAM decomposition
 #'
-#' @param x An object of class \code{reslr_output} and \code{model_type} created via \code{\link{run_mcmc}}
+#' @param x An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}
 #' @param plot_tide_gauges Plotting the tide gauge data as well as proxy data
 #' @param ...  Not used
 #'
@@ -9,8 +9,8 @@
 #'
 #' @examples
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-#' x <- load_input_data(data = data)
-#' jags_output <- run_mcmc(x, model_type = "eiv_slr_t")
+#' x <- reslr_load(data = data)
+#' jags_output <- reslr_mcmc(x, model_type = "eiv_slr_t")
 #' plot(x =jags_output)
 plot.reslr_output <- function(x,
                         plot_tide_gauges = FALSE,

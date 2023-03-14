@@ -7,8 +7,8 @@
 #'
 #' @examples
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-#' input_data <- load_input_data(data = data)
-#' parameter_estimate(jags_output = run_mcmc(input_data = input_data, model_type = "eiv_slr_t"))
+#' input_data <- reslr_load(data = data)
+#' parameter_estimate(jags_output = reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t"))
 parameter_estimate <- function(jags_output) {
   mu_pred <- .lower <- .upper <- x <- variable <- sd <- mad <- q5 <- q95 <- pred_y <- `w.m[1]`<- `w.m[50]`<- lwr_95 <- upr_95 <- alpha <- cp <- sigma_g <- phi <- sigma <- mu_x <- dat <- NULL
 

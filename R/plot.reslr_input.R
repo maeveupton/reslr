@@ -1,6 +1,6 @@
 #' Plot data with measurement uncertainty
 #'
-#' @param x An object created via the function  \code{\link{load_input_data}}
+#' @param x An object created via the function  \code{\link{reslr_load}}
 #' @param title Title of the Plot
 #' @param xlab Labeling the x-axis
 #' @param ylab Labeling the y-axis
@@ -11,8 +11,8 @@
 #' @export
 #'
 #' @examples
-#' full_dataset <- load_input_data(NAACproxydata)
-#' plot(x = full_dataset)
+#' full_dataset <- reslr_load(NAACproxydata)
+#' plot(full_dataset)
 plot.reslr_input <- function(x,
                       title = "Plot of the raw data",
                       xlab = "Age (CE)",

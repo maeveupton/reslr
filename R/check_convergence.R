@@ -7,8 +7,8 @@
 #'
 #' @examples
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-#' input_data <- load_input_data(data = data)
-#' check_convergence(jags_output = run_mcmc(input_data = input_data, model_type = "eiv_slr_t"))
+#' input_data <- reslr_load(data = data)
+#' check_convergence(jags_output = reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t"))
 check_convergence <- function(jags_output) {
   # Create an object containing the posterior samples
   m <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix

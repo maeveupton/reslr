@@ -181,11 +181,11 @@ Important to note, the tide gauge data require values for the `linear_rate` and 
 
 The general structure for running `reslr` is as follows:
 
-**Step 1.** Load in the data using `load_input_data`. If tide gauge data required update `tide_gauge_included = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100`. The default of 100 years.
+**Step 1.** Load in the data using `reslr_load`. If tide gauge data required update `tide_gauge_included = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100`. The default of 100 years.
 
 **Step 2.** Plot the raw data using `plot`
 
-**Step 3.** Choose your preferred model type from the available list above and use the `run_mcmc` function to obtain the parameter estimates
+**Step 3.** Choose your preferred model type from the available list above and use the `reslr_mcmc` function to obtain the parameter estimates
 
 **Step 4.** Check the model converged with `check_convergence`
 
@@ -205,16 +205,16 @@ example_data_set <- reslr::NAACproxydata
 CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 ```
 
-**Step 1:** Load in the data using the `load_input_data` function: 
+**Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
-CedarIslandNC <- reslr::load_input_data(data = CedarIslandNC,
+CedarIslandNC <- reslr_load(data = CedarIslandNC,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(x = CedarIslandNC)
+plot(CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
@@ -231,8 +231,8 @@ plot(
 
 **Step 3:** To run the the model the following code is used:
 ```{r,eval = TRUE}
-jags_output.eiv_slr_t <- reslr::run_mcmc(
-  x =  CedarIslandNC,
+jags_output.eiv_slr_t <- reslr::reslr_mcmc(
+  input_data =  CedarIslandNC,
   model_type = "eiv_slr_t"
 )
 ```
@@ -254,7 +254,7 @@ The output of this function allows to user to examine the parameter estimates. F
 
 **Step 6:** The results from the eiv_slr_t model can be visualised using the following function:
 ```{r eval = TRUE}
-plot(jags_output = jags_output.eiv_slr_t)
+plot(x = jags_output.eiv_slr_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. 
 
@@ -276,9 +276,9 @@ example_data_set <- reslr::NAACproxydata
 CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 ```
 
-**Step 1:** Load in the data using the `load_input_data` function: 
+**Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
-CedarIslandNC <- reslr::load_input_data(data = CedarIslandNC,
+CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
@@ -301,15 +301,15 @@ plot(
 
 **Step 3:** Run the model using the following code and select the number of change points you require:
 ```{r eval = TRUE}
-jags_output.eiv_cp1_t <- reslr::run_mcmc(
+jags_output.eiv_cp1_t <- reslr::reslr_mcmc(
   input_data  = CedarIslandNC,
   model_type = "eiv_cp_t", n_cp = 1
 )
 ```
 To note, for 2 change points the user should use:
 ```{r eval = TRUE}
-jags_output.eiv_cp2_t <- reslr::run_mcmc(
-  x =  CedarIslandNC,
+jags_output.eiv_cp2_t <- reslr::reslr_mcmc(
+  input_data =  CedarIslandNC,
   model_type = "eiv_cp_t", n_cp = 2
 )
 ```
@@ -331,7 +331,7 @@ For the eiv_cp_t model, the parameters of interest are the intercept (alpha), th
 
 **Step 6:** The results from the EIV Change Point model can be illustrated using:
 ```{r eval = TRUE}
-plot(jags_output = jags_output.eiv_cp1_t)
+plot(x = jags_output.eiv_cp1_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval.
 
@@ -350,9 +350,9 @@ example_data_set <- reslr::NAACproxydata
 CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 ```
 
-**Step 1:** Load in the data using the `load_input_data` function: 
+**Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
-CedarIslandNC <- reslr::load_input_data(data = CedarIslandNC,
+CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
@@ -374,8 +374,8 @@ plot(
 ```
 **Step 3:** To run the eiv_igp_t model the following function should be used:
 ```{r eval = TRUE}
-jags_output.eiv_igp_t <- reslr::run_mcmc(
-  x =  CedarIslandNC,
+jags_output.eiv_igp_t <- reslr::reslr_mcmc(
+  input_data =  CedarIslandNC,
   model_type = "eiv_igp_t"
 )
 ```
@@ -423,9 +423,9 @@ example_data_set <- reslr::NAACproxydata
 CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 ```
 
-**Step 1:** Load in the data using the `load_input_data` function: 
+**Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
-CedarIslandNC <- reslr::load_input_data(data = CedarIslandNC,
+CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
@@ -449,7 +449,7 @@ plot(
 **Step 3:** To run this model type use the following:
 
 ```{r,eval = TRUE}
-jags_output.ni_spline_t <- reslr::run_mcmc(x =  CedarIslandNC,
+jags_output.ni_spline_t <- reslr::reslr_mcmc(input_data =  CedarIslandNC,
                                    model_type = "ni_spline_t")
 ```
 The output object `jags_output.ni_spline_t` stores the JAGS model run. 
@@ -470,7 +470,7 @@ In this situation, we can present the standard deviation associated with the NIG
 
 **Step 6:** the results from the ni_spline_t model can be illustrated using:
 ```{r eval = TRUE}
-plot(jags_output = jags_output.ni_spline_t)
+plot(x = jags_output.ni_spline_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the ni_spline_t is presented when using this function.
 
@@ -492,9 +492,9 @@ example_data_set <- reslr::NAACproxydata
 multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nassau"))
 ```
 
-**Step 1:** Load in the data using the `load_input_data` function: 
+**Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
-multi_site <- reslr::load_input_data(data = multi_site,
+multi_site <- reslr::reslr_load(data = multi_site,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`.**FINISH** Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
@@ -517,7 +517,7 @@ plot(
 
 **Step 3:** Run the model for the two sites.
 ```{r,eval = TRUE}
-jags_output.ni_spline_st <- reslr::run_mcmc(x =  multi_site, model_type = "ni_spline_st")
+jags_output.ni_spline_st <- reslr::reslr_mcmc(input_data =  multi_site, model_type = "ni_spline_st")
 ```
 The output object `jags_output.ni_spline_st` stores the JAGS model run. 
 Note that additional computational run time is required for the model compared with the ni_spline_t. 
@@ -537,7 +537,7 @@ In this situation, we can present the standard deviation associated with the NIG
 
 **Step 6:** the results from the ni_spline_st model can be illustrated using:
 ```{r eval = TRUE}
-plot(jags_output = jags_output.ni_spline_st)
+plot(x = jags_output.ni_spline_st)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the ni_spline_st is presented when using this function.
 
@@ -571,9 +571,9 @@ example_data_set <- reslr::NAACproxydata
 multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nassau"))
 ```
 
-**Step 1:** Load in the data using the `load_input_data` function: 
+**Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
-multi_site <- reslr::load_input_data(data = multi_site,
+multi_site <- reslr::reslr_load(data = multi_site,
                             tide_gauge_included = TRUE)
 ```
 In this function, the user should select to add tide gauge data by changing `tide_gauge_included = TRUE`. If the user has not provided the GIA rate and the associated GIA rate uncertainty within the `linear_rate` and `linear_rate_err` column prior to running the package, the package to calculate it using the data. The output of this function the the updated dataframe which will be used in the following steps.
@@ -596,8 +596,8 @@ plot(
 
 **Step 3:** Run the model
 ```{r,eval = TRUE}
-jags_output.ni_gam_decomp <- reslr::run_mcmc(
-  x =  multi_site,
+jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
+  input_data =  multi_site,
   model_type = "ni_gam_decomp")
 ```
 The output object `jags_output.ni_gam_decomp` stores the JAGS model run. 
@@ -618,7 +618,7 @@ In this situation, we can present the standard deviation associated with each co
 
 **Step 6:** The results from the ni_gam_decomp model can be illustrated using:
 ```{r eval = TRUE}
-plot(jags_output = jags_output.ni_gam_decomp)
+plot(x = jags_output.ni_gam_decomp)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also,  the rate of change for the total model fit for the ni_gam_decomp is presented when using this function. 
 The regional component and the rate of change of the regional component is presented with 95\% Uncertainty interval. 
@@ -659,7 +659,7 @@ non_lin_local_model_rate_df <-params$output_dataframes$non_lin_local_model_rate_
 ### Plotting techniques
 In this section, we highlight additional information in regard to plotting the final results. For all our plots, the user is provided with the data - frame used to create the plot which can be accessed using the following function:
 ```{r,eval = TRUE}
-output_dataframes <- parameter_estimate(jags_output = run_mcmc(x =  CedarIslandNC, model_type = "ni_spline_t"))
+output_dataframes <- parameter_estimate(jags_output = reslr_mcmc(x =  CedarIslandNC, model_type = "ni_spline_t"))
 total_model_fit_df <- output_dataframes$output_dataframe$total_model_df
 total_model_fit_df
 rate_fit_df <- output_dataframes$output_dataframe$total_model_rate_df
@@ -670,7 +670,7 @@ Note, the `model_type = "ni_spline_t` is used as an example and can be changed t
 In the package, all plot labels for results, i.e. x and y labels and titles, can be updated in the following manner:
 ```{r, eval = TRUE}
 # Example
-final_plots <- plot(jags_output = reslr::run_mcmc(x =  CedarIslandNC, model_type = "ni_spline_t"))
+final_plots <- plot(jags_output = reslr::reslr_mcmc(x =  CedarIslandNC, model_type = "ni_spline_t"))
 final_plots$plot_result
 # Adding new title to the total model fit plot
 final_plots$plot_result + ggplot2::ggtitle("New Title Added as Example")
