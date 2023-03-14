@@ -79,8 +79,7 @@ reslr_load<- function(data,
   sites <- sites[rep(seq_len(nrow(sites)),
     each = length(times %>% unique())
   ), ]
-  #predict_data_full <- dplyr::tibble(
-  predict_data <- dplyr::tibble(
+  predict_data_full <- dplyr::tibble(
     Age = times,
     Longitude = sites$Longitude,
     Latitude = sites$Latitude,
@@ -89,15 +88,15 @@ reslr_load<- function(data,
     linear_rate_err = sites$linear_rate_err,
     data_type_id = sites$data_type_id
   )
-  # data_age_boundary <- data %>%
-  #   dplyr::group_by(SiteName) %>%
-  #   dplyr::summarise(max_Age = max(Age), min_Age = min(Age))
-  #
-  # # Filtering prediction grids to just cover the data
-  # predict_data <- predict_data_full %>%
-  #   dplyr::left_join(data_age_boundary, by = "SiteName") %>%
-  #   dplyr::filter(Age <= max_Age & Age >= min_Age) %>%
-  #   dplyr::tibble()
+  data_age_boundary <- data %>%
+    dplyr::group_by(SiteName) %>%
+    dplyr::summarise(max_Age = max(Age), min_Age = min(Age))
+
+  # Filtering prediction grids to just cover the data
+  predict_data <- predict_data_full %>%
+    dplyr::left_join(data_age_boundary, by = "SiteName") %>%
+    dplyr::filter(Age <= max_Age+0.01 & Age >= min_Age+ 0.01) %>%
+    dplyr::tibble()
 
   # # Calculating GIA using linear regression through the data ------------------
   # if(GIA_rate_provided == "TRUE" & GIA_rate_sd_provided == "TRUE"){

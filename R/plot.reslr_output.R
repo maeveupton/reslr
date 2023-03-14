@@ -649,6 +649,7 @@ plot.reslr_output <- function(x,
     total_model_pred_rate_df <- output_dataframes$mod_output_pred_deriv_df
     # Regional component
     time_post_component_df <-output_dataframes$time_post_component_df
+    time_deriv_component_post_df <-output_dataframes$time_deriv_component_post_df
     time_post_pred_component_df <-output_dataframes$time_post_pred_component_df
     time_post_pred_deriv_component_df <-output_dataframes$time_post_pred_deriv_component_df
     # Linear local component
@@ -1291,11 +1292,11 @@ plot.reslr_output <- function(x,
       ) +
       # Total Model
       ggplot2::geom_line(
-        data = mod_output_pred_df,
+        data = total_model_pred_df,
         ggplot2::aes(x = Age * 1000, y = RSL, colour = ID)
       ) +
       ggplot2::geom_ribbon(
-        data = mod_output_pred_df,
+        data = total_model_pred_df,
         ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = ID), alpha = 0.3
       ) +
       ggplot2::theme_bw() +

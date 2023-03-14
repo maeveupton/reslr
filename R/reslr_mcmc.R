@@ -110,7 +110,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       predict_data = predict_data
     )
-    closeAllConnections()
+    #closeAllConnections()
 
     # Classing the JAGS output in NIGAM time--------------
     class(jags_output) <- c("reslr_output","eiv_slr_t")
@@ -689,7 +689,7 @@ model{
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    closeAllConnections()
+    #closeAllConnections()
 
     # Output with everything-------------
     jags_output <- list(
@@ -881,7 +881,7 @@ model{
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    closeAllConnections()
+    #closeAllConnections()
 
     # Output with everything-------------
     jags_output <- list(
@@ -1217,7 +1217,7 @@ model{
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    closeAllConnections()
+    #closeAllConnections()
 
     # Output with everything-------------
     jags_output <- list(

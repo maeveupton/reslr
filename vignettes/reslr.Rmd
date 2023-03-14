@@ -38,8 +38,10 @@ The `reslr` package uses the JAGS (Just Another Gibbs Sampler) software to run t
 
 Next, start Rstudio and find the window with the command prompt (the symbol `>`). Type
 
-```{r,eval = FALSE}
-install.packages("reslr")
+```{r,eval = TRUE}
+#install.packages("reslr")
+library(devtools)
+install()
 ```
 It may ask you to pick your nearest CRAN mirror (the nearest site which hosts R packages). You will then see some activity on the screen as the `reslr` package and the other packages it uses are downloaded. The final line should then read: 
 
@@ -47,7 +49,7 @@ It may ask you to pick your nearest CRAN mirror (the nearest site which hosts R 
 
 You then need to load the package.
 
-```{r,eval = FALSE}
+```{r,eval = TRUE}
 library(reslr)
 ```
 
@@ -106,7 +108,7 @@ If you are interested in a specific site from the example dataset, then filter f
 ```{r,include = FALSE}
 library(reslr)
 ```
-```{r,eval = FALSE}
+```{r,eval = TRUE}
 # For 1 site
 data_1site <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 # For multiple sites
@@ -199,26 +201,26 @@ The general structure for running `reslr` is as follows:
 The simplest model the `reslr` package can fit is a simple linear regression using the Errors-in-Variables method to account for the uncertainty associated with the proxy records, i.e. uncertainty associated with input (age) and the output (RSL). We would not recommend any model simpler than this (e.g. `lm`) as it will ignore some of the key uncertainties in the data. 
 
 This technique focuses on 1 site and is not recommended for multiple sites together. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 example_data_set <- reslr::NAACproxydata 
 # For 1 site
 CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
   x = CedarIslandNC,
   title = "Plot of the raw data",
@@ -253,7 +255,7 @@ params$par_summary
 The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept (alpha), the slope (beta) and the standard deviation of the model **How I explain this easily** (sigma). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. beta. In this example, the rate of sea-level change for Cedar Island North Carolina using the EIV simple linear regression model is estimated to be XXXX.
 
 **Step 6:** The results from the eiv_slr_t model can be visualised using the following function:
-```{r eval = FALSE}
+```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(x = jags_output.eiv_slr_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. 
@@ -270,26 +272,26 @@ The Errors-in-Variable Change Point model is an extension of the linear regressi
 This technique focuses on 1 site and the maximum number of change points available to the user is 3. We do not recommended for multiple sites together. It is important to note that not certain data sites will not work with 2 or 3 change points as there is no distinct changing points in the data. In this case, we recommend testing different number of change points and reviewing the resulting plots to confirm the correct number of change points is selected.
 
 As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 example_data_set <- reslr::NAACproxydata
 # For 1 site
 CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x =  CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
   x =  CedarIslandNC,
   title = "Plot of the raw data",
@@ -300,14 +302,14 @@ plot(
 ```
 
 **Step 3:** Run the model using the following code and select the number of change points you require:
-```{r eval = FALSE}
+```{r eval = TRUE}
 jags_output.eiv_cp1_t <- reslr::reslr_mcmc(
   input_data  = CedarIslandNC,
   model_type = "eiv_cp_t", n_cp = 1
 )
 ```
 To note, for 2 change points the user should use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 jags_output.eiv_cp2_t <- reslr::reslr_mcmc(
   input_data =  CedarIslandNC,
   model_type = "eiv_cp_t", n_cp = 2
@@ -317,26 +319,26 @@ jags_output.eiv_cp2_t <- reslr::reslr_mcmc(
 Similar to the earlier model, the output object `jags_output.eiv_cp1_t` stores the JAGS model run and should take a second to run.
 
 **Step 4:** The convergence of the algorithm is examined using the following:
-```{r eval = FALSE}
+```{r eval = TRUE}
 reslr::check_convergence(jags_output = jags_output.eiv_cp1_t)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
 **Step 5:** the parameter estimates from the model can be investigated:
-```{r eval = FALSE}
+```{r eval = TRUE}
 params <- reslr::parameter_estimate(jags_output = jags_output.eiv_cp1_t)
 params$par_summary
 ```
 For the eiv_cp_t model, the parameters of interest are the intercept (alpha), the slopes before the change point (beta[1]) and after the change point (beta[2]), the year of the change point(cp) and sigma the variance of the model (**Again bad description here**).
 
 **Step 6:** The results from the EIV Change Point model can be illustrated using:
-```{r eval = FALSE}
+```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x = jags_output.eiv_cp1_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval.
 
 To examine the data creating the total model result plot, the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_fit <- params$output_dataframes$total_model_df
 ```
 
@@ -344,26 +346,26 @@ total_model_fit <- params$output_dataframes$total_model_df
 The EIV Integrated Gaussian Process model provides the underlying rate of the process directly from the model. Further reading on this modeling approach can be found [here](https://projecteuclid.org/journals/annals-of-applied-statistics/volume-9/issue-2/Modeling-sea-level-change-using-errors-in-variables-integrated-Gaussian/10.1214/15-AOAS824.full). 
 
 This technique focuses on 1 site and we do not recommended for multiple sites together. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 example_data_set <- reslr::NAACproxydata
 # For 1 site
 CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x =  CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
   x =  CedarIslandNC,
   title = "Plot of the raw data",
@@ -391,13 +393,14 @@ If the model run has converged properly the values should be close to 1. If they
 
 **Step 5:** The user can examine the estimated parameters using:
 ```{r eval = FALSE}
+# Error
 params <- reslr::parameter_estimate(jags_output = jags_output.eiv_igp_t)
 params$par_summary
 ```
 Where "phi" controls the... *Need to check these*, and "sigma"....
 
 **Step 6:** The results from the EIV IGP model can be illustrated using:
-```{r eval = FALSE}
+```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(jags_output = jags_output.eiv_igp_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. In addition, the rate of change is plotted using this function.
@@ -407,7 +410,7 @@ To examine the data creating the total model result plot, the user can use:
 total_model_fit <- params$output_dataframes$total_model_fit
 ```
 To examine the data creating the total model rate of change plot the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_rate_df <-params$output_dataframes$total_model_rate_df
 ```
 
@@ -417,26 +420,26 @@ An alternative method to examine how the response variable varies in time is usi
 It model can obtain results in more efficient computational run times when compared with the eiv_igp_t model.
 
 This technique focuses on 1 site and we do not recommended for multiple sites together. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 example_data_set <- reslr::NAACproxydata
 # For 1 site
 CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x =  CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
   x =  CedarIslandNC,
   title = "Plot of the raw data",
@@ -448,7 +451,7 @@ plot(
 
 **Step 3:** To run this model type use the following:
 
-```{r,eval = FALSE}
+```{r,eval = TRUE}
 jags_output.ni_spline_t <- reslr::reslr_mcmc(input_data =  CedarIslandNC,
                                    model_type = "ni_spline_t")
 ```
@@ -456,56 +459,56 @@ The output object `jags_output.ni_spline_t` stores the JAGS model run.
 Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
 
 **Step 4:** The convergence of the algorithm is examined using the following:
-```{r eval = FALSE}
+```{r eval = TRUE}
 reslr::check_convergence(jags_output = jags_output.ni_spline_t)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
 **Step 5:** the parameter estimates from the model can be investigated:
-```{r eval = FALSE}
+```{r eval = TRUE}
 params <- reslr::parameter_estimate(jags_output = jags_output.ni_spline_t)
 params$par_summary
 ```
 In this situation, we can present the standard deviation associated with the NIGAM space time model. Where "sigma_r" highlights the variation associated with the temporal model and "sigma_res" presenting the overall variation.
 
 **Step 6:** the results from the ni_spline_t model can be illustrated using:
-```{r eval = FALSE}
+```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x = jags_output.ni_spline_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the ni_spline_t is presented when using this function.
 
 To examine the data creating the total model result plot, the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_fit <- params$output_dataframes$total_model_fit
 ```
 To examine the data creating the total model rate of change plot the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_rate_df <-params$output_dataframes$total_model_rate_df
 ```
 
 ## Noisy Input Generalised Additive Model in space time (**"ni_spline_st"**)
 The Noisy Input Generalised Additive Model in space time examines changes in response over multiple locations and throughout time. 
 For this model, a minimum of 2 sites should be used. As an example, we will filter the example dataset `NAACproxydata` to select two random sites to demonstrate the process:
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 example_data_set <- reslr::NAACproxydata
 # For 2 site
 multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nassau"))
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 multi_site <- reslr::reslr_load(data = multi_site,
                             tide_gauge_included = FALSE)
 ```
 In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`.**FINISH** Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x =  multi_site)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
   x =  multi_site,
   title = "Plot of the raw data",
@@ -516,37 +519,37 @@ plot(
 ```
 
 **Step 3:** Run the model for the two sites.
-```{r,eval = FALSE}
+```{r,eval = TRUE}
 jags_output.ni_spline_st <- reslr::reslr_mcmc(input_data =  multi_site, model_type = "ni_spline_st")
 ```
 The output object `jags_output.ni_spline_st` stores the JAGS model run. 
 Note that additional computational run time is required for the model compared with the ni_spline_t. 
 
 **Step 4:** The convergence of the algorithm is examined using the following:
-```{r eval = FALSE}
+```{r eval = TRUE}
 reslr::check_convergence(jags_output = jags_output.ni_spline_st)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
 **Step 5:** The parameter estimates from the model can be investigated:
-```{r eval = FALSE}
+```{r eval = TRUE}
 params <- reslr::parameter_estimate(jags_output = jags_output.ni_spline_st)
 params$par_summary
 ```
 In this situation, we can present the standard deviation associated with the NIGAM space time model. Where "sigma_l" highlights the variation associated with the spatial temporal model and "sigma_res" presenting the overall variation.
 
 **Step 6:** the results from the ni_spline_st model can be illustrated using:
-```{r eval = FALSE}
+```{r eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(x = jags_output.ni_spline_st)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the ni_spline_st is presented when using this function.
 
 To examine the data creating the total model result plot, the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_fit <- params$output_dataframes$total_model_fit
 ```
 To examine the data creating the total model rate of change plot the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_rate_df <-params$output_dataframes$total_model_rate_df
 ```
 
@@ -565,26 +568,26 @@ More information about this model can be found [here](https://arxiv.org/abs/2301
 This requires more than XXX sites.**Need to check this but the knots things are still a problem**
 
 For this model, a minimum of 2 sites should be used. As an example, we will filter the example dataset `NAACproxydata` to select two random sites to demonstrate the process:
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 example_data_set <- reslr::NAACproxydata
 # For 2 site
 multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nassau"))
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 multi_site <- reslr::reslr_load(data = multi_site,
                             tide_gauge_included = TRUE)
 ```
 In this function, the user should select to add tide gauge data by changing `tide_gauge_included = TRUE`. If the user has not provided the GIA rate and the associated GIA rate uncertainty within the `linear_rate` and `linear_rate_err` column prior to running the package, the package to calculate it using the data. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x =  multi_site)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
   x =  multi_site,
   title = "Plot of the raw data",
@@ -595,7 +598,7 @@ plot(
 ```
 
 **Step 3:** Run the model
-```{r,eval = FALSE}
+```{r,eval = TRUE}
 jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
   input_data =  multi_site,
   model_type = "ni_gam_decomp")
@@ -604,20 +607,20 @@ The output object `jags_output.ni_gam_decomp` stores the JAGS model run.
 Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
 
 **Step 4:** The convergence of the algorithm is examined using the following:
-```{r eval = FALSE}
+```{r eval = TRUE}
 reslr::check_convergence(jags_output = jags_output.ni_gam_decomp)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
 **Step 5:** The parameter estimates from the model can be investigated:
-```{r eval = FALSE}
+```{r eval = TRUE}
 params <- reslr::parameter_estimate(jags_output = jags_output.ni_gam_decomp)
 params$par_summary
 ```
 In this situation, we can present the standard deviation associated with each component of the NIGAM decomposition. This gives an insight into the variation caused by the different components with "sigma_r" representing the regional component, "sigma_l" highlighting the non-linear local component, "sigma_res" presenting the overall variation and "sigma_h" representing the site specific vertical offset.
 
 **Step 6:** The results from the ni_gam_decomp model can be illustrated using:
-```{r eval = FALSE}
+```{r eval = TRUE}
 plot(x = jags_output.ni_gam_decomp)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also,  the rate of change for the total model fit for the ni_gam_decomp is presented when using this function. 
@@ -628,28 +631,28 @@ The linear local component is plotted with 95\% Uncertainty interval. The associ
 The non-linear local component is plotted with with 95\% Uncertainty interval.
 
 To examine the data creating the total model result plot, the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_fit <- params$output_dataframes$total_model_fit
 ```
 To examine the data creating the total model rate of change plot the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 total_model_rate_df <-params$output_dataframes$total_model_rate_df
 ```
 To examine the data creating the regional component plot, the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 regional_model_fit <- params$output_dataframes$regional_model_fit
 ```
 To examine the data creating the regional component rate of change plot the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 regional_model_rate_df <-params$output_dataframes$regional_model_rate_df
 ```
 
 To examine the data creating the non-linear component plot, the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 non_lin_local_model_fit <- params$output_dataframes$non_lin_local_model_fit
 ```
 To examine the data creating the regional component rate of change plot the user can use:
-```{r eval = FALSE}
+```{r eval = TRUE}
 non_lin_local_model_rate_df <-params$output_dataframes$non_lin_local_model_rate_df
 ```
 
