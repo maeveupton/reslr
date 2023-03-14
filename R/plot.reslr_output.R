@@ -365,7 +365,7 @@ plot.reslr_output <- function(x,
   # NIGAM time
   if (inherits(jags_output, "ni_spline_t") == TRUE) {
     # Dataframes to plot
-    output_dataframes <- parameter_estimate(jags_output = jags_output)
+    output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
     total_model_df <- output_dataframes$total_model_df
     total_model_rate_df <- output_dataframes$total_model_rate_df
 
@@ -505,7 +505,7 @@ plot.reslr_output <- function(x,
   # NIGAM space time
   if (inherits(jags_output, "ni_spline_st") == TRUE) {
     # Dataframes to plot
-    output_dataframes <- parameter_estimate(jags_output = jags_output)
+    output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
     total_model_df <- output_dataframes$total_model_df
     total_model_rate_df <- output_dataframes$total_model_rate_df
     # Plots

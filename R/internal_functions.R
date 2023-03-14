@@ -743,7 +743,7 @@ bs_bbase <- function(x,
                      xl = min(x),
                      xr = max(x),
                      deg = 3,
-                     nseg = 5){
+                     nseg = 10){
                      #nseg = 5){
                      #nseg = 10){
                      #nseg = 1) {
