@@ -99,7 +99,7 @@ add_noisy_input <- function(model_run, model_type, data) {
 
   # Writing new dataframe with noisy extra column------
   data <- data.frame(data)
-  message("Noise Added to data frame")
+  #message("Noise Added to data frame")
   return(data)
 }
 
@@ -225,9 +225,8 @@ spline_basis_fun <- function(data, predict_data, model_type) {
       B_t_pred_deriv = B_t_pred_deriv
     )
 
-    message("Basis functions created for the splines in time")
+    #message("Basis functions created for the splines in time")
   }
-
 
   if (model_type == "ni_spline_st") {
     # t <- sort(data$Age)
@@ -415,7 +414,7 @@ spline_basis_fun <- function(data, predict_data, model_type) {
       B_st_deriv_pred = B_st_deriv_pred
     )
 
-    message("Basis functions created for the splines in space time")
+    #message("Basis functions created for the splines in space time")
   }
 
   if (model_type == "ni_gam_decomp") {
@@ -743,8 +742,8 @@ bs_bbase <- function(x,
                      xl = min(x),
                      xr = max(x),
                      deg = 3,
-                     nseg = 10){
-                     #nseg = 5){
+                     #nseg = 10){
+                     nseg = 5){
                      #nseg = 10){
                      #nseg = 1) {
                        # #' @param nseg number of sections

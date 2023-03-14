@@ -12,7 +12,7 @@
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' reslr_load(data = data)
 reslr_load<- function(data,
-                            n_prediction = 1,
+                            n_prediction = 100,
                             tide_gauge_included = FALSE,
                             input_Age_type = "CE") {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
@@ -76,8 +76,8 @@ reslr_load<- function(data,
       dplyr::contains("data_type_id")
     ) %>%
     unique()
-  times <- rep(seq(min(data$Age) - n_prediction,
-                   max(data$Age) + n_prediction, by = n_prediction / 1000), nrow(sites))
+  times <- rep(seq(min(data$Age) - n_prediction/1000,
+                   max(data$Age) + n_prediction/1000, by = n_prediction / 1000), nrow(sites))
   sites <- sites[rep(seq_len(nrow(sites)),
     each = length(times %>% unique())
   ), ]
@@ -90,13 +90,23 @@ reslr_load<- function(data,
     linear_rate_err = sites$linear_rate_err,
     data_type_id = sites$data_type_id
   )
-  data_age_boundary <- data %>%
-    dplyr::group_by(SiteName,data_type_id) %>%
-    dplyr::summarise(max_Age = ifelse(data_type_id == "ProxyRecordData",
-                                      max(Age)+n_prediction,max(Age)+0.001),
-                     min_Age = ifelse(data_type_id == "ProxyRecordData",
-                                      (min(Age)-n_prediction),(min(Age)-0.001))) %>%
-    unique()
+  # if(tide_gauge_included == "TRUE") {
+  # data_age_boundary <- data %>%
+  #   dplyr::group_by(SiteName,data_type_id) %>%
+  #   dplyr::summarise(max_Age = ifelse(data_type_id == "ProxyRecordData",
+  #                                     max(Age)+n_prediction/1000,max(Age)+0.001),
+  #                    min_Age = ifelse(data_type_id == "ProxyRecordData",
+  #                                     (min(Age)-n_prediction/1000),(min(Age)-0.001))) %>%
+  #   unique()
+  # }
+  # else{
+    data_age_boundary <- data %>%
+      dplyr::group_by(SiteName) %>%
+      dplyr::summarise(max_Age = max(Age)+(n_prediction/1000),
+                       min_Age = min(Age)-(n_prediction/1000)) %>%
+      unique()
+  #}
+
   data_age_boundary_test <-
     data_age_boundary %>% dplyr::mutate(max_age = max_Age*1000,min_age = min_Age*1000)
   # Filtering prediction grids to just cover the data

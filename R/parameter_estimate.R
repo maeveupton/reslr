@@ -165,12 +165,12 @@ parameter_estimate <- function(jags_output) {
 
   if (inherits(jags_output, "eiv_igp_t") == TRUE) {
     # Get predictions on a grid of t values.
-    Ngrid <- jags_data$Ngrid
-    tgrid <- jags_data$tstar
-    tstar <- jags_data$tstar
+    Ngrid <- jags_output$jags_data$Ngrid
+    tgrid <- jags_output$jags_data$tstar
+    tstar <- jags_output$jags_data$tstar
 
-    Dist <- jags_data$Dist
-
+    Dist <- jags_output$jags_data$Dist
+    #n_iter <- jags_output$noisy_model_run_output$n.iter
     # Set up the matrix that will contain the estimates
     pred <- matrix(NA, ncol = Ngrid, nrow = n_iter)
     K.gw <- K <- K.w.inv <- array(NA, c(n_iter, Ngrid, Ngrid))
@@ -226,8 +226,11 @@ parameter_estimate <- function(jags_output) {
     mean_samps <- apply(w.ms, 1, mean)
     w_summary <- dplyr::tibble(
       variable = "overall_rate",
-      mean = mean(mean_samps), sd = stats::sd(mean_samps),
-      mad = stats::mad(mean_samps), q5 = stats::quantile(mean_samps, 0.05),
+      mean = mean(mean_samps),
+      median = stats::median(mean_samps),
+      sd = stats::sd(mean_samps),
+      mad = stats::mad(mean_samps),
+      q5 = stats::quantile(mean_samps, 0.05),
       q95 = stats::quantile(mean_samps, 0.95), rhat = NA, ess_bulk = NA, ess_tail = NA
     )
     par_summary <- posterior::summarise_draws(sample_draws) %>%
