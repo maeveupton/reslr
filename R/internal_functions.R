@@ -771,6 +771,5 @@ bs_bbase <- function(x,
   )
   # Remove columns that contain zero only
   bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  message(print(nseg))
   return(bs_matrix)
 }

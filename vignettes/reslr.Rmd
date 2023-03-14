@@ -129,12 +129,12 @@ The user must ensure that the input data as a dataframe. For a single site or mu
 
 |Site|Region | Age | Age_err | RSL | RSL_err | Longitude | Latitude | linear_rate | linear_rate_err|
 |------| ----| -----| ----| ----|----|----|-----|-----|---|----|
-|"Leeds Point"| "New Jersey" | 1000 | 1 | 0.5 | 0.01 | 39.5 | - 74.4| 1.69 | 6.14e- 61|
-|"Leeds Point"| "New Jersey" | 1050 | 1.1 | 0.6 | 0.01 | 39.5 | - 74.4| 1.69 | 6.14e- 61| 
+|"Leeds Point"| "New Jersey" | 1000 | 1 | 0.5 | 0.01 | 39.5 | - 74.4| 1.69 | 0.03|
+|"Leeds Point"| "New Jersey" | 1050 | 1.1 | 0.6 | 0.01 | 39.5 | - 74.4| 1.69 | 0.03| 
 | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
 | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
 | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
-| "Cedar Island" | "North Carolina" | 1700 | 1.3 | 0.8 | 0.06 | -76.4 | 35 |  0.74 | 8.482526e-76 | 
+| "Cedar Island" | "North Carolina" | 1700 | 1.3 | 0.8 | 0.06 | -76.4 | 35 |  0.74 | 0.01 | 
 | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
 | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
 

@@ -12,7 +12,7 @@
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' reslr_load(data = data)
 reslr_load<- function(data,
-                            n_prediction = 100,
+                            n_prediction = 1,
                             tide_gauge_included = FALSE,
                             input_Age_type = "CE") {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
@@ -56,6 +56,7 @@ reslr_load<- function(data,
       message("Tide Gauge data included by the package")
     }
   } else {
+    data <- data %>% dplyr::mutate(data_type_id ="ProxyRecordData")
     message("No Tide Gauge data included")
     # message("Decadally average tide gauge data provided by user along with GIA rate and associated uncertainty")}
   }
@@ -75,7 +76,8 @@ reslr_load<- function(data,
       dplyr::contains("data_type_id")
     ) %>%
     unique()
-  times <- rep(seq(min(data$Age) + 0.01, max(data$Age) + 0.01, by = n_prediction / 1000), nrow(sites))
+  times <- rep(seq(min(data$Age) - n_prediction,
+                   max(data$Age) + n_prediction, by = n_prediction / 1000), nrow(sites))
   sites <- sites[rep(seq_len(nrow(sites)),
     each = length(times %>% unique())
   ), ]
@@ -89,14 +91,23 @@ reslr_load<- function(data,
     data_type_id = sites$data_type_id
   )
   data_age_boundary <- data %>%
-    dplyr::group_by(SiteName) %>%
-    dplyr::summarise(max_Age = max(Age), min_Age = min(Age))
-
+    dplyr::group_by(SiteName,data_type_id) %>%
+    dplyr::summarise(max_Age = ifelse(data_type_id == "ProxyRecordData",
+                                      max(Age)+n_prediction,max(Age)+0.001),
+                     min_Age = ifelse(data_type_id == "ProxyRecordData",
+                                      (min(Age)-n_prediction),(min(Age)-0.001))) %>%
+    unique()
+  data_age_boundary_test <-
+    data_age_boundary %>% dplyr::mutate(max_age = max_Age*1000,min_age = min_Age*1000)
   # Filtering prediction grids to just cover the data
   predict_data <- predict_data_full %>%
     dplyr::left_join(data_age_boundary, by = "SiteName") %>%
-    dplyr::filter(Age <= max_Age+0.01 & Age >= min_Age+ 0.01) %>%
+    dplyr::group_by(SiteName) %>%
+    dplyr::filter(Age >= (min_Age) & Age <= (max_Age)) %>%
+    #dplyr::filter(Age <= min_Age) %>%
     dplyr::tibble()
+  predict_data_test <- predict_data %>% dplyr::group_by(SiteName)%>%
+    dplyr::summarise(minAge_range = min(Age)*1000,maxAge_range = max(Age)*1000)
 
   # # Calculating GIA using linear regression through the data ------------------
   # if(GIA_rate_provided == "TRUE" & GIA_rate_sd_provided == "TRUE"){
