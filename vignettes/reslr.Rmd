@@ -1,5 +1,5 @@
 ---
-title: "Models for examining Relative Sea Level Change in R with reslr"
+title: "Statistical Models for examining Relative Sea Level Change in R with reslr"
 author: "Maeve Upton"
 date: "`r Sys.Date()`"
 output: 
@@ -15,18 +15,18 @@ editor_options:
 
 ## Introduction
 
-`reslr` is a package designed to account for measurement errors withing commonly used models (e.g. linear regression, change-point regression, Integrated Gaussian process regression) for examining data in time and space. The package has the ability to utilise data derived from paleoenvironmental reconstructions. One such example is estimating Relative Sea Level (RSL) over time and space using a variety of different model types within a Bayesian Framework. This guide is developed for researchers interested in examining RSL historic change that varies in time or in time and space and how the RSL signal can be decomposed into a fundamental components.
+`reslr` is a package designed to account for measurement errors within commonly used models (e.g. linear regression, change-point regression, Integrated Gaussian process regression) for examining data in time and space. The package has the ability to utilise data derived from paleoenvironmental reconstructions. One such example is estimating Relative Sea Level (RSL) over time and space using a variety of different model types within a Bayesian Framework. This guide is developed for researchers interested in examining RSL historic change that varies in time or in time and space and how the RSL signal can be decomposed into a fundamental components.
 
 
 There are a number of modelling options available to the user:
 
-| Statistical Model | Model Information | model_type code |
+|Statistical Model |Model Information |`model_type` code |
 |-----|-------|--------|
 | Errors in variables simple linear regression| This produces a straight line of best fit taking account of any age and measurement errors in the RSL values using the method of Cahill et al (2015) | **"eiv_slr_t"** |
 | Errors in variables change point model | The next modelling process used to examine RSL change in time is the temporal change point model. The change point model is an extension of the linear regression modelling process. It uses piece-wise linear sections and estimates where/when trend changes occur in the data (Cahill et al. 2015). | **"eiv_cp_t"** |
 | Errors in variables integrated Gaussian Process | The next modelling process used to examine RSL change in time is the temporal change point model. The change point model is an extension of the linear regression modelling process. It uses piece-wise linear sections and estimates where/when trend changes occur in the data (Cahill et al. 2015). | **"eiv_igp_t"** |
-| Noisy Input Generalised Additive model in time | This produces a non-linear fit using regression splines using the method of Upton et al (2023). | **"ni_spline_t"** |
-| Noisy Input Generalised Additive model in space and time | The produces a non-linear fit for a set of sites across a region using the method of Upton et al (2023). | **"ni_spline_st"**|
+| Noisy Input spline in time | This produces a non-linear fit using regression splines using the method of Upton et al (2023). | **"ni_spline_t"** |
+| Noisy Input spline in space and time | The produces a non-linear fit for a set of sites across a region using the method of Upton et al (2023). | **"ni_spline_st"**|
 | Noisy Input Generalised Additive model for the decomposition of the RSL signal | This produces a non-linear fit for a set of sites across a region and provides a decomposition of the signal into regional, local-linear (commonly GIA) and local non-linear components. Again this full model is as described in Upton et al (2023). | **"ni_gam_decomp"** |
 
 For all of the above models the user is able to get quantify and visualise changes of RSL and rates of change with associated uncertainties. Indeed a full posterior distribution ensemble of values is available in the output of the functions. For the decomposed full model the user is also able to access the posterior probability distributions of the individual components. 
@@ -38,7 +38,7 @@ The `reslr` package uses the JAGS (Just Another Gibbs Sampler) software to run t
 
 Next, start Rstudio and find the window with the command prompt (the symbol `>`). Type
 
-```{r,eval = TRUE}
+```{r,eval = TRUE,results='hide'}
 #install.packages("reslr")
 library(devtools)
 install()
@@ -101,7 +101,7 @@ The `NAACproxydata` is a data frame with 1705 rows and 8 columns which include:
 - Longitude: Longitude of the data site
 - RSL: Relative Sea level in meters
 - RSL_err: 1 standard deviation error associated with relative sea level measured in meters
-- Age: Age in years CE
+- Age: Age in years common era (CE)
 - Age_err: 1 standard deviation error associated with the Age in years CE
 
 If you are interested in a specific site from the example dataset, then filter for that site prior to running the package, using the following method:
@@ -127,17 +127,20 @@ data_multisite <- reslr::NAACproxydata %>% dplyr::filter(Site %in% c(
 
 The user must ensure that the input data as a dataframe. For a single site or multiple sites only one dataframe should be given to the package, i.e. combined all sites into one dataframe, with the following columns names:
 
-|Site|Region | Age | Age_err | RSL | RSL_err | Longitude | Latitude | linear_rate | linear_rate_err|
-|------| ----| -----| ----| ----|----|----|-----|-----|---|----|
-|"Leeds Point"| "New Jersey" | 1000 | 1 | 0.5 | 0.01 | 39.5 | - 74.4| 1.69 | 0.03|
-|"Leeds Point"| "New Jersey" | 1050 | 1.1 | 0.6 | 0.01 | 39.5 | - 74.4| 1.69 | 0.03| 
-| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
-| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
-| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
-| "Cedar Island" | "North Carolina" | 1700 | 1.3 | 0.8 | 0.06 | -76.4 | 35 |  0.74 | 0.01 | 
-| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
-| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | 
+| Site | Region | Age | Age_err | RSL | RSL_err | Longitude | Latitude | linear_rate | linear_rate_err | data_type_id |
+|------| ----| -----| ----| ----|----|----|-----|-----|---|----|---|
+|"Leeds Point"| "New Jersey" | 1000 | 8 | 0.5 | 0.01 | 39.5 | - 74.4| 1.69 | 0.03|"ProxyRecord"|
+|"Leeds Point"| "New Jersey" | 1050 | 11 | 0.6 | 0.01 | 39.5 | - 74.4| 1.69 | 0.03| "ProxyRecord"|
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ...|
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ...|
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ...|
+| "Cedar Island" | "North Carolina" | 1700 | 12 | 0.8 | 0.06 | -76.4 | 35 |  0.74 | 0.01 | "ProxyRecord"|
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ...|
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ...|
+| "KEY WEST" | "USA" | 1970 | 5 | 0.6 | 0.02 | -81.8 | 24.6 | 0.1289976 | 0.03 |"TideGaugeData"|
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
 
+**Check TG name without spaces**
 - Site is the name of the site in question, e.g. Leeds Point.
 
 - Region is the area in which is was collected, e.g. New Jersey. To note, in the package, the Site and the Region columns will be combined to form a factor called the SiteName which results in an output, e.g. "Leeds Point,\n New Jersey".
@@ -157,6 +160,8 @@ The user must ensure that the input data as a dataframe. For a single site or mu
 - **Optional** linear_rate is a column that contains the linear rate in mm per year associated with that site, arising from processes such as GIA. *This is not a requirement*. For the NIGAM decomposition model the user has the option of using their own rate, otherwise the package will calculate it using the data.
 
 - **Optional** linear_rate_err is a column that contains associated uncertainty for the linear rate in mm per year. *This is not a requirement*. For the NIGAM decomposition model the user has the option of using their value, otherwise the package will calculate it using the data.
+
+- **Optional** data_type_id is a column to identify the sources of data from "ProxyRecord" or "TideGaugeData". The inclusion of tide gauge data is not a requirement, however, it is possible. The user must ensure that the Age is decadally averaged and the uncertainty associated with the age, i.e. Age_err, is 5 years. The uncertainty associated with RSL_err is the standard deviation of the RSL over the 10 years. In addition, the linear_rate and the linear_rate_err must be provided for each tide gauge site.
 
 
 ### Tide Gauge Data

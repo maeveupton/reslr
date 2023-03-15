@@ -11,25 +11,23 @@
 #' @examples
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' reslr_load(data = data)
-reslr_load<- function(data,
-                            n_prediction = 100,
-                            tide_gauge_included = FALSE,
-                            input_Age_type = "CE") {
+reslr_load <- function(data,
+                       n_prediction = 100,
+                       tide_gauge_included = FALSE,
+                       input_Age_type = "CE") {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
 
   # Tidy Original data-------------------------------
   if (!("SiteName" %in% colnames(data))) {
     data <- data %>%
       dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
-  }
-  else{
+  } else {
     message("User must provide a site name and a region name")
   }
-  if(input_Age_type == "BCE"){
+  if (input_Age_type == "BCE") {
     data <- data %>%
       dplyr::mutate(Age = 1950 - Age)
-  }
-  else{
+  } else {
     data <- data
   }
 
@@ -56,7 +54,7 @@ reslr_load<- function(data,
       message("Tide Gauge data included by the package")
     }
   } else {
-    data <- data %>% dplyr::mutate(data_type_id ="ProxyRecordData")
+    data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
     message("No Tide Gauge data included")
     # message("Decadally average tide gauge data provided by user along with GIA rate and associated uncertainty")}
   }
@@ -76,8 +74,10 @@ reslr_load<- function(data,
       dplyr::contains("data_type_id")
     ) %>%
     unique()
-  times <- rep(seq(min(data$Age) - n_prediction/1000,
-                   max(data$Age) + n_prediction/1000, by = n_prediction / 1000), nrow(sites))
+  times <- rep(seq(min(data$Age) - n_prediction / 1000,
+    max(data$Age) + n_prediction / 1000,
+    by = n_prediction / 1000
+  ), nrow(sites))
   sites <- sites[rep(seq_len(nrow(sites)),
     each = length(times %>% unique())
   ), ]
@@ -100,24 +100,26 @@ reslr_load<- function(data,
   #   unique()
   # }
   # else{
-    data_age_boundary <- data %>%
-      dplyr::group_by(SiteName) %>%
-      dplyr::summarise(max_Age = max(Age)+(n_prediction/1000),
-                       min_Age = min(Age)-(n_prediction/1000)) %>%
-      unique()
-  #}
+  data_age_boundary <- data %>%
+    dplyr::group_by(SiteName) %>%
+    dplyr::summarise(
+      max_Age = max(Age) + (n_prediction / 1000),
+      min_Age = min(Age) - (n_prediction / 1000)
+    ) %>%
+    unique()
+  # }
 
   data_age_boundary_test <-
-    data_age_boundary %>% dplyr::mutate(max_age = max_Age*1000,min_age = min_Age*1000)
+    data_age_boundary %>% dplyr::mutate(max_age = max_Age * 1000, min_age = min_Age * 1000)
   # Filtering prediction grids to just cover the data
   predict_data <- predict_data_full %>%
     dplyr::left_join(data_age_boundary, by = "SiteName") %>%
     dplyr::group_by(SiteName) %>%
     dplyr::filter(Age >= (min_Age) & Age <= (max_Age)) %>%
-    #dplyr::filter(Age <= min_Age) %>%
     dplyr::tibble()
-  predict_data_test <- predict_data %>% dplyr::group_by(SiteName)%>%
-    dplyr::summarise(minAge_range = min(Age)*1000,maxAge_range = max(Age)*1000)
+  predict_data_test <- predict_data %>%
+    dplyr::group_by(SiteName) %>%
+    dplyr::summarise(minAge_range = min(Age) * 1000, maxAge_range = max(Age) * 1000)
 
   # # Calculating GIA using linear regression through the data ------------------
   # if(GIA_rate_provided == "TRUE" & GIA_rate_sd_provided == "TRUE"){
@@ -134,8 +136,16 @@ reslr_load<- function(data,
   # }
 
   # Ensuring SiteName is a factor
-  data <- data %>% dplyr::mutate(SiteName= as.factor(SiteName))
-  predict_data <- predict_data %>% dplyr::mutate(SiteName= as.factor(SiteName))
+  data <- data %>%
+    dplyr::mutate(
+      SiteName = as.factor(SiteName),
+      data_type_id = as.factor(data_type_id)
+    )
+  predict_data <- predict_data %>%
+    dplyr::mutate(
+      SiteName = as.factor(SiteName),
+      data_type_id = as.factor(data_type_id)
+    )
 
   input_data <- base::list(
     data = data,

@@ -43,13 +43,12 @@ clean_tidal_gauge_data <- function(data) {
   file_list <- utils::read.csv(file_path,stringsAsFactors = FALSE, header=F,sep=";")
   colnames(file_list)<- c("id","Latitude","Longitude","name","coastline","stationcode","stationflag")
   # Removing white space in the name of each site
-  file_list$name <- gsub("[[:space:]]", "",file_list$name)
-  file_list$stationflag <- gsub("[[:space:]]", "",file_list$stationflag)
+  file_list$name <- stringr::str_trim(file_list$name,side = "both")#gsub("[[:space:]]", "",file_list$name)
+  file_list$stationflag <-  stringr::str_trim(file_list$stationflag,side = "both")#gsub("[[:space:]]", "",file_list$stationflag)
 
   data_TG <- temp_SL %>%
     dplyr::mutate(id = stringr::str_extract(basename(temp_SL$id),"[0-9]+")) %>% # pulling out the file number from string
     dplyr::filter(!RSL== -99999) %>%  # Cases where bad data was collected
-    #dplyr::filter(RSL== -99999) %>%  # Cases where bad data was collected
     # mutate(RSL = RSL - 7000) # Offset
     dplyr::group_by(id) %>% #2000-2018 used as the tidal epoch
     dplyr::mutate(Age_epoch_id = ifelse(dplyr::between(Age,2000,2018),TRUE,FALSE))
@@ -166,7 +165,7 @@ clean_tidal_gauge_data <- function(data) {
     dplyr::mutate(Latitude = round(Latitude, 1)) %>%
     tidyr::unite("LongLat", Latitude:Longitude, remove = FALSE) %>% # Uniting 2 columns
     dplyr::mutate(site = sprintf("%02d", as.integer(as.factor(LongLat)))) %>%
-    dplyr::mutate(data_type_id = "ProxyRecordData") %>%
+    dplyr::mutate(data_type_id = "ProxyRecord") %>%
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(
       Longitude = dplyr::first(Longitude),

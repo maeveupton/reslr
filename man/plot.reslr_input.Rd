@@ -14,7 +14,7 @@
 )
 }
 \arguments{
-\item{x}{An object created via the function  \code{\link{reslr_load}}}
+\item{x}{An object created via the function \code{\link{reslr_load}}}
 
 \item{title}{Title of the Plot}
 

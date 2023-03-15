@@ -168,9 +168,8 @@ parameter_estimate <- function(jags_output) {
     Ngrid <- jags_output$jags_data$Ngrid
     tgrid <- jags_output$jags_data$tstar
     tstar <- jags_output$jags_data$tstar
-
     Dist <- jags_output$jags_data$Dist
-    #n_iter <- jags_output$noisy_model_run_output$n.iter
+
     # Set up the matrix that will contain the estimates
     pred <- matrix(NA, ncol = Ngrid, nrow = n_iter)
     K.gw <- K <- K.w.inv <- array(NA, c(n_iter, Ngrid, Ngrid))
@@ -231,7 +230,8 @@ parameter_estimate <- function(jags_output) {
       sd = stats::sd(mean_samps),
       mad = stats::mad(mean_samps),
       q5 = stats::quantile(mean_samps, 0.05),
-      q95 = stats::quantile(mean_samps, 0.95), rhat = NA, ess_bulk = NA, ess_tail = NA
+      q95 = stats::quantile(mean_samps, 0.95),
+      rhat = NA, ess_bulk = NA, ess_tail = NA
     )
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c("phi", "sigma_g", "sigma"))
@@ -247,13 +247,6 @@ parameter_estimate <- function(jags_output) {
 
     # Dataframes for plotting output using prediction grid---------------
     total_model_df <- data.frame(
-      # RSL_mod = apply(mu_post, 2, mean),
-      # RSL_mod_upr = apply(mu_post, 2, stats::quantile, probs = 0.025),
-      # RSL_mod_lwr = apply(mu_post, 2, stats::quantile, probs = 0.975),
-      # upr_50 = apply(mu_post, 2, stats::quantile, probs = 0.25),
-      # lwr_50 = apply(mu_post, 2, stats::quantile, probs = 0.75),
-      # jags_output$data$Age,
-      # jags_output$data$SiteName,
       RSL_mod = apply(mu_post_pred, 2, mean),
       RSL_mod_upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
       RSL_mod_lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
@@ -263,23 +256,17 @@ parameter_estimate <- function(jags_output) {
       jags_output$predict_data$SiteName,
       jags_output$predict_data$linear_rate,
       jags_output$predict_data$linear_rate_err,
-      ID = "Total Predicted Posterior Model"
+      ID = "Total Predicted Posterior Model",
+      data_type_id = jags_output$predict_data$data_type_id
     )
     names(total_model_df) <- c(
       "RSL", "upr", "lwr", "upr_50", "lwr_50",
       "Age",
       "SiteName", "linear_rate", "linear_rate_err",
-      "ID"
+      "ID",'data_type_id'
     )
     # Dataframes for derivative plots from prediction grids------------
     total_model_rate_df <- data.frame(
-      # RSL_mod = apply(mu_deriv_post, 2, mean),
-      # RSL_mod_upr = apply(mu_deriv_post, 2, stats::quantile, probs = 0.025),
-      # RSL_mod_lwr = apply(mu_deriv_post, 2, stats::quantile, probs = 0.975),
-      # upr_50 = apply(mu_deriv_post, 2, stats::quantile, probs = 0.25),
-      # lwr_50 = apply(mu_deriv_post, 2, stats::quantile, probs = 0.75),
-      # jags_output$data$Age,
-      # jags_output$data$SiteName,
       RSL_mod = apply(mu_pred_deriv_post, 2, mean),
       RSL_mod_upr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
       RSL_mod_lwr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
@@ -336,13 +323,14 @@ parameter_estimate <- function(jags_output) {
       jags_output$predict_data$SiteName,
       jags_output$predict_data$linear_rate,
       jags_output$predict_data$linear_rate_err,
-      ID = "Total Predicted Posterior Model"
+      ID = "Total Predicted Posterior Model",
+      data_type_id = jags_output$predict_data$data_type_id
     )
     names(total_model_df) <- c(
       "RSL", "upr", "lwr", "upr_50", "lwr_50",
       "Age",
       "SiteName", "linear_rate", "linear_rate_err",
-      "ID"
+      "ID",'data_type_id'
     )
 
     # Dataframes for derivative plots from prediction grids------------

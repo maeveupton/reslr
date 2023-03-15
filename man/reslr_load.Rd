@@ -6,7 +6,7 @@
 \usage{
 reslr_load(
   data,
-  n_prediction = 1,
+  n_prediction = 100,
   tide_gauge_included = FALSE,
   input_Age_type = "CE"
 )

@@ -11,45 +11,43 @@ add_linear_rate <- function(data) {
 
   # Download the file and save it to the temporary file
   utils::download.file(url,
-                       destfile =temp_file,# "dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc",#temp_file,
-                       method = "libcurl", mode = "wb")
+    destfile = temp_file, # "dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc",#temp_file,
+    method = "libcurl", mode = "wb"
+  )
   # Unzip the data file to a temporary directory
   temp_dir <- tempfile()
-  utils::unzip(temp_file, exdir = temp_dir)
-
-  # download.file("https://www.dropbox.com/s/a8m4kzmcxh54mmt/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc?dl=1",
-  #   destfile = "dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc",
-  #   method = "libcurl", mode = "wb"
-  # )
-  #nc_data <- ncdf4::nc_open("dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc") # ICE5G: better fit for data
+  suppressWarnings(
+    utils::unzip(temp_file, exdir = temp_dir)
+  )
+  # Opening the files
   nc_data <- ncdf4::nc_open(temp_file) # ICE5G: better fit for data
 
-  #---Rounding to 1 decimal point to reduce number of spatial options--
+  # Rounding to 1 decimal point to reduce number of spatial options--
   dat_lon <- round(data$Longitude, 1)
   dat_lat <- round(data$Latitude, 1)
 
-  ### get lon and lat from GIA model output
+  # Get lon and lat from GIA model output
   lon <- round(ncdf4::ncvar_get(nc_data, "Lon"), 1)
   lat <- round(ncdf4::ncvar_get(nc_data, "Lat"), 1)
 
-  ### needs to be sorted for the match.closest function() below
-  ### note need the index for the unsorted coordinate for pulling the correct SL rate later
+  # Needs to be sorted for the match.closest function() below
+  # Note need the index for the unsorted coordinate for pulling the correct SL rate later
   gia_lat <- dplyr::tibble(index = 1:length(lat), lat) %>% dplyr::arrange(lat)
   gia_lon <- dplyr::tibble(index = 1:length(lon), lon) %>% dplyr::arrange(lon)
 
-  #--- Matching closest long & lat values---
+  # Matching closest long & lat values
   lat_index <- gia_lat$index[match.closest(dat_lat, gia_lat$lat)]
   lon_index <- gia_lon$index[match.closest(360 + dat_lon, gia_lon$lon)] # change data lon to degrees east
 
-  #---GIA rates---
+  # GIA rates
   SL <- ncdf4::ncvar_get(nc_data, "Dsea_250")
-  #---repicating to match dim of data---
+  # Repicating to match dim of data
   linear_slope <- rep(NA, nrow(data))
   for (i in 1:nrow(data)) {
     linear_slope[i] <- (SL[lon_index[i], lat_index[i]])
   }
 
-  #---Combining linear with other dataset--
+  # Combining linear with other dataset
   data <- cbind(data, ICE5_GIA_slope = linear_slope) # mm/yr
 
   # Remove the temporary file and directory
@@ -96,7 +94,7 @@ match.closest <- function(x, table, tolerance = Inf, nomatch = NA_integer_) {
 #' @param data Input data
 #' @noRd
 linear_reg_rates <- function(data) {
-  Age <- RSL <- Age_err<- RSL_err <- linear_rate <- linear_rate_err <-SiteName <- Longitude <- Latitude <- NULL
+  Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- NULL
   data_filter <- data %>%
     dplyr::filter(!Age > 1.800) # Ignoring recent human influences to SL rise
 
