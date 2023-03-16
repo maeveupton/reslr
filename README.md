@@ -6,6 +6,7 @@ There are a variety of different statistical model types available to the user, 
 
 To use the `reslr` package install it using the following method:
 ```{r}
+# install.packages("devtools")
 devtools::install_github("maeveupton/reslr")
 ```
 The package is not yet on CRAN.
