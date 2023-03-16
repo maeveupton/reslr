@@ -182,7 +182,7 @@ Important to note, the tide gauge data require values for the `linear_rate` and 
 
 The general structure for running `reslr` is as follows:
 
-**Step 1.** Load in the data using `reslr_load`. If tide gauge data required update `tide_gauge_included = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100` with the default of 100 years. The `input_Age_type` argument is associated with the type of input Age where the default is in Common era. 
+**Step 1.** Load in the data using `reslr_load`. If tide gauge data required update `tide_gauge_included = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100` with the default of 100 years. The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
 
 **Step 2.** Plot the raw data using `plot`
 

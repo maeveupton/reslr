@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{An object of class \code{reslr_input}}
 
-\item{...}{Other argunemnts (not supported)}
+\item{...}{Other arguments (not supported)}
 }
 \value{
 A neat presentation of your input reslr object
