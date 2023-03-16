@@ -22,12 +22,14 @@ reslr_load <- function(data,
     data <- data %>%
       dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
   } else {
-    message("User must provide a site name and a region name")
+    cat("User must provide a site name and a region name. \n")
   }
   if (input_Age_type == "BCE") {
+    cat("The inputed age value will be converted to units of Common Era. \n")
     data <- data %>%
       dplyr::mutate(Age = 1950 - Age)
   } else {
+    cat("The inputed age value is units of Common Era. \n")
     data <- data
   }
 
@@ -35,10 +37,10 @@ reslr_load <- function(data,
   if (!("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data))) {
     lm_data_rates <- linear_reg_rates(data)
     data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
-    message("Package calculated linear_rate and linear_rate_err using the input data")
+    cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
   } else {
     data <- data
-    message("Package will use linear_rate and linear_rate_err provided by the user")
+    cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
   }
   # Include tide gauge data--------------------
   if (tide_gauge_included == "TRUE") {
@@ -51,15 +53,15 @@ reslr_load <- function(data,
           linear_rate = ifelse(data_type_id == "TideGaugeData", ICE5_GIA_slope, linear_rate),
           linear_rate_err = ifelse(data_type_id == "TideGaugeData", 0.3, linear_rate_err)
         )
-      message("Tide Gauge data included by the package")
+      cat("Tide Gauge data included by the package. \n")
     }
   } else {
     data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
-    message("No Tide Gauge data included")
-    # message("Decadally average tide gauge data provided by user along with GIA rate and associated uncertainty")}
+    cat("No Tide Gauge data included. \n")
+    # cat("Decadally average tide gauge data provided by user along with GIA rate and associated uncertainty")}
   }
   # else{
-  #   message("No Tide Gauge data included")
+  #   cat("No Tide Gauge data included")
   # }
 
 
@@ -81,7 +83,7 @@ reslr_load <- function(data,
   sites <- sites[rep(seq_len(nrow(sites)),
     each = length(times %>% unique())
   ), ]
-  predict_data_full <- dplyr::tibble(
+  data_grid_full <- dplyr::tibble(
     Age = times,
     Longitude = sites$Longitude,
     Latitude = sites$Latitude,
@@ -112,27 +114,27 @@ reslr_load <- function(data,
   data_age_boundary_test <-
     data_age_boundary %>% dplyr::mutate(max_age = max_Age * 1000, min_age = min_Age * 1000)
   # Filtering prediction grids to just cover the data
-  predict_data <- predict_data_full %>%
+  data_grid <- data_grid_full %>%
     dplyr::left_join(data_age_boundary, by = "SiteName") %>%
     dplyr::group_by(SiteName) %>%
     dplyr::filter(Age >= (min_Age) & Age <= (max_Age)) %>%
     dplyr::tibble()
-  predict_data_test <- predict_data %>%
+  data_grid_test <- data_grid %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(minAge_range = min(Age) * 1000, maxAge_range = max(Age) * 1000)
 
   # # Calculating GIA using linear regression through the data ------------------
   # if(GIA_rate_provided == "TRUE" & GIA_rate_sd_provided == "TRUE"){
   #
-  #   message("Using rate and associated uncertainty of the rate provided by the user")
+  #   cat("Using rate and associated uncertainty of the rate provided by the user")
   # }
   # else{
-  #   message("No rate or associated uncertainty provided, package will calculate it using the data")
+  #   cat("No rate or associated uncertainty provided, package will calculate it using the data")
   # }
   # if (calculate_GIA_rate == "TRUE") {
   #   lm_data_rates <- linear_reg_rates(data)
   #   data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
-  #   message("Calculated GIA rate and uncertainty using the input data")
+  #   cat("Calculated GIA rate and uncertainty using the input data")
   # }
 
   # Ensuring SiteName is a factor
@@ -141,7 +143,7 @@ reslr_load <- function(data,
       SiteName = as.factor(SiteName),
       data_type_id = as.factor(data_type_id)
     )
-  predict_data <- predict_data %>%
+  data_grid <- data_grid %>%
     dplyr::mutate(
       SiteName = as.factor(SiteName),
       data_type_id = as.factor(data_type_id)
@@ -149,7 +151,7 @@ reslr_load <- function(data,
 
   input_data <- base::list(
     data = data,
-    predict_data = predict_data
+    data_grid = data_grid
   )
   class(input_data) <- "reslr_input"
   return(input_data)

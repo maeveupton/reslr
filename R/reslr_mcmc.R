@@ -40,7 +40,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
   # Input Data -------------
   data <- input_data$data# Add the function here
-  predict_data <- input_data$predict_data
+  data_grid <- input_data$data_grid
 
   # Simple Linear Regression ----------------
   if (model_type == "eiv_slr_t") {
@@ -81,10 +81,10 @@ reslr_mcmc.reslr_input <- function(input_data,
       y = data$RSL,
       y_err = data$RSL_err,
       t_err = data$Age_err,
-      t_pred = predict_data$Age,
+      t_pred = data_grid$Age,
       t = data$Age,
       n_obs = nrow(data),
-      n_pred = nrow(predict_data)
+      n_pred = nrow(data_grid)
     )
 
     # Run JAGS------------------------
@@ -108,8 +108,10 @@ reslr_mcmc.reslr_input <- function(input_data,
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      predict_data = predict_data
+      data_grid = data_grid
     )
+    #showConnections()
+    #close(model_file)
     #closeAllConnections()
 
     # Classing the JAGS output in NIGAM time--------------
@@ -165,8 +167,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       y = data$RSL,
       y_err = data$RSL_err,
       t = data$Age,
-      n_pred = nrow(predict_data),
-      t_pred = predict_data$Age,
+      n_pred = nrow(data_grid),
+      t_pred = data_grid$Age,
       t_err = data$Age_err,
       t_min = min(data$Age),
       t_max = max(data$Age),
@@ -189,7 +191,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      predict_data = predict_data
+      data_grid = data_grid
     )
 
     # Classing the JAGS output in 1 Change Point--------------
@@ -266,8 +268,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       y = data$RSL,
       y_err = data$RSL_err,
       t = data$Age,
-      n_pred = nrow(predict_data),
-      t_pred = predict_data$Age,
+      n_pred = nrow(data_grid),
+      t_pred = data_grid$Age,
       t_err = data$Age_err,
       t_min = min(data$Age),
       t_max = max(data$Age),
@@ -291,7 +293,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      predict_data = predict_data
+      data_grid = data_grid
     )
 
     # Classing the JAGS output in 2 Change Point--------------
@@ -373,8 +375,8 @@ model{
       y = data$RSL,
       y_err = data$RSL_err,
       t = data$Age,
-      n_pred = nrow(predict_data),
-      t_pred = predict_data$Age,
+      n_pred = nrow(data_grid),
+      t_pred = data_grid$Age,
       t_err = data$Age_err,
       t_min = min(data$Age),
       t_max = max(data$Age),
@@ -398,7 +400,7 @@ model{
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      predict_data = predict_data
+      data_grid = data_grid
     )
 
     # Classing the JAGS output in 3 Change Point--------------
@@ -465,8 +467,8 @@ model{
       y = data$RSL,
       y_err = data$RSL_err,
       t = data$Age,
-      n_pred = nrow(predict_data),
-      t_pred = predict_data$Age,
+      n_pred = nrow(data_grid),
+      t_pred = data_grid$Age,
       t_err = data$Age_err,
       t_min = min(data$Age),
       t_max = max(data$Age),
@@ -492,7 +494,7 @@ model{
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      predict_data = predict_data
+      data_grid = data_grid
     )
 
     # Classing the JAGS output for eiv_igp_t--------------
@@ -554,7 +556,7 @@ model{
     # Basis functions in time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
-      predict_data = predict_data,
+      data_grid = data_grid,
       model_type = model_type
     )
 
@@ -668,8 +670,8 @@ model{
       y_err = data$RSL_err,
       t = data$Age,
       n_obs = nrow(data),
-      t_pred = predict_data$Age,
-      n_pred = length(predict_data$Age),
+      t_pred = data_grid$Age,
+      n_pred = length(data_grid$Age),
       B_t = spline_basis_fun_list$B_t,
       B_t_deriv = spline_basis_fun_list$B_t_deriv,
       B_t_pred = spline_basis_fun_list$B_t_pred,
@@ -696,7 +698,7 @@ model{
       noisy_model_run_output = noisy_model_run_output,
       jags_data = jags_data,
       data = data,
-      predict_data = predict_data
+      data_grid = data_grid
     )
 
 
@@ -776,7 +778,7 @@ model{
   #   # Basis functions in time -----------------------------
   #   spline_basis_fun_list <- spline_basis_fun(
   #     data = data,
-  #     predict_data = predict_data,
+  #     data_grid = data_grid,
   #     model_type = model_type
   #   )
   #
@@ -805,8 +807,8 @@ model{
   #       y_err = data$RSL_err,
   #       t = data$Age,
   #       n_obs = nrow(data),
-  #       t_pred = predict_data$Age,
-  #       n_pred = length(predict_data$Age),
+  #       t_pred = data_grid$Age,
+  #       n_pred = length(data_grid$Age),
   #       B_t = spline_basis_fun_list$B_t,
   #       B_t_deriv = spline_basis_fun_list$B_t_deriv,
   #       B_t_pred = spline_basis_fun_list$B_t_pred,
@@ -835,7 +837,7 @@ model{
   #     noisy_model_run_output = model_run,
   #     jags_data = jags_data,
   #     data = data,
-  #     predict_data = predict_data
+  #     data_grid = data_grid
   #   )
   #
   #
@@ -886,7 +888,7 @@ model{
     # Basis functions in space time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
-      predict_data = predict_data,
+      data_grid = data_grid,
       model_type = model_type
     )
 
@@ -986,7 +988,7 @@ model{
       NI_var_term = data$NI_var_term,
       y_err = data$RSL_err,
       t = data$Age,
-      n_pred = length(predict_data$Age),
+      n_pred = length(data_grid$Age),
       n_obs = nrow(data),
       B_st = spline_basis_fun_list$B_st,
       B_st_deriv = spline_basis_fun_list$B_st_deriv,
@@ -1027,7 +1029,7 @@ model{
       noisy_model_run_output = noisy_model_run_output,
       jags_data = jags_data,
       data = data,
-      predict_data = predict_data
+      data_grid = data_grid
     )
     # Classing the JAGS output in NIGAM space time--------------
     class(jags_output) <- c("reslr_output","ni_spline_st")
@@ -1083,7 +1085,7 @@ model{
     # Basis functions in space time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
-      predict_data = predict_data,
+      data_grid = data_grid,
       model_type = model_type
     )
 
@@ -1092,13 +1094,13 @@ model{
       y = data$RSL,
       y_err = data$RSL_err,
       t = data$Age,
-      t_pred = predict_data$Age,
+      t_pred = data_grid$Age,
       site = as.factor(data$SiteName),
-      site_pred = as.factor(predict_data$SiteName),
+      site_pred = as.factor(data_grid$SiteName),
       n_sites = length(unique(data$SiteName)),
-      n_site_pred = length(unique(predict_data$SiteName)),
+      n_site_pred = length(unique(data_grid$SiteName)),
       n_obs = nrow(data),
-      n_pred = nrow(predict_data),
+      n_pred = nrow(data_grid),
       B_t = spline_basis_fun_list$B_t,
       B_t_pred = spline_basis_fun_list$B_t_pred,
       n_knots_t = ncol(spline_basis_fun_list$B_t),
@@ -1112,12 +1114,12 @@ model{
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
         dplyr::pull(),
-      linear_rate_pred = predict_data %>%
+      linear_rate_pred = data_grid %>%
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate) %>%
         dplyr::pull(),
-      linear_rate_err_pred = predict_data %>%
+      linear_rate_err_pred = data_grid %>%
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
@@ -1273,12 +1275,12 @@ model{
       y = data$RSL,
       y_err = data$RSL_err,
       t = data$Age,
-      t_pred = predict_data$Age,
+      t_pred = data_grid$Age,
       site = as.factor(data$SiteName),
-      site_pred = as.factor(predict_data$SiteName),
+      site_pred = as.factor(data_grid$SiteName),
       n_sites = length(unique(data$SiteName)),
-      n_sites_pred = length(unique(predict_data$SiteName)),
-      n_pred = length(predict_data$Age),
+      n_sites_pred = length(unique(data_grid$SiteName)),
+      n_pred = length(data_grid$Age),
       n_obs = nrow(data),
       B_t = spline_basis_fun_list$B_t,
       B_t_deriv = spline_basis_fun_list$B_t_deriv,
@@ -1300,12 +1302,12 @@ model{
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
         dplyr::pull(),
-      linear_rate_pred = predict_data %>%
+      linear_rate_pred = data_grid %>%
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate) %>%
         dplyr::pull(),
-      linear_rate_err_pred = predict_data %>%
+      linear_rate_err_pred = data_grid %>%
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
@@ -1363,7 +1365,7 @@ model{
       noisy_model_run_output = noisy_model_run_output,
       jags_data = jags_data,
       data = data,
-      predict_data = predict_data
+      data_grid = data_grid
     )
 
     # Classing the JAGS output in NIGAM for RSL decomposition--------------

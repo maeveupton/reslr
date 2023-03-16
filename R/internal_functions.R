@@ -158,12 +158,12 @@ igp_data <- function(data) {
 #' Creating basis function for splines
 #'
 #' @param data Input data
-#' @param predict_data Prediction data
+#' @param data_grid Prediction data
 #' @param model_type Type of model
 #' @noRd
 
 
-spline_basis_fun <- function(data, predict_data, model_type) {
+spline_basis_fun <- function(data, data_grid, model_type) {
   Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
 
   if (model_type == "ni_spline_t") {
@@ -188,13 +188,13 @@ spline_basis_fun <- function(data, predict_data, model_type) {
     B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
 
     # Basis functions in time using prediction data frame-----------------------
-    t_pred <- sort(predict_data$Age)
+    t_pred <- sort(data_grid$Age)
     B_t_pred <- bs_bbase(t_pred,
       xl = min(t), xr = max(t))
     # Now create derivatives----------------------
     # h <- 0.001
     h <- 0.01
-    t_pred <- predict_data$Age
+    t_pred <- data_grid$Age
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
     first_deriv_step2 <- first_deriv_calc(t_pred - h)
     B_t_pred_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
@@ -300,17 +300,17 @@ spline_basis_fun <- function(data, predict_data, model_type) {
 
 
     # Basis functions in space time using prediction data frame-----------------------
-    B_pred_time <- bs_bbase(predict_data$Age,
+    B_pred_time <- bs_bbase(data_grid$Age,
       xl = min(data$Age),
       xr = max(data$Age)
     ) # , nseg = 3,
     # deg = 2)
-    B_space_1 <- bs_bbase(predict_data$Latitude,
+    B_space_1 <- bs_bbase(data_grid$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude)
     ) # , nseg = 3,
     # deg = 2)
-    B_space_2 <- bs_bbase(predict_data$Longitude,
+    B_space_2 <- bs_bbase(data_grid$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude)
     ) # , nseg = 3,#6
@@ -319,7 +319,7 @@ spline_basis_fun <- function(data, predict_data, model_type) {
     suppressWarnings({
       B_st_pred_full <- matrix(NA,
         ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1),
-        nrow = nrow(predict_data)
+        nrow = nrow(data_grid)
       ) # Not sure here?? nrow(data)
       regional_knots_loc <- rep(NA,
         ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1)
@@ -346,12 +346,12 @@ spline_basis_fun <- function(data, predict_data, model_type) {
         xr = max(data$Age)
       ) # , nseg = 3,
       # deg = 2)
-      B_space_1 <- bs_bbase(predict_data$Latitude,
+      B_space_1 <- bs_bbase(data_grid$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude)
       ) # , nseg = 3,
       # deg = 2)
-      B_space_2 <- bs_bbase(predict_data$Longitude,
+      B_space_2 <- bs_bbase(data_grid$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude)
       ) # , nseg = 3,
@@ -359,7 +359,7 @@ spline_basis_fun <- function(data, predict_data, model_type) {
 
       B_st_full <- matrix(NA,
         ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
-        nrow = nrow(predict_data)
+        nrow = nrow(data_grid)
       ) # nrow(data))
       regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
       count <- 1
@@ -379,7 +379,7 @@ spline_basis_fun <- function(data, predict_data, model_type) {
       return(B_st)
     }
     h <- 0.001
-    t_pred <- predict_data$Age
+    t_pred <- data_grid$Age
 
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
     first_deriv_step2 <- first_deriv_calc(t_pred - h)
@@ -417,11 +417,11 @@ spline_basis_fun <- function(data, predict_data, model_type) {
     B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
 
     # Basis functions in time using prediction data frame-----------------------
-    B_t_pred <- bs_bbase(predict_data$Age,
+    B_t_pred <- bs_bbase(data_grid$Age,
       xl = min(data$Age), xr = max(data$Age))
     # Now create derivatives----------------------
     h <- 0.001
-    t_pred <- predict_data$Age
+    t_pred <- data_grid$Age
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
     first_deriv_step2 <- first_deriv_calc(t_pred - h)
     B_t_pred_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
@@ -510,17 +510,17 @@ spline_basis_fun <- function(data, predict_data, model_type) {
 
 
     # Basis functions in space time using prediction data frame-----------------------
-    B_pred_time <- bs_bbase(predict_data$Age,
+    B_pred_time <- bs_bbase(data_grid$Age,
       xl = min(data$Age),
       xr = max(data$Age), # nseg = 6,
       # deg = 2
     )
-    B_space_1 <- bs_bbase(predict_data$Latitude,
+    B_space_1 <- bs_bbase(data_grid$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude), # nseg = 6,
       # deg = 2
     )
-    B_space_2 <- bs_bbase(predict_data$Longitude,
+    B_space_2 <- bs_bbase(data_grid$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude), # nseg = 6,
       # deg = 2
@@ -529,7 +529,7 @@ spline_basis_fun <- function(data, predict_data, model_type) {
     suppressWarnings({
       B_st_pred_full <- matrix(NA,
         ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1),
-        nrow = nrow(predict_data)
+        nrow = nrow(data_grid)
       ) # Not sure here?? nrow(data)
       regional_knots_loc <- rep(NA,
         ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1)
@@ -556,12 +556,12 @@ spline_basis_fun <- function(data, predict_data, model_type) {
         xr = max(data$Age), # nseg = 6,
         # deg = 2
       )
-      B_space_1 <- bs_bbase(predict_data$Latitude,
+      B_space_1 <- bs_bbase(data_grid$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude), # nseg = 6,
         # deg = 2
       )
-      B_space_2 <- bs_bbase(predict_data$Longitude,
+      B_space_2 <- bs_bbase(data_grid$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude), # nseg = 6,
         # deg = 2
@@ -569,7 +569,7 @@ spline_basis_fun <- function(data, predict_data, model_type) {
 
       B_st_full <- matrix(NA,
         ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
-        nrow = nrow(predict_data)
+        nrow = nrow(data_grid)
       ) # nrow(data))
       regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
       count <- 1
@@ -589,7 +589,7 @@ spline_basis_fun <- function(data, predict_data, model_type) {
       return(B_st)
     }
     h <- 0.001
-    t_pred <- predict_data$Age
+    t_pred <- data_grid$Age
 
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
     first_deriv_step2 <- first_deriv_calc(t_pred - h)

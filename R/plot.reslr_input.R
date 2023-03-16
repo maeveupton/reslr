@@ -24,7 +24,7 @@ plot.reslr_input <- function(x,
   # Input data-------
   input_data <- x
   data <- input_data$data
-  predict_data <- input_data$predict_data
+  data_grid <- input_data$data_grid
 
   # # Not plotting the tide gauge data -------------
   # if (("data_type_id" %in% colnames(data)) & plot_tide_gauges == FALSE) {

@@ -21,7 +21,7 @@ plot.reslr_output <- function(x,
   #   jags_output$data <- jags_output$data %>%
   #     dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
   #     dplyr::filter(data_type_id == "ProxyRecordData")
-  #   jags_output$predict_data <- jags_output$predict_data %>%
+  #   jags_output$data_grid <- jags_output$data_grid %>%
   #     dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
   #     dplyr::filter(data_type_id == "ProxyRecordData")
   # } else {
@@ -96,7 +96,7 @@ plot.reslr_output <- function(x,
           size = 2
         ))
       )
-    message("Plotted EIV Simple linear regression")
+    cat("Plotted EIV Simple linear regression. \n")
 
     output_plots <- list(plot_result = plot_result)
   }
@@ -168,7 +168,7 @@ plot.reslr_output <- function(x,
           size = 2
         ))
       )
-    message("Plotted 1 Change Point")
+    cat("Plotted 1 Change Point \n")
 
     output_plots <- list(plot_result = plot_result)
   }
@@ -240,7 +240,7 @@ plot.reslr_output <- function(x,
         ))
       )
 
-    message("Plotted a 2 Change Point Model")
+    cat("Plotted 2 Change Point Model \n")
 
     output_plots <- list(plot_result = plot_result)
   }
@@ -321,7 +321,7 @@ plot.reslr_output <- function(x,
           size = 2
         ))
       )
-    message("Plotted 3 Change Point")
+    cat("Plotted 3 Change Point \n")
 
     output_plots <- list(plot_result = plot_result)
   }
@@ -358,11 +358,11 @@ plot.reslr_output <- function(x,
       ggplot2::labs(colour = "", fill = "95% UI") +
       ggplot2::theme_classic()
 
-    message("Plotted EIV-IGP model & rate")
+    cat("Plotted EIV-IGP model & rate \n")
     output_plots <- list(plot_result = plot_result, plot_rate = plot_rate)
   }
 
-  # NIGAM time
+  # NI spline time
   if (inherits(jags_output, "ni_spline_t") == TRUE) {
     # Dataframes to plot
     output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
@@ -435,7 +435,7 @@ plot.reslr_output <- function(x,
         ))
       )
 
-    message("Plotted NIGAM in time using data")
+    cat("Plotted NI spline in time using data \n")
 
     # Plotting Rate of Change for Total component----------
     plot_rate <-
@@ -493,7 +493,7 @@ plot.reslr_output <- function(x,
         ))
       )
 
-    message("Plotted rate of change for NIGAM in time")
+    cat("Plotted rate of change for NI spline in time \n")
 
 
     output_plots <- list(
@@ -502,7 +502,7 @@ plot.reslr_output <- function(x,
     )
   }
 
-  # NIGAM space time
+  # NI spline space time
   if (inherits(jags_output, "ni_spline_st") == TRUE) {
     # Dataframes to plot
     output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
@@ -630,7 +630,7 @@ plot.reslr_output <- function(x,
       )
 
 
-    message("Rate of change completed")
+    cat("Rate of change completed \n")
 
     output_plots <- list(
       plot_result = plot_result,
@@ -642,151 +642,151 @@ plot.reslr_output <- function(x,
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
     # Dataframes to plot
     output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
-    total_model_df <- output_dataframes$total_model_df
-    total_model_rate_df <-output_dataframes$total_model_rate_df
+    #total_model_df <- output_dataframes$total_model_df
+    #total_model_rate_df <-output_dataframes$total_model_rate_df
     # Predicted
     total_model_pred_df <- output_dataframes$mod_output_pred_df
     total_model_pred_rate_df <- output_dataframes$mod_output_pred_deriv_df
     # Regional component
-    time_post_component_df <-output_dataframes$time_post_component_df
-    time_deriv_component_post_df <-output_dataframes$time_deriv_component_post_df
+    #time_post_component_df <-output_dataframes$time_post_component_df
+    #time_deriv_component_post_df <-output_dataframes$time_deriv_component_post_df
     time_post_pred_component_df <-output_dataframes$time_post_pred_component_df
     time_post_pred_deriv_component_df <-output_dataframes$time_post_pred_deriv_component_df
     # Linear local component
-    g_h_component_post_df <-output_dataframes$g_h_component_post_df
+    #g_h_component_post_df <-output_dataframes$g_h_component_post_df
     g_h_component_post_df_pred <-output_dataframes$g_h_component_pred_post_df
     # Non-linear local component
-    space_time_component_post_df <-output_dataframes$space_time_component_post_df
-    space_time_component_deriv_post_df <-output_dataframes$space_time_component_deriv_post_df
+    #space_time_component_post_df <-output_dataframes$space_time_component_post_df
+    #space_time_component_deriv_post_df <-output_dataframes$space_time_component_deriv_post_df
     space_time_component_pred_post_df <-output_dataframes$space_time_component_pred_post_df
     space_time_component_pred_deriv_post_df <-output_dataframes$space_time_component_pred_deriv_post_df
 
 
-    # Plots
-    plot_result <-
-      ggplot2::ggplot() +
-      ggplot2::geom_rect(data = jags_output$data, ggplot2::aes(
-        xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
-        ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
-      ), alpha = 0.4) +
-      ggplot2::geom_point(
-        data = jags_output$data,
-        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
-      ) +
-      ggplot2::geom_line(
-        data = total_model_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
-      ) +
-      ggplot2::geom_ribbon(
-        data = total_model_df,
-        ggplot2::aes(y = RSL, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
-      ) +
-      # ggplot2::geom_ribbon(
-      #   data = total_model_df,
-      #   ggplot2::aes(y = RSL, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-      # ) +
-      ggplot2::xlab("Age (CE)") +
-      ggplot2::ylab("Relative Sea Level (m)") +
-      ggplot2::theme_bw() +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 15),
-        axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 10)
-      ) +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 10),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      ggplot2::labs(colour = "") +
-      ggplot2::scale_fill_manual("",
-                                 values = c(
-                                   "95" = ggplot2::alpha("purple3", 0.2),
-                                   "Uncertainty" = ggplot2::alpha("grey", 0.4)
-                                   # "50" = ggplot2::alpha("purple3", 0.3)
-                                 ),
-                                 labels = c(
-                                   "95% Credible Interval",
-                                   expression(paste("1-sigma error"))
-                                   # , "50% Credible Interval"
-                                 )
-      ) +
-      ggplot2::scale_colour_manual("",
-                                   values = c("black" = "black", "mean" = "purple3"),
-                                   labels = c("Data", "Posterior Fit")
-      ) +
-      ggplot2::guides(
-        fill = ggplot2::guide_legend(override.aes = list(
-          alpha = c(0.4, 0.2), # , 0.4),
-          size = 1
-        )),
-        colour = ggplot2::guide_legend(override.aes = list(
-          linetype = c(0, 1),
-          shape = c(16, NA),
-          size = 2
-        ))
-      ) +
-      ggplot2::facet_wrap(~SiteName)
+    # # Plots
+    # plot_result <-
+    #   ggplot2::ggplot() +
+    #   ggplot2::geom_rect(data = jags_output$data, ggplot2::aes(
+    #     xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+    #     ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
+    #   ), alpha = 0.4) +
+    #   ggplot2::geom_point(
+    #     data = jags_output$data,
+    #     ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+    #   ) +
+    #   ggplot2::geom_line(
+    #     data = total_model_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = total_model_df,
+    #     ggplot2::aes(y = RSL, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
+    #   ) +
+    #   # ggplot2::geom_ribbon(
+    #   #   data = total_model_df,
+    #   #   ggplot2::aes(y = RSL, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+    #   # ) +
+    #   ggplot2::xlab("Age (CE)") +
+    #   ggplot2::ylab("Relative Sea Level (m)") +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::theme(
+    #     plot.title = ggplot2::element_text(size = 15),
+    #     axis.title = ggplot2::element_text(size = 12, face = "bold"),
+    #     axis.text = ggplot2::element_text(size = 12),
+    #     legend.text = ggplot2::element_text(size = 10)
+    #   ) +
+    #   ggplot2::theme(
+    #     strip.text.x = ggplot2::element_text(size = 10),
+    #     strip.background = ggplot2::element_rect(fill = c("white"))
+    #   ) +
+    #   ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+    #   ggplot2::labs(colour = "") +
+    #   ggplot2::scale_fill_manual("",
+    #                              values = c(
+    #                                "95" = ggplot2::alpha("purple3", 0.2),
+    #                                "Uncertainty" = ggplot2::alpha("grey", 0.4)
+    #                                # "50" = ggplot2::alpha("purple3", 0.3)
+    #                              ),
+    #                              labels = c(
+    #                                "95% Credible Interval",
+    #                                expression(paste("1-sigma error"))
+    #                                # , "50% Credible Interval"
+    #                              )
+    #   ) +
+    #   ggplot2::scale_colour_manual("",
+    #                                values = c("black" = "black", "mean" = "purple3"),
+    #                                labels = c("Data", "Posterior Fit")
+    #   ) +
+    #   ggplot2::guides(
+    #     fill = ggplot2::guide_legend(override.aes = list(
+    #       alpha = c(0.4, 0.2), # , 0.4),
+    #       size = 1
+    #     )),
+    #     colour = ggplot2::guide_legend(override.aes = list(
+    #       linetype = c(0, 1),
+    #       shape = c(16, NA),
+    #       size = 2
+    #     ))
+    #   ) +
+    #   ggplot2::facet_wrap(~SiteName)
+    #
+    # cat("Plotted the total model fit for the NIGAM decomposition \n")
 
-    message("Plotted the total model fit for the NIGAM decomposition")
-
-    # Plotting Rate of Change for Total component----------
-    plot_rate <-
-      ggplot2::ggplot() +
-      ggplot2::geom_line(
-        data = total_model_rate_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
-      ) +
-      ggplot2::geom_ribbon(
-        data = total_model_rate_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
-      ) +
-      ggplot2::geom_ribbon(
-        data = total_model_rate_df,
-        ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-      ) +
-      ggplot2::theme_bw() +
-      ggplot2::facet_wrap(~SiteName) +
-      ggplot2::ylab("Rate of change (mm/yr)") +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 22),
-        axis.title = ggplot2::element_text(size = 14, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 12)
-      ) +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 10),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::xlab("Age (CE)") +
-      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      ggplot2::labs(colour = "") +
-      ggplot2::scale_fill_manual("",
-                                 values = c(
-                                   "95" = ggplot2::alpha("purple3", 0.2),
-                                   "50" = ggplot2::alpha("purple3", 0.3)
-                                 ),
-                                 labels = c("95% Credible Interval", "50% Credible Interval")
-      ) +
-      ggplot2::scale_colour_manual("",
-                                   values = c("mean" = "purple3"),
-                                   labels = c("Posterior Fit")
-      ) +
-      ggplot2::guides(
-        fill = ggplot2::guide_legend(override.aes = list(
-          alpha = c(0.4, 0.2), # , 0.4),
-          size = 1
-        )),
-        colour = ggplot2::guide_legend(override.aes = list(
-          linetype = c(1),
-          shape = c(NA),
-          size = 2
-        ))
-      )
-
-
-    message("Rate of change for the total model fit for the NIGAM decomposition")
+    # # Plotting Rate of Change for Total component----------
+    # plot_rate <-
+    #   ggplot2::ggplot() +
+    #   ggplot2::geom_line(
+    #     data = total_model_rate_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = total_model_rate_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = total_model_rate_df,
+    #     ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+    #   ) +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::facet_wrap(~SiteName) +
+    #   ggplot2::ylab("Rate of change (mm/yr)") +
+    #   ggplot2::theme(
+    #     plot.title = ggplot2::element_text(size = 22),
+    #     axis.title = ggplot2::element_text(size = 14, face = "bold"),
+    #     axis.text = ggplot2::element_text(size = 12),
+    #     legend.text = ggplot2::element_text(size = 12)
+    #   ) +
+    #   ggplot2::theme(
+    #     strip.text.x = ggplot2::element_text(size = 10),
+    #     strip.background = ggplot2::element_rect(fill = c("white"))
+    #   ) +
+    #   ggplot2::xlab("Age (CE)") +
+    #   ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+    #   ggplot2::labs(colour = "") +
+    #   ggplot2::scale_fill_manual("",
+    #                              values = c(
+    #                                "95" = ggplot2::alpha("purple3", 0.2),
+    #                                "50" = ggplot2::alpha("purple3", 0.3)
+    #                              ),
+    #                              labels = c("95% Credible Interval", "50% Credible Interval")
+    #   ) +
+    #   ggplot2::scale_colour_manual("",
+    #                                values = c("mean" = "purple3"),
+    #                                labels = c("Posterior Fit")
+    #   ) +
+    #   ggplot2::guides(
+    #     fill = ggplot2::guide_legend(override.aes = list(
+    #       alpha = c(0.4, 0.2), # , 0.4),
+    #       size = 1
+    #     )),
+    #     colour = ggplot2::guide_legend(override.aes = list(
+    #       linetype = c(1),
+    #       shape = c(NA),
+    #       size = 2
+    #     ))
+    #   )
+    #
+    #
+    # cat("Rate of change for the total model fit for the NIGAM decomposition \n")
 
 
     # Plots Total Predictions--------
@@ -856,7 +856,7 @@ plot.reslr_output <- function(x,
       ) +
       ggplot2::facet_wrap(~SiteName)
 
-    message("Plotted the total model fit for the NIGAM decomposition")
+    cat("Plotted the total model fit for the NIGAM decomposition \n")
 
     # Plotting Rate of Change for Total component on prediction grid----------
     plot_rate_pred <-
@@ -911,61 +911,61 @@ plot.reslr_output <- function(x,
           size = 2
         ))
       )
-    message("Plotted the rate of change for the total model fit for the NIGAM decomposition")
+    cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
 
-    # Regional Component Plot---------------------------
-    regional_plot <-
-      ggplot2::ggplot() +
-      ggplot2::geom_line(
-        data = time_post_component_df,
-        ggplot2::aes(x = Age * 1000, y = RSL), colour = "#3b47ad"
-      ) +
-      ggplot2::geom_ribbon(
-        data = time_post_component_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000), fill = "#3b47ad", alpha = 0.2
-      ) +
-      ggplot2::geom_ribbon(
-        data =time_post_component_df,
-        ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#3b47ad", alpha = 0.3
-      ) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 15),
-        axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 12)
-      ) +
-      ggplot2::ylab("Sea Level (m)") +
-      ggplot2::xlab("Age (CE)")
-
-    message("Regional Component plotted")
-
-    # Derivative of Regional Component Plot---------------------------
-    deriv_regional_plot <-
-      ggplot2::ggplot() +
-      ggplot2::geom_line(
-        data = time_deriv_component_post_df,
-        ggplot2::aes(x = Age * 1000, y = RSL), colour = "#3b47ad"
-      ) +
-      ggplot2::geom_ribbon(
-        data = time_deriv_component_post_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000), fill = "#3b47ad", alpha = 0.2
-      ) +
-      ggplot2::geom_ribbon(
-        data = time_deriv_component_post_df,
-        ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#3b47ad", alpha = 0.3
-      ) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 15),
-        axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 12)
-      ) +
-      ggplot2::ylab("Rate of change (mm/yr)") +
-      ggplot2::xlab("Age (CE)")
-
-    message("Derivative Regional Component plotted")
+    # # Regional Component Plot---------------------------
+    # regional_plot <-
+    #   ggplot2::ggplot() +
+    #   ggplot2::geom_line(
+    #     data = time_post_component_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL), colour = "#3b47ad"
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = time_post_component_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000), fill = "#3b47ad", alpha = 0.2
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data =time_post_component_df,
+    #     ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#3b47ad", alpha = 0.3
+    #   ) +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::theme(
+    #     plot.title = ggplot2::element_text(size = 15),
+    #     axis.title = ggplot2::element_text(size = 12, face = "bold"),
+    #     axis.text = ggplot2::element_text(size = 12),
+    #     legend.text = ggplot2::element_text(size = 12)
+    #   ) +
+    #   ggplot2::ylab("Sea Level (m)") +
+    #   ggplot2::xlab("Age (CE)")
+    #
+    # cat("Regional Component plotted \n")
+    #
+    # # Derivative of Regional Component Plot---------------------------
+    # deriv_regional_plot <-
+    #   ggplot2::ggplot() +
+    #   ggplot2::geom_line(
+    #     data = time_deriv_component_post_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL), colour = "#3b47ad"
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = time_deriv_component_post_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000), fill = "#3b47ad", alpha = 0.2
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = time_deriv_component_post_df,
+    #     ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#3b47ad", alpha = 0.3
+    #   ) +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::theme(
+    #     plot.title = ggplot2::element_text(size = 15),
+    #     axis.title = ggplot2::element_text(size = 12, face = "bold"),
+    #     axis.text = ggplot2::element_text(size = 12),
+    #     legend.text = ggplot2::element_text(size = 12)
+    #   ) +
+    #   ggplot2::ylab("Rate of change (mm/yr)") +
+    #   ggplot2::xlab("Age (CE)")
+    #
+    # cat("Derivative Regional Component plotted \n")
 
     # Regional Component Plot using Prediction---------------------------
     regional_pred_plot<-
@@ -981,11 +981,11 @@ plot.reslr_output <- function(x,
                      axis.title=ggplot2::element_text(size=12,face="bold"),
                      axis.text=ggplot2::element_text(size=12),
                      legend.text=ggplot2::element_text(size=12))+
-      ggplot2::ggtitle("Prediction")+
+      #ggplot2::ggtitle("Prediction")+
       ggplot2::ylab('Sea Level (m)')+
       ggplot2::xlab('Age (CE)')
 
-    message("Regional Component using Prediction plotted")
+    cat("Regional Component using Prediction plotted \n")
 
     # Derivative of Predicted Regional Component Plot---------------------------
     deriv_pred_regional_plot<-
@@ -997,7 +997,7 @@ plot.reslr_output <- function(x,
       ggplot2::geom_ribbon(data=time_post_pred_deriv_component_df,
                            ggplot2::aes(ymin=lwr_50,ymax=upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
       ggplot2::theme_bw()+
-      ggplot2::ggtitle("Prediction Rate of Change")+
+      #ggplot2::ggtitle("Prediction Rate of Change")+
       ggplot2::theme(plot.title = ggplot2::element_text(size=15),
                      axis.title=ggplot2::element_text(size=12,face="bold"),
                      axis.text=ggplot2::element_text(size=12),
@@ -1005,37 +1005,37 @@ plot.reslr_output <- function(x,
       ggplot2::ylab('Rate of Change (mm/yr)')+
       ggplot2::xlab('Age (CE)')
 
-    message("Derivative Predicted Regional Component plotted")
+    cat("Derivative Predicted Regional Component plotted \n")
 
 
-    # Linear Local + Site specific vertical offset---------------------
-    g_h_component_df_plot <-
-      ggplot2::ggplot() +
-      ggplot2::geom_line(
-        data = g_h_component_post_df,
-        ggplot2::aes(x = Age * 1000, y = RSL), colour = "#5bac06"
-      ) +
-      ggplot2::geom_ribbon(
-        data = g_h_component_post_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000),
-        fill = "#5bac06", alpha = 0.3
-      ) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 22),
-        axis.title = ggplot2::element_text(size = 14, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 12)
-      ) +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 14),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::ylab("Sea Level (m)") +
-      ggplot2::facet_wrap(~SiteName) +
-      ggplot2::xlab("Age (CE)")
-
-    message("Linear Local Component plotted")
+    # # Linear Local + Site specific vertical offset---------------------
+    # g_h_component_df_plot <-
+    #   ggplot2::ggplot() +
+    #   ggplot2::geom_line(
+    #     data = g_h_component_post_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL), colour = "#5bac06"
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = g_h_component_post_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000),
+    #     fill = "#5bac06", alpha = 0.3
+    #   ) +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::theme(
+    #     plot.title = ggplot2::element_text(size = 22),
+    #     axis.title = ggplot2::element_text(size = 14, face = "bold"),
+    #     axis.text = ggplot2::element_text(size = 12),
+    #     legend.text = ggplot2::element_text(size = 12)
+    #   ) +
+    #   ggplot2::theme(
+    #     strip.text.x = ggplot2::element_text(size = 14),
+    #     strip.background = ggplot2::element_rect(fill = c("white"))
+    #   ) +
+    #   ggplot2::ylab("Sea Level (m)") +
+    #   ggplot2::facet_wrap(~SiteName) +
+    #   ggplot2::xlab("Age (CE)")
+    #
+    # cat("Linear Local Component plotted \n")
 
     # Linear Local + Site specific vertical offset for Prediction---------------------
     g_h_component_df_pred_plot <-
@@ -1064,72 +1064,72 @@ plot.reslr_output <- function(x,
       ggplot2::facet_wrap(~SiteName) +
       ggplot2::xlab("Age (CE)")
 
-    message("Linear Local Component plotted")
+    cat("Linear Local Component plotted \n")
 
-    # Non-Linear Local Component: Spline in Space Time----------------
-    local_plot <-
-      ggplot2::ggplot() +
-      ggplot2::geom_line(
-        data = space_time_component_post_df,
-        ggplot2::aes(x = Age * 1000, y = RSL), colour = "#ad4c14"
-      ) +
-      ggplot2::geom_ribbon(
-        data = space_time_component_post_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000), fill = "#ad4c14", alpha = 0.2
-      ) +
-      ggplot2::geom_ribbon(
-        data = space_time_component_post_df,
-        ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#ad4c14", alpha = 0.3
-      ) +
-      ggplot2::geom_hline(yintercept = 0) +
-      ggplot2::theme_bw() +
-      ggplot2::ylab("Sea Level (m)") +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 22),
-        axis.title = ggplot2::element_text(size = 14, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 12)
-      ) +
-      ggplot2::facet_wrap(~SiteName) +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 10),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::xlab("Age (CE)")
-    message("Non-Linear Local Component Plot")
-
-    # Non-Linear Local Component: Rate of change for Spline in Space Time----------------
-    local_rate_plot <-
-      ggplot2::ggplot() +
-      ggplot2::geom_line(
-        data = space_time_component_deriv_post_df,
-        ggplot2::aes(x = Age * 1000, y = RSL), colour = "#ad4c14"
-      ) +
-      ggplot2::geom_ribbon(
-        data = space_time_component_deriv_post_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000), fill = "#ad4c14", alpha = 0.2
-      ) +
-      ggplot2::geom_ribbon(
-        data = space_time_component_deriv_post_df,
-        ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#ad4c14", alpha = 0.3
-      ) +
-      ggplot2::theme_bw() +
-      ggplot2::ylab("Rate of Change (mm/year)") +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 22),
-        axis.title = ggplot2::element_text(size = 14, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 12)
-      ) +
-      ggplot2::facet_wrap(~SiteName) +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 10),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::xlab("Age (CE)")
-
-    message("Rate of change of Non-Linear Local Component Plot")
-
+    # # Non-Linear Local Component: Spline in Space Time----------------
+    # local_plot <-
+    #   ggplot2::ggplot() +
+    #   ggplot2::geom_line(
+    #     data = space_time_component_post_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL), colour = "#ad4c14"
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = space_time_component_post_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000), fill = "#ad4c14", alpha = 0.2
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = space_time_component_post_df,
+    #     ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#ad4c14", alpha = 0.3
+    #   ) +
+    #   ggplot2::geom_hline(yintercept = 0) +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::ylab("Sea Level (m)") +
+    #   ggplot2::theme(
+    #     plot.title = ggplot2::element_text(size = 22),
+    #     axis.title = ggplot2::element_text(size = 14, face = "bold"),
+    #     axis.text = ggplot2::element_text(size = 12),
+    #     legend.text = ggplot2::element_text(size = 12)
+    #   ) +
+    #   ggplot2::facet_wrap(~SiteName) +
+    #   ggplot2::theme(
+    #     strip.text.x = ggplot2::element_text(size = 10),
+    #     strip.background = ggplot2::element_rect(fill = c("white"))
+    #   ) +
+    #   ggplot2::xlab("Age (CE)")
+    # cat("Non-Linear Local Component Plot \n")
+    #
+    # # Non-Linear Local Component: Rate of change for Spline in Space Time----------------
+    # local_rate_plot <-
+    #   ggplot2::ggplot() +
+    #   ggplot2::geom_line(
+    #     data = space_time_component_deriv_post_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL), colour = "#ad4c14"
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = space_time_component_deriv_post_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000), fill = "#ad4c14", alpha = 0.2
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = space_time_component_deriv_post_df,
+    #     ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#ad4c14", alpha = 0.3
+    #   ) +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::ylab("Rate of Change (mm/year)") +
+    #   ggplot2::theme(
+    #     plot.title = ggplot2::element_text(size = 22),
+    #     axis.title = ggplot2::element_text(size = 14, face = "bold"),
+    #     axis.text = ggplot2::element_text(size = 12),
+    #     legend.text = ggplot2::element_text(size = 12)
+    #   ) +
+    #   ggplot2::facet_wrap(~SiteName) +
+    #   ggplot2::theme(
+    #     strip.text.x = ggplot2::element_text(size = 10),
+    #     strip.background = ggplot2::element_rect(fill = c("white"))
+    #   ) +
+    #   ggplot2::xlab("Age (CE)")
+    #
+    # cat("Rate of change of Non-Linear Local Component Plot \n")
+    #
 
 
     # Non-Linear Local Component: Spline in Space Time with predictions----------------
@@ -1162,7 +1162,7 @@ plot.reslr_output <- function(x,
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
       ggplot2::xlab("Age (CE)")
-    message("Non-Linear Local Component Plot")
+    cat("Non-Linear Local Component Plot \n")
 
     # Non-Linear Local Component: Rate of change for Spline in Space Time prediction----------------
     local_pred_rate_plot <-
@@ -1194,70 +1194,70 @@ plot.reslr_output <- function(x,
       ) +
       ggplot2::xlab("Age (CE)")
 
-    message("Rate of change of Non-Linear Local Component Plot")
+    cat("Rate of change of Non-Linear Local Component Plot \n")
 
-    # Separate Components on one plot with CI proxy--------
-    all_components_CI_plot <- ggplot2::ggplot() +
-      # Local
-      ggplot2::geom_line(
-        data = space_time_component_post_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = ID)
-      ) +
-      ggplot2::geom_ribbon(
-        data = space_time_component_post_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = ID), alpha = 0.3
-      ) +
-      # Linear Local Component + site specific vertical offset
-      ggplot2::geom_line(
-        data = g_h_component_post_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = ID)
-      ) +
-      ggplot2::geom_ribbon(
-        data = g_h_component_post_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = ID), alpha = 0.3
-      ) +
-
-      # Regional Component
-      ggplot2::geom_line(
-        data = time_post_component_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = ID)
-      ) +
-      ggplot2::geom_ribbon(
-        data = time_post_component_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = ID), alpha = 0.3
-      ) +
-      # Total Model
-      ggplot2::geom_line(
-        data = total_model_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = ID)
-      ) +
-      ggplot2::geom_ribbon(
-        data = total_model_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = ID), alpha = 0.3
-      ) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 9),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::scale_fill_manual(
-        name = "", values = c("#5bac06", "#ad4c14", "#3b47ad", "purple3"),
-        guide = ggplot2::guide_legend(override.aes = list(alpha = 0.1))
-      ) +
-      ggplot2::scale_colour_manual(name = "", values = c("#5bac06", "#ad4c14", "#3b47ad", "purple3")) +
-      ggplot2::ylab("Sea Level (m)") +
-      ggplot2::facet_wrap(~SiteName) +
-      ggplot2::xlab("Age (CE)") +
-      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom")
-      # ggplot2::theme(
-      #   legend.position = c(0.95, -0.05),
-      #   legend.justification = c(1, 0),
-      #   legend.spacing.y = ggplot2::unit(0.1, "cm"),
-      #   legend.title = ggplot2::element_blank(),
-      #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
-      # )
-
-    cat("All Components plotted")
+    # # Separate Components on one plot with CI proxy--------
+    # all_components_CI_plot <- ggplot2::ggplot() +
+    #   # Local
+    #   ggplot2::geom_line(
+    #     data = space_time_component_post_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL, colour = ID)
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = space_time_component_post_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = ID), alpha = 0.3
+    #   ) +
+    #   # Linear Local Component + site specific vertical offset
+    #   ggplot2::geom_line(
+    #     data = g_h_component_post_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL, colour = ID)
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = g_h_component_post_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = ID), alpha = 0.3
+    #   ) +
+    #
+    #   # Regional Component
+    #   ggplot2::geom_line(
+    #     data = time_post_component_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL, colour = ID)
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = time_post_component_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = ID), alpha = 0.3
+    #   ) +
+    #   # Total Model
+    #   ggplot2::geom_line(
+    #     data = total_model_df,
+    #     ggplot2::aes(x = Age * 1000, y = RSL, colour = ID)
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = total_model_df,
+    #     ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = ID), alpha = 0.3
+    #   ) +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::theme(
+    #     strip.text.x = ggplot2::element_text(size = 9),
+    #     strip.background = ggplot2::element_rect(fill = c("white"))
+    #   ) +
+    #   ggplot2::scale_fill_manual(
+    #     name = "", values = c("#5bac06", "#ad4c14", "#3b47ad", "purple3"),
+    #     guide = ggplot2::guide_legend(override.aes = list(alpha = 0.1))
+    #   ) +
+    #   ggplot2::scale_colour_manual(name = "", values = c("#5bac06", "#ad4c14", "#3b47ad", "purple3")) +
+    #   ggplot2::ylab("Sea Level (m)") +
+    #   ggplot2::facet_wrap(~SiteName) +
+    #   ggplot2::xlab("Age (CE)") +
+    #   ggplot2::theme(legend.box = "horizontal", legend.position = "bottom")
+    #   # ggplot2::theme(
+    #   #   legend.position = c(0.95, -0.05),
+    #   #   legend.justification = c(1, 0),
+    #   #   legend.spacing.y = ggplot2::unit(0.1, "cm"),
+    #   #   legend.title = ggplot2::element_blank(),
+    #   #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
+    #   # )
+    #
+    # cat("All Components plotted \n")
 
 
     # Separate Components on one plot with CI proxy on Prediction grid--------
@@ -1321,27 +1321,27 @@ plot.reslr_output <- function(x,
       #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
       # )
 
-    cat("All Components plotted")
+    cat("All Components plotted \n")
 
 
 
 
     output_plots <- list(
-      plot_result = plot_result,
-      plot_rate = plot_rate,
+      #plot_result = plot_result,
+      #plot_rate = plot_rate,
       plot_result_pred = plot_result_pred,
       plot_rate_pred = plot_rate_pred,
-      regional_plot = regional_plot,
-      deriv_regional_plot = deriv_regional_plot,
+      #regional_plot = regional_plot,
+      #deriv_regional_plot = deriv_regional_plot,
       regional_pred_plot = regional_pred_plot,
       deriv_pred_regional_plot = deriv_pred_regional_plot,
-      g_h_component_df_plot = g_h_component_df_plot,
+      #g_h_component_df_plot = g_h_component_df_plot,
       g_h_component_df_pred_plot = g_h_component_df_pred_plot,
-      local_plot = local_plot,
-      local_rate_plot = local_rate_plot,
+      #local_plot = local_plot,
+      #local_rate_plot = local_rate_plot,
       local_pred_plot = local_pred_plot,
       local_pred_rate_plot = local_pred_rate_plot,
-      all_components_CI_plot = all_components_CI_plot,
+      #all_components_CI_plot = all_components_CI_plot,
       all_components_CI_pred_plot = all_components_CI_pred_plot)
   }
 #}
