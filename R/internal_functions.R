@@ -708,14 +708,16 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 bs_bbase <- function(x,
                      xl = min(x),
                      xr = max(x),
-                     deg = 3,
+                     deg = 3#,
                      # nseg = 10){
-                     nseg = 3) {
+                     #nseg = 4
+                     ) {
   # nseg = 10){
   # nseg = 1) {
   # #' @param nseg number of sections
   # Create basis functions------------------------------------------------------
-  # nseg <- round(deg / (1 + deg / length(x))) #+ 10#Option 1
+  nseg <- round(deg / (1 + deg / length(x))) #+ 10#Option 1
+  print(nseg)
   # df <- sqrt(length(x)) - 4
   # too big
   # nseg <- round(df/(1+df/length(x)))

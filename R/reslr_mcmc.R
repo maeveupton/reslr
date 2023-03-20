@@ -458,157 +458,6 @@ reslr_mcmc.reslr_input <- function(input_data,
     message("JAGS model run finished for the NIGAM in time")
   }
 
-  # # TESTING new jags for Noisy Input GAM in Time-----------------------------------
-  # if (model_type == "ni_spline_t") {
-  #   # No Noise
-  #   model_file <-
-  #     "model {
-  #
-  #       for (i in 1:n_obs) {
-  #         # Main likelihood
-  #         y[i] ~ dnorm(mu_y[i],tau) #sigmasq_all[i]^-1)
-  #         #sigmasq_all[i] <- (sigma_res^2 + y_err[i]^2)
-  #         #tau[i] <- (sigma_res^2 + y_err[i]^2)
-  #
-  #         # Mean structure
-  #         mu_y[i] <- r[i]
-  #         }
-  #
-  #     # Spline in time penalised
-  #     r <- B_t %*% b_t
-  #     b_t[1] ~ dnorm(0,1)
-  #     for (j in 2:n_knots_t) {
-  #       b_t[j] ~ dnorm(b_t[j-1], tau_t)
-  #     }
-  #
-  #     # Predictions
-  #     r_pred <- B_t_pred %*% b_t
-  #     for (i in 1:n_pred){
-  #       mu_pred[i] <- r_pred[i]
-  #     }
-  #
-  #     # Derivatives
-  #     r_deriv <- B_t_deriv %*% b_t
-  #     for (i in 1:n_obs){
-  #       mu_deriv[i] <- r_deriv[i]
-  #     }
-  #     r_pred_deriv <- B_t_pred_deriv %*% b_t
-  #     for (i in 1:n_pred){
-  #       mu_pred_deriv[i] <- r_pred_deriv[i]
-  #     }
-  #
-  #
-  #     # Priors
-  #     #tau ~ dgamma(a_tau,d_tau)
-  #     tau ~ dgamma(1,1)
-  #     tau_t ~dgamma(0.5*nu,0.5*delta*nu)
-  #     #delta ~ dgamma(a_delta,d_delta)
-  #     delta ~ dgamma(0.0001,0.0001)
-  #     #tau_t ~ dgamma(1,1)
-  #
-  #     sigma_t<- tau_t^-0.5
-  #     #sigma_t~ dt(0, 1^-2, 1)T(0,)
-  #     #sigma_res ~ dt(0, 1^-2, 1)T(0,)
-  #
-  #     }"
-  #
-  #
-  #
-  #
-  #   # Parameters to save in JAGs-----------------
-  #   # jags_pars <- c(
-  #   #   "mu_y",
-  #   #   #"tau",
-  #   #   "tau_t",
-  #   #   #"sigma_res",
-  #   #   "b_t",
-  #   #   "r",
-  #   #   "sigma_t",
-  #   #   "sigmasq_all"
-  #   # )
-  #   # Basis functions in time -----------------------------
-  #   spline_basis_fun_list <- spline_basis_fun(
-  #     data = data,
-  #     data_grid = data_grid,
-  #     model_type = model_type
-  #   )
-  #
-  #
-  #   # Parameters to save in JAGs-----------------
-  #   jags_pars <- c(
-  #     "mu_y",
-  #     "mu_deriv",
-  #     "mu_pred",
-  #     "mu_pred_deriv",
-  #     "r_pred_deriv",
-  #     # "sigma_res",
-  #     "b_t",
-  #     "r",
-  #     "r_deriv",
-  #     "sigma_t",
-  #     # "sigmasq_all",
-  #     "r_pred",
-  #     "tau",
-  #     "tau_t"
-  #   )
-  #
-  #   # JAGS data for second model run-----------
-  #   jags_data <- list(
-  #     y = data$RSL,
-  #     y_err = data$RSL_err,
-  #     t = data$Age,
-  #     n_obs = nrow(data),
-  #     t_pred = data_grid$Age,
-  #     n_pred = length(data_grid$Age),
-  #     B_t = spline_basis_fun_list$B_t,
-  #     B_t_deriv = spline_basis_fun_list$B_t_deriv,
-  #     B_t_pred = spline_basis_fun_list$B_t_pred,
-  #     n_knots_t = ncol(spline_basis_fun_list$B_t),
-  #     B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv,
-  #     nu = 2
-  #   )
-  #
-  #
-  #
-  #   # Run JAGS------------------------
-  #   model_run <- suppressWarnings(R2jags::jags(
-  #     data = jags_data,
-  #     parameters.to.save = jags_pars,
-  #     model.file = textConnection(model_file),
-  #     n.iter = n_iterations,
-  #     n.burnin = n_burnin,
-  #     n.thin = n_thin,
-  #     n.chains = n_chains
-  #   ))
-  #
-  #
-  #   # # Run JAGS--------------
-  #   #   noisy_model_run_output <-
-  #   #     suppressWarnings(R2jags::jags(
-  #   #       data = jags_data,
-  #   #       parameters.to.save = jags_pars,
-  #   #       model.file = textConnection(noise_model_file),
-  #   #       n.iter = n_iterations,
-  #   #       n.burnin = n_burnin,
-  #   #       n.thin = n_thin,
-  #   #       n.chains = n_chains
-  #   #     ))
-  #
-  #   # Output with everything-------------
-  #   jags_output <- list(
-  #     noisy_model_run_output = model_run,
-  #     jags_data = jags_data,
-  #     data = data,
-  #     data_grid = data_grid
-  #   )
-  #
-  #
-  #   # Classing the JAGS output in NIGAM time--------------
-  #   class(jags_output) <- c("reslr_output", "ni_spline_t")
-  #
-  #   message("JAGS model run finished for the NIGAM in time")
-  # }
-
   # Noisy Input GAM in Space Time-------------------------------------------
   if (model_type == "ni_spline_st") {
     # jags_file <- "inst/jags_models/model_ni_spline_st.jags"
@@ -629,7 +478,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       n_sites = length(unique(data$SiteName)),
       n_obs = nrow(data),
       B_st = spline_basis_fun_list$B_st,
-      n_knots_st = ncol(spline_basis_fun_list$B_st)
+      n_knots_st = ncol(spline_basis_fun_list$B_st),
+      nu = 2
     )
 
     # Parameters to save in JAGs
@@ -676,7 +526,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_st_deriv = spline_basis_fun_list$B_st_deriv,
       B_st_pred = spline_basis_fun_list$B_st_pred,
       B_st_deriv_pred = spline_basis_fun_list$B_st_deriv_pred,
-      n_knots_st = ncol(spline_basis_fun_list$B_st)
+      n_knots_st = ncol(spline_basis_fun_list$B_st),
+      nu = 2
     )
 
     # Parameters to save in JAGs
@@ -764,7 +615,8 @@ reslr_mcmc.reslr_input <- function(input_data,
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
-        dplyr::pull()
+        dplyr::pull(),
+        nu = 2
     )
 
     # Parameters to save in JAGs
@@ -851,7 +703,8 @@ reslr_mcmc.reslr_input <- function(input_data,
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
-        dplyr::pull()
+        dplyr::pull(),
+        nu = 2
     )
 
     # Parameters to save in JAGs
