@@ -66,58 +66,6 @@ In this package, the models are written using Just Another Gibbs Sample (JAGS) w
 ### Working with scripts
 The best way to use the `reslr` package is by creating scripts. A script can be created in Rstudio by clicking `File > New File > Rscript`. This opens a text window which allows commands to be typed in order and saved. The command can be sent to the command prompt (which Rstudio calls the Console) by highlighting the command and clicking Run (or going to Code > Run Lines). There are also keyboard shortcuts to speed up the process. We strongly recommend you learn to run R via scripts.
 
-### Example Data Set
-The `reslr` package possesses a large dataset used as an example called `NAACproxydata`. This dataset contains proxy records from the Atlantic coast of North America as used in Upton et al 2023 along with tide gauge data which will be discussed below. The 21 different proxy data sites and the references for each data source can be found in the following table:
-
-| Site Name | Reference |
-| ------------------------ | --------------------------- |
-| Barn Island, Connecticut| [Donnelly et al (2004)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2003GL018933), [Gehrels et al (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL085814) |
-| Big River Marsh, Newfoundland | [Kemp et al (2018)](https://doi.org/10.1016/j.quascirev.2018.10.012) |
-| Cape May Courthouse, New Jersey | [Kemp et al (2013)](https://doi.org/10.1016/j.quascirev.2013.09.024), [Cahill et al (2016)](https://doi.org/10.5194/cp-12-525-2016) |
-| Cedar Island, North Carolina | [Kemp et al (2011)](https://doi.org/10.1073/pnas.1015619108), [Kemp et al (2017)](https://doi.org/10.1177/0959683616683263) |
- | Cheesequake, New Jersey | [Walker et al (2021)](https://www.nature.com/articles/s41467-021-22079-2) |
- | Chezzetcook Inlet, Nova Scotia | [Gehrels et al (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL085814) |
- |East River Marsh, Connecticut | [Kemp et al (2015)](https://doi.org/10.1016/j.epsl.2015.07.034), [Stearns et al (2017)](https://doi.org/10.23860/thesis-stearns-rachel-2017)    |
- |  Fox Hill Marsh, Rhode Island | [Stearns et al (2017)](https://doi.org/10.23860/thesis-stearns-rachel-2017) |
-| Leeds Point, New Jersey | [Kemp et al (2013)](https://doi.org/10.1016/j.quascirev.2013.09.024), [Cahill et al (2016)](https://doi.org/10.5194/cp-12-525-2016) |
-| Les Sillons, Magdelen Islands| [Barnett et al (2017)](https://doi.org/10.1002/jqs.2931) |
-| Little Manatee River, Florida | [Gerlach et al (2017)](https://doi.org/10.1016/j.margeo.2017.07.001) |
-|  Nassau, Florida | [Kemp et al (2014)](https://www.sciencedirect.com/science/article/pii/S0025322714002187?via%3Dihub)|
-| Pelham Bay, New York | [Kemp et al (2017)](https://doi.org/10.1177/0959683616683263), [Stearns et al (2017)](https://doi.org/10.23860/thesis-stearns-rachel-2017) |
-| Placentia, Newfoundland | [Kemp et al (2018)](https://doi.org/10.1016/j.quascirev.2018.10.012)) |
-| Revere, Massachusetts | [Donnelly et al (2006)](https://www.jstor.org/stable/4300372)  |
-| Saint Simeon, Quebec | [Barnett et al (2017)](https://doi.org/10.1002/jqs.2931) |
-| Sanborn Cove, Maine | [Gehrels et al (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL085814) |
-| Sand Point, North Carolina | [Kemp et al (2011)](https://doi.org/10.1073/pnas.1015619108), [Kemp et al (2017)](https://doi.org/10.1177/0959683616683263) |
-| Snipe Key, Florida | [Khan et al (2022)](https://doi.org/10.1016/j.gloplacha.2022.103902) |
-| Swan Key, Florida | [Khan et al (2022)](https://doi.org/10.1016/j.gloplacha.2022.103902) |
-| Wood Island, Massachusetts | [Kemp et al (2011)](https://doi.org/10.1073/pnas.1015619108) | 
-
-The `NAACproxydata` is a data frame with 1705 rows and 8 columns which include:
-
-- Region: All regions along Atlantic coast of North America
-- Site: All sites along Atlantic coast of North America
-- Latitude: Latitude of the data site
-- Longitude: Longitude of the data site
-- RSL: Relative Sea level in meters
-- RSL_err: 1 standard deviation error associated with relative sea level measured in meters
-- Age: Age in years common era (CE)
-- Age_err: 1 standard deviation error associated with the Age in years CE
-
-If you are interested in a specific site from the example dataset, then filter for that site prior to running the package, using the following method:
-```{r,include = FALSE}
-library(reslr)
-```
-```{r,eval = TRUE}
-# For 1 site
-data_1site <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-# For multiple sites
-data_multisite <- reslr::NAACproxydata %>% dplyr::filter(Site %in% c(
-  "Snipe Key", "Cheesequake",
-  "Placentia", "Leeds Point"
-))
-```
-
 ### Inputting User's data
 `reslr` can handle three different types of data structure. It is important to note that varying the number of data sites will require different statistical modelling strategy:
 
@@ -176,6 +124,57 @@ If it is not provided then package will automatically calculate these rates usin
 
 Important to note, the tide gauge data require values for the `linear_rate` and `linear_rate_err` columns. This is calculated using [Peltier's  Earth ice model: ICE5G](https://www.atmosp.physics.utoronto.ca/~peltier/data.php) with an uncertainty value of 0.3 mm/year from [Englehart et al 2009](https://eartharxiv.org/repository/view/1157/).
 
+### Example Data Set
+The `reslr` package possesses a large dataset used as an example called `NAACproxydata`. This dataset contains proxy records from the Atlantic coast of North America as used in Upton et al 2023 along with tide gauge data which will be discussed below. The 21 different proxy data sites and the references for each data source can be found in the following table:
+
+| Site Name | Reference |
+| ------------------------ | --------------------------- |
+| Barn Island, Connecticut| [Donnelly et al (2004)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2003GL018933), [Gehrels et al (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL085814) |
+| Big River Marsh, Newfoundland | [Kemp et al (2018)](https://doi.org/10.1016/j.quascirev.2018.10.012) |
+| Cape May Courthouse, New Jersey | [Kemp et al (2013)](https://doi.org/10.1016/j.quascirev.2013.09.024), [Cahill et al (2016)](https://doi.org/10.5194/cp-12-525-2016) |
+| Cedar Island, North Carolina | [Kemp et al (2011)](https://doi.org/10.1073/pnas.1015619108), [Kemp et al (2017)](https://doi.org/10.1177/0959683616683263) |
+ | Cheesequake, New Jersey | [Walker et al (2021)](https://www.nature.com/articles/s41467-021-22079-2) |
+ | Chezzetcook Inlet, Nova Scotia | [Gehrels et al (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL085814) |
+ |East River Marsh, Connecticut | [Kemp et al (2015)](https://doi.org/10.1016/j.epsl.2015.07.034), [Stearns et al (2017)](https://doi.org/10.23860/thesis-stearns-rachel-2017)    |
+ |  Fox Hill Marsh, Rhode Island | [Stearns et al (2017)](https://doi.org/10.23860/thesis-stearns-rachel-2017) |
+| Leeds Point, New Jersey | [Kemp et al (2013)](https://doi.org/10.1016/j.quascirev.2013.09.024), [Cahill et al (2016)](https://doi.org/10.5194/cp-12-525-2016) |
+| Les Sillons, Magdelen Islands| [Barnett et al (2017)](https://doi.org/10.1002/jqs.2931) |
+| Little Manatee River, Florida | [Gerlach et al (2017)](https://doi.org/10.1016/j.margeo.2017.07.001) |
+|  Nassau, Florida | [Kemp et al (2014)](https://www.sciencedirect.com/science/article/pii/S0025322714002187?via%3Dihub)|
+| Pelham Bay, New York | [Kemp et al (2017)](https://doi.org/10.1177/0959683616683263), [Stearns et al (2017)](https://doi.org/10.23860/thesis-stearns-rachel-2017) |
+| Placentia, Newfoundland | [Kemp et al (2018)](https://doi.org/10.1016/j.quascirev.2018.10.012)) |
+| Revere, Massachusetts | [Donnelly et al (2006)](https://www.jstor.org/stable/4300372)  |
+| Saint Simeon, Quebec | [Barnett et al (2017)](https://doi.org/10.1002/jqs.2931) |
+| Sanborn Cove, Maine | [Gehrels et al (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL085814) |
+| Sand Point, North Carolina | [Kemp et al (2011)](https://doi.org/10.1073/pnas.1015619108), [Kemp et al (2017)](https://doi.org/10.1177/0959683616683263) |
+| Snipe Key, Florida | [Khan et al (2022)](https://doi.org/10.1016/j.gloplacha.2022.103902) |
+| Swan Key, Florida | [Khan et al (2022)](https://doi.org/10.1016/j.gloplacha.2022.103902) |
+| Wood Island, Massachusetts | [Kemp et al (2011)](https://doi.org/10.1073/pnas.1015619108) | 
+
+The `NAACproxydata` is a data frame with 1705 rows and 8 columns which include:
+
+- Region: All regions along Atlantic coast of North America
+- Site: All sites along Atlantic coast of North America
+- Latitude: Latitude of the data site
+- Longitude: Longitude of the data site
+- RSL: Relative Sea level in meters
+- RSL_err: 1 standard deviation error associated with relative sea level measured in meters
+- Age: Age in years common era (CE)
+- Age_err: 1 standard deviation error associated with the Age in years CE
+
+If you are interested in a specific site from the example dataset, then filter for that site prior to running the package, using the following method:
+```{r,include = FALSE}
+library(reslr)
+```
+```{r,eval = TRUE}
+# For 1 site
+data_1site <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
+# For multiple sites
+data_multisite <- reslr::NAACproxydata %>% dplyr::filter(Site %in% c(
+  "Snipe Key", "Cheesequake",
+  "Placentia", "Leeds Point"
+))
+```
 
 
 ## How to run reslr
@@ -264,7 +263,7 @@ If the model run has converged properly the values should be close to 1. If they
 params <- reslr::parameter_estimate(jags_output = jags_output.eiv_slr_t)
 params$par_summary
 ```
-The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept (alpha), the slope (beta) and the standard deviation of the model **How I explain this easily** (sigma). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. beta. In this example, the rate of sea-level change for Cedar Island North Carolina using the EIV simple linear regression model is estimated to be XXXX.
+The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept (alpha), the slope (beta) and the standard deviation of the model **How I explain this easily** (sigma_res). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. beta. In this example, the rate of sea-level change for Cedar Island North Carolina using the EIV simple linear regression model is estimated to be XXXX.
 
 **Step 6:** The results from the eiv_slr_t model can be visualised using the following function:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -342,7 +341,7 @@ If the model run has converged properly the values should be close to 1. If they
 params <- reslr::parameter_estimate(jags_output = jags_output.eiv_cp1_t)
 params$par_summary
 ```
-For the eiv_cp_t model, the parameters of interest are the intercept (alpha), the slopes before the change point (beta[1]) and after the change point (beta[2]), the year of the change point(cp) and sigma the variance of the model (**Again bad description here**).
+For the eiv_cp_t model, the parameters of interest are the intercept (alpha), the slopes before the change point (beta[1]) and after the change point (beta[2]), the year of the change point(cp) and sigma_res the variance of the model (**Again bad description here**).
 
 **Step 6:** The results from the EIV Change Point model can be illustrated using:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -410,7 +409,7 @@ If the model run has converged properly the values should be close to 1. If they
 params <- reslr::parameter_estimate(jags_output = jags_output.eiv_igp_t)
 params$par_summary
 ```
-Where "phi" controls the... *Need to check these*, and "sigma"....
+The length scale parameter, "phi" determines the distance over which two input points can influence each other. More specifically, it determines the rate at which the correlation between the input data points decays as the distance between those points increases. "sigma_res".... **FINISH**
 
 **Step 6:** The results from the EIV IGP model can be illustrated using:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}

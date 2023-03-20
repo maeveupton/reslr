@@ -17,29 +17,29 @@
 #' input_data <- reslr_load(data = data)
 #' reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 reslr_mcmc <- function(input_data,
-                     model_type,
-                     n_cp = 1,
-                     igp_smooth = 0.2,
-                     n_iterations = 5000,
-                     n_burnin = 1000,
-                     n_thin = 4,
-                     n_chains = 3) {
+                       model_type,
+                       n_cp = 1,
+                       igp_smooth = 0.2,
+                       n_iterations = 5000,
+                       n_burnin = 1000,
+                       n_thin = 4,
+                       n_chains = 3) {
   UseMethod("reslr_mcmc")
 }
 
 #' @export
 reslr_mcmc.reslr_input <- function(input_data,
-                     model_type,
-                     n_cp = 1,
-                     igp_smooth = 0.2,
-                     n_iterations = 5000,
-                     n_burnin = 1000,
-                     n_thin = 4,
-                     n_chains = 3) {
+                                   model_type,
+                                   n_cp = 1,
+                                   igp_smooth = 0.2,
+                                   n_iterations = 5000,
+                                   n_burnin = 1000,
+                                   n_thin = 4,
+                                   n_chains = 3) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
   # Input Data -------------
-  data <- input_data$data# Add the function here
+  data <- input_data$data # Add the function here
   data_grid <- input_data$data_grid
 
   # Simple Linear Regression ----------------
@@ -53,14 +53,14 @@ reslr_mcmc.reslr_input <- function(input_data,
   t[j] ~ dnorm(mu_t[j],t_err[j]^-2)
   mu_t[j] ~ dnorm(0,0.5^-2)
   mu_y[j] <- alpha + beta*(mu_t[j])
-  tau[j] <- (y_err[j]^2 + sigma^2)^-1
+  tau[j] <- (y_err[j]^2 + sigma_res^2)^-1
 
   } # end j loop
 
  ## Priors
  alpha ~ dnorm(0.0,0.01)
  beta ~ dnorm(0.0,0.01)
- sigma ~ dt(0,4^-2,1)T(0,)
+ sigma_res ~ dt(0,4^-2,1)T(0,)
 
  # Predictions
  for(i in 1:n_pred) {
@@ -73,7 +73,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "beta",
       "alpha",
-      "sigma"
+      "sigma_res"
     )
 
     # JAGS data----------------------
@@ -88,17 +88,17 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
 
     # Run JAGS------------------------
-    model_run <- #suppressWarnings(
+    model_run <- # suppressWarnings(
       R2jags::jags(
-      data = jags_data,
-      parameters.to.save = jags_pars,
-      model.file = textConnection(model_file),
-      n.iter = n_iterations,
-      n.burnin = n_burnin,
-      n.thin = n_thin,
-      n.chains = n_chains
-    )
-   # )
+        data = jags_data,
+        parameters.to.save = jags_pars,
+        model.file = textConnection(model_file),
+        n.iter = n_iterations,
+        n.burnin = n_burnin,
+        n.thin = n_thin,
+        n.chains = n_chains
+      )
+    # )
 
     # Output from mcmc------------------------
     mu_post_pred <- model_run$BUGSoutput$sims.list$mu_pred
@@ -110,12 +110,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid
     )
-    #showConnections()
-    #close(model_file)
-    #closeAllConnections()
+    # showConnections()
+    # close(model_file)
+    # closeAllConnections()
 
     # Classing the JAGS output in NIGAM time--------------
-    class(jags_output) <- c("reslr_output","eiv_slr_t")
+    class(jags_output) <- c("reslr_output", "eiv_slr_t")
     message("JAGS model run finished for the EIV Simple Linear Regression")
   }
 
@@ -133,7 +133,7 @@ reslr_mcmc.reslr_input <- function(input_data,
           C[j] <- 1+step(mu_t[j]-cp)
           mu_t[j] ~ dnorm(0,0.5^-2)
           mu_y[j] <- alpha + beta[C[j]]*(mu_t[j]-cp)
-          tau[j] <- (y_err[j]^2 + sigma^2)^-1
+          tau[j] <- (y_err[j]^2 + sigma_res^2)^-1
 
         }
 
@@ -143,7 +143,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       beta[1]~dnorm(0.0,0.01)
       beta[2]~dnorm(0.0,0.01)
 
-      sigma ~ dt(0,4^-2,1)T(0,)
+      sigma_res ~ dt(0,4^-2,1)T(0,)
 
       cp ~ dunif(t_min,t_max)
 
@@ -158,7 +158,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "beta",
       "alpha",
-      "sigma",
+      "sigma_res",
       "cp"
     )
 
@@ -195,7 +195,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
 
     # Classing the JAGS output in 1 Change Point--------------
-    class(jags_output) <- c("reslr_output","eiv_cp1_t")
+    class(jags_output) <- c("reslr_output", "eiv_cp1_t")
     message("JAGS model run finished for the EIV 1 Change Point model")
   }
 
@@ -217,7 +217,7 @@ reslr_mcmc.reslr_input <- function(input_data,
         mu_t[j] ~ dnorm(0,0.5^-2)
         mu_y[j] <- alpha[C[j]] + beta[A[j] + C[j]]*(mu_t[j]-cp[C[j]])
 
-        tau[j] <- (y_err[j]^2 + sigma^2)^-1
+        tau[j] <- (y_err[j]^2 + sigma_res^2)^-1
 
       }
 
@@ -229,7 +229,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     beta[2] <- (alpha[2] - alpha[1])/(cp[2]-cp[1])
     beta[3]~dnorm(0.0,0.01)
 
-    sigma ~ dt(0,4^-2,1)T(0,)
+    sigma_res ~ dt(0,4^-2,1)T(0,)
 
     cp.temp[1] ~ dunif(t_min,t_max)
     cp.temp[2] ~ dunif(t_min,t_max)
@@ -259,7 +259,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "beta",
       "alpha",
-      "sigma",
+      "sigma_res",
       "cp"
     )
 
@@ -297,7 +297,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
 
     # Classing the JAGS output in 2 Change Point--------------
-    class(jags_output) <- c("reslr_output","eiv_cp2_t")
+    class(jags_output) <- c("reslr_output", "eiv_cp2_t")
     message("JAGS model run finished for the EIV 2 Change Point model")
   }
 
@@ -321,7 +321,7 @@ model{
   mu_y[j] <- alpha[B[j] + C[j]] + beta[A[j] + B[j] + C[j]]*(mu_t[j]-cp[B[j] + C[j]])
   mu_t[j] ~ dnorm(0,0.5^-2)
 
-  tau[j] <- (y_err[j]^2 + sigma^2)^-1
+  tau[j] <- (y_err[j]^2 + sigma_res^2)^-1
   }
 
   ##Priors
@@ -334,7 +334,7 @@ model{
   beta[3] <- (alpha[3] - alpha[2])/(cp[3]-cp[2])
   beta[4]~dnorm(0.0,0.01)
 
-  sigma ~ dt(0,4^-2,1)T(0,)
+  sigma_res ~ dt(0,4^-2,1)T(0,)
 
   cp.temp[1] ~ dunif(t_min,t_max)
   cp.temp[2] ~ dunif(t_min,t_max)
@@ -366,7 +366,7 @@ model{
       "mu_pred",
       "beta",
       "alpha",
-      "sigma",
+      "sigma_res",
       "cp"
     )
 
@@ -404,7 +404,7 @@ model{
     )
 
     # Classing the JAGS output in 3 Change Point--------------
-    class(jags_output) <- c("reslr_output","eiv_cp3_t")
+    class(jags_output) <- c("reslr_output", "eiv_cp3_t")
     message("JAGS model run finished for the EIV 3 Change Point model")
   }
 
@@ -418,7 +418,7 @@ model{
           t[i] ~ dnorm(mu_t[i],t_err[i]^-2)
           mu_t[i] ~ dnorm(0,0.5^-2)
           noisy_terr[i] <- sqrt((beta^2)*(t_err[i]^2))
-          tau[i] <- (y_err[i]^2 + sigma^2 + noisy_terr[i]^2)^-1
+          tau[i] <- (y_err[i]^2 + sigma_res^2 + noisy_terr[i]^2)^-1
         }
 
         ###Derivative process
@@ -446,7 +446,7 @@ model{
       # Priors
       sigma_g ~ dt(0,2^-2,1)T(0,)
       phi ~ dbeta(al,10)
-      sigma ~ dt(0,2^-2,1)T(0,)
+      sigma_res ~ dt(0,2^-2,1)T(0,)
       alpha ~ dnorm(0,2^-2)
       beta ~ dnorm(0,2^-2)
   }##End model
@@ -455,7 +455,7 @@ model{
     jags_pars <- c(
       "phi",
       "sigma_g",
-      "sigma",
+      "sigma_res",
       "w.m",
       "alpha",
       "beta"
@@ -498,13 +498,217 @@ model{
     )
 
     # Classing the JAGS output for eiv_igp_t--------------
-    class(jags_output) <- c("reslr_output","eiv_igp_t")
+    class(jags_output) <- c("reslr_output", "eiv_igp_t")
     message("JAGS model run finished for the eiv_igp_t")
   }
 
 
 
-  # Noisy Input GAM in Time-----------------------------------
+  # # Noisy Input GAM in Time-----------------------------------
+  # if (model_type == "ni_spline_t") {
+  #   # No Noise
+  #   model_file <-
+  #     "model {
+  #
+  #       for (i in 1:n_obs) {
+  #         # Main likelihood
+  #         y[i] ~ dnorm(mu_y[i], sigmasq_all[i]^-1)
+  #         sigmasq_all[i] <- sigma_res^2 + y_err[i]^2
+  #
+  #         # Mean structure
+  #         mu_y[i] <- r[i]
+  #         }
+  #
+  #     # # Regional term
+  #     # r <- B_t %*% b_t
+  #     # for (j in 1:n_knots_t) {
+  #     #   b_t[j] ~ dnorm(0, tau_t)
+  #     #   #b_t[j] ~ dnorm(0, sigma_t^-2)
+  #     # }
+  #
+  #     # Spline in time penalised
+  #     r <- B_t %*% b_t
+  #     b_t[1] ~ dnorm(0,1)
+  #     for (j in 2:n_knots_t) {
+  #       b_t[j] ~ dnorm(b_t[j-1], tau_t)
+  #     }
+  #
+  #     # Priors
+  #     # tau_t ~ dgamma(1,10^-5)# Lang paper
+  #     tau_t ~ dgamma(1,1)
+  #
+  #     sigma_t<- tau_t^-0.5
+  #     #sigma_t~ dt(0, 1^-2, 1)T(0,)
+  #     sigma_res ~ dt(0, 1^-2, 1)T(0,)
+  #
+  #     }"
+  #
+  #
+  #   # Parameters to save in JAGs-----------------
+  #   jags_pars <- c(
+  #     "mu_y",
+  #     "sigma_res",
+  #     "b_t",
+  #     "r",
+  #     "sigma_t",
+  #     "sigmasq_all"
+  #   )
+  #   # Basis functions in time -----------------------------
+  #   spline_basis_fun_list <- spline_basis_fun(
+  #     data = data,
+  #     data_grid = data_grid,
+  #     model_type = model_type
+  #   )
+  #
+  #   # JAGS data----------------------
+  #   jags_data <- list(
+  #     y = data$RSL,
+  #     y_err = data$RSL_err,
+  #     t = data$Age,
+  #     n_obs = nrow(data),
+  #     B_t = spline_basis_fun_list$B_t,
+  #     n_knots_t = ncol(spline_basis_fun_list$B_t)
+  #   )
+  #
+  #
+  #
+  #   # Run JAGS------------------------
+  #   model_run <- suppressWarnings(R2jags::jags(
+  #     data = jags_data,
+  #     parameters.to.save = jags_pars,
+  #     model.file = textConnection(model_file),
+  #     n.iter = n_iterations,
+  #     n.burnin = n_burnin,
+  #     n.thin = n_thin,
+  #     n.chains = n_chains
+  #   ))
+  #
+  #   # Adding Noisy Input-------------------
+  #   data <- add_noisy_input(
+  #     data = data,
+  #     model_run = model_run,
+  #     model_type = model_type
+  #   )
+  #
+  #   # Include Noise-----------------------
+  #   noise_model_file <-
+  #     "model {
+  #
+  #       for (i in 1:n_obs) {
+  #         # Main likelihood
+  #         y[i] ~ dnorm(mu_y[i], sigmasq_all[i]^-1)
+  #         sigmasq_all[i] <- sigma_res^2 + y_err[i]^2 + NI_var_term[i]^2
+  #
+  #         # Mean structure
+  #         mu_y[i] <- r[i]
+  #       }
+  #
+  #     # Spline in Time
+  #     # r <- B_t %*% b_t
+  #     # for (j in 1:n_knots_t) {
+  #     #    #b_t[j] ~ dnorm(0, sigma_t^-2)
+  #     #    b_t[j] ~ dnorm(0, tau_t)
+  #     #  }
+  #
+  #     # # Spline in time penalised
+  #     r <- B_t %*% b_t
+  #     b_t[1] ~ dnorm(0,1)
+  #     for (j in 2:n_knots_t) {
+  #       b_t[j] ~ dnorm(b_t[j-1], tau_t)
+  #     }
+  #
+  #
+  #
+  #     # Predictions
+  #     r_pred <- B_t_pred %*% b_t
+  #     for (i in 1:n_pred){
+  #         mu_pred[i] <- r_pred[i]
+  #     }
+  #
+  #     # Derivatives
+  #     r_deriv <- B_t_deriv %*% b_t
+  #     for (i in 1:n_obs){
+  #       mu_deriv[i] <- r_deriv[i]
+  #     }
+  #     r_pred_deriv <- B_t_pred_deriv %*% b_t
+  #     for (i in 1:n_pred){
+  #       mu_pred_deriv[i] <- r_pred_deriv[i]
+  #     }
+  #
+  #
+  #     # Priors
+  #     # tau_t ~ dgamma(1,10^-5)# Lang paper
+  #     tau_t ~ dgamma(1,1)
+  #
+  #     sigma_t <- tau_t^-0.5
+  #     #sigma_t~ dt(0, 1^-2, 1)T(0,)
+  #
+  #     sigma_res ~ dt(0, 1^-2, 1)T(0,)
+  #   }"
+  #
+  #
+  #   # Parameters to save in JAGs-----------------
+  #   jags_pars <- c(
+  #     "mu_y",
+  #     "mu_deriv",
+  #     "mu_pred",
+  #     "mu_pred_deriv",
+  #     "r_pred_deriv",
+  #     "sigma_res",
+  #     "b_t",
+  #     "r",
+  #     "r_deriv",
+  #     "sigma_t",
+  #     "sigmasq_all",
+  #     "r_pred"
+  #   )
+  #
+  #   # JAGS data for second model run-----------
+  #   jags_data <- list(
+  #     NI_var_term = data$NI_var_term,
+  #     y = data$RSL,
+  #     y_err = data$RSL_err,
+  #     t = data$Age,
+  #     n_obs = nrow(data),
+  #     t_pred = data_grid$Age,
+  #     n_pred = length(data_grid$Age),
+  #     B_t = spline_basis_fun_list$B_t,
+  #     B_t_deriv = spline_basis_fun_list$B_t_deriv,
+  #     B_t_pred = spline_basis_fun_list$B_t_pred,
+  #     n_knots_t = ncol(spline_basis_fun_list$B_t),
+  #     B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv
+  #   )
+  #
+  #
+  #   # Run JAGS--------------
+  #   noisy_model_run_output <-
+  #     suppressWarnings(R2jags::jags(
+  #       data = jags_data,
+  #       parameters.to.save = jags_pars,
+  #       model.file = textConnection(noise_model_file),
+  #       n.iter = n_iterations,
+  #       n.burnin = n_burnin,
+  #       n.thin = n_thin,
+  #       n.chains = n_chains
+  #     ))
+  #   #closeAllConnections()
+  #
+  #   # Output with everything-------------
+  #   jags_output <- list(
+  #     noisy_model_run_output = noisy_model_run_output,
+  #     jags_data = jags_data,
+  #     data = data,
+  #     data_grid = data_grid
+  #   )
+  #
+  #
+  #   # Classing the JAGS output in NIGAM time--------------
+  #   class(jags_output) <- c("reslr_output", "ni_spline_t")
+  #
+  #   message("JAGS model run finished for the NIGAM in time")
+  # }
+
+  # TESTING new jags for Noisy Input GAM in Time-----------------------------------
   if (model_type == "ni_spline_t") {
     # No Noise
     model_file <-
@@ -512,19 +716,13 @@ model{
 
         for (i in 1:n_obs) {
           # Main likelihood
-          y[i] ~ dnorm(mu_y[i], sigmasq_all[i]^-1)
-          sigmasq_all[i] <- sigma_res^2 + y_err[i]^2
+          y[i] ~ dnorm(mu_y[i],tau) #sigmasq_all[i]^-1)
+          #sigmasq_all[i] <- (sigma_res^2 + y_err[i]^2)
+          #tau[i] <- (sigma_res^2 + y_err[i]^2)
 
           # Mean structure
           mu_y[i] <- r[i]
           }
-
-      # # Regional term
-      # r <- B_t %*% b_t
-      # for (j in 1:n_knots_t) {
-      #   b_t[j] ~ dnorm(0, tau_t)
-      #   #b_t[j] ~ dnorm(0, sigma_t^-2)
-      # }
 
       # Spline in time penalised
       r <- B_t %*% b_t
@@ -533,26 +731,51 @@ model{
         b_t[j] ~ dnorm(b_t[j-1], tau_t)
       }
 
+      # Predictions
+      r_pred <- B_t_pred %*% b_t
+      for (i in 1:n_pred){
+        mu_pred[i] <- r_pred[i]
+      }
+
+      # Derivatives
+      r_deriv <- B_t_deriv %*% b_t
+      for (i in 1:n_obs){
+        mu_deriv[i] <- r_deriv[i]
+      }
+      r_pred_deriv <- B_t_pred_deriv %*% b_t
+      for (i in 1:n_pred){
+        mu_pred_deriv[i] <- r_pred_deriv[i]
+      }
+
+
       # Priors
-      # tau_t ~ dgamma(1,10^-5)# Lang paper
-      tau_t ~ dgamma(1,1)
+      #tau ~ dgamma(a_tau,d_tau)
+      tau~ dgamma(1,1)
+      tau_t ~dgamma(0.5*nu,0.5*delta*nu)
+      #delta ~ dgamma(a_delta,d_delta)
+      delta ~ dgamma(0.0001,0.0001)
+      #tau_t ~ dgamma(1,1)
 
       sigma_t<- tau_t^-0.5
       #sigma_t~ dt(0, 1^-2, 1)T(0,)
-      sigma_res ~ dt(0, 1^-2, 1)T(0,)
+      #sigma_res ~ dt(0, 1^-2, 1)T(0,)
 
       }"
 
 
+
+
     # Parameters to save in JAGs-----------------
-    jags_pars <- c(
-      "mu_y",
-      "sigma_res",
-      "b_t",
-      "r",
-      "sigma_t",
-      "sigmasq_all"
-    )
+    # jags_pars <- c(
+    #   "mu_y",
+    #   #"tau",
+    #   "tau_t",
+    #   #"sigma_res",
+    #   "b_t",
+    #   "r",
+    #   "sigma_t",
+    #   "sigmasq_all"
+    # )
     # Basis functions in time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
@@ -560,14 +783,39 @@ model{
       model_type = model_type
     )
 
-    # JAGS data----------------------
+
+    # Parameters to save in JAGs-----------------
+    jags_pars <- c(
+      "mu_y",
+      "mu_deriv",
+      "mu_pred",
+      "mu_pred_deriv",
+      "r_pred_deriv",
+      # "sigma_res",
+      "b_t",
+      "r",
+      "r_deriv",
+      "sigma_t",
+      # "sigmasq_all",
+      "r_pred",
+      "tau",
+      "tau_t"
+    )
+
+    # JAGS data for second model run-----------
     jags_data <- list(
       y = data$RSL,
       y_err = data$RSL_err,
       t = data$Age,
       n_obs = nrow(data),
+      t_pred = data_grid$Age,
+      n_pred = length(data_grid$Age),
       B_t = spline_basis_fun_list$B_t,
-      n_knots_t = ncol(spline_basis_fun_list$B_t)
+      B_t_deriv = spline_basis_fun_list$B_t_deriv,
+      B_t_pred = spline_basis_fun_list$B_t_pred,
+      n_knots_t = ncol(spline_basis_fun_list$B_t),
+      B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv,
+      nu = 2
     )
 
 
@@ -583,119 +831,22 @@ model{
       n.chains = n_chains
     ))
 
-    # Adding Noisy Input-------------------
-    data <- add_noisy_input(
-      data = data,
-      model_run = model_run,
-      model_type = model_type
-    )
 
-    # Include Noise-----------------------
-    noise_model_file <-
-      "model {
-
-        for (i in 1:n_obs) {
-          # Main likelihood
-          y[i] ~ dnorm(mu_y[i], sigmasq_all[i]^-1)
-          sigmasq_all[i] <- sigma_res^2 + y_err[i]^2 + NI_var_term[i]^2
-
-          # Mean structure
-          mu_y[i] <- r[i]
-        }
-
-      # Spline in Time
-      # r <- B_t %*% b_t
-      # for (j in 1:n_knots_t) {
-      #    #b_t[j] ~ dnorm(0, sigma_t^-2)
-      #    b_t[j] ~ dnorm(0, tau_t)
-      #  }
-
-      # # Spline in time penalised
-      r <- B_t %*% b_t
-      b_t[1] ~ dnorm(0,1)
-      for (j in 2:n_knots_t) {
-        b_t[j] ~ dnorm(b_t[j-1], tau_t)
-      }
-
-
-
-      # Predictions
-      r_pred <- B_t_pred %*% b_t
-      for (i in 1:n_pred){
-          mu_pred[i] <- r_pred[i]
-      }
-
-      # Derivatives
-      r_deriv <- B_t_deriv %*% b_t
-      for (i in 1:n_obs){
-        mu_deriv[i] <- r_deriv[i]
-      }
-      r_pred_deriv <- B_t_pred_deriv %*% b_t
-      for (i in 1:n_pred){
-        mu_pred_deriv[i] <- r_pred_deriv[i]
-      }
-
-
-      # Priors
-      # tau_t ~ dgamma(1,10^-5)# Lang paper
-      tau_t ~ dgamma(1,1)
-
-      sigma_t <- tau_t^-0.5
-      #sigma_t~ dt(0, 1^-2, 1)T(0,)
-
-      sigma_res ~ dt(0, 1^-2, 1)T(0,)
-    }"
-
-
-    # Parameters to save in JAGs-----------------
-    jags_pars <- c(
-      "mu_y",
-      "mu_deriv",
-      "mu_pred",
-      "mu_pred_deriv",
-      "r_pred_deriv",
-      "sigma_res",
-      "b_t",
-      "r",
-      "r_deriv",
-      "sigma_t",
-      "sigmasq_all",
-      "r_pred"
-    )
-
-    # JAGS data for second model run-----------
-    jags_data <- list(
-      NI_var_term = data$NI_var_term,
-      y = data$RSL,
-      y_err = data$RSL_err,
-      t = data$Age,
-      n_obs = nrow(data),
-      t_pred = data_grid$Age,
-      n_pred = length(data_grid$Age),
-      B_t = spline_basis_fun_list$B_t,
-      B_t_deriv = spline_basis_fun_list$B_t_deriv,
-      B_t_pred = spline_basis_fun_list$B_t_pred,
-      n_knots_t = ncol(spline_basis_fun_list$B_t),
-      B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv
-    )
-
-
-    # Run JAGS--------------
-    noisy_model_run_output <-
-      suppressWarnings(R2jags::jags(
-        data = jags_data,
-        parameters.to.save = jags_pars,
-        model.file = textConnection(noise_model_file),
-        n.iter = n_iterations,
-        n.burnin = n_burnin,
-        n.thin = n_thin,
-        n.chains = n_chains
-      ))
-    #closeAllConnections()
+    # # Run JAGS--------------
+    #   noisy_model_run_output <-
+    #     suppressWarnings(R2jags::jags(
+    #       data = jags_data,
+    #       parameters.to.save = jags_pars,
+    #       model.file = textConnection(noise_model_file),
+    #       n.iter = n_iterations,
+    #       n.burnin = n_burnin,
+    #       n.thin = n_thin,
+    #       n.chains = n_chains
+    #     ))
 
     # Output with everything-------------
     jags_output <- list(
-      noisy_model_run_output = noisy_model_run_output,
+      noisy_model_run_output = model_run,
       jags_data = jags_data,
       data = data,
       data_grid = data_grid
@@ -707,145 +858,6 @@ model{
 
     message("JAGS model run finished for the NIGAM in time")
   }
-
-  # # TESTING new jags for Noisy Input GAM in Time-----------------------------------
-  # if (model_type == "ni_spline_t") {
-  #   # No Noise
-  #   model_file <-
-  #     "model {
-  #
-  #       for (i in 1:n_obs) {
-  #         # Main likelihood
-  #         y[i] ~ dnorm(mu_y[i], tau)
-  #        #tau[i] <- (sigma_res^2 + y_err[i]^2)^
-  #
-  #         # Mean structure
-  #         mu_y[i] <- r[i]
-  #         }
-  #
-  #     # Spline in time penalised
-  #     r <- B_t %*% b_t
-  #     b_t[1] ~ dnorm(0,1)
-  #     for (j in 2:n_knots_t) {
-  #       b_t[j] ~ dnorm(b_t[j-1], tau_t)
-  #     }
-  #
-  #     # Predictions
-  #   r_pred <- B_t_pred %*% b_t
-  #   for (i in 1:n_pred){
-  #     mu_pred[i] <- r_pred[i]
-  #   }
-  #
-  #   # Derivatives
-  #   r_deriv <- B_t_deriv %*% b_t
-  #   for (i in 1:n_obs){
-  #     mu_deriv[i] <- r_deriv[i]
-  #   }
-  #   r_pred_deriv <- B_t_pred_deriv %*% b_t
-  #   for (i in 1:n_pred){
-  #     mu_pred_deriv[i] <- r_pred_deriv[i]
-  #   }
-  #
-  #
-  #     # Priors
-  #     #tau ~ dgamma(a_tau,d_tau)
-  #     tau~ dgamma(1,1)
-  #     tau_t ~dgamma(0.5*nu,0.5*delta*nu)
-  #     #delta ~ dgamma(a_delta,d_delta)
-  #     delta ~ dgamma(0.0001,0.0001)
-  #     #tau_t ~ dgamma(1,1)
-  #
-  #     #sigma_t<- tau_t^-0.5
-  #     #sigma_t~ dt(0, 1^-2, 1)T(0,)
-  #     #sigma_res ~ dt(0, 1^-2, 1)T(0,)
-  #
-  #     }"
-  #
-  #
-  #
-  #
-  #   # Parameters to save in JAGs-----------------
-  #   jags_pars <- c(
-  #     "mu_y",
-  #     "tau",
-  #     "tau_t",
-  #     #"sigma_res",
-  #     "b_t",
-  #     "r"
-  #     #"sigma_t",
-  #     #"sigmasq_all"
-  #   )
-  #   # Basis functions in time -----------------------------
-  #   spline_basis_fun_list <- spline_basis_fun(
-  #     data = data,
-  #     data_grid = data_grid,
-  #     model_type = model_type
-  #   )
-  #
-  #
-  #     # Parameters to save in JAGs-----------------
-  #     jags_pars <- c(
-  #       "mu_y",
-  #       "mu_deriv",
-  #       "mu_pred",
-  #       "mu_pred_deriv",
-  #       "r_pred_deriv",
-  #       #"sigma_res",
-  #       "b_t",
-  #       "r",
-  #       "r_deriv",
-  #       #"sigma_t",
-  #       #"sigmasq_all",
-  #       "r_pred",
-  #       "tau",
-  #       "tau_t"
-  #     )
-  #
-  #     # JAGS data for second model run-----------
-  #     jags_data <- list(
-  #       y = data$RSL,
-  #       y_err = data$RSL_err,
-  #       t = data$Age,
-  #       n_obs = nrow(data),
-  #       t_pred = data_grid$Age,
-  #       n_pred = length(data_grid$Age),
-  #       B_t = spline_basis_fun_list$B_t,
-  #       B_t_deriv = spline_basis_fun_list$B_t_deriv,
-  #       B_t_pred = spline_basis_fun_list$B_t_pred,
-  #       n_knots_t = ncol(spline_basis_fun_list$B_t),
-  #       B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv,
-  #       nu = 2
-  #     )
-  #
-  #
-  #
-  #   # Run JAGS------------------------
-  #   model_run <- suppressWarnings(R2jags::jags(
-  #     data = jags_data,
-  #     parameters.to.save = jags_pars,
-  #     model.file = textConnection(model_file),
-  #     n.iter = n_iterations,
-  #     n.burnin = n_burnin,
-  #     n.thin = n_thin,
-  #     n.chains = n_chains
-  #   ))
-  #
-  #   #closeAllConnections()
-  #
-  #   # Output with everything-------------
-  #   jags_output <- list(
-  #     noisy_model_run_output = model_run,
-  #     jags_data = jags_data,
-  #     data = data,
-  #     data_grid = data_grid
-  #   )
-  #
-  #
-  #   # Classing the JAGS output in NIGAM time--------------
-  #   class(jags_output) <- c("reslr_output", "ni_spline_t")
-  #
-  #   message("JAGS model run finished for the NIGAM in time")
-  # }
 
   # Noisy Input GAM in Space Time-------------------------------------------
   if (model_type == "ni_spline_st") {
@@ -1022,7 +1034,7 @@ model{
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    #closeAllConnections()
+    # closeAllConnections()
 
     # Output with everything-------------
     jags_output <- list(
@@ -1032,7 +1044,7 @@ model{
       data_grid = data_grid
     )
     # Classing the JAGS output in NIGAM space time--------------
-    class(jags_output) <- c("reslr_output","ni_spline_st")
+    class(jags_output) <- c("reslr_output", "ni_spline_st")
     message("JAGS model run finished for the NIGAM in space time")
   }
 
@@ -1358,7 +1370,7 @@ model{
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    #closeAllConnections()
+    # closeAllConnections()
 
     # Output with everything-------------
     jags_output <- list(
@@ -1369,7 +1381,7 @@ model{
     )
 
     # Classing the JAGS output in NIGAM for RSL decomposition--------------
-    class(jags_output) <- c("reslr_output","ni_gam_decomp")
+    class(jags_output) <- c("reslr_output", "ni_gam_decomp")
     message("JAGS model run finished for the NI GAM Decomposition")
   }
   return(jags_output)

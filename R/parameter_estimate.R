@@ -55,7 +55,6 @@ parameter_estimate <- function(jags_output) {
       dplyr::filter(variable %in% c("alpha", "beta")) %>%
       dplyr::mutate(
         par_mean = mean, #* mod$scale_factor_y,
-        par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
         par_q5 = q5, #* mod$scale_factor_y,
@@ -90,7 +89,7 @@ parameter_estimate <- function(jags_output) {
     output_dataframes <- list(total_model_df = total_model_df)
     # Estimated parameters
     par_summary <- posterior::summarise_draws(sample_draws) %>%
-      dplyr::filter(variable %in% c("alpha", "beta[1]", "beta[2]", "cp", "sigma"))
+      dplyr::filter(variable %in% c("alpha", "beta[1]", "beta[2]", "cp", "sigma_res"))
   }
 
   if (inherits(jags_output, "eiv_cp2_t") == TRUE) {
@@ -124,7 +123,7 @@ parameter_estimate <- function(jags_output) {
         "alpha[1]", "alpha[2]",
         "beta[1]", "beta[2]",
         "beta[3]", "cp[1]",
-        "cp[2]", "sigma"
+        "cp[2]", "sigma_res"
       ))
   }
 
@@ -159,7 +158,7 @@ parameter_estimate <- function(jags_output) {
         "alpha[1]", "alpha[2]",
         "alpha[3]", "beta[1]", "beta[2]",
         "beta[3]", "beta[4]", "cp[1]",
-        "cp[2]", "cp[3]", "sigma"
+        "cp[2]", "cp[3]", "sigma_res"
       ))
   }
 
@@ -182,10 +181,8 @@ parameter_estimate <- function(jags_output) {
     quad1 <- array(dim = c(nrow = Ngrid, ncol = Ngrid, L))
     quad2 <- array(dim = c(nrow = Ngrid, ncol = Ngrid, L))
 
-    for (j in 1:Ngrid)
-    {
-      for (k in 1:Ngrid)
-      {
+    for (j in 1:Ngrid){
+      for (k in 1:Ngrid){
         quad1[k, j, ] <- abs((tgrid[k] * cosfunc / 2) + (tgrid[k] / 2) - tstar[j])^1.99
         quad2[k, j, ] <- ((tgrid[k] / 2) * (pi / L)) * (sqrt(1 - cosfunc^2))
       }
@@ -234,7 +231,7 @@ parameter_estimate <- function(jags_output) {
       rhat = NA, ess_bulk = NA, ess_tail = NA
     )
     par_summary <- posterior::summarise_draws(sample_draws) %>%
-      dplyr::filter(variable %in% c("phi", "sigma_g", "sigma"))
+      dplyr::filter(variable %in% c("phi", "sigma_g", "sigma_res"))
     par_summary <- rbind(par_summary, w_summary)
   }
 
@@ -295,7 +292,6 @@ parameter_estimate <- function(jags_output) {
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c("b_t", "r", "sigma_t", "sigma_res")) %>%
       dplyr::mutate(
-        par_mean = mean, #* mod$scale_factor_y,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
@@ -363,7 +359,6 @@ parameter_estimate <- function(jags_output) {
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c("b_st", "sigma_st", "sigma_res")) %>%
       dplyr::mutate(
-        par_mean = mean, #* mod$scale_factor_y,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
@@ -727,7 +722,6 @@ parameter_estimate <- function(jags_output) {
         "sigma_t", "sigma_res"
       )) %>%
       dplyr::mutate(
-        par_mean = mean, #* mod$scale_factor_y,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?

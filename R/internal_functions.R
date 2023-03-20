@@ -710,7 +710,7 @@ bs_bbase <- function(x,
                      xr = max(x),
                      deg = 3,
                      # nseg = 10){
-                     nseg = 5) {
+                     nseg = 8) {
   # nseg = 10){
   # nseg = 1) {
   # #' @param nseg number of sections
