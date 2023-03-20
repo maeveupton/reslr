@@ -1,0 +1,40 @@
+  model{
+    # 2 CP Regression model
+
+    ###Data Loop
+      for(j in 1:n_obs){
+        y[j] ~ dnorm(mu_y[j],tau[j])
+        t[j] ~ dnorm(mu_t[j],t_err[j]^-2)
+        A[j] <- step(mu_t[j]-cp[1])
+        C[j] <- 1+step(mu_t[j]-cp[2])
+
+        mu_t[j] ~ dnorm(0,0.5^-2)
+        mu_y[j] <- alpha[C[j]] + beta[A[j] + C[j]]*(mu_t[j]-cp[C[j]])
+
+        tau[j] <- (y_err[j]^2 + sigma_res^2)^-1
+
+      }
+
+    ##Priors
+    alpha[1] ~ dnorm(0.0,0.01)
+    alpha[2] ~ dnorm(0.0,0.01)
+
+    beta[1]~dnorm(0.0,0.01)
+    beta[2] <- (alpha[2] - alpha[1])/(cp[2]-cp[1])
+    beta[3]~dnorm(0.0,0.01)
+
+    sigma_res ~ dt(0,4^-2,1)T(0,)
+
+    cp.temp[1] ~ dunif(t_min,t_max)
+    cp.temp[2] ~ dunif(t_min,t_max)
+
+    cp[1:2]<-sort(cp.temp)
+
+    for(i in 1:n_pred){
+      Astar[i] <- step(t_pred[i]-cp[1])
+      Cstar[i] <- 1+step(t_pred[i]-cp[2])
+      mu_pred[i] <- alpha[Cstar[i]] + beta[Astar[i] + Cstar[i]]*(t_pred[i]-cp[Cstar[i]])
+    }
+
+
+  }

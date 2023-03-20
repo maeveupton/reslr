@@ -8,13 +8,13 @@ The different options are:
 "diagnostics" to assess MCMC convergence}
 \usage{
 \method{summary}{reslr_output}(
-  jags_output,
+  object,
   type = c("diagnostics", "quantiles", "statistics", "parameter_estimate"),
   ...
 )
 }
 \arguments{
-\item{jags_output}{Output object from the \code{\link{reslr_mcmc}}}
+\item{object}{Output object from the \code{\link{reslr_mcmc}}}
 
 \item{type}{User decides which type of summary they require}
 
@@ -33,5 +33,5 @@ The different options are:
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 input_data <- reslr_load(data = data)
 jags_output  <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
-summary.reslr_output(jags_output = jags_output, type = "diagnostics")
+summary(object = jags_output)
 }

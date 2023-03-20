@@ -254,7 +254,7 @@ This command takes the input data and the user specifies the statistical model, 
 
 **Step 4:** To examine if the algorithm has converged use:
 ```{r eval = TRUE}
-reslr::check_convergence(jags_output = jags_output.eiv_slr_t)
+reslr::check_convergence(object = jags_output.eiv_slr_t)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
@@ -332,7 +332,7 @@ Similar to the earlier model, the output object `jags_output.eiv_cp1_t` stores t
 
 **Step 4:** The convergence of the algorithm is examined using the following:
 ```{r eval = TRUE}
-reslr::check_convergence(jags_output = jags_output.eiv_cp1_t)
+reslr::check_convergence(object = jags_output.eiv_cp1_t)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
@@ -399,7 +399,7 @@ This command takes the input data and the user specifies the statistical model, 
 
 **Step 4:** The convergence of the algorithm is inspected using:
 ```{r eval = TRUE}
-reslr::check_convergence(jags_output = jags_output.eiv_igp_t)
+reslr::check_convergence(object = jags_output.eiv_igp_t)
 ```
 
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run.
@@ -473,7 +473,7 @@ Note that there will be two model runs printed in the console here but the outpu
 
 **Step 4:** The convergence of the algorithm is examined using the following:
 ```{r eval = TRUE}
-reslr::check_convergence(jags_output = jags_output.ni_spline_t)
+reslr::check_convergence(object = jags_output.ni_spline_t)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
@@ -542,7 +542,7 @@ Note that additional computational run time is required for the model compared w
 
 **Step 4:** The convergence of the algorithm is examined using the following:
 ```{r eval = TRUE}
-reslr::check_convergence(jags_output = jags_output.ni_spline_st)
+reslr::check_convergence(object = jags_output.ni_spline_st)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
@@ -624,7 +624,7 @@ Note that there will be two model runs printed in the console here but the outpu
 
 **Step 4:** The convergence of the algorithm is examined using the following:
 ```{r eval = TRUE}
-reslr::check_convergence(jags_output = jags_output.ni_gam_decomp)
+reslr::check_convergence(object = jags_output.ni_gam_decomp)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 

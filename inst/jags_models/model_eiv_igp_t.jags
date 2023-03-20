@@ -1,0 +1,39 @@
+model{
+     # EIV IGP in time
+        for(i in 1:n_obs){
+          y[i]~dnorm(alpha + w.tilde.m[i],tau[i])
+          t[i] ~ dnorm(mu_t[i],t_err[i]^-2)
+          mu_t[i] ~ dnorm(0,0.5^-2)
+          noisy_terr[i] <- sqrt((beta^2)*(t_err[i]^2))
+          tau[i] <- (y_err[i]^2 + sigma_res^2 + noisy_terr[i]^2)^-1
+        }
+
+        ###Derivative process
+        w.m~dmnorm(mu.w,K.inv)
+        K.inv <- inverse((sigma_g^2)*K)
+        K.w.inv<-inverse(K)
+
+        for(i in 1:Ngrid){
+          mu.w[i] <- beta
+          K[i,i]<-1+0.00001
+        ######Exponential covariance for the derivative process
+          for(j in (i+1):Ngrid){
+              K[i,j]<-(pow(phi,pow(Dist[i,j],1.99)))
+              K[j,i]<-K[i,j]
+            }
+          }
+        ###Expected value of the integrated Gaussian Process
+        for(i in 1:Ngrid) {
+          for(j in 1:n_obs) {
+            K.gw[j,i]<-sum(pow(phi,quad1[j,i,])*quad2[j,i,])  #### Quadrature function
+          } #End j loop
+        } #End i loop
+
+        w.tilde.m<-K.gw %*% K.w.inv %*% w.m
+      # Priors
+      sigma_g ~ dt(0,2^-2,1)T(0,)
+      phi ~ dbeta(al,10)
+      sigma_res ~ dt(0,2^-2,1)T(0,)
+      alpha ~ dnorm(0,2^-2)
+      beta ~ dnorm(0,2^-2)
+  }

@@ -1,0 +1,31 @@
+model{
+
+ # 1 CP Regression model
+
+  # Data Loop
+  for(j in 1:n_obs){
+      y[j]~dnorm(mu_y[j],tau[j])
+      t[j] ~ dnorm(mu_t[j],t_err[j]^-2)
+      C[j] <- 1+step(mu_t[j]-cp)
+      mu_t[j] ~ dnorm(0,0.5^-2)
+      mu_y[j] <- alpha + beta[C[j]]*(mu_t[j]-cp)
+      tau[j] <- (y_err[j]^2 + sigma_res^2)^-1
+
+  }
+
+  # Priors
+  alpha[1] ~ dnorm(0.0,0.01)
+
+  beta[1]~dnorm(0.0,0.01)
+  beta[2]~dnorm(0.0,0.01)
+
+  sigma_res ~ dt(0,4^-2,1)T(0,)
+
+  cp ~ dunif(t_min,t_max)
+
+  # Data grid loop
+  for(i in 1:n_pred){
+      mu_pred[i] <-alpha + beta[Cstar[i]]*(t_pred[i]-cp)
+      Cstar[i] <- 1+step(t_pred[i]-cp)
+      }
+  }

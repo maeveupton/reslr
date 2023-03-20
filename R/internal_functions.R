@@ -410,7 +410,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       return(B_t)
     }
     # Now create derivatives----------------------
-    h <- 0.001
+    h <- 0.00001#h <- 0.001
     t <- data$Age
     first_deriv_step1 <- first_deriv_calc(t + h)
     first_deriv_step2 <- first_deriv_calc(t - h)
@@ -420,7 +420,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     B_t_pred <- bs_bbase(data_grid$Age,
       xl = min(data$Age), xr = max(data$Age))
     # Now create derivatives----------------------
-    h <- 0.001
+    h <- 0.00001#h <- 0.001
     t_pred <- data_grid$Age
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
     first_deriv_step2 <- first_deriv_calc(t_pred - h)
@@ -501,7 +501,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       return(B_st)
     }
     #-------Now create derivatives----
-    h <- 0.0001
+    h <- 0.00001#h <- 0.0001
     t <- data$Age
 
     first_deriv_step1 <- first_deriv_calc(t + h)
@@ -588,7 +588,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       B_st <- B_st_full[, -remove_col_index] # Not sure here
       return(B_st)
     }
-    h <- 0.001
+    h <- 0.00001#h <- 0.001
     t_pred <- data_grid$Age
 
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
@@ -656,7 +656,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       return(output_B_tot)
     }
     #-------Now create derivatives----
-    h <- 0.0001
+    h <- 0.00001#h <- 0.0001
     t <- data$Age
 
     first_deriv_step1 <- first_deriv_calc(t + h)
@@ -710,7 +710,7 @@ bs_bbase <- function(x,
                      xr = max(x),
                      deg = 3,
                      # nseg = 10){
-                     nseg = 8) {
+                     nseg = 3) {
   # nseg = 10){
   # nseg = 1) {
   # #' @param nseg number of sections

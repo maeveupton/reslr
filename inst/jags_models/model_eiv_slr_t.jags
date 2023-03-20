@@ -1,0 +1,22 @@
+model{
+  ## Data model loop of eiv_slr_t
+  for(j in 1:n_obs)
+  {
+  y[j] ~ dnorm(mu_y[j],tau[j])
+  t[j] ~ dnorm(mu_t[j],t_err[j]^-2)
+  mu_t[j] ~ dnorm(0,0.5^-2)
+  mu_y[j] <- alpha + beta*(mu_t[j])
+  tau[j] <- (y_err[j]^2 + sigma_res^2)^-1
+
+  } # end j loop
+
+ ## Priors
+ alpha ~ dnorm(0.0,0.01)
+ beta ~ dnorm(0.0,0.01)
+ sigma_res ~ dt(0,4^-2,1)T(0,)
+
+ # Predictions
+ for(i in 1:n_pred) {
+    mu_pred[i] = alpha + beta*t_pred[i]}
+
+  }

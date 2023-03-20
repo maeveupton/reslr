@@ -4,10 +4,10 @@
 \alias{check_convergence}
 \title{Checking the algorithm converged}
 \usage{
-check_convergence(jags_output)
+check_convergence(object)
 }
 \arguments{
-\item{jags_output}{Output from the JAGS}
+\item{object}{Output object from the \code{\link{reslr_mcmc}}}
 }
 \value{
 Statement of convergence
@@ -18,5 +18,6 @@ Checking the algorithm converged
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 input_data <- reslr_load(data = data)
-check_convergence(jags_output = reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t"))
+jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
+check_convergence(object = jags_output)
 }

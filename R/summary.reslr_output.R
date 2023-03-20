@@ -3,7 +3,7 @@
 #' The different options are:
 #' "diagnostics" to assess MCMC convergence
 #'
-#' @param jags_output Output object from the \code{\link{reslr_mcmc}}
+#' @param object Output object from the \code{\link{reslr_mcmc}}
 #' @param type User decides which type of summary they require
 #' @param ... Not in use
 #'
@@ -14,24 +14,23 @@
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' input_data <- reslr_load(data = data)
 #' jags_output  <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
-#' summary.reslr_output(jags_output = jags_output, type = "diagnostics")
-summary.reslr_output <- function(jags_output,
+#' summary(object = jags_output)
+summary.reslr_output <- function(object,
                                  type = c("diagnostics","quantiles","statistics","parameter_estimate"),
                                  ...){
+  mu_pred <- .lower <- .upper <- object<- jags_output<- variable <- sd <- mad <- q5 <- q95 <- `w.m[1]`<- `w.m[50]`<- lwr_95 <- upr_95 <- alpha <- cp <- sigma_g <- phi <- sigma  <- NULL
+  #jags_output <- object
   jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+  # Create an object containing the posterior samples
   sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
   par_summary <- posterior::summarise_draws(sample_draws)
 
   if ("diagnostics" %in% type){
-    # Create an object containing the posterior samples
-    #m <- jags_output_model_run$sims.matrix
-    # sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-    # par_summary <- posterior::summarise_draws(sample_draws)
-    # # Check convergence
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0){
-    #   cat("No convergence issues detected")}
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-    #   cat("Convergence issues detected")}
+    # Check convergence
+    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0){
+      cat("No convergence issues detected")}
+    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+      cat("Convergence issues detected")}
     out_bgr <- jags_output$noisy_model_run_output$BUGSoutput$summary[, "Rhat"]
     # Print out gelman diagnostics of the output
     cat("Gelman diagnostics - these values should all be close to 1.\n")
