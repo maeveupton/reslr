@@ -3,7 +3,6 @@
 S3method(plot,reslr_input)
 S3method(plot,reslr_output)
 S3method(reslr_mcmc,reslr_input)
-S3method(summary,reslr_output)
 export("%>%")
 export(check_convergence)
 export(parameter_estimate)
