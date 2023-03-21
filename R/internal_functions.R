@@ -82,11 +82,10 @@ add_noisy_input <- function(model_run, model_type, data) {
       # Create the regional basis functions
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age)
+        xr = max(data$Age),nseg = 8
       ) # , nseg = 20)
       #----Deriv----
-      return(intercept_post[data$SiteName] + B_t %*% colMeans(b_t_post) +
-        +b_g_post[data$SiteName] * (t_new))
+      return(intercept_post[data$SiteName] + B_t %*% colMeans(b_t_post) +b_g_post[data$SiteName] * (t_new))
     }
     #-------Now create derivatives----
     h <- 0.01
@@ -399,13 +398,14 @@ spline_basis_fun <- function(data, data_grid, model_type) {
   if (model_type == "ni_gam_decomp") {
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase(data$Age,
-      xl = min(data$Age), xr = max(data$Age))
+      xl = min(data$Age), xr = max(data$Age),nseg = 8)
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
       # Create the regional basis functions
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age)
+        xr = max(data$Age),
+        nseg = 8
       ) # nseg = 20)
       return(B_t)
     }
@@ -418,7 +418,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 
     # Basis functions in time using prediction data frame-----------------------
     B_t_pred <- bs_bbase(data_grid$Age,
-      xl = min(data$Age), xr = max(data$Age))
+      xl = min(data$Age), xr = max(data$Age),nseg = 8)
     # Now create derivatives----------------------
     h <- 0.00001#h <- 0.001
     t_pred <- data_grid$Age
@@ -430,13 +430,13 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # Basis functions in space time for data-----------------------
     B_time <- bs_bbase(data$Age,
       xl = min(data$Age),
-      xr = max(data$Age))
+      xr = max(data$Age),nseg = 6)
     B_space_1 <- bs_bbase(data$Latitude,
       xl = min(data$Latitude),
-      xr = max(data$Latitude))
+      xr = max(data$Latitude),nseg = 6)
     B_space_2 <- bs_bbase(data$Longitude,
       xl = min(data$Longitude),
-      xr = max(data$Longitude))
+      xr = max(data$Longitude),nseg = 6)
 
     B_st_full <- matrix(NA,
       ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
@@ -466,17 +466,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age), # nseg = 6,
+        xr = max(data$Age),  nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude), # nseg = 6,
+        xr = max(data$Latitude),  nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude), # nseg = 6,
+        xr = max(data$Longitude),  nseg = 6
         # deg = 2
       )
 
@@ -512,17 +512,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # Basis functions in space time using prediction data frame-----------------------
     B_pred_time <- bs_bbase(data_grid$Age,
       xl = min(data$Age),
-      xr = max(data$Age), # nseg = 6,
+      xr = max(data$Age), nseg = 6
       # deg = 2
     )
     B_space_1 <- bs_bbase(data_grid$Latitude,
       xl = min(data$Latitude),
-      xr = max(data$Latitude), # nseg = 6,
+      xr = max(data$Latitude),  nseg = 6
       # deg = 2
     )
     B_space_2 <- bs_bbase(data_grid$Longitude,
       xl = min(data$Longitude),
-      xr = max(data$Longitude), # nseg = 6,
+      xr = max(data$Longitude),  nseg = 6
       # deg = 2
     )
 
@@ -553,17 +553,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age), # nseg = 6,
+        xr = max(data$Age),  nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase(data_grid$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude), # nseg = 6,
+        xr = max(data$Latitude),  nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase(data_grid$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude), # nseg = 6,
+        xr = max(data$Longitude),  nseg = 6
         # deg = 2
       )
 
@@ -607,17 +607,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age), # nseg = 6,
+        xr = max(data$Age),  nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude), # nseg = 6,
+        xr = max(data$Latitude),  nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude), # nseg = 6,
+        xr = max(data$Longitude), nseg = 6
         # deg = 2
       )
 
@@ -708,16 +708,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 bs_bbase <- function(x,
                      xl = min(x),
                      xr = max(x),
-                     deg = 3#,
-                     # nseg = 10){
+                     deg = 3,
+                     nseg = NULL){
                      #nseg = 4
-                     ) {
-  # nseg = 10){
+  # nseg = 8){
   # nseg = 1) {
-  # #' @param nseg number of sections
   # Create basis functions------------------------------------------------------
-  nseg <- round(deg / (1 + deg / length(x))) #+ 10#Option 1
-  print(nseg)
+  if(is.null(nseg)){
+    nseg <- round(deg / (1 + deg / length(x)))
+  }
+
+                       #+ 10#Option 1
   # df <- sqrt(length(x)) - 4
   # too big
   # nseg <- round(df/(1+df/length(x)))

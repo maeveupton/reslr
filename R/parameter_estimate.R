@@ -17,6 +17,9 @@ parameter_estimate <- function(jags_output) {
   n_iter <- sample_draws$.iteration %>%
     unique() %>%
     length()
+  # DIV for the model
+  DIC_model <- jags_output$noisy_model_run_output$DIC
+  message()
   # If the user sets iteration value extremely high and to save time reduce it
   if (jags_output$noisy_model_run_output$n.iter > 10000) {
     sample_draws <- sample_draws %>% dplyr::slice_sample(n = 1000)
@@ -27,7 +30,6 @@ parameter_estimate <- function(jags_output) {
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
     # Output from mcmc------------------------
     mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    # Adaptive UI
     # Dataframes for plotting output---------------
     total_model_df <- data.frame(
       RSL_mod = apply(mu_post_pred, 2, mean),
