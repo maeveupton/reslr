@@ -18,8 +18,7 @@ parameter_estimate <- function(jags_output) {
     unique() %>%
     length()
   # DIV for the model
-  DIC_model <- jags_output$noisy_model_run_output$DIC
-  message()
+  DIC_model <- jags_output$noisy_model_run_output$BUGSoutput$DIC
   # If the user sets iteration value extremely high and to save time reduce it
   if (jags_output$noisy_model_run_output$n.iter > 10000) {
     sample_draws <- sample_draws %>% dplyr::slice_sample(n = 1000)

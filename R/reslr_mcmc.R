@@ -69,11 +69,11 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
 
     # Run JAGS------------------------
-    model_run <- # suppressWarnings(
+    model_run <-
       R2jags::jags(
         data = jags_data,
         parameters.to.save = jags_pars,
-        model.file = jags_file, # textConnection(jags_file),#jags_file,#textConnection(model_file),
+        model.file = jags_file,
         n.iter = n_iterations,
         n.burnin = n_burnin,
         n.thin = n_thin,
@@ -91,9 +91,6 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid
     )
-    # showConnections()
-    # close(model_file)
-    # closeAllConnections()
 
     # Classing the JAGS output in NIGAM time--------------
     class(jags_output) <- c("reslr_output", "eiv_slr_t")
@@ -103,8 +100,6 @@ reslr_mcmc.reslr_input <- function(input_data,
   # 1 Change Point Model-------------------
   if (model_type == "eiv_cp_t" & n_cp == 1) {
     # JAGS file
-    # jags_file <- "inst/jags_models/model_eiv_cp1_t.jags"
-    # check didn't like the other way
     jags_file <- system.file("jags_models", "model_eiv_cp1_t.jags", package = "reslr")
 
     # JAGS parameters to save
@@ -133,7 +128,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     model_run <- suppressWarnings(R2jags::jags(
       data = jags_data,
       parameters.to.save = jags_pars,
-      model.file = jags_file, # textConnection(model_file),
+      model.file = jags_file,
       n.iter = n_iterations,
       n.burnin = n_burnin,
       n.thin = n_thin,
@@ -196,7 +191,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     model_run <- suppressWarnings(R2jags::jags(
       data = jags_data,
       parameters.to.save = jags_pars,
-      model.file = jags_file, # textConnection(model_file),
+      model.file = jags_file,
       n.iter = n_iterations,
       n.burnin = n_burnin,
       n.thin = n_thin,
@@ -220,7 +215,6 @@ reslr_mcmc.reslr_input <- function(input_data,
   # 3 Change Point Model----------------------
   if (model_type == "eiv_cp_t" & n_cp == 3) {
     # JAGS file
-    # jags_file <- "inst/jags_models/model_eiv_cp3_t.jags"
     jags_file <- system.file("jags_models", "model_eiv_cp3_t.jags", package = "reslr")
 
     # Initial functions for Change point required
@@ -259,7 +253,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     model_run <- suppressWarnings(R2jags::jags(
       data = jags_data,
       parameters.to.save = jags_pars,
-      model.file = jags_file, # textConnection(model_file),
+      model.file = jags_file,
       n.iter = n_iterations,
       n.burnin = n_burnin,
       n.thin = n_thin,
@@ -283,7 +277,6 @@ reslr_mcmc.reslr_input <- function(input_data,
   # Errors-in-Variables Integrated Gaussian Process------------------
   if (model_type == "eiv_igp_t") {
     # JAGS file
-    # jags_file <- "inst/jags_models/model_eiv_igp_t.jags"
     jags_file <- system.file("jags_models", "model_eiv_igp_t.jags", package = "reslr")
 
     # JAGS parameters to save
@@ -316,7 +309,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     model_run <- suppressWarnings(R2jags::jags(
       data = jags_data,
       parameters.to.save = jags_pars,
-      model.file = jags_file, # textConnection(model_file),
+      model.file = jags_file,
       n.iter = n_iterations,
       n.burnin = n_burnin,
       n.thin = n_thin,
@@ -378,7 +371,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     model_run <- suppressWarnings(R2jags::jags(
       data = jags_data,
       parameters.to.save = jags_pars,
-      model.file = jags_file, # textConnection(model_file),
+      model.file = jags_file,
       n.iter = n_iterations,
       n.burnin = n_burnin,
       n.thin = n_thin,
@@ -496,7 +489,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     model_run <- suppressWarnings(R2jags::jags(
       data = jags_data,
       parameters.to.save = jags_pars,
-      model.file = jags_file, # textConnection(model_file),
+      model.file = jags_file,
       n.iter = n_iterations,
       n.burnin = n_burnin,
       n.thin = n_thin,
@@ -511,7 +504,6 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
 
     #----NI JAGS model-----
-    # noisy_jags_file <- "inst/jags_models/noisy_model_ni_spline_st.jags"
     noisy_jags_file <- system.file("jags_models", "noisy_model_ni_spline_st.jags", package = "reslr")
 
     # JAGS input data
@@ -549,13 +541,13 @@ reslr_mcmc.reslr_input <- function(input_data,
       suppressWarnings(R2jags::jags(
         data = jags_data,
         parameters.to.save = jags_pars,
-        model.file = noisy_jags_file, # textConnection(noise_model_file),
+        model.file = noisy_jags_file,
         n.iter = n_iterations,
         n.burnin = n_burnin,
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    # closeAllConnections()
+
 
     # Output with everything-------------
     jags_output <- list(
@@ -571,7 +563,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
   # Noisy Input GAM for decomposition of RSL signal-------------------------------------------
   if (model_type == "ni_gam_decomp") {
-    # jags_file <- "inst/jags_models/model_ni_gam_decomp.jags"
+    # jags file
     jags_file <- system.file("jags_models", "model_ni_gam_decomp.jags", package = "reslr")
 
     # Basis functions in space time -----------------------------
@@ -639,7 +631,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     model_run <- suppressWarnings(R2jags::jags(
       data = jags_data,
       parameters.to.save = jags_pars,
-      model.file = jags_file, # textConnection(model_file),
+      model.file = jags_file,
       n.iter = n_iterations,
       n.burnin = n_burnin,
       n.thin = n_thin,
@@ -654,7 +646,6 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
 
     #----NI JAGS model-----
-    # noisy_jags_file <- "inst/jags_models/noisy_model_ni_gam_decomp.jags"
     noisy_jags_file <- system.file("jags_models", "noisy_model_ni_gam_decomp.jags", package = "reslr")
 
     # JAGS input data
@@ -751,7 +742,6 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    # closeAllConnections()
 
     # Output with everything-------------
     jags_output <- list(

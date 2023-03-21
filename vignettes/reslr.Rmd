@@ -412,7 +412,7 @@ params$par_summary
 The length scale parameter, "phi" determines the distance over which two input points can influence each other. More specifically, it determines the rate at which the correlation between the input data points decays as the distance between those points increases. "sigma_res".... **FINISH**
 
 **Step 6:** The results from the EIV IGP model can be illustrated using:
-```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output = jags_output.eiv_igp_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. In addition, the rate of change is plotted using this function.
@@ -422,7 +422,7 @@ To examine the data creating the total model result plot, the user can use:
 total_model_fit <- params$output_dataframes$total_model_fit
 ```
 To examine the data creating the total model rate of change plot the user can use:
-```{r eval = TRUE}
+```{r eval = FALSE}
 total_model_rate_df <-params$output_dataframes$total_model_rate_df
 ```
 
