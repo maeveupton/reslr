@@ -38,7 +38,7 @@ The `reslr` package uses the JAGS (Just Another Gibbs Sampler) software to run t
 
 Next, start Rstudio and find the window with the command prompt (the symbol `>`). Type
 
-```{r,eval = TRUE,results='hide'}
+```{r,eval = TRUE,message=FALSE}
 #install.packages("reslr")
 #library(devtools)
 devtools::install()
@@ -49,7 +49,7 @@ It may ask you to pick your nearest CRAN mirror (the nearest site which hosts R 
 
 You then need to load the package.
 
-```{r,eval = TRUE}
+```{r,eval = TRUE, message=FALSE}
 library(reslr)
 ```
 
@@ -181,7 +181,7 @@ data_multisite <- reslr::NAACproxydata %>% dplyr::filter(Site %in% c(
 
 The general structure for running `reslr` is as follows:
 
-**Step 1.** Load in the data using `reslr_load`. If tide gauge data required update `tide_gauge_included = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100` with the default of 100 years. The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
+**Step 1.** Load in the data using `reslr_load`. If tide gauge data required update `include_tide_gauge = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100` with the default of 100 years. The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
 
 **Step 2.** Plot the raw data using `plot`
 
@@ -208,11 +208,12 @@ CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
-                            tide_gauge_included = FALSE,
+                            include_tide_gauge = FALSE,
+                            include_linear_rate = FALSE,
                             n_prediction = 100,
                             input_Age_type = "CE")
 ```
-In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
+In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`. Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
 - The `data` dataframe is the inputted data with additional columns for the linear_rate, linear_rate_err and data_type_id which will contain two options, "ProxyRecord" or "TideGaugeData". It can be accessed by:
@@ -292,10 +293,11 @@ CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
-                            tide_gauge_included = FALSE,
+                            include_tide_gauge = FALSE,
+                            include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
-In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
@@ -367,10 +369,11 @@ CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
-                            tide_gauge_included = FALSE,
+                            include_tide_gauge = FALSE,
+                            include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
-In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
@@ -441,10 +444,11 @@ CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
-                            tide_gauge_included = FALSE,
+                            include_tide_gauge = FALSE,
+                            include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
-In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
@@ -511,10 +515,11 @@ multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nas
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 multi_site <- reslr::reslr_load(data = multi_site,
-                            tide_gauge_included = FALSE,
+                            include_tide_gauge = FALSE,
+                            include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
-In this function, the user can select to add tide gauge data by changing `tide_gauge_included = TRUE`.**FINISH** Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`.**FINISH** Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -592,10 +597,11 @@ multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nas
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 multi_site <- reslr::reslr_load(data = multi_site,
-                            tide_gauge_included = TRUE,
+                            include_tide_gauge = TRUE,
+                            include_linear_rate = TRUE,
                             n_prediction = 100)
 ```
-In this function, the user should select to add tide gauge data by changing `tide_gauge_included = TRUE`. If the user has not provided the GIA rate and the associated GIA rate uncertainty within the `linear_rate` and `linear_rate_err` column prior to running the package, the package to calculate it using the data. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user should select to add tide gauge data by changing `include_tide_gauge = TRUE`. If the user has not provided the GIA rate and the associated GIA rate uncertainty within the `linear_rate` and `linear_rate_err` column prior to running the package, the package to calculate it using the data. The output of this function the the updated dataframe which will be used in the following steps.
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}

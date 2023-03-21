@@ -45,8 +45,6 @@ reslr_mcmc.reslr_input <- function(input_data,
   # Simple Linear Regression ----------------
   if (model_type == "eiv_slr_t") {
     # JAGS file
-    # Can't find this??
-    # jags_file <- "inst/jags_models/model_eiv_slr_t.jags"
     jags_file <- system.file("jags_models", "model_eiv_slr_t.jags", package = "reslr")
 
     # Parameters to save in JAGS-----------------

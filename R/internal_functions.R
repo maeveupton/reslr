@@ -710,18 +710,15 @@ bs_bbase <- function(x,
                      xr = max(x),
                      deg = 3,
                      nseg = NULL){
-                     #nseg = 4
-  # nseg = 8){
-  # nseg = 1) {
   # Create basis functions------------------------------------------------------
   if(is.null(nseg)){
     nseg <- round(deg / (1 + deg / length(x)))
   }
 
-                       #+ 10#Option 1
-  # df <- sqrt(length(x)) - 4
+
+  #df <- sqrt(length(x)) - 4
   # too big
-  # nseg <- round(df/(1+df/length(x)))
+  #nseg <- round(df/(1+df/length(x)))
 
   # Compute the length of the partitions
   dx <- (xr - xl) / nseg

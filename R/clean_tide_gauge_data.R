@@ -40,23 +40,23 @@ clean_tidal_gauge_data <- function(data
   temp_SL$id <- stringr::str_extract(basename(temp_SL$id),"[0-9]+")
 
   # Access the individual data files within the 'rlr_annual' folder
-  file_path <- file.path(temp_dir, "rlr_annual", "filelist.txt")# Watch this?
-  #file_names <- list.files(file_path, pattern = ".rlrdata", full.names = TRUE)
-  #file_list <- utils::read.table(file_path,sep = ";")
+  file_path <- file.path(temp_dir, "rlr_annual", "filelist.txt")
   file_list <- utils::read.csv(file_path,stringsAsFactors = FALSE, header=F,sep=";")
   colnames(file_list)<- c("id","Latitude","Longitude","name","coastline","stationcode","stationflag")
   # Removing white space in the name of each site
-  file_list$name <- stringr::str_trim(file_list$name,side = "both")#gsub("[[:space:]]", "",file_list$name)
-  file_list$stationflag <-  stringr::str_trim(file_list$stationflag,side = "both")#gsub("[[:space:]]", "",file_list$stationflag)
-
+  file_list$name <- stringr::str_trim(file_list$name,side = "both")
+  file_list$stationflag <-  stringr::str_trim(file_list$stationflag,side = "both")
+  # Data from the PSMSL website
   data_TG <- temp_SL %>%
-    dplyr::mutate(id = stringr::str_extract(basename(temp_SL$id),"[0-9]+")) %>% # pulling out the file number from string
-    dplyr::filter(!RSL== -99999) %>%  # Cases where bad data was collected
-    # mutate(RSL = RSL - 7000) # Offset
-    dplyr::group_by(id) %>% #2000-2018 used as the tidal epoch
+    # pulling out the file number from string so that it matches the name from other files
+    dplyr::mutate(id = stringr::str_extract(basename(temp_SL$id),"[0-9]+")) %>%
+    # Cases where bad data was collected
+    dplyr::filter(!RSL== -99999) %>%
+    dplyr::group_by(id) %>%
+    #2000-2018 used as the tidal epoch
     dplyr::mutate(Age_epoch_id = ifelse(dplyr::between(Age,2000,2018),TRUE,FALSE))
 
-  #--- Removing offset based on the location---
+  # Removing offset based on the location---
   # Offset value is the mean of RSL over the tidal epoch
   # Setting 2000-2018 as the tidal epoch
   Age_epoch_ref <-  data_TG %>%
@@ -77,7 +77,6 @@ clean_tidal_gauge_data <- function(data
   annual_SL_tide_df <- annual_SL_tide_df %>%
     dplyr::filter(!stationflag == "Y") %>%
     tidyr::drop_na()
-
 
   # Remove the temporary file and directory
   unlink(temp_file)
