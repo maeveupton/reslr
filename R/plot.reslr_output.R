@@ -31,28 +31,30 @@ plot.reslr_output <- function(x,
   jags_output <- x
   # EIV slr------------
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
-    total_model_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_df
+    output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
+    data <- jags_output$data
+    # Plot
     plot_result <-
       ggplot2::ggplot() +
-      ggplot2::geom_rect(data = jags_output$data, ggplot2::aes(
+      ggplot2::geom_rect(data = data, ggplot2::aes(
         xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
         ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
       ), alpha = 0.4) +
       ggplot2::geom_point(
-        data = jags_output$data,
+        data = data,
         ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
       ) +
       ggplot2::geom_line(
-        data = total_model_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
+        data = output_dataframes,
+        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
       ) +
       ggplot2::geom_ribbon(
-        data = total_model_df,
-        ggplot2::aes(y = RSL, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
+        data = output_dataframes,
+        ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
       ) +
       # ggplot2::geom_ribbon(
-      #   data = total_model_df,
-      #   ggplot2::aes(y = RSL, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+      #   data = output_dataframes,
+      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
       ggplot2::xlab("Age (CE)") +
       ggplot2::ylab("Relative Sea Level (m)") +
@@ -70,20 +72,20 @@ plot.reslr_output <- function(x,
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
-        values = c(
-          "Uncertainty" = ggplot2::alpha("grey", 0.3),
-          "95" = ggplot2::alpha("purple3", 0.2) #
-          # "50" = ggplot2::alpha("purple3", 0.3)
-        ),
-        labels = c(
-          "95% Credible Interval",
-          expression(paste("1-sigma error"))
-          # , "50% Credible Interval"
-        )
+                                 values = c(
+                                   "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                   "95" = ggplot2::alpha("purple3", 0.2) #
+                                   # "50" = ggplot2::alpha("purple3", 0.3)
+                                 ),
+                                 labels = c(
+                                   "95% Credible Interval",
+                                   expression(paste("1 sigma error"))
+                                   # , "50% Credible Interval"
+                                 )
       ) +
       ggplot2::scale_colour_manual("",
-        values = c("black" = "black", "mean" = "purple3"),
-        labels = c("Data", "Posterior Fit")
+                                   values = c("black" = "black", "mean" = "purple3"),
+                                   labels = c("Data", "Posterior Fit")
       ) +
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(
@@ -96,6 +98,7 @@ plot.reslr_output <- function(x,
           size = 2
         ))
       )
+
     cat("Plotted EIV Simple linear regression. \n")
 
     output_plots <- list(plot_result = plot_result)
@@ -103,28 +106,30 @@ plot.reslr_output <- function(x,
 
   # EIV CP 1
   if (inherits(jags_output, "eiv_cp1_t")) {
-    total_model_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_df
+    output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
+    data <- jags_output$data
+    # Plot
     plot_result <-
       ggplot2::ggplot() +
-      ggplot2::geom_rect(data = jags_output$data, ggplot2::aes(
+      ggplot2::geom_rect(data = data, ggplot2::aes(
         xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
         ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
       ), alpha = 0.4) +
       ggplot2::geom_point(
-        data = jags_output$data,
+        data = data,
         ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
       ) +
       ggplot2::geom_line(
-        data = total_model_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
+        data = output_dataframes,
+        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
       ) +
       ggplot2::geom_ribbon(
-        data = total_model_df,
-        ggplot2::aes(y = RSL, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
+        data = output_dataframes,
+        ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
       ) +
       # ggplot2::geom_ribbon(
-      #   data = total_model_df,
-      #   ggplot2::aes(y = RSL, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+      #   data = output_dataframes,
+      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
       ggplot2::xlab("Age (CE)") +
       ggplot2::ylab("Relative Sea Level (m)") +
@@ -142,20 +147,20 @@ plot.reslr_output <- function(x,
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
-        values = c(
-          "Uncertainty" = ggplot2::alpha("grey", 0.4),
-          "95" = ggplot2::alpha("purple3", 0.2)
-          # "50" = ggplot2::alpha("purple3", 0.3)
-        ),
-        labels = c(
-          "95% Credible Interval",
-          expression(paste("1-sigma error"))
-          # , "50% Credible Interval"
-        )
+                                 values = c(
+                                   "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                   "95" = ggplot2::alpha("purple3", 0.2) #
+                                   # "50" = ggplot2::alpha("purple3", 0.3)
+                                 ),
+                                 labels = c(
+                                   "95% Credible Interval",
+                                   expression(paste("1 sigma error"))
+                                   # , "50% Credible Interval"
+                                 )
       ) +
       ggplot2::scale_colour_manual("",
-        values = c("black" = "black", "mean" = "purple3"),
-        labels = c("Data", "Posterior Fit")
+                                   values = c("black" = "black", "mean" = "purple3"),
+                                   labels = c("Data", "Posterior Fit")
       ) +
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(
@@ -168,35 +173,39 @@ plot.reslr_output <- function(x,
           size = 2
         ))
       )
-    cat("Plotted 1 Change Point \n")
+
+    cat("Plotted EIV 1 Change Point model. \n")
 
     output_plots <- list(plot_result = plot_result)
   }
 
+
   # EIV CP2
   if (inherits(jags_output, "eiv_cp2_t")) {
-    total_model_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_df
+    output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
+    data <- jags_output$data
+    # Plot
     plot_result <-
       ggplot2::ggplot() +
-      ggplot2::geom_rect(data = jags_output$data, ggplot2::aes(
+      ggplot2::geom_rect(data = data, ggplot2::aes(
         xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
         ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
       ), alpha = 0.4) +
       ggplot2::geom_point(
-        data = jags_output$data,
+        data = data,
         ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
       ) +
       ggplot2::geom_line(
-        data = total_model_df, # jags_output$mod_output_pred_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
+        data = output_dataframes,
+        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
       ) +
       ggplot2::geom_ribbon(
-        data = total_model_df,
-        ggplot2::aes(y = RSL, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
+        data = output_dataframes,
+        ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
       ) +
       # ggplot2::geom_ribbon(
-      #   data = total_model_df,
-      #   ggplot2::aes(y = RSL, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+      #   data = output_dataframes,
+      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
       ggplot2::xlab("Age (CE)") +
       ggplot2::ylab("Relative Sea Level (m)") +
@@ -214,19 +223,20 @@ plot.reslr_output <- function(x,
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
-        values = c(
-          "Uncertainty" = ggplot2::alpha("grey", 0.4),
-          "95" = ggplot2::alpha("purple3", 0.2)
-          # "50" = ggplot2::alpha("purple3", 0.3)
-        ),
-        labels = c(
-          expression(paste("1-sigma error")),
-          "95% Credible Interval" # , "50% Credible Interval"
-        )
+                                 values = c(
+                                   "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                   "95" = ggplot2::alpha("purple3", 0.2) #
+                                   # "50" = ggplot2::alpha("purple3", 0.3)
+                                 ),
+                                 labels = c(
+                                   "95% Credible Interval",
+                                   expression(paste("1 sigma error"))
+                                   # , "50% Credible Interval"
+                                 )
       ) +
       ggplot2::scale_colour_manual("",
-        values = c("black" = "black", "mean" = "purple3"),
-        labels = c("Data", "Posterior Fit")
+                                   values = c("black" = "black", "mean" = "purple3"),
+                                   labels = c("Data", "Posterior Fit")
       ) +
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(
@@ -239,7 +249,6 @@ plot.reslr_output <- function(x,
           size = 2
         ))
       )
-
     cat("Plotted 2 Change Point Model \n")
 
     output_plots <- list(plot_result = plot_result)
@@ -247,28 +256,30 @@ plot.reslr_output <- function(x,
 
   # EIV CP 3
   if (inherits(jags_output, "eiv_cp3_t")) {
-    total_model_df <- parameter_estimate(jags_output = jags_output)$output_dataframes$total_model_df
+    output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
+    data <- jags_output$data
+    # Plot
     plot_result <-
       ggplot2::ggplot() +
-      ggplot2::geom_rect(data = jags_output$data, ggplot2::aes(
+      ggplot2::geom_rect(data = data, ggplot2::aes(
         xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
         ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
       ), alpha = 0.4) +
       ggplot2::geom_point(
-        data = jags_output$data,
+        data = data,
         ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
       ) +
       ggplot2::geom_line(
-        data = total_model_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
+        data = output_dataframes,
+        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
       ) +
       ggplot2::geom_ribbon(
-        data = total_model_df,
-        ggplot2::aes(y = RSL, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
+        data = output_dataframes,
+        ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
       ) +
       # ggplot2::geom_ribbon(
-      #   data = total_model_df,
-      #   ggplot2::aes(y = RSL, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+      #   data = output_dataframes,
+      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
       ggplot2::xlab("Age (CE)") +
       ggplot2::ylab("Relative Sea Level (m)") +
@@ -283,32 +294,23 @@ plot.reslr_output <- function(x,
         strip.text.x = ggplot2::element_text(size = 10),
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
-      # ggplot2::theme(
-      #   legend.position = c(0.95, 0.01),
-      #   legend.justification = c(1, 0),
-      #   legend.spacing.y = ggplot2::unit(0.1, "cm"),
-      #   legend.title = ggplot2::element_blank(),
-      #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
-      # ) +
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
-        values = c(
-          "Uncertainty" = ggplot2::alpha("grey", 0.4),
-          "95" = ggplot2::alpha("purple3", 0.2)
-        ),
-        # "50" = ggplot2::alpha("purple3", 0.3)
-        labels = c(
-          "95% Credible Interval", # "50% Credible Interval",
-          expression(paste("1-sigma error"))
-        )
+                                 values = c(
+                                   "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                   "95" = ggplot2::alpha("purple3", 0.2) #
+                                   # "50" = ggplot2::alpha("purple3", 0.3)
+                                 ),
+                                 labels = c(
+                                   "95% Credible Interval",
+                                   expression(paste("1 sigma error"))
+                                   # , "50% Credible Interval"
+                                 )
       ) +
       ggplot2::scale_colour_manual("",
-        values = c(
-          "black" = "black",
-          "mean" = "purple3"
-        ),
-        labels = c("Proxy Records", "Posterior Fit")
+                                   values = c("black" = "black", "mean" = "purple3"),
+                                   labels = c("Data", "Posterior Fit")
       ) +
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(
@@ -319,8 +321,8 @@ plot.reslr_output <- function(x,
           linetype = c(0, 1),
           shape = c(16, NA),
           size = 2
-        ))
-      )
+        )))
+
     cat("Plotted 3 Change Point \n")
 
     output_plots <- list(plot_result = plot_result)
@@ -366,31 +368,29 @@ plot.reslr_output <- function(x,
   if (inherits(jags_output, "ni_spline_t") == TRUE) {
     # Dataframes to plot
     output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
-    total_model_df <- output_dataframes$total_model_df
-    total_model_rate_df <- output_dataframes$total_model_rate_df
-
-    # Plots
+    data <- jags_output$data
+    # Plot
     plot_result <-
       ggplot2::ggplot() +
-      ggplot2::geom_rect(data = jags_output$data, ggplot2::aes(
+      ggplot2::geom_rect(data = data, ggplot2::aes(
         xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
         ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
       ), alpha = 0.4) +
       ggplot2::geom_point(
-        data = jags_output$data,
+        data = data,
         ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
       ) +
       ggplot2::geom_line(
-        data = total_model_df, # jags_output$mod_output_pred_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
+        data = output_dataframes,
+        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
       ) +
       ggplot2::geom_ribbon(
-        data = total_model_df,
-        ggplot2::aes(y = RSL, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
+        data = output_dataframes,
+        ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
       ) +
       # ggplot2::geom_ribbon(
-      #   data = total_model_df,
-      #   ggplot2::aes(y = RSL, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+      #   data = output_dataframes,
+      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
       ggplot2::xlab("Age (CE)") +
       ggplot2::ylab("Relative Sea Level (m)") +
@@ -408,20 +408,20 @@ plot.reslr_output <- function(x,
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
-        values = c(
-          "95" = ggplot2::alpha("purple3", 0.2),
-          "Uncertainty" = ggplot2::alpha("grey", 0.4)
-          # "50" = ggplot2::alpha("purple3", 0.3)
-        ),
-        labels = c(
-          "95% Credible Interval",
-          expression(paste("1-sigma error"))
-          # , "50% Credible Interval"
-        )
+                                 values = c(
+                                   "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                   "95" = ggplot2::alpha("purple3", 0.2) #
+                                   # "50" = ggplot2::alpha("purple3", 0.3)
+                                 ),
+                                 labels = c(
+                                   "95% Credible Interval",
+                                   expression(paste("1 sigma error"))
+                                   # , "50% Credible Interval"
+                                 )
       ) +
       ggplot2::scale_colour_manual("",
-        values = c("black" = "black", "mean" = "purple3"),
-        labels = c("Data", "Posterior Fit")
+                                   values = c("black" = "black", "mean" = "purple3"),
+                                   labels = c("Data", "Posterior Fit")
       ) +
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(
@@ -432,8 +432,7 @@ plot.reslr_output <- function(x,
           linetype = c(0, 1),
           shape = c(16, NA),
           size = 2
-        ))
-      )
+        )))
 
     cat("Plotted NI spline in time using data \n")
 
@@ -441,25 +440,25 @@ plot.reslr_output <- function(x,
     plot_rate <-
       ggplot2::ggplot() +
       ggplot2::geom_line(
-        data = total_model_rate_df,
-        ggplot2::aes(x = Age * 1000, y = RSL, colour = "mean")
+        data = output_dataframes,
+        ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
       ) +
       ggplot2::geom_ribbon(
-        data = total_model_rate_df,
-        ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "95"), alpha = 0.2
+        data = output_dataframes,
+        ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "95"), alpha = 0.2
       ) +
-      ggplot2::geom_ribbon(
-        data = total_model_rate_df,
-        ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-      ) +
-      ggplot2::theme_bw() +
-      ggplot2::ylab("Rate of change (mm/yr)") +
+      # ggplot2::geom_ribbon(
+      #   data = output_dataframes,
+      #   ggplot2::aes(y = pred_rate, ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+      # ) +
       ggplot2::xlab("Age (CE)") +
+      ggplot2::ylab("Relative Sea Level (m)") +
+      ggplot2::theme_bw() +
       ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 22),
-        axis.title = ggplot2::element_text(size = 14, face = "bold"),
+        plot.title = ggplot2::element_text(size = 15),
+        axis.title = ggplot2::element_text(size = 12, face = "bold"),
         axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 12)
+        legend.text = ggplot2::element_text(size = 10)
       ) +
       ggplot2::theme(
         strip.text.x = ggplot2::element_text(size = 10),
@@ -468,31 +467,29 @@ plot.reslr_output <- function(x,
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
-        values = c(
-          "95" = ggplot2::alpha("purple3", 0.2),
-          "50" = ggplot2::alpha("purple3", 0.3)
-        ),
-        labels = c(
-          "95% Credible Interval",
-          "50% Credible Interval"
-        )
+                                 values = c(
+                                   "95" = ggplot2::alpha("purple3", 0.2) #
+                                   # "50" = ggplot2::alpha("purple3", 0.3)
+                                 ),
+                                 labels = c(
+                                   "95% Credible Interval"
+                                   # , "50% Credible Interval"
+                                 )
       ) +
       ggplot2::scale_colour_manual("",
-        values = c("mean" = "purple3"),
-        labels = c("Posterior Fit")
+                                   values = c("mean" = "purple3"),
+                                   labels = c( "Posterior Fit")
       ) +
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(
-          alpha = c(0.4, 0.2), # , 0.4),
+          alpha = c(0.4), # , 0.4),
           size = 1
         )),
         colour = ggplot2::guide_legend(override.aes = list(
           linetype = c(1),
-          shape = c(NA),
+          shape = c( NA),
           size = 2
-        ))
-      )
-
+        )))
     cat("Plotted rate of change for NI spline in time \n")
 
 

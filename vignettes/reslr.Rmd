@@ -29,7 +29,7 @@ There are a number of modelling options available to the user:
 | Noisy Input spline in space and time | The produces a non-linear fit for a set of sites across a region using the method of Upton et al (2023). | **"ni_spline_st"**|
 | Noisy Input Generalised Additive model for the decomposition of the RSL signal | This produces a non-linear fit for a set of sites across a region and provides a decomposition of the signal into regional, local-linear (commonly GIA) and local non-linear components. Again this full model is as described in Upton et al (2023). | **"ni_gam_decomp"** |
 
-For all of the above models the user is able to get quantify and visualise changes of RSL and rates of change with associated uncertainties. Indeed a full posterior distribution ensemble of values is available in the output of the functions. For the decomposed full model the user is also able to access the posterior probability distributions of the individual components. 
+For all of the above models the user is able to quantify and visualise changes of RSL and rates of change with associated uncertainties. Indeed a full posterior distribution ensemble of values is available in the output of the functions. For the decomposed full model, **"ni_gam_decomp"** , the user is able to access the posterior probability distributions of the individual components. 
 
 ## Installation of the `reslr` package
 
@@ -71,9 +71,9 @@ The best way to use the `reslr` package is by creating scripts. A script can be 
 
 - A single site. This may occur when you have data for only one individual data site. In the case of a single site, we recommend using a temporal model, for example EIV Integrated Gaussian Process or NI spline in time.
 - Multiple sites. This may occur if you have a dataset which has multiple different data sites. In this situation, the user must use a spatial temporal model, for example NI spline in space time.
-- Multiple group of sites with different drivers of change. This may occur if you have multiple locations are interested in investigating how the regional, linear local and non-linear local components vary. In this case, the NIGAM decomposition is recommended.
+- Multiple group of sites with different drivers of change. This may occur if you have multiple locations are interested in investigating how the regional, linear local and non-linear local components vary. In this case, the NI GAM decomposition is recommended.
 
-The user must ensure that the input data as a dataframe. For a single site or multiple sites only one dataframe should be given to the package, i.e. combined all sites into one dataframe, with the following columns names:
+The user must ensure that the input data is a dataframe. For a single site or multiple sites only one dataframe should be given to the package, i.e. combined all sites into one dataframe, with the following columns names:
 
 | Site | Region | Age | Age_err | RSL | RSL_err | Longitude | Latitude | linear_rate | linear_rate_err | 
 |------| ----| -----| ----| ----|----|----|-----|-----|---|----|
@@ -98,13 +98,13 @@ The user must ensure that the input data as a dataframe. For a single site or mu
 
 - RSL_err is the  1 standard deviation ($\sigma$) Relative Sea level uncertainty associated with the RSL measured in meters.
 
-- Longitude is the longitude of the site in degrees (in decimal, range: -180 to 180). It is important to note that if there is slightly different longitude values for all the observations in site this will lead to errors. Therefore, select one longitude value for each site.
+- Longitude is the longitude of the site in degrees (in decimal, range: -180 to 180). It is important to note that if there are slightly different longitude values for all the observations in site this will lead to errors. Therefore, select one longitude value for each site.
 
-- Latitude is the Latitude of the site in degrees (degree in decimal, range -90 to 90). Similarly, it is important to note that if there is slightly different latitude values for all the observations in site this will lead to errors. Therefore, select one latitude value for each site.
+- Latitude is the Latitude of the site in degrees (degree in decimal, range -90 to 90). Similarly, it is important to note that if there are slightly different latitude values for all the observations in site this will lead to errors. Therefore, select one latitude value for each site.
 
-- **Optional** linear_rate is a column that contains the linear rate in mm per year associated with that site, arising from processes such as GIA. *This is not a requirement*. For the NIGAM decomposition model the user has the option of using their own rate, otherwise the package will calculate it using the data.
+- **Optional** linear_rate is a column that contains the linear rate in mm per year associated with that site, arising from processes such as glacial isostatic adjustment (GIA). *This is not a requirement*. For the NI GAM decomposition model, the user has the option of using their own rate, otherwise the package will calculate it using the data. It is important to note that if the linear_rate is provided without the linear_rate_err column this will lead to issues, i.e. both columns need to be provided
 
-- **Optional** linear_rate_err is a column that contains associated uncertainty for the linear rate in mm per year. *This is not a requirement*. For the NIGAM decomposition model the user has the option of using their value, otherwise the package will calculate it using the data.
+- **Optional** linear_rate_err is a column that contains associated uncertainty for the linear rate in mm per year. *This is not a requirement*. For the NI GAM decomposition model, the user has the option of using their value, otherwise the package will calculate it using the data. It is important to note that if the linear_rate_err is provided without the linear_rate column this will lead to issues, i.e. both columns need to be provided.
 
 ### Tide Gauge Data
 There is an option in the `reslr` package to include tide gauge data as an additional source of data which we recommend when using the `model_type = "ni_gam_decomp"`. The package will select a tide gauge site utilising the annual data from the [PSMSL website](https://psmsl.org/data/obtaining/complete.php). Within the package, the tide gauge data is averaged over a decade to make it comparable with proxy records. An additional column, called `data_type_id`, is added to the dataset which identifies the data source "ProxyRecord" or "TideGaugeData" depending on the observation in question.
@@ -118,7 +118,7 @@ To select the preferred tide gauge, the following criteria are used:**Going to g
 
 ### Glacial Isostatic Adjustment (GIA) 
 
-For the NIGAM decomposition, the statistical model requires an estimate for the local linear rate arising from processes such as GIA and associated uncertainty for this rate each site. These are included as additional columns, `linear_rate` and `linear_rate_err`, in the input dataframe.
+For the NI GAM decomposition, the statistical model requires an estimate for the local linear rate arising from processes such as GIA and associated uncertainty for this rate each site. These are included as additional columns, `linear_rate` and `linear_rate_err`, in the input dataframe.
 
 If it is not provided then package will automatically calculate these rates using the data provided. We do not provide the rates from any Earth-ice physical model for the proxy records. To obtain this data check out [Peltier's webpage](https://www.atmosp.physics.utoronto.ca/~peltier/data.php) and the associated publication (Peltier, 2004) or the recent Caron et al 2018 publication and [data](https://vesl.jpl.nasa.gov/solid-earth/gia/). 
 
@@ -181,7 +181,7 @@ data_multisite <- reslr::NAACproxydata %>% dplyr::filter(Site %in% c(
 
 The general structure for running `reslr` is as follows:
 
-**Step 1.** Load in the data using `reslr_load`. If tide gauge data required update `include_tide_gauge = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100` with the default of 100 years. The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
+**Step 1.** Load in the data using `reslr_load`. If tide gauge data required update the argument `include_tide_gauge = TRUE`. If linear_rate is of interest to the user update the argument `include_linear_rate = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100` with the default of 100 years. The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
 
 **Step 2.** Plot the raw data using `plot`
 
@@ -213,7 +213,7 @@ CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             n_prediction = 100,
                             input_Age_type = "CE")
 ```
-In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`. Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
 - The `data` dataframe is the inputted data with additional columns for the linear_rate, linear_rate_err and data_type_id which will contain two options, "ProxyRecord" or "TideGaugeData". It can be accessed by:
@@ -264,7 +264,7 @@ If the model run has converged properly the values should be close to 1. If they
 params <- reslr::parameter_estimate(jags_output = jags_output.eiv_slr_t)
 params$par_summary
 ```
-The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept (alpha), the slope (beta) and the standard deviation of the model **How I explain this easily** (sigma_res). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. beta. In this example, the rate of sea-level change for Cedar Island North Carolina using the EIV simple linear regression model is estimated to be XXXX.
+The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept (alpha), the slope (beta) and the residual standard deviation of the model (sigma_res). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. beta. In this example, the rate of sea-level change for Cedar Island North Carolina using the EIV simple linear regression model is estimated to be XXXX.
 
 **Step 6:** The results from the eiv_slr_t model can be visualised using the following function:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}

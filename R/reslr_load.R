@@ -154,7 +154,7 @@ reslr_load <- function(data,
     dplyr::mutate(
       SiteName = as.factor(SiteName),
       data_type_id = as.factor(data_type_id)
-    )
+    ) %>% dplyr::select(!c(max_Age,min_Age))
 
   input_data <- base::list(
     data = data,

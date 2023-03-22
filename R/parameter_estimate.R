@@ -10,15 +10,14 @@
 #' input_data <- reslr_load(data = data)
 #' parameter_estimate(jags_output = reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t"))
 parameter_estimate <- function(jags_output) {
-  mu_pred <- .lower <- .upper <- x <- variable <- sd <- mad <- q5 <- q95 <- pred_y <- `w.m[1]`<- `w.m[50]`<- lwr_95 <- upr_95 <- alpha <- cp <- sigma_g <- phi <- sigma <- mu_x <- dat <- NULL
+  mu_pred <- .lower <- .upper <- x <- variable <- sd <- mad <- q5 <- q95 <- pred_y <- `w.m[1]` <- `w.m[50]` <- lwr_95 <- upr_95 <- alpha <- cp <- sigma_g <- phi <- sigma <- mu_x <- dat <- NULL
 
   m <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
   sample_draws <- tidybayes::tidy_draws(m)
   n_iter <- sample_draws$.iteration %>%
     unique() %>%
     length()
-  # DIV for the model
-  DIC_model <- jags_output$noisy_model_run_output$BUGSoutput$DIC
+
   # If the user sets iteration value extremely high and to save time reduce it
   if (jags_output$noisy_model_run_output$n.iter > 10000) {
     sample_draws <- sample_draws %>% dplyr::slice_sample(n = 1000)
@@ -27,31 +26,9 @@ parameter_estimate <- function(jags_output) {
   jags_data <- jags_output$jags_data
 
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
-    # Output from mcmc------------------------
-    mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    # Dataframes for plotting output---------------
-    total_model_df <- data.frame(
-      RSL_mod = apply(mu_post_pred, 2, mean),
-      RSL_mod_upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      RSL_mod_lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
-      jags_output$data_grid$Age,
-      jags_output$data_grid$SiteName,
-      jags_output$data_grid$linear_rate,
-      jags_output$data_grid$linear_rate_err,
-      ID = "Total Posterior Model"
-    )
-    names(total_model_df) <- c(
-      "RSL", "upr", "lwr", "upr_50", "lwr_50",
-      "Age",
-      "SiteName",
-      "linear_rate", "linear_rate_err",
-      "ID"
-    )
-
-    output_dataframes <- list(total_model_df = total_model_df)
-
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(jags_output, rate = FALSE, decomposition = FALSE)
+    # Summary of output
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c("alpha", "beta")) %>%
       dplyr::mutate(
@@ -64,60 +41,16 @@ parameter_estimate <- function(jags_output) {
   }
 
   if (inherits(jags_output, "eiv_cp1_t") == TRUE) {
-    # Output from mcmc------------------------
-    mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    # Adaptive UI
-    # Dataframes for plotting output---------------
-    total_model_df <- data.frame(
-      RSL_mod = apply(mu_post_pred, 2, mean),
-      RSL_mod_upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      RSL_mod_lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
-      jags_output$data_grid$Age,
-      jags_output$data_grid$SiteName,
-      jags_output$data_grid$linear_rate,
-      jags_output$data_grid$linear_rate_err,
-      ID = "Total Posterior Model"
-    )
-    names(total_model_df) <- c(
-      "RSL", "upr", "lwr", "upr_50", "lwr_50",
-      "Age",
-      "SiteName", "linear_rate", "linear_rate_err",
-      "ID"
-    )
-    # Output dataframes for plots
-    output_dataframes <- list(total_model_df = total_model_df)
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(jags_output, rate = FALSE, decomposition = FALSE)
     # Estimated parameters
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c("alpha", "beta[1]", "beta[2]", "cp", "sigma_res"))
   }
 
   if (inherits(jags_output, "eiv_cp2_t") == TRUE) {
-    # Output from mcmc------------------------
-    mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    # Adaptive UI
-    # Dataframes for plotting output---------------
-    total_model_df <- data.frame(
-      RSL_mod = apply(mu_post_pred, 2, mean),
-      RSL_mod_upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      RSL_mod_lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
-      jags_output$data_grid$Age,
-      jags_output$data_grid$SiteName,
-      jags_output$data_grid$linear_rate,
-      jags_output$data_grid$linear_rate_err,
-      ID = "Total Posterior Model"
-    )
-    names(total_model_df) <- c(
-      "RSL", "upr", "lwr", "upr_50", "lwr_50",
-      "Age",
-      "SiteName", "linear_rate", "linear_rate_err",
-      "ID"
-    )
-    # Output dataframes for plots
-    output_dataframes <- list(total_model_df = total_model_df)
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(jags_output, rate = FALSE, decomposition = FALSE)
     # Estimated parameters
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
@@ -129,30 +62,8 @@ parameter_estimate <- function(jags_output) {
   }
 
   if (inherits(jags_output, "eiv_cp3_t") == TRUE) {
-    # Output from mcmc------------------------
-    mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    # Adaptive UI
-    # Dataframes for plotting output---------------
-    total_model_df <- data.frame(
-      RSL_mod = apply(mu_post_pred, 2, mean),
-      RSL_mod_upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      RSL_mod_lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
-      jags_output$data_grid$Age,
-      jags_output$data_grid$SiteName,
-      jags_output$data_grid$linear_rate,
-      jags_output$data_grid$linear_rate_err,
-      ID = "Total Posterior Model"
-    )
-    names(total_model_df) <- c(
-      "RSL", "upr", "lwr", "upr_50", "lwr_50",
-      "Age",
-      "SiteName", "linear_rate", "linear_rate_err",
-      "ID"
-    )
-    # Output dataframes for plots
-    output_dataframes <- list(total_model_df = total_model_df)
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(jags_output, rate = FALSE, decomposition = FALSE)
     # Estimated parameters
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
@@ -182,8 +93,8 @@ parameter_estimate <- function(jags_output) {
     quad1 <- array(dim = c(nrow = Ngrid, ncol = Ngrid, L))
     quad2 <- array(dim = c(nrow = Ngrid, ncol = Ngrid, L))
 
-    for (j in 1:Ngrid){
-      for (k in 1:Ngrid){
+    for (j in 1:Ngrid) {
+      for (k in 1:Ngrid) {
         quad1[k, j, ] <- abs((tgrid[k] * cosfunc / 2) + (tgrid[k] / 2) - tstar[j])^1.99
         quad2[k, j, ] <- ((tgrid[k] / 2) * (pi / L)) * (sqrt(1 - cosfunc^2))
       }
@@ -215,7 +126,7 @@ parameter_estimate <- function(jags_output) {
       pred_y = apply(pred, 2, mean),
       lwr_95 = apply(pred, 2, stats::quantile, probs = 0.025),
       upr_95 = apply(pred, 2, stats::quantile, probs = 0.975),
-      rate_y = apply(w.ms, 2,mean),
+      rate_y = apply(w.ms, 2, mean),
       rate_lwr_95 = apply(w.ms, 2, stats::quantile, probs = 0.025),
       rate_upr_95 = apply(w.ms, 2, stats::quantile, probs = 0.975)
     )
@@ -237,58 +148,8 @@ parameter_estimate <- function(jags_output) {
   }
 
   if (inherits(jags_output, "ni_spline_t") == TRUE) {
-    # Output from mcmc------------------------
-    mu_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_y
-    mu_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
-    mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    mu_pred_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
-
-    # Dataframes for plotting output using prediction grid---------------
-    total_model_df <- data.frame(
-      RSL_mod = apply(mu_post_pred, 2, mean),
-      RSL_mod_upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      RSL_mod_lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
-      jags_output$data_grid$Age,
-      jags_output$data_grid$SiteName,
-      jags_output$data_grid$linear_rate,
-      jags_output$data_grid$linear_rate_err,
-      ID = "Total Predicted Posterior Model",
-      data_type_id = jags_output$data_grid$data_type_id
-    )
-    names(total_model_df) <- c(
-      "RSL", "upr", "lwr", "upr_50", "lwr_50",
-      "Age",
-      "SiteName", "linear_rate", "linear_rate_err",
-      "ID",'data_type_id'
-    )
-    # Dataframes for derivative plots from prediction grids------------
-    total_model_rate_df <- data.frame(
-      RSL_mod = apply(mu_pred_deriv_post, 2, mean),
-      RSL_mod_upr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-      RSL_mod_lwr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75),
-      jags_output$data_grid$Age,
-      jags_output$data_grid$SiteName,
-      jags_output$data_grid$linear_rate,
-      jags_output$data_grid$linear_rate_err,
-      ID = "Rate of Change of Posterior Model"
-    )
-    names(total_model_rate_df) <- c(
-      "RSL", "upr", "lwr", "upr_50", "lwr_50",
-      "Age",
-      "SiteName", "linear_rate", "linear_rate_err",
-      "ID"
-    )
-
-    # Output dataframes for plotting
-    output_dataframes <- list(
-      total_model_df = total_model_df,
-      total_model_rate_df = total_model_rate_df
-    )
-
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(jags_output, rate = TRUE, decomposition = FALSE)
     # Output parameter estimates
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c("b_t", "r", "sigma_t", "sigma_res")) %>%
@@ -300,8 +161,11 @@ parameter_estimate <- function(jags_output) {
         par_q95 = q95 # * mod$scale_factor_y
       )
   }
-
+# FINISH these
   if (inherits(jags_output, "ni_spline_st") == TRUE) {
+    # Output from mcmc & dataframes for plots
+    #output_dataframes <- create_output_df(jags_output, rate = TRUE, decomposition = FALSE)
+
     # Output from mcmc------------------------
     mu_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_y
     mu_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
@@ -327,7 +191,7 @@ parameter_estimate <- function(jags_output) {
       "RSL", "upr", "lwr", "upr_50", "lwr_50",
       "Age",
       "SiteName", "linear_rate", "linear_rate_err",
-      "ID",'data_type_id'
+      "ID", "data_type_id"
     )
 
     # Dataframes for derivative plots from prediction grids------------
@@ -370,23 +234,23 @@ parameter_estimate <- function(jags_output) {
 
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
     # Output from mcmc------------------------
-    #mu_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_y
-    #mu_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
+    # mu_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_y
+    # mu_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
 
 
     mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     mu_pred_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
 
-    #time_component_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$r
-    #time_deriv_component_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$r_deriv
+    # time_component_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$r
+    # time_deriv_component_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$r_deriv
     time_component_pred_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$r_pred
     time_component_pred_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$r_pred_deriv
 
-    #g_h_component_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x
+    # g_h_component_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x
     g_h_component_pred_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x_pred
 
-    #space_time_component_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$l
-    #space_time_component_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$l_deriv
+    # space_time_component_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$l
+    # space_time_component_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$l_deriv
     space_time_component_pred_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$l_pred
     space_time_component_pred_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$l_pred_deriv
 
@@ -453,8 +317,8 @@ parameter_estimate <- function(jags_output) {
     names(mod_output_pred_df) <- c(
       "RSL", "upr", "lwr", "upr_50", "lwr_50",
       "Age",
-      "SiteName","linear_rate", "linear_rate_err",
-      "ID","data_type_id"
+      "SiteName", "linear_rate", "linear_rate_err",
+      "ID", "data_type_id"
     )
     # Dataframes for derivative plots from prediction grids------------
     mod_output_pred_deriv_df <- data.frame(
@@ -472,7 +336,7 @@ parameter_estimate <- function(jags_output) {
       "RSL", "upr", "lwr", "upr_50", "lwr_50",
       "Age",
       "SiteName",
-      "ID","data_type_id"
+      "ID", "data_type_id"
     )
 
 
@@ -529,7 +393,7 @@ parameter_estimate <- function(jags_output) {
       "RSL", "upr", "lwr", "upr_50", "lwr_50",
       "Age",
       "SiteName",
-      "ID","data_type_id"
+      "ID", "data_type_id"
     )
 
     # Derivative Regional Component using Prediction: Spline in Time-----------------------
@@ -548,7 +412,7 @@ parameter_estimate <- function(jags_output) {
       "RSL", "upr", "lwr", "upr_50", "lwr_50",
       "Age",
       "SiteName",
-      "ID","data_type_id"
+      "ID", "data_type_id"
     )
 
 
@@ -590,7 +454,7 @@ parameter_estimate <- function(jags_output) {
       jags_output$data_grid$linear_rate,
       jags_output$data_grid$linear_rate_err,
       ID = "Linear Local Component and site-specific vertical offset",
-       data_type_id = jags_output$data_grid$data_type_id
+      data_type_id = jags_output$data_grid$data_type_id
     )
     names(g_h_component_pred_post_df) <- c(
       "RSL",
@@ -600,7 +464,7 @@ parameter_estimate <- function(jags_output) {
       "lwr_50",
       "Age",
       "SiteName", "linear_rate", "linear_rate_err",
-      "ID","data_type_id"
+      "ID", "data_type_id"
     )
 
     # # Non-Linear Local Component ---------------------------------
@@ -698,19 +562,19 @@ parameter_estimate <- function(jags_output) {
 
     # Output dataframes for plots
     output_dataframes <- list(
-      #total_model_df = total_model_df,
-      #total_model_rate_df = total_model_rate_df,
-      mod_output_pred_df=mod_output_pred_df,
-      mod_output_pred_deriv_df=mod_output_pred_deriv_df,
+      # total_model_df = total_model_df,
+      # total_model_rate_df = total_model_rate_df,
+      mod_output_pred_df = mod_output_pred_df,
+      mod_output_pred_deriv_df = mod_output_pred_deriv_df,
 
-      #time_post_component_df = time_post_component_df,
-      #time_deriv_component_post_df = time_deriv_component_post_df,
+      # time_post_component_df = time_post_component_df,
+      # time_deriv_component_post_df = time_deriv_component_post_df,
       time_post_pred_component_df = time_post_pred_component_df,
       time_post_pred_deriv_component_df = time_post_pred_deriv_component_df,
-      #g_h_component_post_df = g_h_component_post_df,
-      g_h_component_pred_post_df= g_h_component_pred_post_df,
-      #space_time_component_post_df = space_time_component_post_df,
-      #space_time_component_deriv_post_df = space_time_component_deriv_post_df,
+      # g_h_component_post_df = g_h_component_post_df,
+      g_h_component_pred_post_df = g_h_component_pred_post_df,
+      # space_time_component_post_df = space_time_component_post_df,
+      # space_time_component_deriv_post_df = space_time_component_deriv_post_df,
       space_time_component_pred_post_df = space_time_component_pred_post_df,
       space_time_component_pred_deriv_post_df = space_time_component_pred_deriv_post_df
     )

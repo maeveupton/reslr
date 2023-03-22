@@ -1,3 +1,73 @@
+#' Function to create the dataframes for plotting
+#'
+#' @param jags_output The JAGS output
+#' @param rate_df If rate of change is included in the dataframe
+#' @param decomposition Is the full model decomposition included in dataframe
+#' @noRd
+create_output_df <- function(jags_output,
+                             rate_df = "FALSE",
+                             decomposition = "FALSE"){
+  mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+  output_dataframes <- data.frame(
+    jags_output$data_grid,
+    pred = apply(mu_post_pred, 2, mean),
+    upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+    lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+    upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+    lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+    #ID = "Total Posterior Model"
+  )
+  if(rate_df == "TRUE"){
+    mu_pred_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
+    output_dataframes <- data.frame(
+      output_dataframes,
+      rate_pred =  apply(mu_pred_deriv_post, 2, mean),
+      rate_upr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+      rate_lwr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+      rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
+      rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+    )
+  }
+  else{
+    output_dataframes <- output_dataframes
+  }
+
+  # if ("linear_rate" %in% colnames(jags_output$data_grid) & "linear_rate_err" %in% colnames(jags_output$data_grid)) {
+  #   output_dataframes <- data.frame(
+  #     output_dataframes,
+  #     linear_rate = jags_output$data_grid$linear_rate,
+  #     linear_rate_err = jags_output$data_grid$linear_rate_err
+  #   )
+  # }
+  # if("data_type_id" %in% colnames(jags_output$data_grid)){
+  #   output_dataframes <- data.frame(
+  #     output_dataframes,
+  #     data_type_id = jags_output$data_grid$data_type_id
+  #   )
+  # }
+
+  if(decomposition == TRUE & rate_df == TRUE){
+    output_dataframes <- list(
+      # total_model_df = total_model_df,
+      # total_model_rate_df = total_model_rate_df,
+      mod_output_pred_df = mod_output_pred_df,
+      mod_output_pred_deriv_df = mod_output_pred_deriv_df,
+
+      # time_post_component_df = time_post_component_df,
+      # time_deriv_component_post_df = time_deriv_component_post_df,
+      time_post_pred_component_df = time_post_pred_component_df,
+      time_post_pred_deriv_component_df = time_post_pred_deriv_component_df,
+      # g_h_component_post_df = g_h_component_post_df,
+      g_h_component_pred_post_df = g_h_component_pred_post_df,
+      # space_time_component_post_df = space_time_component_post_df,
+      # space_time_component_deriv_post_df = space_time_component_deriv_post_df,
+      space_time_component_pred_post_df = space_time_component_pred_post_df,
+      space_time_component_pred_deriv_post_df = space_time_component_pred_deriv_post_df
+    )
+  }
+
+  return(output_dataframes)
+}
 #' Adding Noisy Input to the dataframe
 #'
 #' @param model_run JAGS output

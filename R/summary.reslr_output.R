@@ -32,11 +32,11 @@ summary.reslr_output <- function(object,
     if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
       cat("Convergence issues detected. \n")
       cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")}
-    #out_bgr <- jags_output$noisy_model_run_output$BUGSoutput$summary[, "Rhat"]
-    # Print out gelman diagnostics of the output
-    # cat("Gelman diagnostics - these values should all be close to 1.\n")
-    # cat("If not, try a longer run of reslr_mcmc.\n")
-    # print(round(out_bgr, 2))
+    out_bgr <- jags_output$noisy_model_run_output$BUGSoutput$summary[, "Rhat"]
+    #Print out gelman diagnostics of the output
+    cat("Gelman diagnostics - these values should all be close to 1.\n")
+    cat("If not, try a longer run of reslr_mcmc.\n")
+    print(round(out_bgr, 2))
   }
   if("quantiles" %in% type){
     out_quantiles <- t(apply(jags_output_model_run, 2, "quantile",
