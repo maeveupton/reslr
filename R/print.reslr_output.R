@@ -13,7 +13,7 @@
 #' print(x = jags_output)
 print.reslr_output <-
   function(x, ...) {
-    #jags_output <- x
+    jags_output <- x
     cat("The input data has been run via reslr_mcmc and has produced ")
     cat(nrow(jags_output$noisy_model_run_output$BUGSoutput$sims.matrix),
         "iterations over", jags_output$noisy_model_run_output$BUGSoutput$n.chains, "MCMC chains.")

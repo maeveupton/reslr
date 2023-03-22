@@ -780,7 +780,7 @@ tpower <- function(x, t, p) {
   return((x - t)^p * (x > t))
 }
 bs_bbase <- function(x, xl = min(x), xr = max(x),#30
-                     nseg = 3, deg = 3) {
+                     nseg = 10, deg = 3) {
   # Construct B-spline basis
   dx <- (xr - xl) / nseg
   knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)

@@ -360,7 +360,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       n_obs = nrow(data),
       B_t = spline_basis_fun_list$B_t,
       n_knots_t = ncol(spline_basis_fun_list$B_t),
-      nu = 2
+      nu = 20
     )
 
 
@@ -417,7 +417,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_t_pred = spline_basis_fun_list$B_t_pred,
       n_knots_t = ncol(spline_basis_fun_list$B_t),
       B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv,
-      nu = 2
+      nu = 20
     )
 
 
