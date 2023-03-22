@@ -775,37 +775,51 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 #' @param deg Degree of polynomial
 #' @param data Input data
 #' @noRd
-bs_bbase <- function(x,
-                     xl = min(x),
-                     xr = max(x),
-                     deg = 3,
-                     nseg = NULL){
-  # Create basis functions------------------------------------------------------
-  if(is.null(nseg)){
-    nseg <- round(deg / (1 + deg / length(x)))
-  }
-
-
-  #df <- sqrt(length(x)) - 4
-  # too big
-  #nseg <- round(df/(1+df/length(x)))
-
-  # Compute the length of the partitions
-  dx <- (xr - xl) / nseg
-  # Create equally spaced knots
-  knots <- seq(xl - deg * dx,
-    xr + deg * dx,
-    by = dx
-  )
-  # Use bs() function to generate the B-spline basis
-  get_bs_matrix <- matrix(
-    splines::bs(x,
-      knots = knots,
-      degree = deg, Boundary.knots = c(knots[1], knots[length(knots)])
-    ),
-    nrow = length(x)
-  )
-  # Remove columns that contain zero only
-  bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  return(bs_matrix)
+tpower <- function(x, t, p) {
+  # Truncated p-th power function
+  return((x - t)^p * (x > t))
 }
+bs_bbase <- function(x, xl = min(x), xr = max(x),#30
+                     nseg = 3, deg = 3) {
+  # Construct B-spline basis
+  dx <- (xr - xl) / nseg
+  knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)
+  P <- outer(x, knots, tpower, deg)
+  n <- dim(P)[2]
+  D <- diff(diag(n), diff = deg + 1) / (gamma(deg + 1) * dx^deg)
+  B <- (-1)^(deg + 1) * P %*% t(D)
+  return(B)
+}
+# bs_bbase <- function(x,
+#                      xl = min(x),
+#                      xr = max(x),
+#                      deg = 3,
+#                      nseg = NULL){
+#   # Create basis functions------------------------------------------------------
+#   if(is.null(nseg)){
+#     nseg <- round(deg / (1 + deg / length(x)))
+#   }
+#
+#   #df <- sqrt(length(x)) - 4
+#   # too big
+#   #nseg <- round(df/(1+df/length(x)))
+#
+#   # Compute the length of the partitions
+#   dx <- (xr - xl) / nseg
+#   # Create equally spaced knots
+#   knots <- seq(xl - deg * dx,
+#     xr + deg * dx,
+#     by = dx
+#   )
+#   # Use bs() function to generate the B-spline basis
+#   get_bs_matrix <- matrix(
+#     splines::bs(x,
+#       knots = knots,
+#       degree = deg, Boundary.knots = c(knots[1], knots[length(knots)])
+#     ),
+#     nrow = length(x)
+#   )
+#   # Remove columns that contain zero only
+#   bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+#   return(bs_matrix)
+# }

@@ -160,6 +160,7 @@ summary.reslr_output <- function(object,
             par_q5 = q5, #* mod$scale_factor_y,
             par_q95 = q95 # * mod$scale_factor_y
           )
+        # Dont use print
         print(par_summary)
       }
 
