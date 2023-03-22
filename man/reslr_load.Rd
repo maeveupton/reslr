@@ -7,7 +7,8 @@
 reslr_load(
   data,
   n_prediction = 100,
-  tide_gauge_included = FALSE,
+  include_tide_gauge = FALSE,
+  include_linear_rate = FALSE,
   input_Age_type = "CE"
 )
 }
@@ -16,7 +17,9 @@ reslr_load(
 
 \item{n_prediction}{Predictions over every 100 years(default) can vary based on user preference}
 
-\item{tide_gauge_included}{Including decadaly average tide gauge data from PSMSL website}
+\item{include_tide_gauge}{Including decadaly average tide gauge data from PSMSL website}
+
+\item{include_linear_rate}{User decides to include linear_rate and linear_rate_err}
 
 \item{input_Age_type}{The inputted age in years CE or year BCE}
 }
