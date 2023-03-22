@@ -181,7 +181,8 @@ add_noisy_input <- function(model_run, model_type, data) {
 igp_data <- function(data) {
   Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
   ############# Set up the grid for the GP ###################
-  tgrid <- seq(min(data$Age), max(data$Age), length.out = 50)
+  #tgrid <- seq(min(data$Age), max(data$Age), length.out = 50)
+  tgrid <- data_grid$Age#*1000
   Ngrid <- length(tgrid)
 
   ### Change data to lower zero for integration

@@ -16,12 +16,12 @@
 #' jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 #' summary(object = jags_output)
 summary <- function(object,
-                    type = c("diagnostics", "quantiles", "statistics", "parameter_estimate"),
+                    type = c("diagnostics","parameter_estimate"),# "quantiles", "statistics",
                     ...) {
   UseMethod("summary.reslr_output")
 }
 summary.reslr_output <- function(object,
-                                 type = c("diagnostics", "quantiles", "statistics", "parameter_estimate"),
+                                 type = c("diagnostics", "parameter_estimate"),# "quantiles", "statistics",
                                  ...) {
   mu_pred <- .lower <- .upper <- object <- jags_output <- variable <- sd <- mad <- q5 <- q95 <- `w.m[1]` <- `w.m[50]` <- lwr_95 <- upr_95 <- alpha <- cp <- sigma_g <- phi <- sigma <- NULL
   # jags_output <- object
@@ -41,18 +41,18 @@ summary.reslr_output <- function(object,
         cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
       }
     }
-    if ("quantiles" %in% type) {
-      out_quantiles <- t(apply(jags_output_model_run, 2, "quantile",
-        probs = c(0.025, 0.25, 0.5, 0.75, 0.975)
-      ))
-      print(round(out_quantiles, 3))
-    }
-    if ("statistics" %in% type) {
-      out_statistics <- t(apply(jags_output_model_run, 2, function(x) {
-        return(c(mean = mean(x), sd = stats::sd(x)))
-      }))
-      print(round(out_statistics, 3))
-    }
+    # if ("quantiles" %in% type) {
+    #   out_quantiles <- t(apply(jags_output_model_run, 2, "quantile",
+    #     probs = c(0.025, 0.25, 0.5, 0.75, 0.975)
+    #   ))
+    #   print(round(out_quantiles, 3))
+    # }
+    # if ("statistics" %in% type) {
+    #   out_statistics <- t(apply(jags_output_model_run, 2, function(x) {
+    #     return(c(mean = mean(x), sd = stats::sd(x)))
+    #   }))
+    #   print(round(out_statistics, 3))
+    # }
     if ("parameter_estimate" %in% type) {
       # Estimated parameter summaries
 

@@ -83,8 +83,8 @@ reslr_load <- function(data,
       dplyr::contains("data_type_id")
     ) %>%
     unique()
-  times <- rep(seq(min(data$Age) - n_prediction / 1000,
-    max(data$Age) + n_prediction / 1000,
+  times <- rep(seq(min(data$Age) ,
+    max(data$Age),
     by = n_prediction / 1000
   ), nrow(sites))
   sites <- sites[rep(seq_len(nrow(sites)),
@@ -117,6 +117,7 @@ reslr_load <- function(data,
     ) %>%
     unique()
   # }
+
 
   data_age_boundary_test <-
     data_age_boundary %>% dplyr::mutate(max_age = max_Age * 1000, min_age = min_Age * 1000)

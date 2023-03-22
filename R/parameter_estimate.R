@@ -75,6 +75,8 @@ parameter_estimate <- function(jags_output) {
   }
 
   if (inherits(jags_output, "eiv_igp_t") == TRUE) {
+
+
     # Get predictions on a grid of t values.
     Ngrid <- jags_output$jags_data$Ngrid
     tgrid <- jags_output$jags_data$tstar
@@ -100,8 +102,10 @@ parameter_estimate <- function(jags_output) {
       }
     }
 
+
     # Get posterior samples of rates
-    w.ms <- as.matrix(sample_draws %>% dplyr::select(`w.m[1]`:`w.m[50]`))
+    w.ms <- as.matrix(jags_output$noisy_model_run_output$BUGSoutput$sims.list$w.m)
+
     # Get estimates
     for (i in 1:n_iter) {
       for (k in 1:Ngrid) {
@@ -118,11 +122,11 @@ parameter_estimate <- function(jags_output) {
     # w.ms <- (w.ms * mod$scale_factor_y) / mod$scale_factor_x
 
     # if (mod$BP_scale) w.ms <- -1 * w.ms# Are we missing brackets here?
-
     # Output dataframes for plots
     output_dataframes <- dplyr::tibble(
       # Should this be predict data instead?
-      t = seq(min(jags_output$data$Age), max(jags_output$data$Age), length.out = 50),
+      #t = seq(min(jags_output$data$Age), max(jags_output$data$Age), length.out = 50),
+      t = jags_output$data_grid$Age,
       pred_y = apply(pred, 2, mean),
       lwr_95 = apply(pred, 2, stats::quantile, probs = 0.025),
       upr_95 = apply(pred, 2, stats::quantile, probs = 0.975),
