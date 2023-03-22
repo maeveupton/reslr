@@ -161,65 +161,10 @@ parameter_estimate <- function(jags_output) {
         par_q95 = q95 # * mod$scale_factor_y
       )
   }
-# FINISH these
+
   if (inherits(jags_output, "ni_spline_st") == TRUE) {
     # Output from mcmc & dataframes for plots
-    #output_dataframes <- create_output_df(jags_output, rate = TRUE, decomposition = FALSE)
-
-    # Output from mcmc------------------------
-    mu_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_y
-    mu_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
-    mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    mu_pred_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
-
-
-    # Dataframes for plotting output using prediction grid---------------
-    total_model_df <- data.frame(
-      RSL_mod = apply(mu_post_pred, 2, mean),
-      RSL_mod_upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      RSL_mod_lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
-      jags_output$data_grid$Age,
-      jags_output$data_grid$SiteName,
-      jags_output$data_grid$linear_rate,
-      jags_output$data_grid$linear_rate_err,
-      ID = "Total Predicted Posterior Model",
-      data_type_id = jags_output$data_grid$data_type_id
-    )
-    names(total_model_df) <- c(
-      "RSL", "upr", "lwr", "upr_50", "lwr_50",
-      "Age",
-      "SiteName", "linear_rate", "linear_rate_err",
-      "ID", "data_type_id"
-    )
-
-    # Dataframes for derivative plots from prediction grids------------
-    total_model_rate_df <- data.frame(
-      RSL_mod = apply(mu_pred_deriv_post, 2, mean),
-      RSL_mod_upr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-      RSL_mod_lwr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75),
-      jags_output$data_grid$Age,
-      jags_output$data_grid$SiteName,
-      jags_output$data_grid$linear_rate,
-      jags_output$data_grid$linear_rate_err,
-      ID = "Rate of Change of Posterior Model"
-    )
-    names(total_model_rate_df) <- c(
-      "RSL", "upr", "lwr", "upr_50", "lwr_50",
-      "Age",
-      "SiteName", "linear_rate", "linear_rate_err",
-      "ID"
-    )
-
-    # Output data frames for plotting
-    output_dataframes <- list(
-      total_model_df = total_model_df,
-      total_model_rate_df = total_model_rate_df
-    )
-
+    output_dataframes <- create_output_df(jags_output, rate = TRUE, decomposition = FALSE)
     # Output parameter estimates
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c("b_st", "sigma_st", "sigma_res")) %>%
@@ -231,7 +176,7 @@ parameter_estimate <- function(jags_output) {
         par_q95 = q95 # * mod$scale_factor_y
       )
   }
-
+  # FINISH these
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
     # Output from mcmc------------------------
     # mu_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_y

@@ -25,7 +25,7 @@ summary.reslr_output <- function(object,
                                  ...) {
   mu_pred <- .lower <- .upper <- object <- jags_output <- variable <- sd <- mad <- q5 <- q95 <- `w.m[1]` <- `w.m[50]` <- lwr_95 <- upr_95 <- alpha <- cp <- sigma_g <- phi <- sigma <- NULL
   # jags_output <- object
-  if (inherits(jags_output, "reslr_output")) {
+  #if (inherits(jags_output, "reslr_output")) {
     jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
     # Create an object containing the posterior samples
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
@@ -40,11 +40,6 @@ summary.reslr_output <- function(object,
         cat("Convergence issues detected. \n")
         cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
       }
-      out_bgr <- jags_output$noisy_model_run_output$BUGSoutput$summary[, "Rhat"]
-      # Print out gelman diagnostics of the output
-      cat("Gelman diagnostics - these values should all be close to 1.\n")
-      cat("If not, try a longer run of reslr_mcmc.\n")
-      print(round(out_bgr, 2))
     }
     if ("quantiles" %in% type) {
       out_quantiles <- t(apply(jags_output_model_run, 2, "quantile",
@@ -74,7 +69,7 @@ summary.reslr_output <- function(object,
             par_q5 = q5, #* mod$scale_factor_y,
             par_q95 = q95 # * mod$scale_factor_y
           )
-        print(par_summary)
+        par_summary
       }
 
       # EIV cp 1
@@ -90,7 +85,7 @@ summary.reslr_output <- function(object,
             par_q5 = q5, #* mod$scale_factor_y,
             par_q95 = q95 # * mod$scale_factor_y
           )
-        print(par_summary)
+        par_summary
       }
 
       # EIV cp 2
@@ -109,7 +104,7 @@ summary.reslr_output <- function(object,
             par_q5 = q5, #* mod$scale_factor_y,
             par_q95 = q95 # * mod$scale_factor_y
           )
-        print(par_summary)
+        par_summary
       }
 
       # EIV cp 3
@@ -128,7 +123,7 @@ summary.reslr_output <- function(object,
             par_q5 = q5, #* mod$scale_factor_y,
             par_q95 = q95 # * mod$scale_factor_y
           )
-        print(par_summary)
+        par_summary
       }
 
       # EIV IGP t
@@ -144,7 +139,7 @@ summary.reslr_output <- function(object,
             par_q5 = q5, #* mod$scale_factor_y,
             par_q95 = q95 # * mod$scale_factor_y
           )
-        print(par_summary)
+        par_summary
       }
 
       # NI spline t
@@ -160,8 +155,7 @@ summary.reslr_output <- function(object,
             par_q5 = q5, #* mod$scale_factor_y,
             par_q95 = q95 # * mod$scale_factor_y
           )
-        # Dont use print
-        print(par_summary)
+        par_summary
       }
 
       # NI Spline st
@@ -197,5 +191,5 @@ summary.reslr_output <- function(object,
         print(par_summary)
       }
     }
-  }
+  #}
 }
