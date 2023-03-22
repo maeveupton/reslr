@@ -112,8 +112,8 @@ reslr_load <- function(data,
   data_age_boundary <- data %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(
-      max_Age = max(Age),# + (n_prediction / 1000),
-      min_Age = min(Age)# - (n_prediction / 1000)
+      max_Age = max(Age) + 10/1000,# + (n_prediction / 1000),
+      min_Age = min(Age) - 10/1000# - (n_prediction / 1000)
     ) %>%
     unique()
   # }
