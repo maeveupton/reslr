@@ -41,7 +41,8 @@ Next, start Rstudio and find the window with the command prompt (the symbol `>`)
 ```{r,eval = TRUE,message=FALSE}
 #install.packages("reslr")
 #library(devtools)
-devtools::install()
+#devtools::install()
+devtools::install_github("maeveupton/reslr")
 ```
 It may ask you to pick your nearest CRAN mirror (the nearest site which hosts R packages). You will then see some activity on the screen as the `reslr` package and the other packages it uses are downloaded. The final line should then read: 
 
@@ -208,11 +209,11 @@ CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
-CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
-                            include_tide_gauge = FALSE,
-                            include_linear_rate = FALSE,
-                            n_prediction = 100,
-                            input_Age_type = "CE")
+CedarIslandNC <- reslr_load(data = CedarIslandNC,
+                                  include_tide_gauge = FALSE,
+                                  include_linear_rate = FALSE,
+                                  n_prediction = 100,
+                                  input_Age_type = "CE")
 ```
 In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
 
