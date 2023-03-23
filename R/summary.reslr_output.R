@@ -18,13 +18,21 @@
 # summary <- function(object,
 #                     type = c("diagnostics","parameter_estimates"),# "quantiles", "statistics",
 #                     ...) {
-#   UseMethod("summary.reslr_output")
+#   UseMethod("summary.reslr_output","eiv_slr_t")
+#   UseMethod("summary.reslr_output","eiv_cp1_t")
+#   UseMethod("summary.reslr_output","eiv_cp2_t")
+#   UseMethod("summary.reslr_output","eiv_cp3_t")
+#   UseMethod("summary.reslr_output","eiv_igp_t")
+#   UseMethod("summary.reslr_output","ni_spline_t")
+#   UseMethod("summary.reslr_output","ni_spline_st")
+#   UseMethod("summary.reslr_output","ni_gam_decomp")
+#
 # }
-summary.reslr_output <- function(x,#jags_output,
+summary.reslr_output <- function(object,#jags_output,
                                  type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",
                                  ...) {
-  mu_pred <- object <- jags_output <- sd <- mad <- q5 <- q95 <- alpha <- cp <- sigma_g <- phi <- sigma <- NULL
-  jags_output <- x
+  mu_pred <- object <- jags_output <- sd <- mad <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
+  jags_output <- object
     # EIV slr t -------
     if (inherits(jags_output, "eiv_slr_t") == TRUE) {
       jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
@@ -277,22 +285,5 @@ summary.reslr_output <- function(x,#jags_output,
         }
       }
 
-    # if ("quantiles" %in% type) {
-    #   out_quantiles <- t(apply(jags_output_model_run, 2, "quantile",
-    #     probs = c(0.025, 0.25, 0.5, 0.75, 0.975)
-    #   ))
-    #   print(round(out_quantiles, 3))
-    # }
-    # if ("statistics" %in% type) {
-    #   out_statistics <- t(apply(jags_output_model_run, 2, function(x) {
-    #     return(c(mean = mean(x), sd = stats::sd(x)))
-    #   }))
-    #   print(round(out_statistics, 3))
-    # }
-    # if ("parameter_estimate" %in% type) {
-    #   # Estimated parameter summaries
-    #
-   #  }gelman = out_bgr, quantiles = out_quantiles,
-  return(par_summary)
-  #invisible(list(diagnositics = out_statistics, correlations = out_cor))
+   #return(par_summary)
 }

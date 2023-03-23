@@ -81,12 +81,12 @@ create_igp_output_df <- function(model_run,jags_data,data_grid){
 #' Function to create the dataframes for plotting
 #'
 #' @param noisy_model_run_output The JAGS output
-#' @param rate_df If rate of change is included in the dataframe
+#' @param rate_grid If rate of change is included in the dataframe
 #' @param decomposition Is the full model decomposition included in dataframe
 #' @noRd
 create_output_df <- function(noisy_model_run_output,
                              data_grid,#jags_output,
-                             rate_df = "FALSE",
+                             rate_grid = "FALSE",
                              decomposition = "FALSE") {
   #mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
   mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
@@ -99,7 +99,7 @@ create_output_df <- function(noisy_model_run_output,
     upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
     lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
   # ID = "Total Posterior Model"
-  if (rate_df == "TRUE") {
+  if (rate_grid == "TRUE") {
     #mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     output_dataframes <- data.frame(
@@ -137,7 +137,7 @@ create_output_df <- function(noisy_model_run_output,
     output_dataframes <- output_dataframes
   }
 
-  if (decomposition == TRUE & rate_df == TRUE) {
+  if (decomposition == TRUE & rate_grid == TRUE) {
     # Total Component from JAGS output
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     total_model_fit_df <- data.frame(

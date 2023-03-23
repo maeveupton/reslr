@@ -15,7 +15,7 @@
 plot.reslr_output <- function(x,
                         plot_tide_gauges = FALSE,
                         ...) {
-  Age <- RSL <- time_deriv_component_post_df <- mod_output_pred_df<-Age_err <- ID <- RSL_err <- lwr_95 <- upr_95 <- lwr_50 <- lwr_95 <- upr_50 <- rate_y <- rate_lwr_95 <- rate_upr_95 <- SiteName <- data_type_id <- pred_y <- NULL
+  Age <- RSL <-Age_err <- ID <- RSL_err <- lwr_95 <- upr_95 <- lwr_50 <- lwr_95 <- upr_50 <- rate_pred <- rate_lwr_95 <- rate_upr_95 <- rate_lwr_50 <- rate_upr_50 <- SiteName <- data_type_id <- pred <- NULL
   # Not plotting the tide gauge data -------------
   # if (("data_type_id" %in% colnames(jags_output$data)) & plot_tide_gauges == FALSE) {
   #   jags_output$data <- jags_output$data %>%
@@ -1046,7 +1046,7 @@ plot.reslr_output <- function(x,
     cat("Rate of change of Non-Linear Local Component Plot \n")
 
     # Separate Components on one plot with CI --------
-    all_components_CI_pred_plot <- ggplot2::ggplot() +
+    all_components_CI_plot <- ggplot2::ggplot() +
       # Local
       ggplot2::geom_line(
         data = non_lin_loc_component_df,
@@ -1063,7 +1063,7 @@ plot.reslr_output <- function(x,
       ) +
       ggplot2::geom_ribbon(
         data = lin_loc_component_df,
-        ggplot2::aes(ymin = lwr, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
+        ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
       ) +
 
       # Regional Component
@@ -1082,7 +1082,7 @@ plot.reslr_output <- function(x,
       ) +
       ggplot2::geom_ribbon(
         data = total_model_fit_df,
-        ggplot2::aes(ymin = lwr, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
+        ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
       ) +
       ggplot2::theme_bw() +
       ggplot2::theme(
@@ -1116,8 +1116,6 @@ plot.reslr_output <- function(x,
       lin_loc_plot = lin_loc_plot,
       non_lin_loc_plot = non_lin_loc_plot,
       non_lin_loc_rate_plot = non_lin_loc_rate_plot,
-      local_pred_plot = local_pred_plot,
-      local_pred_rate_plot = local_pred_rate_plot,
       all_components_CI_plot = all_components_CI_plot)
   }
 #}

@@ -210,8 +210,8 @@ CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 CedarIslandNC <- reslr_load(data = CedarIslandNC,
-                                  include_tide_gauge = FALSE,
-                                  include_linear_rate = FALSE,
+                                  #include_tide_gauge = FALSE,
+                                  #include_linear_rate = FALSE,
                                   n_prediction = 100,
                                   input_Age_type = "CE")
 ```
@@ -288,7 +288,7 @@ The output of this function is a graph of the input data, i.e. Age and RSL and a
 
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
-output_dataframes <- jags_output$output_dataframes
+output_dataframes <- jags_output.eiv_slr_t$output_dataframes
 output_dataframes
 ```
 
@@ -308,8 +308,8 @@ CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
-                            include_tide_gauge = FALSE,
-                            include_linear_rate = FALSE,
+                            #include_tide_gauge = FALSE,
+                            #include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
 In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for a change point model, we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
@@ -390,7 +390,7 @@ The output of this function is a graph of the input data, i.e. Age and RSL and a
 
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
-output_dataframes <- jags_output$output_dataframes
+output_dataframes <- jags_output.eiv_cp1_t$output_dataframes
 output_dataframes
 ```
 
@@ -408,8 +408,8 @@ CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
-                            include_tide_gauge = FALSE,
-                            include_linear_rate = FALSE,
+                            #include_tide_gauge = FALSE,
+                            #include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
 In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for an IGP we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
@@ -477,13 +477,13 @@ For the parameter estimates, the length scale parameter, "phi" determines the di
 
 **Step 5:** The results from the EIV IGP model can be illustrated using:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(jags_output = jags_output.eiv_igp_t)
+plot(x = jags_output.eiv_igp_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. In addition, the rate of change is plotted using this function.
 
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
-output_dataframes <- jags_output$output_dataframes
+output_dataframes <- jags_output.eiv_igp_t$output_dataframes
 output_dataframes
 ```
 
@@ -577,7 +577,7 @@ The output of this function is a graph of the input data, i.e. Age and RSL and a
 
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
-output_dataframes <- jags_output$output_dataframes
+output_dataframes <- jags_output.ni_spline_t$output_dataframes
 output_dataframes
 ```
 
@@ -667,7 +667,7 @@ The output of this function is a graph of the input data, i.e. Age and RSL and a
 
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
-output_dataframes <- jags_output$output_dataframes
+output_dataframes <- jags_output.ni_spline_st$output_dataframes
 output_dataframes
 ```
 

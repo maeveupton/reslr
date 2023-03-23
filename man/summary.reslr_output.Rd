@@ -7,11 +7,7 @@ Produces summaries and convergence diagnostics for an object created with \code{
 The different options are:
 "diagnostics" to assess MCMC convergence}
 \usage{
-\method{summary}{reslr_output}(
-  object,
-  type = c("diagnostics", "quantiles", "statistics", "parameter_estimate"),
-  ...
-)
+\method{summary}{reslr_output}(object, type = c("diagnostics", "parameter_estimates"), ...)
 }
 \arguments{
 \item{object}{Output object from the \code{\link{reslr_mcmc}}}
@@ -32,6 +28,6 @@ The different options are:
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 input_data <- reslr_load(data = data)
-jags_output  <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
+jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 summary(object = jags_output)
 }
