@@ -116,6 +116,9 @@ To select the preferred tide gauge, the following criteria are used:**Going to g
 2. Next, the nearest tide gauge to proxy site based on minimum distance in kilometers from the proxy site or be within 1 degrees distance to a proxy site and longer than 20 years
 3. For larger data sets, tide gauges with longer than 150 years in close proximity are included.
 
+Within the `reslr_load`, the user has three options to choose from:
+- Provide a list of the prefered tide gauges from the PSMSL website, ensuring spelling
+
 
 ### Glacial Isostatic Adjustment (GIA) 
 
@@ -503,8 +506,8 @@ CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
-                            include_tide_gauge = FALSE,
-                            include_linear_rate = FALSE,
+                            #include_tide_gauge = FALSE,
+                            #include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
 In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for a spline in time, we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
@@ -594,8 +597,8 @@ multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nas
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, eval = TRUE}
 multi_site <- reslr::reslr_load(data = multi_site,
-                            include_tide_gauge = FALSE,
-                            include_linear_rate = FALSE,
+                            #include_tide_gauge = FALSE,
+                            #include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
 In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for a spline in space time, we recommend using the default settings as demonstrated in the above code chunk or investigating the resulting plots if additional tide gauge data could provide insight into recent changes. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years.
@@ -694,35 +697,35 @@ multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nas
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 multi_site <- reslr::reslr_load(data = multi_site,
-                            include_tide_gauge = TRUE,
-                            include_linear_rate = TRUE,
+                            #include_tide_gauge = TRUE,
+                            #include_linear_rate = TRUE,
                             n_prediction = 100)
 ```
 In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for this model, we recommend using the default settings as demonstrated in the above code chunk. If the user has not provided the linear rate and the associated linear rate uncertainty within the `linear_rate` and `linear_rate_err` column prior to running the package, the package to calculate it using the data. 
 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
 - The `data` dataframe is the inputted data with additional columns for the linear_rate, linear_rate_err and data_type_id which will contain two options, "ProxyRecord" or "TideGaugeData". It can be accessed by:
-```{r,eval=TRUE}
+```{r,eval=FALSE}
 data <- multi_site$data
 ```
 - The `data_grid` is a dataframe that is evenly spaced in time based on the `n_prediction` value chosen by the user and is used to create the plots and is accessed by
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 data_grid <- multi_site$data_grid
 ```
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 print(multi_site)
 ```
 
 **Step 2:** Plotting the data the raw data with:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(x =  multi_site)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(
   x =  multi_site,
   title = "Plot of the raw data",
@@ -733,7 +736,7 @@ plot(
 ```
 
 **Step 3:** Run the model
-```{r,eval = TRUE}
+```{r,eval = FALSE}
 jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
   input_data =  multi_site,
   model_type = "ni_gam_decomp")
@@ -741,11 +744,11 @@ jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
 The output object `jags_output.ni_gam_decomp` stores the JAGS model run. 
 Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 print(jags_output.ni_gam_decomp)
 ```
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r eval = TRUE}
+```{r eval = FALSE}
 summary(jags_output.ni_gam_decomp)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
@@ -764,35 +767,35 @@ jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
 For the parameter estimates, we can present the standard deviation associated with each component of the NIGAM decomposition. This gives an insight into the variation caused by the different components with "sigma_r" representing the regional component, "sigma_l" highlighting the non-linear local component, "sigma_res" presenting the overall variation and "sigma_h" representing the site specific vertical offset.
 
 **Step 5:** The results from the `ni_gam_decomp` model can be illustrated using:
-```{r eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
+```{r eval = FALSE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(x = jags_output.ni_gam_decomp)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the total model fit for the `ni_gam_decomp` is presented when using this function. 
 To examine the data creating the total model result plot, the user can use:
-```{r eval = TRUE}
+```{r eval = FALSE}
 total_model_fit_df <- jags_output.ni_gam_decomp$output_dataframes$total_model_fit_df
 ```
 To examine the data creating the total model rate of change plot the user can use:
-```{r eval = TRUE}
+```{r eval = FALSE}
 total_model_rate_df <-jags_output.ni_gam_decomp$output_dataframes$total_model_rate_df
 ```
 The regional component and the rate of change of the regional component is presented with 95\% Uncertainty interval.
 To examine the data creating the regional component plot, the user can use:
-```{r eval = TRUE}
+```{r eval = FALSE}
 regional_component_df <- jags_output.ni_gam_decomp$output_dataframes$regional_component_df
 ```
 To examine the data creating the regional component rate of change plot the user can use:
-```{r eval = TRUE}
+```{r eval = FALSE}
 regional_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$regional_rate_component_df
 ```
 
 The linear local component is plotted with 95\% Uncertainty interval.
 To examine the data creating the linear local component plot, the user can use:
-```{r eval = TRUE}
+```{r eval = FALSE}
 lin_loc_component_df <- jags_output.ni_gam_decomp$output_dataframes$lin_loc_component_df
 ```
 The associated linear local component rates can be accessed by: 
-```{r eval = TRUE}
+```{r eval = FALSE}
 lin_loc_component_rates <- lin_loc_component_df %>% 
   dplyr::group_by(SiteName) %>% 
   dplyr::summarise(linear_rate = unique(linear_rate),
@@ -800,11 +803,11 @@ lin_loc_component_rates <- lin_loc_component_df %>%
 ```
 The non-linear local component is plotted with with 95\% Uncertainty interval. 
 To examine the data creating the non-linear local component plot, the user can use:
-```{r eval = TRUE}
+```{r eval = FALSE}
 non_lin_loc_component_df <- jags_output.ni_gam_decomp$output_dataframes$non_lin_loc_component_df
 ```
 To examine the data creating the non-linear local component plot rate of change plot the user can use:
-```{r eval = TRUE}
+```{r eval = FALSE}
 non_lin_loc_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$non_lin_loc_rate_component_df
 ```
 

@@ -42,7 +42,7 @@ reslr_load <- function(data,
   }
   # Including TGs and no linear rates
   if(include_tide_gauge == TRUE & include_linear_rate == FALSE){
-    data <- clean_tidal_gauge_data(data = data)
+    data <- clean_tidal_gauge_data(data = data)$additional_datasets$data
     cat("Decadally averaged tide gauge data included by the package. \n")
     cat("Note: No linear rate included. It is required for the ni_gam_decomp model \n")
   }
@@ -80,6 +80,9 @@ reslr_load <- function(data,
       #data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
     }
     TG_data <- clean_tidal_gauge_data(data = data)
+    # Annual TG data?
+    data <- clean_tidal_gauge_data(data = data)$additional_datasets$data
+
     #---Adding linear rates from ICE5G for TG-----
     TG_lin_data <- add_linear_rate(data = TG_data)
     data <- data %>% merge(data, TG_lin_data)

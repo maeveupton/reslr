@@ -92,6 +92,7 @@ clean_tidal_gauge_data <- function(data
     dplyr::group_by(SiteName) %>%
     dplyr::arrange(SiteName, .by_group = TRUE)
 
+
   # # Set the window size for the moving average (in this case, 10 years)
   # window_size <- 10
   #
@@ -153,13 +154,15 @@ clean_tidal_gauge_data <- function(data
     dplyr::mutate(RSL_annual = RSL) %>%
     dplyr::mutate(RSL = decade_meanRSL)
 
-  # Removing sites with only 2 points (20 years of data)-----
+  # Criteria 1: Removing sites with only 2 points (20 years of data)-----
   decadal_NA_TG_df <-
     tidal_gauge_full_df %>%
     #decadal_NA_TG %>%
     dplyr::group_by(SiteName) %>%
     dplyr::filter(dplyr::n() >= 2) %>%
     dplyr::select(!decade, decade_meanRSL, RSL_annual)
+  # Criteria 2: User provides a list of TGs------------------------
+
 
   #-----Uniting original dataset and model run to give a site index to model_result data set-----
   SL_site_df <- data %>%
@@ -176,7 +179,7 @@ clean_tidal_gauge_data <- function(data
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(n_obs_by_site = dplyr::n()) %>%
     dplyr::ungroup()
-browser()
+
   SL_tide_site_df <- decadal_NA_TG_df %>%
     # dplyr::select(!all_tidal_data_sites) %>%
     dplyr::mutate(Longitude = round(Longitude, 1)) %>%
@@ -188,9 +191,9 @@ browser()
     dplyr::mutate(n_obs_by_site = dplyr::n()) %>%
     dplyr::ungroup()
 
-
-  #------Joining proxy dataframe to Tide gauges data----
-  SL_tide_proxy <- dplyr::bind_rows(SL_site_df, SL_tide_site_df)
+#
+#   #------Joining proxy dataframe to Tide gauges data----
+#   SL_tide_proxy <- dplyr::bind_rows(SL_site_df, SL_tide_site_df)
 
   #------Joining proxy sites to gauges based on shortest distance----
   SL_proxy_unique <- SL_site_df %>%
@@ -208,8 +211,6 @@ browser()
   #--finding row mins & corresponding tidal gauge--
   rownames(mat.distance_m) = SL_proxy_unique$SiteName
   colnames(mat.distance_m) = SL_tide_unique$SiteName
-
-  #min_dist_TG_proxy <- mat.distance
 
   #--finding row mins & corresponding tidal gauge--
   dist_TG_proxy <- t(sapply(seq(nrow(mat.distance_m)), function(z) {
@@ -236,6 +237,7 @@ browser()
   obs_sites <- SL_tide_unique %>%
     dplyr::filter(SiteName %in% dist_TG_proxy_long_2$nearest_TG) %>%
     dplyr::select(n_obs_by_site)
+  # Criteria
   dist_TG_proxy_df_new <- data.frame(nearest_proxy_site = dist_TG_proxy_long_1$nearest_proxy_site,
                                      nearest_TG = dist_TG_proxy_long_2$nearest_TG,
                                      minimum_dist = as.numeric(dist_TG_proxy_long_1$minimum_distance),
@@ -286,5 +288,9 @@ browser()
       # Indicator,Basin,
     )) %>%
     dplyr::mutate(SiteName = as.factor(SiteName))
-  return(data)
+  additional_datasets <-
+    list(annual_tidal_gauge_data_df = annual_tidal_gauge_data_df,
+       data=data)
+  #return(data)
+  return(additional_datasets)
 }
