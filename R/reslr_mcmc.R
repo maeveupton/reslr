@@ -288,7 +288,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
 
     # JAGS data
-    igp_dat_list <- igp_data(data)
+    igp_dat_list <- igp_data(data,data_grid)
     jags_data <- list(
       y = data$RSL,
       y_err = data$RSL_err,

@@ -11,8 +11,8 @@ create_output_df <- function(jags_output,
   output_dataframes <- data.frame(
     jags_output$data_grid,
     pred = apply(mu_post_pred, 2, mean),
-    upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-    lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+    upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+    lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
     upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
     lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
     #ID = "Total Posterior Model"
@@ -22,8 +22,8 @@ create_output_df <- function(jags_output,
     output_dataframes <- data.frame(
       output_dataframes,
       rate_pred =  apply(mu_pred_deriv_post, 2, mean),
-      rate_upr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-      rate_lwr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+      rate_upr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+      rate_lwr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
       rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
       rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
     )
@@ -178,7 +178,7 @@ add_noisy_input <- function(model_run, model_type, data) {
 #' @param data Input data
 #' @noRd
 
-igp_data <- function(data) {
+igp_data <- function(data,data_grid) {
   Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
   ############# Set up the grid for the GP ###################
   #tgrid <- seq(min(data$Age), max(data$Age), length.out = 50)

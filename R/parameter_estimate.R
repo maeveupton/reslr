@@ -126,7 +126,8 @@ parameter_estimate <- function(jags_output) {
     output_dataframes <- dplyr::tibble(
       # Should this be predict data instead?
       #t = seq(min(jags_output$data$Age), max(jags_output$data$Age), length.out = 50),
-      t = jags_output$data_grid$Age,
+      #t = jags_output$data_grid$Age,
+      jags_output$data_grid,
       pred_y = apply(pred, 2, mean),
       lwr_95 = apply(pred, 2, stats::quantile, probs = 0.025),
       upr_95 = apply(pred, 2, stats::quantile, probs = 0.975),

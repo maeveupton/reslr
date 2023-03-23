@@ -121,12 +121,22 @@ reslr_load <- function(data,
 
   data_age_boundary_test <-
     data_age_boundary %>% dplyr::mutate(max_age = max_Age * 1000, min_age = min_Age * 1000)
+
   # Filtering prediction grids to just cover the data
   data_grid <- data_grid_full %>%
     dplyr::left_join(data_age_boundary, by = "SiteName") %>%
     dplyr::group_by(SiteName) %>%
     dplyr::filter(Age >= (min_Age) & Age <= (max_Age)) %>%
-    dplyr::tibble()
+    dplyr::tibble() %>%
+    dplyr::group_by(SiteName) %>%
+    dplyr::mutate(Age = replace(Age, Age == min(Age), unique(min_Age))) %>%
+    dplyr::mutate(Age = replace(Age, Age == max(Age), unique(max_Age)))
+
+  # data_grid <- data_grid_full %>%
+  #   dplyr::left_join(data_age_boundary, by = "SiteName") %>%
+  #   dplyr::group_by(SiteName) %>%
+  #   dplyr::filter(Age >= (min_Age) & Age <= (max_Age)) %>%
+  #   dplyr::tibble()
   data_grid_test <- data_grid %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(minAge_range = min(Age) * 1000, maxAge_range = max(Age) * 1000)
