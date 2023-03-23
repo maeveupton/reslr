@@ -193,10 +193,7 @@ The general structure for running `reslr` is as follows:
 
 **Step 4.** Check the model converged and examine the results of the parameters with the `summary` function 
 
-**Step 5.** Visualise the results with `plot`
-
-**Step 5.** Examine the results of the parameters using `parameter_estimate` and access the dataframes used in creating the summaries.
-
+**Step 5.** Visualise the results with `plot` and access the dataframes used to create the plots
 
 ## Errors-in-Variables Simple Linear Regression (**"eiv_slr_t"**)
 
@@ -263,29 +260,35 @@ This command takes the input data and the user specifies the statistical model, 
 ```{r, eval=TRUE}
 print(jags_output.eiv_slr_t)
 ```
-**Step 4:** To examine if the algorithm has converged use:
+**Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r eval = TRUE}
-reslr::check_convergence(object = jags_output.eiv_slr_t)
+summary(jags_output.eiv_slr_t)
 ```
-If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
-
-
-**Step 5:** When the model has successfully converged, the user can view the parameter estimates using the following:
-```{r eval = TRUE}
-params <- reslr::parameter_estimate(jags_output = jags_output.eiv_slr_t)
-params$par_summary
+If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
+```{r,eval = FALSE}
+jags_output.eiv_slr_t <- reslr::reslr_mcmc(
+  input_data =  CedarIslandNC,
+  model_type = "eiv_slr_t",
+  # Update these values
+  n_iterations = 6000,# Number of iterations
+  n_burnin = 1000,# Number of iterations to discard at the beginning
+  n_thin = 4,# Reduces number of output samples to save memory and computation time
+  n_chains = 3 # Number of Markov chains
+  )
 ```
-The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept (alpha), the slope (beta) and the residual standard deviation of the model (sigma_res). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. beta. In this example, the rate of sea-level change for Cedar Island North Carolina using the EIV simple linear regression model is estimated to be XXXX.
 
-**Step 6:** The results from the eiv_slr_t model can be visualised using the following function:
+The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept (alpha), the slope (beta) and the residual standard deviation of the model (sigma_res). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. beta. 
+
+**Step 5:** The results from the eiv_slr_t model can be visualised using the following function:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x = jags_output.eiv_slr_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. 
 
-To examine the data creating the total model result plot, the user can use:
-```{r eval = FALSE}
-total_model_fit <- params$output_dataframes$total_model_df
+To examine the data creating these plots, can be accessed by the user:
+```{r eval = TRUE}
+output_dataframes <- jags_output$output_dataframes
+output_dataframes
 ```
 
 
@@ -308,7 +311,20 @@ CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
-In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for a change point model, we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
+The output of this function is a list of two dataframes called `data` and `data_grid`. 
+- The `data` dataframe is the inputted data with additional column for the data_type_id which will contain, "ProxyRecord". It can be accessed by:
+```{r,eval=TRUE}
+data <- CedarIslandNC$data
+```
+- The `data_grid` is a dataframe that is evenly spaced in time based on the `n_prediction` value chosen by the user and is used to create the plots and is accessed by
+```{r, eval = TRUE}
+data_grid <- CedarIslandNC$data_grid
+```
+**Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
+```{r, eval=TRUE}
+print(CedarIslandNC)
+```
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
@@ -342,30 +358,41 @@ jags_output.eiv_cp2_t <- reslr::reslr_mcmc(
 ```
 
 Similar to the earlier model, the output object `jags_output.eiv_cp1_t` stores the JAGS model run and should take a second to run.
-
-**Step 4:** The convergence of the algorithm is examined using the following:
-```{r eval = TRUE}
-reslr::check_convergence(object = jags_output.eiv_cp1_t)
+**Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
+```{r, eval=TRUE}
+print(jags_output.eiv_cp1_t)
 ```
-If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
 
-**Step 5:** the parameter estimates from the model can be investigated:
+**Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r eval = TRUE}
-params <- reslr::parameter_estimate(jags_output = jags_output.eiv_cp1_t)
-params$par_summary
+summary(jags_output.eiv_cp1_t)
 ```
-For the eiv_cp_t model, the parameters of interest are the intercept (alpha), the slopes before the change point (beta[1]) and after the change point (beta[2]), the year of the change point(cp) and sigma_res the variance of the model (**Again bad description here**).
+If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
+```{r,eval = FALSE}
+jags_output.eiv_cp1_t <- reslr::reslr_mcmc(
+  input_data =  CedarIslandNC,
+  model_type = "eiv_cp_t",
+  # Update these values
+  n_iterations = 6000,# Number of iterations
+  n_burnin = 1000,# Number of iterations to discard at the beginning
+  n_thin = 4,# Reduces number of output samples to save memory and computation time
+  n_chains = 3 # Number of Markov chains
+  )
+```
+For the eiv_cp_t model, the parameters of interest are the intercept (alpha), the slopes before the change point (beta[1]) and after the change point (beta[2]), the year of the change point(cp) and sigma_res the variance of the model.
 
-**Step 6:** The results from the EIV Change Point model can be illustrated using:
+**Step 5:** The results from the EIV Change Point model can be illustrated using:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x = jags_output.eiv_cp1_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval.
 
-To examine the data creating the total model result plot, the user can use:
+To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
-total_model_fit <- params$output_dataframes$total_model_df
+output_dataframes <- jags_output$output_dataframes
+output_dataframes
 ```
+
 
 ## Errors-in-Variable Integrated Gaussian Process Model (**"eiv_igp_t"**)
 The EIV Integrated Gaussian Process model provides the underlying rate of the process directly from the model. Further reading on this modeling approach can be found [here](https://projecteuclid.org/journals/annals-of-applied-statistics/volume-9/issue-2/Modeling-sea-level-change-using-errors-in-variables-integrated-Gaussian/10.1214/15-AOAS824.full). 
@@ -384,7 +411,20 @@ CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
-In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for an IGP we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
+The output of this function is a list of two dataframes called `data` and `data_grid`. 
+- The `data` dataframe is the inputted data with additional columns for the data_type_id which will contain "ProxyRecord". It can be accessed by:
+```{r,eval=TRUE}
+data <- CedarIslandNC$data
+```
+- The `data_grid` is a dataframe that is evenly spaced in time based on the `n_prediction` value chosen by the user and is used to create the plots and is accessed by
+```{r, eval = TRUE}
+data_grid <- CedarIslandNC$data_grid
+```
+**Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
+```{r, eval=TRUE}
+print(CedarIslandNC)
+```
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
@@ -410,35 +450,42 @@ jags_output.eiv_igp_t <- reslr::reslr_mcmc(
 ```
 This command takes the input data and the user specifies the statistical model, i.e. an integrated Gaussian process using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `jags_output.eiv_igp_t`. The computational run time for this model is long **XXX minutes??**
 
-
-**Step 4:** The convergence of the algorithm is inspected using:
-```{r eval = TRUE}
-reslr::check_convergence(object = jags_output.eiv_igp_t)
+**Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
+```{r, eval=TRUE}
+print(jags_output.eiv_igp_t)
 ```
 
-If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run.
-
-**Step 5:** The user can examine the estimated parameters using:
+**Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r eval = TRUE}
-params <- reslr::parameter_estimate(jags_output = jags_output.eiv_igp_t)
-params$par_summary
+summary(jags_output.eiv_igp_t)
 ```
-The length scale parameter, "phi" determines the distance over which two input points can influence each other. More specifically, it determines the rate at which the correlation between the input data points decays as the distance between those points increases. "sigma_res".... **FINISH**
+If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
+```{r,eval = FALSE}
+jags_output.eiv_igp_t <- reslr::reslr_mcmc(
+  input_data =  CedarIslandNC,
+  model_type = "eiv_igp_t",
+  # Update these values
+  n_iterations = 6000,# Number of iterations
+  n_burnin = 1000,# Number of iterations to discard at the beginning
+  n_thin = 4,# Reduces number of output samples to save memory and computation time
+  n_chains = 3 # Number of Markov chains
+  )
+```
 
-**Step 6:** The results from the EIV IGP model can be illustrated using:
+For the parameter estimates, the length scale parameter, "phi" determines the distance over which two input points can influence each other. More specifically, it determines the rate at which the correlation between the input data points decays as the distance between those points increases.
+
+**Step 5:** The results from the EIV IGP model can be illustrated using:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output = jags_output.eiv_igp_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. In addition, the rate of change is plotted using this function.
 
-To examine the data creating the total model result plot, the user can use:
-```{r eval = FALSE}
-total_model_fit <- params$output_dataframes$total_model_fit
+To examine the data creating these plots, can be accessed by the user:
+```{r eval = TRUE}
+output_dataframes <- jags_output$output_dataframes
+output_dataframes
 ```
-To examine the data creating the total model rate of change plot the user can use:
-```{r eval = FALSE}
-total_model_rate_df <-params$output_dataframes$total_model_rate_df
-```
+
 
 
 ## Noisy Input Generalised Additive Model in time (**"ni_spline_t"**)
@@ -459,7 +506,21 @@ CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
                             include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
-In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`. Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for a spline in time, we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
+The output of this function is a list of two dataframes called `data` and `data_grid`. 
+- The `data` dataframe is the inputted data with additional columns for the data_type_id which will contain "ProxyRecord". It can be accessed by:
+```{r,eval=TRUE}
+data <- CedarIslandNC$data
+```
+- The `data_grid` is a dataframe that is evenly spaced in time based on the `n_prediction` value chosen by the user and is used to create the plots and is accessed by
+```{r, eval = TRUE}
+data_grid <- CedarIslandNC$data_grid
+```
+
+**Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
+```{r, eval=TRUE}
+print(CedarIslandNC)
+```
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
@@ -485,37 +546,43 @@ jags_output.ni_spline_t <- reslr::reslr_mcmc(input_data =  CedarIslandNC,
 ```
 The output object `jags_output.ni_spline_t` stores the JAGS model run. 
 Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
-
-**Step 4:** The convergence of the algorithm is examined using the following:
-```{r eval = TRUE}
-reslr::check_convergence(object = jags_output.ni_spline_t)
+**Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
+```{r, eval=TRUE}
+print(jags_output.ni_spline_t)
 ```
-If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
-
-**Step 5:** the parameter estimates from the model can be investigated:
+**Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r eval = TRUE}
-params <- reslr::parameter_estimate(jags_output = jags_output.ni_spline_t)
-params$par_summary
+summary(jags_output.ni_spline_t)
 ```
-In this situation, we can present the standard deviation associated with the NI spline space time model. Where "sigma_r" highlights the variation associated with the temporal model and "sigma_res" presenting the overall variation.
+If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
+```{r,eval = FALSE}
+jags_output.ni_spline_t <- reslr::reslr_mcmc(
+  input_data =  CedarIslandNC,
+  model_type = "ni_spline_t",
+  # Update these values
+  n_iterations = 6000,# Number of iterations
+  n_burnin = 1000,# Number of iterations to discard at the beginning
+  n_thin = 4,# Reduces number of output samples to save memory and computation time
+  n_chains = 3 # Number of Markov chains
+  )
+```
+For the parameter estimates, we can present the standard deviation associated with the NI spline time model. Where "sigma_r" highlights the variation associated with the temporal model and "sigma_res" presenting the overall variation.
 
-**Step 6:** the results from the ni_spline_t model can be illustrated using:
+**Step 5:** the results from the ni_spline_t model can be illustrated using:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x = jags_output.ni_spline_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the ni_spline_t is presented when using this function.
 
-To examine the data creating the total model result plot, the user can use:
+To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
-total_model_fit <- params$output_dataframes$total_model_fit
-```
-To examine the data creating the total model rate of change plot the user can use:
-```{r eval = TRUE}
-total_model_rate_df <-params$output_dataframes$total_model_rate_df
+output_dataframes <- jags_output$output_dataframes
+output_dataframes
 ```
 
-## Noisy Input Generalised Additive Model in space time (**"ni_spline_st"**)
-The Noisy Input Generalised Additive Model in space time examines changes in response over multiple locations and throughout time. 
+
+## Noisy input spline in space time (**"ni_spline_st"**)
+The Noisy Input spline in space time examines changes in response over multiple locations and throughout time. 
 For this model, a minimum of 2 sites should be used. As an example, we will filter the example dataset `NAACproxydata` to select two random sites to demonstrate the process:
 ```{r, eval = TRUE}
 example_data_set <- reslr::NAACproxydata
@@ -530,7 +597,21 @@ multi_site <- reslr::reslr_load(data = multi_site,
                             include_linear_rate = FALSE,
                             n_prediction = 100)
 ```
-In this function, the user can select to add tide gauge data by changing `include_tide_gauge = TRUE`.**FINISH** Note that for this model we recommend using the default settings as demonstrated in the above code chunk. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for a spline in space time, we recommend using the default settings as demonstrated in the above code chunk or investigating the resulting plots if additional tide gauge data could provide insight into recent changes. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years.
+The output of this function is a list of two dataframes called `data` and `data_grid`. 
+- The `data` dataframe is the inputted data with additional columns for the linear_rate, linear_rate_err and data_type_id which will contain two options, "ProxyRecord" or "TideGaugeData". It can be accessed by:
+```{r,eval=TRUE}
+data <- multi_site$data
+```
+- The `data_grid` is a dataframe that is evenly spaced in time based on the `n_prediction` value chosen by the user and is used to create the plots and is accessed by
+```{r, eval = TRUE}
+data_grid <- multi_site$data_grid
+```
+
+**Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
+```{r, eval=TRUE}
+print(multi_site)
+```
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -555,34 +636,40 @@ jags_output.ni_spline_st <- reslr::reslr_mcmc(input_data =  multi_site,
 ```
 The output object `jags_output.ni_spline_st` stores the JAGS model run. 
 Note that additional computational run time is required for the model compared with the ni_spline_t. 
-
-**Step 4:** The convergence of the algorithm is examined using the following:
-```{r eval = TRUE}
-reslr::check_convergence(object = jags_output.ni_spline_st)
+**Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
+```{r, eval=TRUE}
+print(jags_output.ni_spline_st)
 ```
-If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
-
-**Step 5:** The parameter estimates from the model can be investigated:
+**Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r eval = TRUE}
-params <- reslr::parameter_estimate(jags_output = jags_output.ni_spline_st)
-params$par_summary
+summary(jags_output.ni_spline_st)
 ```
-In this situation, we can present the standard deviation associated with the NI spline space time model. Where "sigma_l" highlights the variation associated with the spatial temporal model and "sigma_res" presenting the overall variation.
+If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
+```{r,eval = FALSE}
+jags_output.ni_spline_st <- reslr::reslr_mcmc(
+  input_data =  multi_site,
+  model_type = "ni_spline_st",
+  # Update these values
+  n_iterations = 6000,# Number of iterations
+  n_burnin = 1000,# Number of iterations to discard at the beginning
+  n_thin = 4,# Reduces number of output samples to save memory and computation time
+  n_chains = 3 # Number of Markov chains
+  )
+```
+For the parameter estimates, we can present the standard deviation associated with the NI spline space time model. Where "sigma_l" highlights the variation associated with the spatial temporal model and "sigma_res" presenting the overall variation.
 
-**Step 6:** the results from the ni_spline_st model can be illustrated using:
+**Step 5:** the results from the ni_spline_st model can be illustrated using:
 ```{r eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(x = jags_output.ni_spline_st)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the ni_spline_st is presented when using this function.
 
-To examine the data creating the total model result plot, the user can use:
+To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
-total_model_fit <- params$output_dataframes$total_model_fit
+output_dataframes <- jags_output$output_dataframes
+output_dataframes
 ```
-To examine the data creating the total model rate of change plot the user can use:
-```{r eval = TRUE}
-total_model_rate_df <-params$output_dataframes$total_model_rate_df
-```
+
 
 
 
@@ -612,7 +699,21 @@ multi_site <- reslr::reslr_load(data = multi_site,
                             include_linear_rate = TRUE,
                             n_prediction = 100)
 ```
-In this function, the user should select to add tide gauge data by changing `include_tide_gauge = TRUE`. If the user has not provided the GIA rate and the associated GIA rate uncertainty within the `linear_rate` and `linear_rate_err` column prior to running the package, the package to calculate it using the data. The output of this function the the updated dataframe which will be used in the following steps.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. Note that for this model, we recommend using the default settings as demonstrated in the above code chunk. If the user has not provided the linear rate and the associated linear rate uncertainty within the `linear_rate` and `linear_rate_err` column prior to running the package, the package to calculate it using the data. 
+
+The output of this function is a list of two dataframes called `data` and `data_grid`. 
+- The `data` dataframe is the inputted data with additional columns for the linear_rate, linear_rate_err and data_type_id which will contain two options, "ProxyRecord" or "TideGaugeData". It can be accessed by:
+```{r,eval=TRUE}
+data <- multi_site$data
+```
+- The `data_grid` is a dataframe that is evenly spaced in time based on the `n_prediction` value chosen by the user and is used to create the plots and is accessed by
+```{r, eval = TRUE}
+data_grid <- multi_site$data_grid
+```
+**Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
+```{r, eval=TRUE}
+print(multi_site)
+```
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -638,55 +739,72 @@ jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
 ```
 The output object `jags_output.ni_gam_decomp` stores the JAGS model run. 
 Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
-
-**Step 4:** The convergence of the algorithm is examined using the following:
-```{r eval = TRUE}
-reslr::check_convergence(object = jags_output.ni_gam_decomp)
+**Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
+```{r, eval=TRUE}
+print(jags_output.ni_gam_decomp)
 ```
-If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
-
-**Step 5:** The parameter estimates from the model can be investigated:
+**Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r eval = TRUE}
-params <- reslr::parameter_estimate(jags_output = jags_output.ni_gam_decomp)
-params$par_summary
+summary(jags_output.ni_gam_decomp)
 ```
-In this situation, we can present the standard deviation associated with each component of the NIGAM decomposition. This gives an insight into the variation caused by the different components with "sigma_r" representing the regional component, "sigma_l" highlighting the non-linear local component, "sigma_res" presenting the overall variation and "sigma_h" representing the site specific vertical offset.
+If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
+```{r,eval = FALSE}
+jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
+  input_data =  multi_site,
+  model_type = "ni_gam_decomp",
+  # Update these values
+  n_iterations = 6000,# Number of iterations
+  n_burnin = 1000,# Number of iterations to discard at the beginning
+  n_thin = 4,# Reduces number of output samples to save memory and computation time
+  n_chains = 3 # Number of Markov chains
+  )
+```
 
-**Step 6:** The results from the `ni_gam_decomp` model can be illustrated using:
+For the parameter estimates, we can present the standard deviation associated with each component of the NIGAM decomposition. This gives an insight into the variation caused by the different components with "sigma_r" representing the regional component, "sigma_l" highlighting the non-linear local component, "sigma_res" presenting the overall variation and "sigma_h" representing the site specific vertical offset.
+
+**Step 5:** The results from the `ni_gam_decomp` model can be illustrated using:
 ```{r eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(x = jags_output.ni_gam_decomp)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the total model fit for the `ni_gam_decomp` is presented when using this function. 
-The regional component and the rate of change of the regional component is presented with 95\% Uncertainty interval. 
-The linear local component is plotted with 95\% Uncertainty interval. The non-linear local component is plotted with with 95\% Uncertainty interval. The associated linear local component rates can be accessed by: 
-**FINISH THIS**
-
-
-
 To examine the data creating the total model result plot, the user can use:
 ```{r eval = TRUE}
-total_model_fit <- params$output_dataframes$total_model_fit
+total_model_fit_df <- jags_output.ni_gam_decomp$output_dataframes$total_model_fit_df
 ```
 To examine the data creating the total model rate of change plot the user can use:
 ```{r eval = TRUE}
-total_model_rate_df <-params$output_dataframes$total_model_rate_df
+total_model_rate_df <-jags_output.ni_gam_decomp$output_dataframes$total_model_rate_df
 ```
+The regional component and the rate of change of the regional component is presented with 95\% Uncertainty interval.
 To examine the data creating the regional component plot, the user can use:
 ```{r eval = TRUE}
-regional_model_fit <- params$output_dataframes$regional_model_fit
+regional_component_df <- jags_output.ni_gam_decomp$output_dataframes$regional_component_df
 ```
 To examine the data creating the regional component rate of change plot the user can use:
 ```{r eval = TRUE}
-regional_model_rate_df <-params$output_dataframes$regional_model_rate_df
+regional_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$regional_rate_component_df
 ```
 
-To examine the data creating the non-linear component plot, the user can use:
+The linear local component is plotted with 95\% Uncertainty interval.
+To examine the data creating the linear local component plot, the user can use:
 ```{r eval = TRUE}
-non_lin_local_model_fit <- params$output_dataframes$non_lin_local_model_fit
+lin_loc_component_df <- jags_output.ni_gam_decomp$output_dataframes$lin_loc_component_df
 ```
-To examine the data creating the regional component rate of change plot the user can use:
+The associated linear local component rates can be accessed by: 
 ```{r eval = TRUE}
-non_lin_local_model_rate_df <-params$output_dataframes$non_lin_local_model_rate_df
+lin_loc_component_rates <- lin_loc_component_df %>% 
+  dplyr::group_by(SiteName) %>% 
+  dplyr::summarise(linear_rate = unique(linear_rate),
+                   linear_rate_err = unique(linear_rate_err))
+```
+The non-linear local component is plotted with with 95\% Uncertainty interval. 
+To examine the data creating the non-linear local component plot, the user can use:
+```{r eval = TRUE}
+non_lin_loc_component_df <- jags_output.ni_gam_decomp$output_dataframes$non_lin_loc_component_df
+```
+To examine the data creating the non-linear local component plot rate of change plot the user can use:
+```{r eval = TRUE}
+non_lin_loc_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$non_lin_loc_rate_component_df
 ```
 
 
