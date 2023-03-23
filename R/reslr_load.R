@@ -5,6 +5,7 @@
 #' @param include_tide_gauge Including decadaly average tide gauge data from PSMSL website
 #' @param include_linear_rate User decides to include linear_rate and linear_rate_err
 #' @param input_Age_type The inputted age in years CE or year BCE
+#' @param list_preferred_TGs The user can supply the name or names of the preferred tide gauges
 #'
 #' @return A list containing data frame of data and prediction grid
 #' @export
@@ -16,6 +17,7 @@ reslr_load <- function(data,
                        n_prediction = 100,
                        include_tide_gauge = FALSE,
                        include_linear_rate = FALSE,
+                       list_preferred_TGs = NULL,
                        input_Age_type = "CE") {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
 
@@ -42,7 +44,7 @@ reslr_load <- function(data,
   }
   # Including TGs and no linear rates
   if(include_tide_gauge == TRUE & include_linear_rate == FALSE){
-    data <- clean_tidal_gauge_data(data = data)$additional_datasets$data
+    data <- clean_tidal_gauge_data(data = data)#$additional_datasets$data
     cat("Decadally averaged tide gauge data included by the package. \n")
     cat("Note: No linear rate included. It is required for the ni_gam_decomp model \n")
   }
@@ -81,7 +83,7 @@ reslr_load <- function(data,
     }
     TG_data <- clean_tidal_gauge_data(data = data)
     # Annual TG data?
-    data <- clean_tidal_gauge_data(data = data)$additional_datasets$data
+    data <- clean_tidal_gauge_data(data = data)#$additional_datasets$data
 
     #---Adding linear rates from ICE5G for TG-----
     TG_lin_data <- add_linear_rate(data = TG_data)

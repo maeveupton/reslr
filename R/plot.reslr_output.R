@@ -503,9 +503,9 @@ plot.reslr_output <- function(x,
   # NI spline time
   if (inherits(jags_output, "ni_spline_t") == TRUE) {
     # Dataframes to plot
-    #output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
     output_dataframes <- jags_output$output_dataframes
     data <- jags_output$data
+
     # Plot
     plot_result <-
       ggplot2::ggplot() +
@@ -586,7 +586,7 @@ plot.reslr_output <- function(x,
       ) +
       # ggplot2::geom_ribbon(
       #   data = output_dataframes,
-      #   ggplot2::aes(y = pred_rate, ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+      #   ggplot2::aes(y = rate_pred, ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
       ggplot2::xlab("Age (CE)") +
       ggplot2::ylab("Relative Sea Level (m)") +

@@ -1,10 +1,10 @@
 #' Including tide gauge data
 #'
 #' @param data Input data
-#The user can supply the name or names of the preferred tide gauges
+#' @parm The user can supply the name or names of the preferred tide gauges
 #' @noRd
-clean_tidal_gauge_data <- function(data
-                                   #name_chosesn_TGs = "FALSE"
+clean_tidal_gauge_data <- function(data,
+                                   list_preferred_TGs = NULL
                                    ) {
   Age_epoch_id <-  LongLat <-  nearest_proxy_site<- RSL_annual<- minimum_dist<-nearest_TG<-rows_site<-site<-min_dist1<-stationflag<-name<-sd<-sd_TG<- n_obs_by_site<-RSL_offset <- data_type_id <-decade<- decade_meanRSL<- Age <- RSL <- Age_err<- RSL_err <- linear_rate <- linear_rate_err <-SiteName <- Longitude <- Latitude <- id <- NULL
   # Using data from PSMSL website for annual tide gauge data----------------------------------
@@ -94,6 +94,7 @@ clean_tidal_gauge_data <- function(data
 
 
   # # Set the window size for the moving average (in this case, 10 years)
+  # I don't know if this is correct?
   # window_size <- 10
   #
   # # Create a new column with the rolling average
@@ -118,7 +119,7 @@ clean_tidal_gauge_data <- function(data
 
 
 
-  #----Decadal Averages------
+  # Decadal Averages------ I don't know if this is too simple to calculate the decadal averages
   decadal_averages_TG <-
     annual_tidal_gauge_data_df %>%
     dplyr::mutate(decade = (Age - 1) %/% 10) %>%
@@ -129,7 +130,7 @@ clean_tidal_gauge_data <- function(data
       rows_site = dplyr::n()
     ) # Age=min(Age)
 
-  #---Using standard deviation of RSL as uncertainty----
+  #---Using standard deviation of RSL over the decade as uncertainty----
   decadal_averages_TG <- decadal_averages_TG %>%
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(sd_TG = sd(decade_meanRSL))
@@ -154,16 +155,21 @@ clean_tidal_gauge_data <- function(data
     dplyr::mutate(RSL_annual = RSL) %>%
     dplyr::mutate(RSL = decade_meanRSL)
 
-  # Criteria 1: Removing sites with only 2 points (20 years of data)-----
+  # No user option here -> this is a must: Removing sites with only 2 points (20 years of data)-----
   decadal_NA_TG_df <-
     tidal_gauge_full_df %>%
     #decadal_NA_TG %>%
     dplyr::group_by(SiteName) %>%
     dplyr::filter(dplyr::n() >= 2) %>%
     dplyr::select(!decade, decade_meanRSL, RSL_annual)
-  # Criteria 2: User provides a list of TGs------------------------
 
+  # Criteria 1: User provides a list of TGs------------------------
+  if(!is.null(list_preferred_TGs)){
+    decadal_NA_TG_df_filter <- decadal_NA_TG_df %>%
+      filter(SiteName %in% list_preferred_TGs)
+  }
 
+  # Criteria 2: Minimum distance to proxy site
   #-----Uniting original dataset and model run to give a site index to model_result data set-----
   SL_site_df <- data %>%
     dplyr::mutate(Longitude = round(Longitude, 1)) %>%
@@ -244,7 +250,7 @@ clean_tidal_gauge_data <- function(data
                                      n_obs_tg = obs_sites)
 
 
-  # # TG near the proxy sites & TG longer than 150 years (New York(The Battery))
+  # Criteria 3: TG near the proxy sites & TG longer than 150 years (New York(The Battery))
   # all_nearest_TG <- dist_TG_proxy %>%
   #   dplyr::select(!c(nearest_proxy_site)) %>%
   #   tidyr::pivot_longer(
@@ -257,7 +263,7 @@ clean_tidal_gauge_data <- function(data
   #     values_to = "MinimumDistance"
   #   )
 
-  # 1 degree away from proxy is 111.1km
+  # Criteria 4: 1 degree away from proxy site is 111.1km
   #all_nearest_TG_closest <- all_nearest_TG %>% dplyr::filter(MinimumDistance > 111100)
 
   # Finding the closest TG
@@ -288,9 +294,9 @@ clean_tidal_gauge_data <- function(data
       # Indicator,Basin,
     )) %>%
     dplyr::mutate(SiteName = as.factor(SiteName))
-  additional_datasets <-
-    list(annual_tidal_gauge_data_df = annual_tidal_gauge_data_df,
-       data=data)
-  #return(data)
-  return(additional_datasets)
+  # additional_datasets <-
+  #   list(annual_tidal_gauge_data_df = annual_tidal_gauge_data_df,
+  #      data=data)
+  return(data)
+  #return(additional_datasets)
 }

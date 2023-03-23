@@ -86,21 +86,19 @@ create_igp_output_df <- function(model_run,jags_data,data_grid){
 #' @noRd
 create_output_df <- function(noisy_model_run_output,
                              data_grid,#jags_output,
-                             rate_grid = "FALSE",
-                             decomposition = "FALSE") {
-  #mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-  mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-  output_dataframes <- data.frame(
-    #jags_output$data_grid,
-    data_grid,
-    pred = apply(mu_post_pred, 2, mean),
-    upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-    lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-    upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-    lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
+                             rate_grid = FALSE,
+                             decomposition = FALSE) {
+  # mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+  # output_dataframes <- data.frame(
+  #   #jags_output$data_grid,
+  #   data_grid,
+  #   pred = apply(mu_post_pred, 2, mean),
+  #   upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+  #   lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+  #   upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+  #   lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
   # ID = "Total Posterior Model"
-  if (rate_grid == "TRUE") {
-    #mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+  if (rate_grid == TRUE) {
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     output_dataframes <- data.frame(
       #jags_output$data_grid,
@@ -226,19 +224,19 @@ create_output_df <- function(noisy_model_run_output,
       non_lin_loc_rate_component_df = non_lin_loc_rate_component_df
     )
   }
-  else {
-    mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    output_dataframes <- data.frame(
-      #jags_output$data_grid,
-      data_grid,
-      pred = apply(mu_post_pred, 2, mean),
-      upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
-    # ID = "Total Posterior Model"
-    output_dataframes <- output_dataframes
-  }
+  # else {
+  #   mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+  #   output_dataframes <- data.frame(
+  #     #jags_output$data_grid,
+  #     data_grid,
+  #     pred = apply(mu_post_pred, 2, mean),
+  #     upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+  #     lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+  #     upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+  #     lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
+  #   # ID = "Total Posterior Model"
+  #   output_dataframes <- output_dataframes
+  # }
 
   return(output_dataframes)
 }
@@ -940,7 +938,9 @@ tpower <- function(x, t, p) {
   return((x - t)^p * (x > t))
 }
 bs_bbase <- function(x, xl = min(x), xr = max(x), # 30
-                     nseg = 10, deg = 3) {
+                     #nseg = 10,
+                     nseg = 8,
+                     deg = 3) {
   # Construct B-spline basis
   dx <- (xr - xl) / nseg
   knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)
