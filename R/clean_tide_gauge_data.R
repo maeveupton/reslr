@@ -176,7 +176,7 @@ clean_tidal_gauge_data <- function(data
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(n_obs_by_site = dplyr::n()) %>%
     dplyr::ungroup()
-
+browser()
   SL_tide_site_df <- decadal_NA_TG_df %>%
     # dplyr::select(!all_tidal_data_sites) %>%
     dplyr::mutate(Longitude = round(Longitude, 1)) %>%

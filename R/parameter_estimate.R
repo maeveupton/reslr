@@ -75,8 +75,6 @@ parameter_estimate <- function(jags_output) {
   }
 
   if (inherits(jags_output, "eiv_igp_t") == TRUE) {
-
-
     # Get predictions on a grid of t values.
     Ngrid <- jags_output$jags_data$Ngrid
     tgrid <- jags_output$jags_data$tstar
@@ -84,7 +82,7 @@ parameter_estimate <- function(jags_output) {
     Dist <- jags_output$jags_data$Dist
 
     # Set up the matrix that will contain the estimates
-    pred <- matrix(NA, ncol = Ngrid, nrow = n_iter)
+    pred_full <- matrix(NA, ncol = Ngrid, nrow = n_iter)
     K.gw <- K <- K.w.inv <- array(NA, c(n_iter, Ngrid, Ngrid))
 
     ######## Initialize quadrature for the integration########
@@ -102,7 +100,6 @@ parameter_estimate <- function(jags_output) {
       }
     }
 
-
     # Get posterior samples of rates
     w.ms <- as.matrix(jags_output$noisy_model_run_output$BUGSoutput$sims.list$w.m)
 
@@ -116,21 +113,20 @@ parameter_estimate <- function(jags_output) {
 
       K[i, , ] <- sample_draws$phi[i]^(Dist^1.99)
       K.w.inv[i, , ] <- solve(K[i, , ])
-      pred[i, ] <- sample_draws$alpha[i] + K.gw[i, , ] %*% K.w.inv[i, , ] %*% w.ms[i, ]
+      pred_full[i, ] <- sample_draws$alpha[i] + K.gw[i, , ] %*% K.w.inv[i, , ] %*% w.ms[i, ]
     } # End i loop
     # pred <- pred * mod$scale_factor_y
     # w.ms <- (w.ms * mod$scale_factor_y) / mod$scale_factor_x
-
     # if (mod$BP_scale) w.ms <- -1 * w.ms# Are we missing brackets here?
     # Output dataframes for plots
     output_dataframes <- dplyr::tibble(
       # Should this be predict data instead?
       #t = seq(min(jags_output$data$Age), max(jags_output$data$Age), length.out = 50),
-      #t = jags_output$data_grid$Age,
-      jags_output$data_grid,
-      pred_y = apply(pred, 2, mean),
-      lwr_95 = apply(pred, 2, stats::quantile, probs = 0.025),
-      upr_95 = apply(pred, 2, stats::quantile, probs = 0.975),
+      t = jags_output$data_grid$Age,
+      #jags_output$data_grid,
+      pred = apply(pred_full, 2, mean),
+      lwr_95 = apply(pred_full, 2, stats::quantile, probs = 0.025),
+      upr_95 = apply(pred_full, 2, stats::quantile, probs = 0.975),
       rate_y = apply(w.ms, 2, mean),
       rate_lwr_95 = apply(w.ms, 2, stats::quantile, probs = 0.025),
       rate_upr_95 = apply(w.ms, 2, stats::quantile, probs = 0.975)

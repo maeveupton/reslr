@@ -79,15 +79,19 @@ reslr_mcmc.reslr_input <- function(input_data,
       )
     # )
 
-    # Output from mcmc------------------------
-    mu_post_pred <- model_run$BUGSoutput$sims.list$mu_pred
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(noisy_model_run_output = model_run,
+                                          data_grid,
+                                          rate = FALSE,
+                                          decomposition = FALSE)
 
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      data_grid = data_grid
+      data_grid = data_grid,
+      output_dataframes = output_dataframes
     )
 
     # Classing the JAGS output in NIGAM time--------------
@@ -132,13 +136,18 @@ reslr_mcmc.reslr_input <- function(input_data,
       n.thin = n_thin,
       n.chains = n_chains
     ))
-
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(noisy_model_run_output = model_run,
+                                          data_grid,
+                                          rate = FALSE,
+                                          decomposition = FALSE)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      data_grid = data_grid
+      data_grid = data_grid,
+      output_dataframes = output_dataframes
     )
 
     # Classing the JAGS output in 1 Change Point--------------
@@ -197,13 +206,20 @@ reslr_mcmc.reslr_input <- function(input_data,
       inits = myinitial
     ))
 
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(noisy_model_run_output = model_run,
+                                          data_grid,
+                                          rate = FALSE,
+                                          decomposition = FALSE)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      data_grid = data_grid
+      data_grid = data_grid,
+      output_dataframes = output_dataframes
     )
+
 
     # Classing the JAGS output in 2 Change Point--------------
     class(jags_output) <- c("reslr_output", "eiv_cp2_t")
@@ -259,13 +275,20 @@ reslr_mcmc.reslr_input <- function(input_data,
       inits = myinitial
     ))
 
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(noisy_model_run_output = model_run,
+                                          data_grid,
+                                          rate = FALSE,
+                                          decomposition = FALSE)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      data_grid = data_grid
+      data_grid = data_grid,
+      output_dataframes = output_dataframes
     )
+
 
     # Classing the JAGS output in 3 Change Point--------------
     class(jags_output) <- c("reslr_output", "eiv_cp3_t")
@@ -314,15 +337,18 @@ reslr_mcmc.reslr_input <- function(input_data,
       n.chains = n_chains
     ))
 
-
+    # Output dataframe for plots
+    output_dataframes <- create_igp_output_df(model_run=model_run,
+                                              jags_data=jags_data,
+                                              data_grid = data_grid)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
       jags_data = jags_data,
       data = data,
-      data_grid = data_grid
+      data_grid = data_grid,
+      output_dataframes = output_dataframes
     )
-
     # Classing the JAGS output for eiv_igp_t--------------
     class(jags_output) <- c("reslr_output", "eiv_igp_t")
     message("JAGS model run finished for the eiv_igp_t")
@@ -426,21 +452,27 @@ reslr_mcmc.reslr_input <- function(input_data,
       suppressWarnings(R2jags::jags(
         data = jags_data,
         parameters.to.save = jags_pars,
-        model.file = noisy_jags_file, # textConnection(noise_model_file),
+        model.file = noisy_jags_file,
         n.iter = n_iterations,
         n.burnin = n_burnin,
         n.thin = n_thin,
         n.chains = n_chains
       ))
-    # closeAllConnections()
 
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(noisy_model_run_output,
+                                          data_grid,
+                                          rate = TRUE,
+                                          decomposition = FALSE)
     # Output with everything-------------
     jags_output <- list(
-      noisy_model_run_output = noisy_model_run_output,
+      noisy_model_run_output = noisy_model_run_output, # Watch this
       jags_data = jags_data,
       data = data,
-      data_grid = data_grid
+      data_grid = data_grid,
+      output_dataframes = output_dataframes
     )
+
 
 
     # Classing the JAGS output in NIGAM time--------------
@@ -546,14 +578,20 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.chains = n_chains
       ))
 
-
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(noisy_model_run_output,
+                                          data_grid,
+                                          rate = TRUE,
+                                          decomposition = FALSE)
     # Output with everything-------------
     jags_output <- list(
-      noisy_model_run_output = noisy_model_run_output,
+      noisy_model_run_output = noisy_model_run_output, # Watch this
       jags_data = jags_data,
       data = data,
-      data_grid = data_grid
+      data_grid = data_grid,
+      output_dataframes = output_dataframes
     )
+
     # Classing the JAGS output in NIGAM space time--------------
     class(jags_output) <- c("reslr_output", "ni_spline_st")
     message("JAGS model run finished for the NIGAM in space time")
@@ -741,12 +779,18 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.chains = n_chains
       ))
 
+    # Output from mcmc & dataframes for plots
+    output_dataframes <- create_output_df(noisy_model_run_output,
+                                          data_grid,
+                                          rate = TRUE,
+                                          decomposition = TRUE)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
       jags_data = jags_data,
       data = data,
-      data_grid = data_grid
+      data_grid = data_grid,
+      output_dataframes = output_dataframes
     )
 
     # Classing the JAGS output in NIGAM for RSL decomposition--------------

@@ -1,24 +1,119 @@
+#' Function to create dataframe for plotting using IGP results
+#'
+#' @param model_run_output  The JAGS output
+#' @param jags_data Data associated with IGP data
+#' @param data_grid Input data grid
+#' @noRd
+create_igp_output_df <- function(model_run,jags_data,data_grid){
+  m <- model_run$BUGSoutput$sims.matrix
+  sample_draws <- tidybayes::tidy_draws(m)
+  n_iter <- sample_draws$.iteration %>%
+    unique() %>%
+    length()
+  # If the user sets iteration value extremely high and to save time reduce it
+  if (model_run$n.iter > 10000) {
+    sample_draws <- sample_draws %>% dplyr::slice_sample(n = 1000)
+    n_iterations <- 1000
+  }
+  jags_data <- jags_data
+  # Get predictions on a grid of t values.
+  Ngrid <- jags_data$Ngrid
+  tgrid <- jags_data$tstar
+  tstar <- jags_data$tstar
+  Dist <- jags_data$Dist
+
+  # Set up the matrix that will contain the estimates
+  pred_full <- matrix(NA, ncol = Ngrid, nrow = n_iter)
+  K.gw <- K <- K.w.inv <- array(NA, c(n_iter, Ngrid, Ngrid))
+
+  ######## Initialize quadrature for the integration########
+  L <- 30 ## this sets the precision of the integration quadrature (higher is better but more computationally expensive)
+  index <- 1:L
+  cosfunc <- cos(((2 * index - 1) * pi) / (2 * L))
+
+  quad1 <- array(dim = c(nrow = Ngrid, ncol = Ngrid, L))
+  quad2 <- array(dim = c(nrow = Ngrid, ncol = Ngrid, L))
+
+  for (j in 1:Ngrid) {
+    for (k in 1:Ngrid) {
+      quad1[k, j, ] <- abs((tgrid[k] * cosfunc / 2) + (tgrid[k] / 2) - tstar[j])^1.99
+      quad2[k, j, ] <- ((tgrid[k] / 2) * (pi / L)) * (sqrt(1 - cosfunc^2))
+    }
+  }
+
+
+  # Get posterior samples of rates
+  w.ms <- as.matrix(model_run$BUGSoutput$sims.list$w.m)
+
+  # Get estimates
+  for (i in 1:n_iter) {
+    for (k in 1:Ngrid) {
+      for (j in 1:Ngrid) {
+        K.gw[i, j, k] <- sum((sample_draws$phi[i]^quad1[j, k, ]) * quad2[j, k, ]) #### Quadrature function
+      } # End j loop
+    } # End k loop
+
+    K[i, , ] <- sample_draws$phi[i]^(Dist^1.99)
+    K.w.inv[i, , ] <- solve(K[i, , ])
+    pred_full[i, ] <- sample_draws$alpha[i] + K.gw[i, , ] %*% K.w.inv[i, , ] %*% w.ms[i, ]
+  } # End i loop
+  # pred_full <- pred_full * mod$scale_factor_y
+  # w.ms <- (w.ms * mod$scale_factor_y) / mod$scale_factor_x
+
+  # Output dataframes for plots
+  output_dataframes <- dplyr::tibble(
+    data_grid,
+    pred = apply(pred_full, 2, mean),
+    lwr_95 = apply(pred_full, 2, stats::quantile, probs = 0.025),
+    upr_95 = apply(pred_full, 2, stats::quantile, probs = 0.975),
+    upr_50 = apply(pred_full, 2, stats::quantile, probs = 0.25),
+    lwr_50 = apply(pred_full, 2, stats::quantile, probs = 0.75),
+    rate_pred = apply(w.ms, 2, mean),
+    rate_lwr_95 = apply(w.ms, 2, stats::quantile, probs = 0.025),
+    rate_upr_95 = apply(w.ms, 2, stats::quantile, probs = 0.975),
+    rate_upr_50 = apply(w.ms, 2, stats::quantile, probs = 0.25),
+    rate_lwr_50 = apply(w.ms, 2, stats::quantile, probs = 0.75)
+  )
+  return(output_dataframes)
+}
+
+
 #' Function to create the dataframes for plotting
 #'
-#' @param jags_output The JAGS output
+#' @param noisy_model_run_output The JAGS output
 #' @param rate_df If rate of change is included in the dataframe
 #' @param decomposition Is the full model decomposition included in dataframe
 #' @noRd
-create_output_df <- function(jags_output,
+create_output_df <- function(noisy_model_run_output,
+                             data_grid,#jags_output,
                              rate_df = "FALSE",
-                             decomposition = "FALSE"){
-  mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+                             decomposition = "FALSE") {
+  #mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+  mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
   output_dataframes <- data.frame(
-    jags_output$data_grid,
+    #jags_output$data_grid,
+    data_grid,
     pred = apply(mu_post_pred, 2, mean),
     upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
     lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
     upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-    lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
-    #ID = "Total Posterior Model"
-  )
-  if(rate_df == "TRUE"){
-    mu_pred_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
+    lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
+  # ID = "Total Posterior Model"
+  if (rate_df == "TRUE") {
+    #mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    output_dataframes <- data.frame(
+      #jags_output$data_grid,
+      data_grid,
+      pred = apply(mu_post_pred, 2, mean),
+      upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+      lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
+    # ID = "Total Posterior Model"
+
+    #mu_pred_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
+    mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
     output_dataframes <- data.frame(
       output_dataframes,
       rate_pred =  apply(mu_pred_deriv_post, 2, mean),
@@ -27,43 +122,122 @@ create_output_df <- function(jags_output,
       rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
       rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
     )
-  }
-  else{
+  } else {
+    #mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    output_dataframes <- data.frame(
+      #jags_output$data_grid,
+      data_grid,
+      pred = apply(mu_post_pred, 2, mean),
+      upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+      lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
+    # ID = "Total Posterior Model"
     output_dataframes <- output_dataframes
   }
 
-  # if ("linear_rate" %in% colnames(jags_output$data_grid) & "linear_rate_err" %in% colnames(jags_output$data_grid)) {
-  #   output_dataframes <- data.frame(
-  #     output_dataframes,
-  #     linear_rate = jags_output$data_grid$linear_rate,
-  #     linear_rate_err = jags_output$data_grid$linear_rate_err
-  #   )
-  # }
-  # if("data_type_id" %in% colnames(jags_output$data_grid)){
-  #   output_dataframes <- data.frame(
-  #     output_dataframes,
-  #     data_type_id = jags_output$data_grid$data_type_id
-  #   )
-  # }
+  if (decomposition == TRUE & rate_df == TRUE) {
+    # Total Component from JAGS output
+    mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    total_model_fit_df <- data.frame(
+      data_grid,
+      pred = apply(mu_post_pred, 2, mean),
+      upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+      lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
+      ID = "Total Posterior Model")
 
-  if(decomposition == TRUE & rate_df == TRUE){
+    mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
+    total_model_rate_df <-
+      data.frame(
+        data_grid,
+        rate_pred =  apply(mu_pred_deriv_post, 2, mean),
+        rate_upr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+        rate_lwr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+        rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
+        rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75),
+        ID = "Total Rate of Change for Posterior Model")
+    # Regional component
+    time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred
+    regional_component_df <- data.frame(
+      data_grid,
+      pred = apply(time_component_pred_post, 2, mean),
+      upr_95 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.025),
+      lwr_95 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.975),
+      upr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.25),
+      lwr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.75),
+      ID = "Regional Component")
+
+    time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred_deriv
+    regional_rate_component_df <-
+      data.frame(
+      data_grid,
+      rate_pred =  apply(time_component_pred_deriv_post, 2, mean),
+      rate_upr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+      rate_lwr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+      rate_upr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
+      rate_lwr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
+      ID = "Rate of Change for Regional Component")
+
+    # Vertical Offset & Linear Local Component
+    g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x_pred
+    lin_loc_component_df <-
+      data.frame(
+        data_grid,
+        pred = apply(g_h_component_pred_post, 2, mean),
+        upr_95 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.025),
+        lwr_95 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.975),
+        upr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.25),
+        lwr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.75),
+        ID = "Site Specific vertical offset + \n Linear Local Component")
+
+    # Non linear local component
+    space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred
+    non_lin_loc_component_df <-
+      data.frame(
+        data_grid,
+        pred = apply(space_time_component_pred_post, 2, mean),
+        upr_95 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.025),
+        lwr_95 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.975),
+        upr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.25),
+        lwr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.75),
+        ID = "Non Linear Local Component")
+    space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred_deriv
+    non_lin_loc_rate_component_df <-
+      data.frame(
+        data_grid,
+        rate_pred =  apply(space_time_component_pred_deriv_post, 2, mean),
+        rate_upr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+        rate_lwr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+        rate_upr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
+        rate_lwr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
+        ID = "Rate of Change for Non Linear Local Component")
+
+
     output_dataframes <- list(
-      # total_model_df = total_model_df,
-      # total_model_rate_df = total_model_rate_df,
-      mod_output_pred_df = mod_output_pred_df,
-      mod_output_pred_deriv_df = mod_output_pred_deriv_df,
-
-      # time_post_component_df = time_post_component_df,
-      # time_deriv_component_post_df = time_deriv_component_post_df,
-      time_post_pred_component_df = time_post_pred_component_df,
-      time_post_pred_deriv_component_df = time_post_pred_deriv_component_df,
-      # g_h_component_post_df = g_h_component_post_df,
-      g_h_component_pred_post_df = g_h_component_pred_post_df,
-      # space_time_component_post_df = space_time_component_post_df,
-      # space_time_component_deriv_post_df = space_time_component_deriv_post_df,
-      space_time_component_pred_post_df = space_time_component_pred_post_df,
-      space_time_component_pred_deriv_post_df = space_time_component_pred_deriv_post_df
+      total_model_fit_df = total_model_fit_df,
+      total_model_rate_df = total_model_rate_df,
+      regional_component_df = regional_component_df,
+      regional_rate_component_df = regional_rate_component_df,
+      lin_loc_component_df = lin_loc_component_df,
+      non_lin_loc_component_df=non_lin_loc_component_df,
+      non_lin_loc_rate_component_df = non_lin_loc_rate_component_df
     )
+  }
+  else {
+    mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    output_dataframes <- data.frame(
+      #jags_output$data_grid,
+      data_grid,
+      pred = apply(mu_post_pred, 2, mean),
+      upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+      lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
+    # ID = "Total Posterior Model"
+    output_dataframes <- output_dataframes
   }
 
   return(output_dataframes)
@@ -83,8 +257,7 @@ add_noisy_input <- function(model_run, model_type, data) {
       # Create the regional basis functions
       B_deriv_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age)
-      ) # nseg = 5)#20)# Automate this
+        xr = max(data$Age))
       #----Deriv----
       return(B_deriv_t %*% colMeans(b_t_post))
     }
@@ -101,19 +274,15 @@ add_noisy_input <- function(model_run, model_type, data) {
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
         xr = max(data$Age)
-      ) # , nseg = 3,
-      # deg = 2)
+      )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude)
-      ) # , nseg = 3,
-      # deg = 2)
+      )
       B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude)
-      ) # , nseg = 3,
-      # deg = 2)
-
+      )
       B_l_deriv_full <- matrix(NA,
         ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
         nrow = nrow(data)
@@ -152,10 +321,11 @@ add_noisy_input <- function(model_run, model_type, data) {
       # Create the regional basis functions
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),nseg = 8
-      ) # , nseg = 20)
+        xr = max(data$Age),
+        nseg = 8
+      )
       #----Deriv----
-      return(intercept_post[data$SiteName] + B_t %*% colMeans(b_t_post) +b_g_post[data$SiteName] * (t_new))
+      return(intercept_post[data$SiteName] + B_t %*% colMeans(b_t_post) + b_g_post[data$SiteName] * (t_new))
     }
     #-------Now create derivatives----
     h <- 0.01
@@ -168,7 +338,6 @@ add_noisy_input <- function(model_run, model_type, data) {
 
   # Writing new dataframe with noisy extra column------
   data <- data.frame(data)
-  # message("Noise Added to data frame")
   return(data)
 }
 
@@ -178,11 +347,10 @@ add_noisy_input <- function(model_run, model_type, data) {
 #' @param data Input data
 #' @noRd
 
-igp_data <- function(data,data_grid) {
+igp_data <- function(data, data_grid) {
   Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
   ############# Set up the grid for the GP ###################
-  #tgrid <- seq(min(data$Age), max(data$Age), length.out = 50)
-  tgrid <- data_grid$Age#*1000
+  tgrid <- data_grid$Age
   Ngrid <- length(tgrid)
 
   ### Change data to lower zero for integration
@@ -246,8 +414,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Create the regional basis functions
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age)
-      ) # , nseg = 5)#20)
+        xr = max(data$Age))
       return(B_t)
     }
     # Now create derivatives----------------------
@@ -260,7 +427,8 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # Basis functions in time using prediction data frame-----------------------
     t_pred <- sort(data_grid$Age)
     B_t_pred <- bs_bbase(t_pred,
-      xl = min(t), xr = max(t))
+      xl = min(t), xr = max(t)
+    )
     # Now create derivatives----------------------
     # h <- 0.001
     h <- 0.01
@@ -285,18 +453,15 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     B_time <- bs_bbase(t,
       xl = min(t),
       xr = max(t)
-    ) # nseg = 3,
-    # deg = 2)
+    )
     B_space_1 <- bs_bbase(data$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude)
-    ) # , nseg = 3,
-    # deg = 2)
+    )
     B_space_2 <- bs_bbase(data$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude)
-    ) # , nseg = 3,
-    # deg = 2)
+    )
 
     B_st_full <- matrix(NA,
       ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
@@ -327,18 +492,15 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
         xr = max(data$Age)
-      ) # , nseg = 3,
-      # deg = 2)
+      )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude)
-      ) # , nseg = 3,
-      # deg = 2)
+      )
       B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude)
-      ) # , nseg = 3,
-      # deg = 2)
+      )
 
       B_st_full <- matrix(NA,
         ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
@@ -362,7 +524,6 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     }
     # Now create derivatives----
     h <- 0.001
-    # t = data$Age
 
     first_deriv_step1 <- first_deriv_calc(t + h)
     first_deriv_step2 <- first_deriv_calc(t - h)
@@ -373,24 +534,21 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     B_pred_time <- bs_bbase(data_grid$Age,
       xl = min(data$Age),
       xr = max(data$Age)
-    ) # , nseg = 3,
-    # deg = 2)
+    )
     B_space_1 <- bs_bbase(data_grid$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude)
-    ) # , nseg = 3,
-    # deg = 2)
+    )
     B_space_2 <- bs_bbase(data_grid$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude)
-    ) # , nseg = 3,#6
-    # deg = 2)
+    )
 
     suppressWarnings({
       B_st_pred_full <- matrix(NA,
         ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1),
         nrow = nrow(data_grid)
-      ) # Not sure here?? nrow(data)
+      )
       regional_knots_loc <- rep(NA,
         ncol = ncol(B_pred_time) * ncol(B_space_1) * ncol(B_space_1)
       )
@@ -414,23 +572,20 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
         xr = max(data$Age)
-      ) # , nseg = 3,
-      # deg = 2)
+      )
       B_space_1 <- bs_bbase(data_grid$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude)
-      ) # , nseg = 3,
-      # deg = 2)
+      )
       B_space_2 <- bs_bbase(data_grid$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude)
-      ) # , nseg = 3,
-      # deg = 2)
+      )
 
       B_st_full <- matrix(NA,
         ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
         nrow = nrow(data_grid)
-      ) # nrow(data))
+      )
       regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
       count <- 1
       for (i in 1:ncol(B_time)) {
@@ -445,7 +600,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 
       # Get rid of all the columns which are just zero
       # B_st <- B_st_full[,-which(colSums(B_st_full) < 0.1)]
-      B_st <- B_st_full[, -remove_col_index] # Not sure here
+      B_st <- B_st_full[, -remove_col_index]
       return(B_st)
     }
     h <- 0.001
@@ -463,13 +618,13 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       B_st_pred = B_st_pred,
       B_st_deriv_pred = B_st_deriv_pred
     )
-
   }
 
   if (model_type == "ni_gam_decomp") {
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase(data$Age,
-      xl = min(data$Age), xr = max(data$Age),nseg = 8)
+      xl = min(data$Age), xr = max(data$Age), nseg = 8
+    )
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
       # Create the regional basis functions
@@ -481,7 +636,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       return(B_t)
     }
     # Now create derivatives----------------------
-    h <- 0.00001#h <- 0.001
+    h <- 0.00001 # h <- 0.001
     t <- data$Age
     first_deriv_step1 <- first_deriv_calc(t + h)
     first_deriv_step2 <- first_deriv_calc(t - h)
@@ -489,9 +644,10 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 
     # Basis functions in time using prediction data frame-----------------------
     B_t_pred <- bs_bbase(data_grid$Age,
-      xl = min(data$Age), xr = max(data$Age),nseg = 8)
+      xl = min(data$Age), xr = max(data$Age), nseg = 8
+    )
     # Now create derivatives----------------------
-    h <- 0.00001#h <- 0.001
+    h <- 0.00001 # h <- 0.001
     t_pred <- data_grid$Age
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
     first_deriv_step2 <- first_deriv_calc(t_pred - h)
@@ -501,13 +657,16 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # Basis functions in space time for data-----------------------
     B_time <- bs_bbase(data$Age,
       xl = min(data$Age),
-      xr = max(data$Age),nseg = 6)
+      xr = max(data$Age), nseg = 6
+    )
     B_space_1 <- bs_bbase(data$Latitude,
       xl = min(data$Latitude),
-      xr = max(data$Latitude),nseg = 6)
+      xr = max(data$Latitude), nseg = 6
+    )
     B_space_2 <- bs_bbase(data$Longitude,
       xl = min(data$Longitude),
-      xr = max(data$Longitude),nseg = 6)
+      xr = max(data$Longitude), nseg = 6
+    )
 
     B_st_full <- matrix(NA,
       ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
@@ -537,17 +696,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),  nseg = 6
+        xr = max(data$Age), nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude),  nseg = 6
+        xr = max(data$Latitude), nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude),  nseg = 6
+        xr = max(data$Longitude), nseg = 6
         # deg = 2
       )
 
@@ -572,7 +731,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       return(B_st)
     }
     #-------Now create derivatives----
-    h <- 0.00001#h <- 0.0001
+    h <- 0.00001 # h <- 0.0001
     t <- data$Age
 
     first_deriv_step1 <- first_deriv_calc(t + h)
@@ -588,12 +747,12 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     )
     B_space_1 <- bs_bbase(data_grid$Latitude,
       xl = min(data$Latitude),
-      xr = max(data$Latitude),  nseg = 6
+      xr = max(data$Latitude), nseg = 6
       # deg = 2
     )
     B_space_2 <- bs_bbase(data_grid$Longitude,
       xl = min(data$Longitude),
-      xr = max(data$Longitude),  nseg = 6
+      xr = max(data$Longitude), nseg = 6
       # deg = 2
     )
 
@@ -624,17 +783,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),  nseg = 6
+        xr = max(data$Age), nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase(data_grid$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude),  nseg = 6
+        xr = max(data$Latitude), nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase(data_grid$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude),  nseg = 6
+        xr = max(data$Longitude), nseg = 6
         # deg = 2
       )
 
@@ -659,7 +818,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       B_st <- B_st_full[, -remove_col_index] # Not sure here
       return(B_st)
     }
-    h <- 0.00001#h <- 0.001
+    h <- 0.00001 # h <- 0.001
     t_pred <- data_grid$Age
 
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
@@ -678,12 +837,12 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),  nseg = 6
+        xr = max(data$Age), nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude),  nseg = 6
+        xr = max(data$Latitude), nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase(data$Longitude,
@@ -727,7 +886,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       return(output_B_tot)
     }
     #-------Now create derivatives----
-    h <- 0.00001#h <- 0.0001
+    h <- 0.00001 # h <- 0.0001
     t <- data$Age
 
     first_deriv_step1 <- first_deriv_calc(t + h)
@@ -780,7 +939,7 @@ tpower <- function(x, t, p) {
   # Truncated p-th power function
   return((x - t)^p * (x > t))
 }
-bs_bbase <- function(x, xl = min(x), xr = max(x),#30
+bs_bbase <- function(x, xl = min(x), xr = max(x), # 30
                      nseg = 10, deg = 3) {
   # Construct B-spline basis
   dx <- (xr - xl) / nseg

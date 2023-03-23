@@ -183,15 +183,19 @@ The general structure for running `reslr` is as follows:
 
 **Step 1.** Load in the data using `reslr_load`. If tide gauge data required update the argument `include_tide_gauge = TRUE`. If linear_rate is of interest to the user update the argument `include_linear_rate = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100` with the default of 100 years. The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
 
+**Step 1a.** The `print` function provides a brief insight into the inputted data.
+
 **Step 2.** Plot the raw data using `plot`
 
-**Step 3.** Choose your preferred model type from the available list above and use the `reslr_mcmc` function to obtain the parameter estimates
+**Step 3.** Choose your preferred model type from the available list above and use the `reslr_mcmc` function to obtain the parameter estimates and the dataframes required for plotting the outputs.
 
-**Step 4.** Check the model converged with `check_convergence`
+**Step 3a.** The `print` function provides a brief insight into the output of the `reslr_mcmc` function.
+
+**Step 4.** Check the model converged and examine the results of the parameters with the `summary` function 
+
+**Step 5.** Visualise the results with `plot`
 
 **Step 5.** Examine the results of the parameters using `parameter_estimate` and access the dataframes used in creating the summaries.
-
-**Step 6.** Visualize the results with `plot`
 
 
 ## Errors-in-Variables Simple Linear Regression (**"eiv_slr_t"**)
@@ -224,7 +228,10 @@ data <- CedarIslandNC$data
 ```{r, eval = TRUE}
 data_grid <- CedarIslandNC$data_grid
 ```
-
+**Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
+```{r, eval=TRUE}
+print(CedarIslandNC)
+```
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -252,12 +259,16 @@ jags_output.eiv_slr_t <- reslr::reslr_mcmc(
 ```
 This command takes the input data and the user specifies the statistical model, i.e. a simple linear regression using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `jags_ouput.eiv_slr_t`.
 
-
+**Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
+```{r, eval=TRUE}
+print(jags_output.eiv_slr_t)
+```
 **Step 4:** To examine if the algorithm has converged use:
 ```{r eval = TRUE}
 reslr::check_convergence(object = jags_output.eiv_slr_t)
 ```
 If the model run has converged properly the values should be close to 1. If they are above 1.1, we recommend a longer run. 
+
 
 **Step 5:** When the model has successfully converged, the user can view the parameter estimates using the following:
 ```{r eval = TRUE}
@@ -322,7 +333,7 @@ jags_output.eiv_cp1_t <- reslr::reslr_mcmc(
   model_type = "eiv_cp_t", n_cp = 1
 )
 ```
-To note, for 2 change points the user should use:
+If the user is interested in running 2 change points use method:
 ```{r eval = TRUE}
 jags_output.eiv_cp2_t <- reslr::reslr_mcmc(
   input_data =  CedarIslandNC,
