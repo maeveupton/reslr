@@ -112,8 +112,8 @@ reslr_load <- function(data,
   data_age_boundary <- data %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(
-      max_Age = max(Age) + 10/1000,# + (n_prediction / 1000),
-      min_Age = min(Age) - 10/1000# - (n_prediction / 1000)
+      max_Age = max(Age)  + (n_prediction / 1000),
+      min_Age = min(Age) -(n_prediction / 1000)
     ) %>%
     unique()
   # }
@@ -130,20 +130,6 @@ reslr_load <- function(data,
   data_grid_test <- data_grid %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(minAge_range = min(Age) * 1000, maxAge_range = max(Age) * 1000)
-
-  # # Calculating GIA using linear regression through the data ------------------
-  # if(GIA_rate_provided == "TRUE" & GIA_rate_sd_provided == "TRUE"){
-  #
-  #   cat("Using rate and associated uncertainty of the rate provided by the user")
-  # }
-  # else{
-  #   cat("No rate or associated uncertainty provided, package will calculate it using the data")
-  # }
-  # if (calculate_GIA_rate == "TRUE") {
-  #   lm_data_rates <- linear_reg_rates(data)
-  #   data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
-  #   cat("Calculated GIA rate and uncertainty using the input data")
-  # }
 
   # Ensuring SiteName is a factor
   data <- data %>%

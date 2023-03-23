@@ -103,7 +103,7 @@ linear_reg_rates <- function(data) {
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(
       linear_rate = round(stats::lm(RSL ~ Age)$coefficients[[2]], 2),
-      linear_rate_err = summary(stats::lm(RSL ~ Age))$coefficients[2, 2]
+      linear_rate_err = base::summary(stats::lm(RSL ~ Age))$coefficients[2, 2]
     )
 
 
