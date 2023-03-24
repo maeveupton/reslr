@@ -851,7 +851,7 @@ non_lin_loc_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$non_
 In this package, we have described three ways to select a tide gauge and in the example we showed how to include the closest tide gauge to the proxy site. Here we are demonstrating the other options available to the user.
 
 If the user has a list of chosen tide gauges from PSMSL website, include them in a list in the `reslr_load` function as demonstrated: 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 multi_site <- reslr::reslr_load(data = multi_site,
                                 include_tide_gauge = TRUE,
                                 include_linear_rate = TRUE,
@@ -864,7 +864,7 @@ multi_site <- reslr::reslr_load(data = multi_site,
                                 n_prediction = 100)
 ```
 Here is a plot of the output example:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(
   x =  multi_site,
   title = "Plot of the raw data",
@@ -876,7 +876,7 @@ plot(
 
 If the user requires all tide gauges within 1 degree of the proxy site, which is the equivalent of 111kms, this can be done by updating `all_TG_1deg=TRUE` in the following way:
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 multi_site <- reslr::reslr_load(data = multi_site,
                                 include_tide_gauge = TRUE,
                                 include_linear_rate = TRUE,
@@ -886,7 +886,7 @@ multi_site <- reslr::reslr_load(data = multi_site,
                                 n_prediction = 100)
 ```
 Here is a plot of the output example:
-```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(
   x =  multi_site,
   title = "Plot of the raw data",
