@@ -12,6 +12,21 @@ vignette: >
 editor_options: 
   chunk_output_type: console
 ---
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "vig/"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+<!-- avoid border around images -->
+<style>
+  img {
+    border: 0;
+  }
+</style>
 
 ## Introduction
 
