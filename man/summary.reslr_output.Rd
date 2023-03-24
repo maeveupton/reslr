@@ -7,14 +7,14 @@ Produces summaries and convergence diagnostics for an object created with \code{
 The different options are:
 "diagnostics" to assess MCMC convergence}
 \usage{
-\method{summary}{reslr_output}(object, type = c("diagnostics", "parameter_estimates"), ...)
+\method{summary}{reslr_output}(object, ...)
 }
 \arguments{
 \item{object}{Output object from the \code{\link{reslr_mcmc}}}
 
-\item{type}{User decides which type of summary they require}
-
 \item{...}{Not in use}
+
+\item{type}{User decides which type of summary they require}
 }
 \value{
 A list containing convergence diagnostics
