@@ -272,10 +272,11 @@ clean_tidal_gauge_data <- function(data,
     dplyr::filter(minimum_dist == min(minimum_dist)) %>%
     dplyr::distinct(nearest_TG,.keep_all = TRUE)# Removing any duplicate tide gauge sites.
 
+
+
   # Joining the selected TG sites back with the original data
   join_new_index_tide_df <- SL_tide_site_df %>%
     dplyr::filter(SiteName %in% all_nearest_TG_closest$nearest_TG)
-
 
   #--There will be NAs were the proxy data doesn't have a corresponding index--
   data_tide_proxy <- plyr::rbind.fill(
