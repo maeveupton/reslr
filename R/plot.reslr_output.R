@@ -777,17 +777,18 @@ plot.reslr_output <- function(x,
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
     # Dataframes to plot
     output_dataframes <- jags_output$output_dataframes
-
+    data <- jags_output$data
     # Plots Total --------
     total_model_fit_df <- output_dataframes$total_model_fit_df
+
     plot_result<-
       ggplot2::ggplot() +
-      ggplot2::geom_rect(data = total_model_fit_df, ggplot2::aes(
+      ggplot2::geom_rect(data = data, ggplot2::aes(
         xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
         ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
       ), alpha = 0.4) +
       ggplot2::geom_point(
-        data = total_model_fit_df,
+        data = data,
         ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
       ) +
       ggplot2::geom_line(
@@ -931,11 +932,11 @@ plot.reslr_output <- function(x,
     regional_rate_plot<-
       ggplot2::ggplot()+
       ggplot2::geom_line(data=regional_rate_component_df,
-                         ggplot2::aes(x=Age*1000,y=pred),colour="#3b47ad")+
+                         ggplot2::aes(x=Age*1000,y=rate_pred),colour="#3b47ad")+
       ggplot2::geom_ribbon(data=regional_rate_component_df,
-                           ggplot2::aes(ymin=lwr_95,ymax=upr_95,x=Age*1000),fill="#3b47ad",alpha=0.2)+
+                           ggplot2::aes(ymin=rate_lwr_95,ymax=rate_upr_95,x=Age*1000),fill="#3b47ad",alpha=0.2)+
       ggplot2::geom_ribbon(data=regional_rate_component_df,
-                           ggplot2::aes(ymin=lwr_50,ymax=upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
+                           ggplot2::aes(ymin=rate_lwr_50,ymax=rate_upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
       ggplot2::theme_bw()+
       #ggplot2::ggtitle("Prediction Rate of Change")+
       ggplot2::theme(plot.title = ggplot2::element_text(size=15),
@@ -1018,15 +1019,15 @@ plot.reslr_output <- function(x,
       ggplot2::ggplot() +
       ggplot2::geom_line(
         data = non_lin_loc_rate_component_df,
-        ggplot2::aes(x = Age * 1000, y = pred), colour = "#ad4c14"
+        ggplot2::aes(x = Age * 1000, y = rate_pred), colour = "#ad4c14"
       ) +
       ggplot2::geom_ribbon(
         data = non_lin_loc_rate_component_df,
-        ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000), fill = "#ad4c14", alpha = 0.2
+        ggplot2::aes(ymin = rate_lwr_95, ymax = rate_upr_95, x = Age * 1000), fill = "#ad4c14", alpha = 0.2
       ) +
       ggplot2::geom_ribbon(
         data = non_lin_loc_rate_component_df,
-        ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#ad4c14", alpha = 0.3
+        ggplot2::aes(ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000), fill = "#ad4c14", alpha = 0.3
       ) +
       ggplot2::theme_bw() +
       ggplot2::ylab("Rate of Change (mm/year)") +

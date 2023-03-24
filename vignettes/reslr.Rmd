@@ -109,15 +109,15 @@ The user must ensure that the input data is a dataframe. For a single site or mu
 
 ### Tide Gauge Data
 There is an option in the `reslr` package to include tide gauge data as an additional source of data which we recommend when using the `model_type = "ni_gam_decomp"`. The package will select a tide gauge site utilising the annual data from the [PSMSL website](https://psmsl.org/data/obtaining/complete.php). Within the package, the tide gauge data is averaged over a decade to make it comparable with proxy records. An additional column, called `data_type_id`, is added to the dataset which identifies the data source "ProxyRecord" or "TideGaugeData" depending on the observation in question.
+The tide gauges undergo a cleaning process within the package. Firstly, certain tide gauges have been flagged by the PSMSL website and have been removed. Secondly, each tide gauge data record must have data longer than 20 years and if this is not the case, the tide gauge is removed. The output will be decadaly averaged tide gauge data. 
 
-To select the preferred tide gauge, the following criteria are used:**Going to get the user decide these**
+Within the `reslr_load` function, the user has three options to choose from:
+1. Provide a list of the preferred tide gauges from the [PSMSL website](https://psmsl.org/data/obtaining/), ensuring spelling, captailisation and spacing is exactly the same as the website. Note, the package will not work if error in spelling occurs. In addition, certain tide gauges have been flagged by the PSMSL website and are not included in this package and will return an error if selected.
 
-1. Each tide gauge data record must have data longer than 20 years. 
-2. Next, the nearest tide gauge to proxy site based on minimum distance in kilometers from the proxy site or be within 1 degrees distance to a proxy site and longer than 20 years
-3. For larger data sets, tide gauges with longer than 150 years in close proximity are included.
+2. The nearest tide gauge to proxy site based on minimum distance in kilometers 
 
-Within the `reslr_load`, the user has three options to choose from:
-- Provide a list of the prefered tide gauges from the PSMSL website, ensuring spelling
+3. Any tide gauge within 1 degree from the proxy site.
+
 
 
 ### Glacial Isostatic Adjustment (GIA) 
@@ -185,7 +185,11 @@ data_multisite <- reslr::NAACproxydata %>% dplyr::filter(Site %in% c(
 
 The general structure for running `reslr` is as follows:
 
-**Step 1.** Load in the data using `reslr_load`. If tide gauge data required update the argument `include_tide_gauge = TRUE`. If linear_rate is of interest to the user update the argument `include_linear_rate = TRUE`. The user can select the resolution of the output by changing the value of `n_prediction = 100` with the default of 100 years. The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
+**Step 1.** Load in the data using `reslr_load`. 
+If tide gauge data required update the argument `include_tide_gauge = TRUE`, from this the user is request to choose whether to provide the list of names for the tide gauges from PSMSL website that the wish to use, `list_preferred_TGs`, or let the package find the tide gauge closest to the proxy site `TG_minimum_dist_proxy`. 
+If linear_rate is of interest to the user update the argument `include_linear_rate = TRUE`. 
+The user can select the resolution of the output by changing the value of `n_prediction = 100` with the default of 100 years. 
+The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
 
 **Step 1a.** The `print` function provides a brief insight into the inputted data.
 
@@ -292,7 +296,7 @@ The output of this function is a graph of the input data, i.e. Age and RSL and a
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
 output_dataframes <- jags_output.eiv_slr_t$output_dataframes
-output_dataframes
+head(output_dataframes)
 ```
 
 
@@ -394,7 +398,7 @@ The output of this function is a graph of the input data, i.e. Age and RSL and a
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
 output_dataframes <- jags_output.eiv_cp1_t$output_dataframes
-output_dataframes
+head(output_dataframes)
 ```
 
 
@@ -487,7 +491,7 @@ The output of this function is a graph of the input data, i.e. Age and RSL and a
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
 output_dataframes <- jags_output.eiv_igp_t$output_dataframes
-output_dataframes
+head(output_dataframes)
 ```
 
 
@@ -559,7 +563,7 @@ print(jags_output.ni_spline_t)
 summary(jags_output.ni_spline_t)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
-```{r,eval = FALSE}
+```{r,eval = TRUE}
 jags_output.ni_spline_t <- reslr::reslr_mcmc(
   input_data =  CedarIslandNC,
   model_type = "ni_spline_t",
@@ -573,7 +577,7 @@ jags_output.ni_spline_t <- reslr::reslr_mcmc(
 For the parameter estimates, we can present the standard deviation associated with the NI spline time model. Where "sigma_r" highlights the variation associated with the temporal model and "sigma_res" presenting the overall variation.
 
 **Step 5:** the results from the ni_spline_t model can be illustrated using:
-```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output.ni_spline_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the ni_spline_t is presented when using this function.
@@ -581,7 +585,7 @@ The output of this function is a graph of the input data, i.e. Age and RSL and a
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
 output_dataframes <- jags_output.ni_spline_t$output_dataframes
-output_dataframes
+head(output_dataframes)
 ```
 
 
@@ -649,7 +653,7 @@ print(jags_output.ni_spline_st)
 summary(jags_output.ni_spline_st)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
-```{r,eval = FALSE}
+```{r,eval = TRUE}
 jags_output.ni_spline_st <- reslr::reslr_mcmc(
   input_data =  multi_site,
   model_type = "ni_spline_st",
@@ -671,7 +675,7 @@ The output of this function is a graph of the input data, i.e. Age and RSL and a
 To examine the data creating these plots, can be accessed by the user:
 ```{r eval = TRUE}
 output_dataframes <- jags_output.ni_spline_st$output_dataframes
-output_dataframes
+head(output_dataframes)
 ```
 
 
@@ -815,16 +819,6 @@ non_lin_loc_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$non_
 ## Advanced 
 
 ### Plotting techniques
-In this section, we highlight additional information in regard to plotting the final results. For all our plots, the user is provided with the data - frame used to create the plot which can be accessed using the following function:
-```{r,eval = FALSE}
-output_dataframes <- parameter_estimate(jags_output = reslr_mcmc(x =  CedarIslandNC, model_type = "ni_spline_t"))
-total_model_fit_df <- output_dataframes$output_dataframe$total_model_df
-total_model_fit_df
-rate_fit_df <- output_dataframes$output_dataframe$total_model_rate_df
-rate_fit_df
-```
-Note, the `model_type = "ni_spline_t` is used as an example and can be changed to use all `model_type` options described above. When the `model_type = "ni_gam_decomp` there is a separate data-frame created for each component which is accessed in the same way.
-
 In the package, all plot labels for results, i.e. x and y labels and titles, can be updated in the following manner:
 ```{r, eval = FALSE}
 # Example
@@ -835,7 +829,13 @@ final_plots$plot_result + ggplot2::ggtitle("New Title Added as Example")
 final_plots$plot_result + ggplot2::xlab("New x axis label Added as Example")
 final_plots$plot_result + ggplot2::ylab("New y axis label Added as Example")
 ```
-
+### Accessing the posterior samples
+In the package the user has the ability accesss all the posterior sample for each unknown parameter in the following way:
+```{r, eval = FALSE}
+# Example
+jags_output.eiv_slr_t <- reslr::reslr_mcmc(x =  CedarIslandNC, model_type = "eiv_slr_t")
+jags_output.eiv_slr_t$noisy_model_run_output$BUGSoutput$sims.list$beta
+```
 
 ## Appendix - suggested reading
 For an introduction into statistical modelling for relative sea level change:

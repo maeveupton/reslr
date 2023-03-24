@@ -13,8 +13,6 @@ The different options are:
 \item{object}{Output object from the \code{\link{reslr_mcmc}}}
 
 \item{...}{Not in use}
-
-\item{type}{User decides which type of summary they require}
 }
 \value{
 A list containing convergence diagnostics

@@ -4,7 +4,6 @@
 #' "diagnostics" to assess MCMC convergence
 #'
 #' @param object Output object from the \code{\link{reslr_mcmc}}
-#' @param type User decides which type of summary they require
 #' @param ... Not in use
 #'
 #' @return A list containing convergence diagnostics
@@ -16,7 +15,7 @@
 #' jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 #' summary(object = jags_output)
 summary.reslr_output <- function(object, # jags_output,
-                                 # type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",
+                                 # type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",#' @param type User decides which type of summary they require
                                  ...) {
   mu_pred <- object <- jags_output <- sd <- mad <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
   #browser()

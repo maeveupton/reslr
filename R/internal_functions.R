@@ -939,7 +939,8 @@ tpower <- function(x, t, p) {
 }
 bs_bbase <- function(x, xl = min(x), xr = max(x), # 30
                      #nseg = 10,
-                     nseg = 8,
+                     #nseg = 8,
+                     nseg = 3,
                      deg = 3) {
   # Construct B-spline basis
   dx <- (xr - xl) / nseg

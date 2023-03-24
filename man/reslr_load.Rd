@@ -10,6 +10,8 @@ reslr_load(
   include_tide_gauge = FALSE,
   include_linear_rate = FALSE,
   list_preferred_TGs = NULL,
+  TG_minimum_dist_proxy = FALSE,
+  all_TG_1deg = FALSE,
   input_Age_type = "CE"
 )
 }
@@ -23,6 +25,10 @@ reslr_load(
 \item{include_linear_rate}{User decides to include linear_rate and linear_rate_err}
 
 \item{list_preferred_TGs}{The user can supply the name or names of the preferred tide gauges}
+
+\item{TG_minimum_dist_proxy}{The package finds the tide gauge closest to the proxy site}
+
+\item{all_TG_1deg}{The package finds all tide gauges within 1 degree of the proxy site}
 
 \item{input_Age_type}{The inputted age in years CE or year BCE}
 }
