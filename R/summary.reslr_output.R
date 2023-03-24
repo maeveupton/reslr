@@ -29,15 +29,19 @@
 #
 # }
 summary.reslr_output <- function(object,#jags_output,
-                                 type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",
+                                 #type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",
                                  ...) {
   mu_pred <- object <- jags_output <- sd <- mad <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
-  jags_output <- object
+  if(inherits(object, "reslr_output") == TRUE){
+    jags_output <- object
+    jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+    sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
     # EIV slr t -------
+  #if("parameter_estimates" %in% type){
     if (inherits(jags_output, "eiv_slr_t") == TRUE) {
-      jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-      sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-      if("parameter_estimates" %in% type){
+      #jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+      #sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+      #if("parameter_estimates" %in% type){
       par_summary <- posterior::summarise_draws(sample_draws) %>%
         dplyr::filter(variable %in% c(
           "alpha", "beta" , "sigma_res"
@@ -50,8 +54,9 @@ summary.reslr_output <- function(object,#jags_output,
           par_q95 = q95 # * mod$scale_factor_y
         )
       par_summary
-      }
-      if ("diagnostics" %in% type) {
+     # }
+      #if ("diagnostics" %in% type) {
+
         # Check convergence
         if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
           cat("No convergence issues detected. \n")
@@ -60,14 +65,14 @@ summary.reslr_output <- function(object,#jags_output,
           cat("Convergence issues detected. \n")
           cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
         }
-      }
+     # }
 
     }
       # EIV cp 1------
       if (inherits(jags_output, "eiv_cp1_t") == TRUE) {
-        jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-        sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-        if("parameter_estimates" %in% type){
+        #jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+        #sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+        #if("parameter_estimates" %in% type){
         par_summary <- posterior::summarise_draws(sample_draws) %>%
           dplyr::filter(variable %in% c(
             "alpha", "beta[1]", "beta[2]", "cp", "sigma_res"
@@ -80,25 +85,25 @@ summary.reslr_output <- function(object,#jags_output,
             par_q95 = q95 # * mod$scale_factor_y
           )
         par_summary
-        }
-        if ("diagnostics" %in% type) {
+       # }
+        #if ("diagnostics" %in% type) {
           # Check convergence
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-            cat("No convergence issues detected. \n")
-          }
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-            cat("Convergence issues detected. \n")
-            cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-          }
-        }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+          #   cat("No convergence issues detected. \n")
+          # }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+          #   cat("Convergence issues detected. \n")
+          #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+          # }
+        #}
 
       }
 
       # EIV cp 2
       if (inherits(jags_output, "eiv_cp2_t") == TRUE) {
-        jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-        sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-        if("parameter_estimates" %in% type){
+        #jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+        #sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+        #if("parameter_estimates" %in% type){
         par_summary <- posterior::summarise_draws(sample_draws) %>%
           dplyr::filter(variable %in% c(
             "alpha[1]", "alpha[2]",
@@ -114,24 +119,24 @@ summary.reslr_output <- function(object,#jags_output,
             par_q95 = q95 # * mod$scale_factor_y
           )
         par_summary
-        }
-        if ("diagnostics" %in% type) {
+        #}
+        #if ("diagnostics" %in% type) {
           # Check convergence
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-            cat("No convergence issues detected. \n")
-          }
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-            cat("Convergence issues detected. \n")
-            cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-          }
-        }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+          #   cat("No convergence issues detected. \n")
+          # }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+          #   cat("Convergence issues detected. \n")
+          #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+          # }
+        #}
       }
 
       # EIV cp 3
       if (inherits(jags_output, "eiv_cp3_t") == TRUE) {
-        jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-        sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-        if("parameter_estimates" %in% type){
+        #jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+        #sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+        #if("parameter_estimates" %in% type){
         par_summary <- posterior::summarise_draws(sample_draws) %>%
           dplyr::filter(variable %in% c(
             "alpha[1]", "alpha[2]",
@@ -147,26 +152,26 @@ summary.reslr_output <- function(object,#jags_output,
             par_q95 = q95 # * mod$scale_factor_y
           )
         par_summary
-        }
-        if ("diagnostics" %in% type) {
+       # }
+       # if ("diagnostics" %in% type) {
           # Check convergence
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-            cat("No convergence issues detected. \n")
-          }
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-            cat("Convergence issues detected. \n")
-            cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-          }
-        }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+          #   cat("No convergence issues detected. \n")
+          # }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+          #   cat("Convergence issues detected. \n")
+          #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+          # }
+       # }
 
       }
 
       # EIV IGP t
       if (inherits(jags_output, "eiv_igp_t") == TRUE) {
-        jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-        sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+        #jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+        #sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
 
-        if("parameter_estimates" %in% type){
+        #if("parameter_estimates" %in% type){
         par_summary <- posterior::summarise_draws(sample_draws) %>%
           dplyr::filter(variable %in% c(
             "phi", "sigma_g", "sigma_res"
@@ -179,25 +184,25 @@ summary.reslr_output <- function(object,#jags_output,
             par_q95 = q95 # * mod$scale_factor_y
           )
         par_summary
-        }
-        if ("diagnostics" %in% type) {
+        #}
+        #if ("diagnostics" %in% type) {
           # Check convergence
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-            cat("No convergence issues detected. \n")
-          }
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-            cat("Convergence issues detected. \n")
-            cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-          }
-        }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+          #   cat("No convergence issues detected. \n")
+          # }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+          #   cat("Convergence issues detected. \n")
+          #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+          # }
+       # }
       }
 
 
       # NI spline t
       if (inherits(jags_output, "ni_spline_t") == TRUE) {
-        jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-        sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-        if("parameter_estimates" %in% type){
+        #jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+        #sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+       # if("parameter_estimates" %in% type){
         par_summary <- posterior::summarise_draws(sample_draws) %>%
           dplyr::filter(variable %in% c(
             "b_t", "sigma_t", "sigma_res"
@@ -210,24 +215,24 @@ summary.reslr_output <- function(object,#jags_output,
             par_q95 = q95 # * mod$scale_factor_y
           )
         par_summary
-        }
-        if ("diagnostics" %in% type) {
+       # }
+       # if ("diagnostics" %in% type) {
           # Check convergence
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-            cat("No convergence issues detected. \n")
-          }
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-            cat("Convergence issues detected. \n")
-            cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-          }
-        }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+          #   cat("No convergence issues detected. \n")
+          # }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+          #   cat("Convergence issues detected. \n")
+          #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+          # }
+       # }
       }
 
       # NI Spline st
       if (inherits(jags_output, "ni_spline_st") == TRUE) {
-        jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-        sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-        if("parameter_estimates" %in% type){
+        #jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+        #sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+       # if("parameter_estimates" %in% type){
         par_summary <- posterior::summarise_draws(sample_draws) %>%
           dplyr::filter(variable %in% c(
             "b_st", "sigma_st", "sigma_res"
@@ -240,24 +245,24 @@ summary.reslr_output <- function(object,#jags_output,
             par_q95 = q95 # * mod$scale_factor_y
           )
         par_summary
-        }
+       # }
 
-        if ("diagnostics" %in% type) {
+       # if ("diagnostics" %in% type) {
           # Check convergence
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-            cat("No convergence issues detected. \n")
-          }
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-            cat("Convergence issues detected. \n")
-            cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-          }
-        }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+          #   cat("No convergence issues detected. \n")
+          # }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+          #   cat("Convergence issues detected. \n")
+          #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+          # }
+       # }
       }
       # NI GAM decomposition
       if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
-        jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-        sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-        if("parameter_estimates" %in% type){
+        #jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+        #sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+        #if("parameter_estimates" %in% type){
         par_summary <- posterior::summarise_draws(sample_draws) %>%
           dplyr::filter(variable %in% c(
             "b_t", "g_h_z_x",
@@ -272,18 +277,29 @@ summary.reslr_output <- function(object,#jags_output,
             par_q95 = q95 # * mod$scale_factor_y
           )
         par_summary
-        }
-        if ("diagnostics" %in% type) {
+       # }
+       # if ("diagnostics" %in% type) {
           # Check convergence
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-            cat("No convergence issues detected. \n")
-          }
-          if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-            cat("Convergence issues detected. \n")
-            cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-          }
-        }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+          #   cat("No convergence issues detected. \n")
+          # }
+          # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+          #   cat("Convergence issues detected. \n")
+          #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+          # }
+        #}
       }
+ # }
 
-   #return(par_summary)
+  # Check convergence
+  if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+    cat("No convergence issues detected. \n")
+  }
+  if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+    cat("Convergence issues detected. \n")
+    cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+  }
+  }
+   return(par_summary)
+  #}
 }

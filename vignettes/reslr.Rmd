@@ -574,9 +574,7 @@ For the parameter estimates, we can present the standard deviation associated wi
 
 **Step 5:** the results from the ni_spline_t model can be illustrated using:
 ```{r fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
-# FALSE
-# Problem here!!!
-plot(x = jags_output.ni_spline_t)
+plot(jags_output.ni_spline_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the ni_spline_t is presented when using this function.
 
