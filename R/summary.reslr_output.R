@@ -18,7 +18,6 @@ summary.reslr_output <- function(object, # jags_output,
                                  # type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",#' @param type User decides which type of summary they require
                                  ...) {
   mu_pred <- object <- jags_output <- sd <- mad <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
-  #browser()
    # if(inherits(object, "reslr_output") == TRUE){
    #
    #   jags_output <- object

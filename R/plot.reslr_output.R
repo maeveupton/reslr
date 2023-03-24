@@ -13,29 +13,38 @@
 #' jags_output <- reslr_mcmc(x, model_type = "eiv_slr_t")
 #' plot(x =jags_output)
 plot.reslr_output <- function(x,
-                        plot_tide_gauges = FALSE,
+                        plot_tide_gauges = TRUE,
                         ...) {
   Age <- RSL <-Age_err <- ID <- RSL_err <- lwr_95 <- upr_95 <- lwr_50 <- lwr_95 <- upr_50 <- rate_pred <- rate_lwr_95 <- rate_upr_95 <- rate_lwr_50 <- rate_upr_50 <- SiteName <- data_type_id <- pred <- NULL
-  # Not plotting the tide gauge data -------------
-  # if (("data_type_id" %in% colnames(jags_output$data)) & plot_tide_gauges == FALSE) {
-  #   jags_output$data <- jags_output$data %>%
-  #     dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
-  #     dplyr::filter(data_type_id == "ProxyRecordData")
-  #   jags_output$data_grid <- jags_output$data_grid %>%
-  #     dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
-  #     dplyr::filter(data_type_id == "ProxyRecordData")
-  # } else {
-  #   data <- data
-  # }
-  #if(inherits(jags_output,"reslr_output") == TRUE){
   jags_output <- x
+  # Not plotting the tide gauge data -------------
+  # if (plot_tide_gauges == FALSE) {
+  #   # Dataframes to plot
+  #   output_dataframes <-
+  #     jags_output$output_dataframes %>%
+  #     dplyr::filter(data_type_id == "ProxyRecordData")
+  #   data <- jags_output$data %>%
+  #     dplyr::filter(data_type_id == "ProxyRecordData")
+  #
+  #   # jags_output$data <- jags_output$data %>%
+  #   #   dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+  #   #   dplyr::filter(data_type_id == "ProxyRecordData")
+  #   # jags_output$data_grid <- jags_output$data_grid %>%
+  #   #   dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+  #   #   dplyr::filter(data_type_id == "ProxyRecordData")
+  # }
+  # else{
+  #   # Dataframes to plot
+  #   output_dataframes <- jags_output$output_dataframes
+  #   data <- jags_output$data
+  # }
+
+
   # EIV slr------------
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
-    #output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
-    # Output from mcmc & dataframes for plots
-    #output_dataframes <- create_output_df(jags_output, rate = FALSE, decomposition = FALSE)
-    output_dataframes <- jags_output$output_dataframes
-    data <- jags_output$data
+    #output_dataframes <- jags_output$output_dataframes
+    #data <- jags_output$data
+
     # Plot
     plot_result <-
       ggplot2::ggplot() +
@@ -110,11 +119,9 @@ plot.reslr_output <- function(x,
   # EIV CP 1
   if (inherits(jags_output, "eiv_cp1_t")) {
     # Output from mcmc & dataframes for plots
-    #output_dataframes <- create_output_df(jags_output, rate = FALSE, decomposition = FALSE)
+    #output_dataframes <- jags_output$output_dataframes
+    #data <- jags_output$data
 
-    #output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
-    output_dataframes <- jags_output$output_dataframes
-    data <- jags_output$data
     # Plot
     plot_result <-
       ggplot2::ggplot() +
@@ -190,11 +197,9 @@ plot.reslr_output <- function(x,
   # EIV CP2
   if (inherits(jags_output, "eiv_cp2_t")) {
     # Output from mcmc & dataframes for plots
-    #output_dataframes <- create_output_df(jags_output, rate = FALSE, decomposition = FALSE)
+    #output_dataframes <- jags_output$output_dataframes
+    #data <- jags_output$data
 
-    #output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
-    output_dataframes <- jags_output$output_dataframes
-    data <- jags_output$data
     # Plot
     plot_result <-
       ggplot2::ggplot() +
@@ -777,9 +782,10 @@ plot.reslr_output <- function(x,
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
     # Dataframes to plot
     output_dataframes <- jags_output$output_dataframes
-    data <- jags_output$data
+    # data <- jags_output$data
     # Plots Total --------
-    total_model_fit_df <- output_dataframes$total_model_fit_df
+    total_model_fit_df <-
+      output_dataframes$total_model_fit_df
 
     plot_result<-
       ggplot2::ggplot() +
@@ -1119,6 +1125,6 @@ plot.reslr_output <- function(x,
       non_lin_loc_rate_plot = non_lin_loc_rate_plot,
       all_components_CI_plot = all_components_CI_plot)
   }
-#}
+
   return(output_plots)
 }

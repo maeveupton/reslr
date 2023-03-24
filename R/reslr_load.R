@@ -108,75 +108,6 @@ reslr_load <- function(data,
     cat("Tide Gauge data & linear_rate included")
   }
 
-  # else{
-  #   cat("No linear_rate or linear_rate_err selected. \n")
-  # }
-
-  # # Calculating the linear rates for the proxy sites
-  # if (include_linear_rate == TRUE & include_tide_gauge == FALSE){
-  #   # Checking if user provided GIA rates----------
-  #   if (!("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data))) {
-  #     lm_data_rates <- linear_reg_rates(data)
-  #     data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
-  #     cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
-  #   }
-  #   else {
-  #     data <- data
-  #     cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
-  #   }
-  # }
-  # else{
-  #   cat("No linear_rate or linear_rate_err selected. \n")
-  # }
-
-  # # Include tide gauge data with no linear rates--------------------
-  # if (include_tide_gauge == TRUE & include_linear_rate == FALSE) {
-  #   if (!("data_type_id" %in% colnames(data))) {
-  #     data <- clean_tidal_gauge_data(data = data)
-  #     cat("Decadally averaged tide Gauge data included by the package. \n")
-  #   }
-  #   #else {
-  #   #  data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
-  #   #  cat("No Tide Gauge data included. \n")
-  #   #}
-  #
-  # }
-  # else{
-  #   cat("User is using Proxy Records only")
-  # }
-
-  # # Include TG data & linear rates
-  # if(include_tide_gauge == TRUE & include_linear_rate == TRUE){
-  #   # Checking if user provided GIA rates----------
-  #   if (!("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data))) {
-  #     lm_data_rates <- linear_reg_rates(data)
-  #     data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
-  #     cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
-  #   }
-  #   else {
-  #     data <- data
-  #     cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
-  #   }
-  #
-  #   #if (!("data_type_id" %in% colnames(data))) {
-  #     TG_data <- clean_tidal_gauge_data(data = data)
-  #     #---Adding linear rates from ICE5G for TG-----
-  #     TG_lin_data <- add_linear_rate(data = TG_data)
-  #
-  #     data <- data %>%
-  #       dplyr::mutate(
-  #         linear_rate = ifelse(data_type_id == "TideGaugeData", ICE5_GIA_slope, linear_rate),
-  #         linear_rate_err = ifelse(data_type_id == "TideGaugeData", 0.3, linear_rate_err)
-  #       )
-  #   cat("Decadally averaged tide Gauge data and linear_rate included by the package. \n")
-  #  # }
-  # }
-  # else{
-  #     cat("No decadally averaged Tide gauge data or linear_rate included.\n")
-  #   }
-
-
-
   # Prediction dataframe-------------------------------------
   sites <- data %>%
     dplyr::select(
@@ -228,9 +159,6 @@ reslr_load <- function(data,
   #   dplyr::group_by(SiteName) %>%
   #   dplyr::filter(Age >= (min_Age) & Age <= (max_Age)) %>%
   #   dplyr::tibble()
-  data_grid_test <- data_grid %>%
-    dplyr::group_by(SiteName) %>%
-    dplyr::summarise(minAge_range = min(Age) * 1000, maxAge_range = max(Age) * 1000)
 
   # Ensuring SiteName is a factor
   data <- data %>%
