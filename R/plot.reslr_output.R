@@ -42,8 +42,8 @@ plot.reslr_output <- function(x,
 
   # EIV slr------------
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
-    #output_dataframes <- jags_output$output_dataframes
-    #data <- jags_output$data
+    output_dataframes <- jags_output$output_dataframes
+    data <- jags_output$data
 
     # Plot
     plot_result <-
@@ -119,8 +119,8 @@ plot.reslr_output <- function(x,
   # EIV CP 1
   if (inherits(jags_output, "eiv_cp1_t")) {
     # Output from mcmc & dataframes for plots
-    #output_dataframes <- jags_output$output_dataframes
-    #data <- jags_output$data
+    output_dataframes <- jags_output$output_dataframes
+    data <- jags_output$data
 
     # Plot
     plot_result <-
@@ -197,8 +197,8 @@ plot.reslr_output <- function(x,
   # EIV CP2
   if (inherits(jags_output, "eiv_cp2_t")) {
     # Output from mcmc & dataframes for plots
-    #output_dataframes <- jags_output$output_dataframes
-    #data <- jags_output$data
+    output_dataframes <- jags_output$output_dataframes
+    data <- jags_output$data
 
     # Plot
     plot_result <-
@@ -272,9 +272,7 @@ plot.reslr_output <- function(x,
 
   # EIV CP 3
   if (inherits(jags_output, "eiv_cp3_t")) {
-    #output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
     # Output from mcmc & dataframes for plots
-    #output_dataframes <- create_output_df(jags_output, rate = FALSE, decomposition = FALSE)
     output_dataframes <- jags_output$output_dataframes
     data <- jags_output$data
     # Plot
@@ -349,11 +347,9 @@ plot.reslr_output <- function(x,
 
   # EIV IGP
   if (inherits(jags_output, "eiv_igp_t")) {
-    data <- jags_output$data
-    #output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
     # Output from mcmc & dataframes for plots
+    data <- jags_output$data
     output_dataframes <- jags_output$output_dataframes
-    #output_dataframes <- create_output_df(jags_output)
 
     # Plot
     plot_result <-
@@ -476,30 +472,6 @@ plot.reslr_output <- function(x,
           shape = c( NA),
           size = 2
         )))
-
-    # ### plot the results
-    # plot_result <- ggplot2::ggplot(pred_res, ggplot2::aes(x = t, y = pred_y)) +
-    #   # ggplot2::geom_point(data = jags_output$data,
-    #   #                     ggplot2::aes(y = RSL, x = Age*1000), size = 0.5) +
-    #   # ggplot2::geom_rect(data = jags_output$data, ggplot2::aes(
-    #   #   xmin = Age*1000 - Age_err*1000, xmax = Age*1000 + Age_err*1000,
-    #   #   ymin = RSL - RSL_err, ymax = RSL + RSL_err
-    #   # ), alpha = 0.2) +
-    #   ggplot2::geom_line(ggplot2::aes()) + # colour = model_label
-    #   ggplot2::geom_ribbon(ggplot2::aes(ymin = lwr_95, ymax = upr_95), alpha = 0.4) + # fill = model_label
-    #   # ggplot2::geom_polygon(ggplot2::aes(x = x, y = y, group = obs_index), data = data_to_plot, alpha = 0.2) +
-    #   ggplot2::ylab("Relative Sea Level (m)") +
-    #   ggplot2::xlab("Age (CE)") +
-    #   ggplot2::labs(colour = "", fill = "95% UI") +
-    #   ggplot2::theme_classic()
-    #
-    # plot_rate <- ggplot2::ggplot(pred_res %>% tidyr::drop_na(), ggplot2::aes(x = t, y = rate_y)) +
-    #   ggplot2::geom_line() + # colour = model_label ggplot2::aes()fill = model_label
-    #   ggplot2::geom_ribbon(ggplot2::aes(ymin = rate_lwr_95, ymax = rate_upr_95), alpha = 0.4) +
-    #   ggplot2::ylab("Rate of change (mm/yr)") +
-    #   ggplot2::xlab("Age (CE)") +
-    #   ggplot2::labs(colour = "", fill = "95% UI") +
-    #   ggplot2::theme_classic()
 
     cat("Plotted EIV-IGP model & rate \n")
     output_plots <- list(plot_result = plot_result, plot_rate = plot_rate)
@@ -644,7 +616,6 @@ plot.reslr_output <- function(x,
   # NI spline space time
   if (inherits(jags_output, "ni_spline_st") == TRUE) {
     # Dataframes to plot
-    #output_dataframes <- parameter_estimate(jags_output = jags_output)$output_dataframes
     output_dataframes <- jags_output$output_dataframes
     data <- jags_output$data
     # Plot
@@ -782,7 +753,7 @@ plot.reslr_output <- function(x,
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
     # Dataframes to plot
     output_dataframes <- jags_output$output_dataframes
-    # data <- jags_output$data
+    data <- jags_output$data
     # Plots Total --------
     total_model_fit_df <-
       output_dataframes$total_model_fit_df
