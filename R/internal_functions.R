@@ -252,10 +252,20 @@ add_noisy_input <- function(model_run, model_type, data) {
     b_t_post <- model_run$BUGSoutput$sims.list$b_t
 
     pred_mean_calc <- function(t_new) {
+      # # Create the regional basis functions
+      # B_deriv_t <- bs_bbase(t_new,
+      #   xl = min(data$Age),
+      #   xr = max(data$Age))
       # Create the regional basis functions
-      B_deriv_t <- bs_bbase(t_new,
-        xl = min(data$Age),
-        xr = max(data$Age))
+      B_deriv_t_old <- bs_bbase(t_new,
+                            xl = min(data$Age),
+                            xr = max(data$Age))
+      #--------New Create the differencing matrix------
+      D_new_t <- diff(diag(ncol(B_deriv_t_old)), diff = 1)
+      Q_new_t <- t(D_new_t) %*% solve(D_new_t %*% t(D_new_t))
+      #Z_new_t <- B_deriv_t_old %*% Q_new_t
+      B_deriv_t <- B_deriv_t_old %*% Q_new_t
+
       #----Deriv----
       return(B_deriv_t %*% colMeans(b_t_post))
     }
@@ -405,7 +415,13 @@ spline_basis_fun <- function(data, data_grid, model_type) {
   if (model_type == "ni_spline_t") {
     t <- data$Age
     # Basis functions in time for data-----------------------
-    B_t <- bs_bbase(t, xl = min(t), xr = max(t))
+    B_t<- bs_bbase(t, xl = min(t), xr = max(t))
+    # B_t_old <- bs_bbase(t, xl = min(t), xr = max(t))
+    # #--------Create the differencing matrix for spline in time------
+    # D_t <- diff(diag(ncol(B_t_old)), diff = 2)#1)
+    # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
+    # #Z_t <- B_t_old %*% Q_t
+    # B_t <- B_t_old %*% Q_t
 
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
@@ -413,6 +429,16 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
         xr = max(data$Age))
+      # # Create the regional basis functions
+      # B_t_old <- bs_bbase(t_new,
+      #                 xl = min(data$Age),
+      #                 xr = max(data$Age))
+      # #--------Create the differencing matrix for spline in time------
+      # D_t <- diff(diag(ncol(B_t_old)), diff = 1)
+      # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
+      # #Z_t <- B_t_old %*% Q_t
+      # B_t <- B_t_old %*% Q_t
+
       return(B_t)
     }
     # Now create derivatives----------------------
@@ -427,6 +453,15 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     B_t_pred <- bs_bbase(t_pred,
       xl = min(t), xr = max(t)
     )
+    # B_t_pred_old <- bs_bbase(t_pred,
+    #                      xl = min(t), xr = max(t)
+    # )
+    # #--------Create the differencing matrix for spline in time------
+    # D_t <- diff(diag(ncol(B_t_old)), diff = 1)
+    # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
+    # #Z_t <- B_t_old %*% Q_t
+    # B_t_pred <- B_t_pred_old %*% Q_t
+
     # Now create derivatives----------------------
     # h <- 0.001
     h <- 0.01
@@ -933,54 +968,54 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 #' @param deg Degree of polynomial
 #' @param data Input data
 #' @noRd
-tpower <- function(x, t, p) {
-  # Truncated p-th power function
-  return((x - t)^p * (x > t))
-}
-bs_bbase <- function(x, xl = min(x), xr = max(x), # 30
-                     #nseg = 10,
-                     #nseg = 8,
-                     nseg = 3,
-                     deg = 3) {
-  # Construct B-spline basis
-  dx <- (xr - xl) / nseg
-  knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)
-  P <- outer(x, knots, tpower, deg)
-  n <- dim(P)[2]
-  D <- diff(diag(n), diff = deg + 1) / (gamma(deg + 1) * dx^deg)
-  B <- (-1)^(deg + 1) * P %*% t(D)
-  return(B)
-}
-# bs_bbase <- function(x,
-#                      xl = min(x),
-#                      xr = max(x),
-#                      deg = 3,
-#                      nseg = NULL){
-#   # Create basis functions------------------------------------------------------
-#   if(is.null(nseg)){
-#     nseg <- round(deg / (1 + deg / length(x)))
-#   }
-#
-#   #df <- sqrt(length(x)) - 4
-#   # too big
-#   #nseg <- round(df/(1+df/length(x)))
-#
-#   # Compute the length of the partitions
-#   dx <- (xr - xl) / nseg
-#   # Create equally spaced knots
-#   knots <- seq(xl - deg * dx,
-#     xr + deg * dx,
-#     by = dx
-#   )
-#   # Use bs() function to generate the B-spline basis
-#   get_bs_matrix <- matrix(
-#     splines::bs(x,
-#       knots = knots,
-#       degree = deg, Boundary.knots = c(knots[1], knots[length(knots)])
-#     ),
-#     nrow = length(x)
-#   )
-#   # Remove columns that contain zero only
-#   bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-#   return(bs_matrix)
+# tpower <- function(x, t, p) {
+#   # Truncated p-th power function
+#   return((x - t)^p * (x > t))
 # }
+# bs_bbase <- function(x, xl = min(x), xr = max(x), # 30
+#                      #nseg = 10,
+#                      #nseg = 8,
+#                      nseg = 3,
+#                      deg = 3) {
+#   # Construct B-spline basis
+#   dx <- (xr - xl) / nseg
+#   knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)
+#   P <- outer(x, knots, tpower, deg)
+#   n <- dim(P)[2]
+#   D <- diff(diag(n), diff = deg + 1) / (gamma(deg + 1) * dx^deg)
+#   B <- (-1)^(deg + 1) * P %*% t(D)
+#   return(B)
+# }
+bs_bbase <- function(x,
+                     xl = min(x),
+                     xr = max(x),
+                     deg = 3,
+                     nseg = NULL){
+  # Create basis functions------------------------------------------------------
+  if(is.null(nseg)){
+    nseg <- round(deg / (1 + deg / length(x)))
+  }
+
+  #df <- sqrt(length(x)) - 4
+  # too big
+  #nseg <- round(df/(1+df/length(x)))
+
+  # Compute the length of the partitions
+  dx <- (xr - xl) / nseg
+  # Create equally spaced knots
+  knots <- seq(xl - deg * dx,
+    xr + deg * dx,
+    by = dx
+  )
+  # Use bs() function to generate the B-spline basis
+  get_bs_matrix <- matrix(
+    splines::bs(x,
+      knots = knots,
+      degree = deg, Boundary.knots = c(knots[1], knots[length(knots)])
+    ),
+    nrow = length(x)
+  )
+  # Remove columns that contain zero only
+  bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  return(bs_matrix)
+}
