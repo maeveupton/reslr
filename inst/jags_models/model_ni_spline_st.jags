@@ -20,7 +20,7 @@ model {
    b_st[1] ~ dnorm(0,0.1)
    for (j in 2:n_knots_st) {
       #b_st[j] ~ dnorm(b_st[1], sigma_st^-2)
-      b_st[j] ~ dnorm(b_st[1], tau_st)
+      b_st[j] ~ dnorm(b_st[j-1], tau_st)
    }
 
 
