@@ -252,19 +252,20 @@ add_noisy_input <- function(model_run, model_type, data) {
     b_t_post <- model_run$BUGSoutput$sims.list$b_t
 
     pred_mean_calc <- function(t_new) {
-      # Create the regional basis functions
-      B_deriv_t <- bs_bbase(t_new,
-        xl = min(data$Age),
-        xr = max(data$Age))
       # # Create the regional basis functions
-      # B_deriv_t_old <- bs_bbase(t_new,
-      #                       xl = min(data$Age),
-      #                       xr = max(data$Age))
-      # #--------New Create the differencing matrix------
-      # D_new_t <- diff(diag(ncol(B_deriv_t_old)), diff = 1)
-      # Q_new_t <- t(D_new_t) %*% solve(D_new_t %*% t(D_new_t))
-      # #Z_new_t <- B_deriv_t_old %*% Q_new_t
-      # B_deriv_t <- B_deriv_t_old %*% Q_new_t
+      # B_deriv_t <- bs_bbase(t_new,
+      #   xl = min(data$Age),
+      #   xr = max(data$Age))
+      # Create the regional basis functions
+      B_deriv_t_old <- bs_bbase(t_new,
+                            xl = min(data$Age),
+                            xr = max(data$Age))
+      #--------New Create the differencing matrix------
+      D_new_t <- diff(diag(ncol(B_deriv_t_old)), diff = 2)#diff = 2)
+      Q_new_t <- t(D_new_t) %*% solve(D_new_t %*% t(D_new_t))
+      #Z_new_t <- B_deriv_t_old %*% Q_new_t
+      B_deriv_t <- B_deriv_t_old %*% Q_new_t
+      B_deriv_t <- B_deriv_t_old
 
       #----Deriv----
       return(B_deriv_t %*% colMeans(b_t_post))
@@ -415,30 +416,31 @@ spline_basis_fun <- function(data, data_grid, model_type) {
   if (model_type == "ni_spline_t") {
     t <- data$Age
     # Basis functions in time for data-----------------------
-    B_t<- bs_bbase(t, xl = min(t), xr = max(t))
-    # B_t_old <- bs_bbase(t, xl = min(t), xr = max(t))
-    # #--------Create the differencing matrix for spline in time------
-    # D_t <- diff(diag(ncol(B_t_old)), diff = 2)#1)
-    # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
-    # #Z_t <- B_t_old %*% Q_t
-    # B_t <- B_t_old %*% Q_t
+    #B_t<- bs_bbase(t, xl = min(t), xr = max(t))
+    B_t_old <- bs_bbase(t, xl = min(t), xr = max(t))
+    #--------Create the differencing matrix for spline in time------
+    D_t <- diff(diag(ncol(B_t_old)), diff = 2)#2)
+    Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
+    #Z_t <- B_t_old %*% Q_t
+    B_t <- B_t_old %*% Q_t
+    B_t <- B_t_old
 
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
-      # Create the regional basis functions
-      B_t <- bs_bbase(t_new,
-        xl = min(data$Age),
-        xr = max(data$Age))
       # # Create the regional basis functions
-      # B_t_old <- bs_bbase(t_new,
-      #                 xl = min(data$Age),
-      #                 xr = max(data$Age))
-      # #--------Create the differencing matrix for spline in time------
-      # D_t <- diff(diag(ncol(B_t_old)), diff = 1)
-      # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
-      # #Z_t <- B_t_old %*% Q_t
-      # B_t <- B_t_old %*% Q_t
-
+      # B_t <- bs_bbase(t_new,
+      #   xl = min(data$Age),
+      #   xr = max(data$Age))
+      # Create the regional basis functions
+      B_t_old <- bs_bbase(t_new,
+                      xl = min(data$Age),
+                      xr = max(data$Age))
+      #--------Create the differencing matrix for spline in time------
+      D_t <- diff(diag(ncol(B_t_old)), diff = 2)#diff = 2)
+      Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
+      #Z_t <- B_t_old %*% Q_t
+      B_t <- B_t_old %*% Q_t
+      B_t <- B_t_old
       return(B_t)
     }
     # Now create derivatives----------------------
@@ -450,17 +452,18 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 
     # Basis functions in time using prediction data frame-----------------------
     t_pred <- sort(data_grid$Age)
-    B_t_pred <- bs_bbase(t_pred,
-      xl = min(t), xr = max(t)
-    )
-    # B_t_pred_old <- bs_bbase(t_pred,
-    #                      xl = min(t), xr = max(t)
+    # B_t_pred <- bs_bbase(t_pred,
+    #   xl = min(t), xr = max(t)
     # )
-    # #--------Create the differencing matrix for spline in time------
-    # D_t <- diff(diag(ncol(B_t_old)), diff = 1)
-    # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
-    # #Z_t <- B_t_old %*% Q_t
-    # B_t_pred <- B_t_pred_old %*% Q_t
+    B_t_pred_old <- bs_bbase(t_pred,
+                         xl = min(t), xr = max(t)
+    )
+    #--------Create the differencing matrix for spline in time------
+    D_t <- diff(diag(ncol(B_t_old)),diff = 2)# diff = 2)
+    Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
+    #Z_t <- B_t_old %*% Q_t
+    B_t_pred <- B_t_pred_old %*% Q_t
+    B_t_pred <- B_t_pred_old
 
     # Now create derivatives----------------------
     # h <- 0.001
@@ -469,8 +472,6 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
     first_deriv_step2 <- first_deriv_calc(t_pred - h)
     B_t_pred_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
-    # matplot(t_pred, B_t_pred_deriv, type = "l", col = 1:length(B_t_pred_deriv))
-    # plot(t_pred, B_t_pred_deriv[, 2], type = "l")
 
     spline_basis_fun_list <- list(
       B_t = B_t,
@@ -990,7 +991,7 @@ bs_bbase <- function(x,
                      xl = min(x),
                      xr = max(x),
                      deg = 3,
-                     nseg = NULL){
+                     nseg = 20){
                      #nseg = NULL){
   # Create basis functions------------------------------------------------------
   if(is.null(nseg)){
@@ -1018,6 +1019,7 @@ bs_bbase <- function(x,
     nrow = length(x)
   )
   # Remove columns that contain zero only
-  bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  bs_matrix <-get_bs_matrix
   return(bs_matrix)
 }

@@ -17,21 +17,22 @@ model {
       #   #b_t[j] ~ dnorm(0, sigma_t^-2)
       # }
 
-      # Spline in time penalised 1st order
-      r <- B_t %*% b_t
-      b_t[1] ~ dnorm(0,1)
-      for (j in 2:n_knots_t) {
-        b_t[j] ~ dnorm(b_t[j-1], tau_t)
-      }
+      ## Spline in time penalised 1st order
+      #r <- B_t %*% b_t
+      #b_t[1] ~ dnorm(0,1)
+      #for (j in 2:n_knots_t) {
+      #  b_t[j] ~ dnorm(b_t[j-1], tau_t)
+      #}
 
        # 1st order difference on b_t for Regional term
-       #r <- B_t %*% b_t
+       r <- B_t %*% b_t
        #for (j in 1:(n_knots_t-1)) {
-      #   b_t[j] ~ dnorm(0, tau_t)
+       for (j in 1:(n_knots_t)) {
+         b_t[j] ~ dnorm(0, tau_t)
          #b_t[j] ~ dnorm(0, sigma_t^-2)
-      # }
+       }
         #---Sum to 0 constraint on the final knot---
-       # b_t[n_knots_t] <-  -sum(b_t[1:(n_knots_t-1)])
+        #b_t[n_knots_t] <-  -sum(b_t[1:(n_knots_t-1)])
 
 
       # Priors

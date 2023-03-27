@@ -386,7 +386,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       n_obs = nrow(data),
       B_t = spline_basis_fun_list$B_t,
       n_knots_t = ncol(spline_basis_fun_list$B_t),
-      nu = 20
+      nu = 2
     )
 
 
@@ -401,7 +401,6 @@ reslr_mcmc.reslr_input <- function(input_data,
       n.thin = n_thin,
       n.chains = n_chains
     ))
-
     # Adding Noisy Input-------------------
     data <- add_noisy_input(
       data = data,
@@ -443,10 +442,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_t_pred = spline_basis_fun_list$B_t_pred,
       n_knots_t = ncol(spline_basis_fun_list$B_t),
       B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv,
-      nu = 20
+      nu = 2
     )
-
-
     # Run JAGS--------------
     noisy_model_run_output <-
       suppressWarnings(R2jags::jags(
