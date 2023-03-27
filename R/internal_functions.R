@@ -252,19 +252,19 @@ add_noisy_input <- function(model_run, model_type, data) {
     b_t_post <- model_run$BUGSoutput$sims.list$b_t
 
     pred_mean_calc <- function(t_new) {
-      # # Create the regional basis functions
-      # B_deriv_t <- bs_bbase(t_new,
-      #   xl = min(data$Age),
-      #   xr = max(data$Age))
       # Create the regional basis functions
-      B_deriv_t_old <- bs_bbase(t_new,
-                            xl = min(data$Age),
-                            xr = max(data$Age))
-      #--------New Create the differencing matrix------
-      D_new_t <- diff(diag(ncol(B_deriv_t_old)), diff = 1)
-      Q_new_t <- t(D_new_t) %*% solve(D_new_t %*% t(D_new_t))
-      #Z_new_t <- B_deriv_t_old %*% Q_new_t
-      B_deriv_t <- B_deriv_t_old %*% Q_new_t
+      B_deriv_t <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age))
+      # # Create the regional basis functions
+      # B_deriv_t_old <- bs_bbase(t_new,
+      #                       xl = min(data$Age),
+      #                       xr = max(data$Age))
+      # #--------New Create the differencing matrix------
+      # D_new_t <- diff(diag(ncol(B_deriv_t_old)), diff = 1)
+      # Q_new_t <- t(D_new_t) %*% solve(D_new_t %*% t(D_new_t))
+      # #Z_new_t <- B_deriv_t_old %*% Q_new_t
+      # B_deriv_t <- B_deriv_t_old %*% Q_new_t
 
       #----Deriv----
       return(B_deriv_t %*% colMeans(b_t_post))
@@ -991,6 +991,7 @@ bs_bbase <- function(x,
                      xr = max(x),
                      deg = 3,
                      nseg = NULL){
+                     #nseg = NULL){
   # Create basis functions------------------------------------------------------
   if(is.null(nseg)){
     nseg <- round(deg / (1 + deg / length(x)))
@@ -1007,6 +1008,7 @@ bs_bbase <- function(x,
     xr + deg * dx,
     by = dx
   )
+  print(length(knots))
   # Use bs() function to generate the B-spline basis
   get_bs_matrix <- matrix(
     splines::bs(x,
