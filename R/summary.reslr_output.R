@@ -14,15 +14,13 @@
 #' input_data <- reslr_load(data = data)
 #' jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 #' summary(object = jags_output)
-summary.reslr_output <- function( object,#jags_output,#
+summary.reslr_output <- function(object,#jags_output,#
                                  # type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",#' @param type User decides which type of summary they require
                                  ...) {
   mu_pred <- sd <- mad <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
-   # if(inherits(object, "reslr_output") == TRUE){
-   #
    jags_output <- object
-   #   jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-   #   sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+   jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+   sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
 
   # EIV slr t -------
   # if("parameter_estimates" %in% type){

@@ -434,7 +434,7 @@ plot.reslr_output <- function(x,
       #   ggplot2::aes(y = pred_rate, ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
       ggplot2::xlab("Age (CE)") +
-      ggplot2::ylab("Relative Sea Level (m)") +
+      ggplot2::ylab("Rate of Change (mm/year)") +
       ggplot2::theme_bw() +
       ggplot2::theme(
         plot.title = ggplot2::element_text(size = 15),
@@ -566,7 +566,7 @@ plot.reslr_output <- function(x,
       #   ggplot2::aes(y = rate_pred, ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
       ggplot2::xlab("Age (CE)") +
-      ggplot2::ylab("Relative Sea Level (m)") +
+      ggplot2::ylab("Rate of Change (mm/year)") +
       ggplot2::theme_bw() +
       ggplot2::theme(
         plot.title = ggplot2::element_text(size = 15),
@@ -703,7 +703,7 @@ plot.reslr_output <- function(x,
       # ) +
       ggplot2::xlab("Age (CE)") +
       ggplot2::facet_wrap(~SiteName) +
-      ggplot2::ylab("Relative Sea Level (m)") +
+      ggplot2::ylab("Rate of Change (mm/year)") +
       ggplot2::theme_bw() +
       ggplot2::theme(
         plot.title = ggplot2::element_text(size = 15),
