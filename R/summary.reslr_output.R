@@ -14,13 +14,13 @@
 #' input_data <- reslr_load(data = data)
 #' jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 #' summary(object = jags_output)
-summary.reslr_output <- function(object, # jags_output,
+summary.reslr_output <- function( object,#jags_output,#
                                  # type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",#' @param type User decides which type of summary they require
                                  ...) {
-  mu_pred <- object <- jags_output <- sd <- mad <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
+  mu_pred <- sd <- mad <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
    # if(inherits(object, "reslr_output") == TRUE){
    #
-   #   jags_output <- object
+   jags_output <- object
    #   jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
    #   sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
 
@@ -41,17 +41,17 @@ summary.reslr_output <- function(object, # jags_output,
         par_q5 = q5, #* mod$scale_factor_y,
         par_q95 = q95 # * mod$scale_factor_y
       )
-    par_summary
+    #return(par_summary)
     # }
     # if ("diagnostics" %in% type) {
     # Check convergence
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-      cat("No convergence issues detected. \n")
-    }
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-      cat("Convergence issues detected. \n")
-      cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    }
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+    #   cat("No convergence issues detected. \n")
+    # }
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+    #   cat("Convergence issues detected. \n")
+    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+    # }
     # }
   }
   # EIV cp 1------
@@ -275,15 +275,15 @@ summary.reslr_output <- function(object, # jags_output,
   }
   # }
 
-  # # Check convergence
-  # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-  #   cat("No convergence issues detected. \n")
+  # Check convergence
+  if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+    cat("No convergence issues detected. \n")
+  }
+  if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+    cat("Convergence issues detected. \n")
+    cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+  }
   # }
-  # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-  #   cat("Convergence issues detected. \n")
-  #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-  # }
-  # }
- # return(par_summary)
+ return(par_summary)
   # }
 }
