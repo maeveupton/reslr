@@ -85,7 +85,7 @@ clean_tidal_gauge_data <- function(data,
   # Remove the temporary file and directory
   unlink(temp_file)
   unlink(temp_dir, recursive = TRUE)
-  annual_SL_tide_df <- annual_SL_tide_df %>% dplyr::filter(name == "ARGENTIA")
+  #annual_SL_tide_df <- annual_SL_tide_df %>% dplyr::filter(name == "ARGENTIA")
   plot(annual_SL_tide_df$Age,annual_SL_tide_df$RSL)
   # Annual Tidal Gauge data----
   annual_tidal_gauge_data_df <- annual_SL_tide_df %>%
@@ -128,24 +128,25 @@ clean_tidal_gauge_data <- function(data,
     #   Age = max(Age),
     #   rows_site = dplyr::n()
     # )
-  plot(decadal_averages_TG$decade,decadal_averages_TG$rolling_avg)
+  #plot(decadal_averages_TG$decade,decadal_averages_TG$rolling_avg)
 
 
-  # Decadal Averages------ I don't know if this is too simple to calculate the decadal averages
-  decadal_averages_TG <-
-    annual_tidal_gauge_data_df %>%
-    dplyr::mutate(decade = (Age - 1) %/% 10) %>%
-    dplyr::group_by(decade, SiteName) %>%
-    dplyr::summarise(
-      decade_meanRSL = mean(RSL),
-      Age = max(Age),
-      rows_site = dplyr::n()
-    ) # Age=min(Age)
+  # # Decadal Averages------ I don't know if this is too simple to calculate the decadal averages
+  # decadal_averages_TG <-
+  #   annual_tidal_gauge_data_df %>%
+  #   dplyr::mutate(decade = (Age - 1) %/% 10) %>%
+  #   dplyr::group_by(decade, SiteName) %>%
+  #   dplyr::summarise(
+  #     decade_meanRSL = mean(RSL),
+  #     Age = max(Age),
+  #     rows_site = dplyr::n()
+  #   ) # Age=min(Age)
 
   #---Using standard deviation of RSL over the decade as uncertainty----
   decadal_averages_TG <- decadal_averages_TG %>%
     dplyr::group_by(SiteName) %>%
-    dplyr::mutate(sd_TG = sd(decade_meanRSL))
+    #dplyr::mutate(sd_TG = sd(decade_meanRSL))
+    dplyr::mutate(sd_TG = sd(rolling_avg))
 
   #----- New df with decadal averages for tide gauges-----
   tidal_gauge_average_10_df <- merge(decadal_averages_TG, annual_tidal_gauge_data_df)
@@ -165,7 +166,8 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(Age = Age / 1000) %>%
     dplyr::mutate(Age_err = Age_err / 1000) %>%
     dplyr::mutate(RSL_annual = RSL) %>%
-    dplyr::mutate(RSL = decade_meanRSL)
+    #dplyr::mutate(RSL = decade_meanRSL)
+    dplyr::mutate(RSL = rolling_avg)
 
   # No user option here -> this is a must: Removing sites with only 2 points (20 years of data)-----
   decadal_NA_TG_df <-
@@ -173,9 +175,9 @@ clean_tidal_gauge_data <- function(data,
     #decadal_NA_TG %>%
     dplyr::group_by(SiteName) %>%
     dplyr::filter(dplyr::n() >= 2) %>%
-    dplyr::mutate(data_type_id = "TideGaugeData")%>%
-    dplyr::select(!decade, decade_meanRSL, RSL_annual)
-  plot(decadal_NA_TG_df$Age,decadal_NA_TG_df$RSL)
+    dplyr::mutate(data_type_id = "TideGaugeData")#%>%
+    #dplyr::select(!decade, decade_meanRSL, RSL_annual)
+  #plot(decadal_NA_TG_df$Age,decadal_NA_TG_df$RSL)
   #-----Uniting original dataset and model run to give a site index to model_result data set-----
   SL_site_df <- data %>%
     dplyr::mutate(Longitude = round(Longitude, 1)) %>%
