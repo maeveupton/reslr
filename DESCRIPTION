@@ -29,6 +29,7 @@ Imports:
     testthat,
     tidybayes,
     tidyr,
+    vdiffr,
     zoo
 Suggests: 
     knitr,

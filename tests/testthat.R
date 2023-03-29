@@ -8,5 +8,8 @@
 
 library(testthat)
 library(reslr)
+library(vdiffr)
+
+co <- function(expr) capture.output(expr, file = "NUL")
 
 test_check("reslr")
