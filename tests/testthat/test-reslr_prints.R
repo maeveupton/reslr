@@ -16,7 +16,7 @@ testthat::test_that("print.reslr_input", {
 testthat::test_that("print.reslr_output", {
   testthat::expect_output(print(jags_output_1))
 })
-# # Test summary function --> not working
-# test_that("summary.reslr_output", {
-#   testthat::expect_output(summary(jags_output_1))
-# })
+# Test summary function
+test_that("summary.reslr_output", {
+  testthat::expect_output(summary(jags_output_1))
+})
