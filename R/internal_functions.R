@@ -838,7 +838,7 @@ add_noisy_input <- function(model_run, model_type, data) {
       return(B_l_deriv %*% colMeans(b_st_post))
     }
     #-------Now create derivatives----
-    h <- 0.001
+    h <- 0.0001
     t <- data$Age
     deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
   }
