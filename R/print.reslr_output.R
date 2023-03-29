@@ -1,4 +1,4 @@
-#' Print a reslr output object
+#' Print a reslr output object which is created from the \code{reslr_mcmc} function. This will be very high level printing the number of iterations used by the user.
 #'
 #' @param x An object of class \code{reslr_output}
 #' @param ... Other arguments (not supported)
