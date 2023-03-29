@@ -252,8 +252,8 @@ clean_tidal_gauge_data <- function(data,
     dplyr::select(n_obs_by_site)
   dist_TG_proxy_df_new <- data.frame(nearest_proxy_site = dist_TG_proxy_long_1$nearest_proxy_site,
                                      nearest_TG = dist_TG_proxy_long_2$nearest_TG,
-                                     minimum_dist = as.numeric(dist_TG_proxy_long_1$minimum_distance),
-                                     n_obs_tg = obs_sites)
+                                     minimum_dist = as.numeric(dist_TG_proxy_long_1$minimum_distance))#,
+                                     #n_obs_tg = obs_sites)
 
 
   # Criteria 1: User provides a list of TGs------------------------
@@ -1538,7 +1538,7 @@ bs_bbase <- function(x,
     xr + deg * dx,
     by = dx
   )
-  print(length(knots))
+  #print(length(knots))
   # Use bs() function to generate the B-spline basis
   get_bs_matrix <- matrix(
     splines::bs(x,
@@ -1550,7 +1550,7 @@ bs_bbase <- function(x,
   # Remove columns that contain zero only
   bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
   #bs_matrix <-get_bs_matrix
-  print(dim(bs_matrix))
+  #print(dim(bs_matrix))
   return(bs_matrix)
 }
 
