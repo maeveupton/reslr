@@ -3,6 +3,8 @@
 #' For the NI spline in space time, the plots of the model fits and the derivatives of the model fits are produced for any amount of proxy sites.
 #' For the NI GAM decomposition, the plots of the model fits and the derivatives of the model fits are produced for any amount of sites including tide gauges and proxy sites. It is important to note that tide gauge data is strongly recommended for this model. Also, the ni_gam_decomp model will produce plots for each individual component,i.e. the regional component and its rate of change, the linear local component, the non-linear local component and its rate of change.
 #'
+#'If tide gauges are used in the model, the user has the ability plot the output with or without the inclusion of the tide gauges.
+#'
 #' @param x An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}
 #' @param plot_tide_gauges Plotting the tide gauge data as well as proxy data
 #' @param ...  Not used
