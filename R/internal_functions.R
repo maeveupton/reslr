@@ -1,3 +1,82 @@
+#' A function that will create a plot of model fits for the output of the function \code{reslr_mcmc}.
+#'
+#' @param output_dataframes These are dataframes created for plotting and are outputs from the \code{reslr_mcmc} function.
+#' @param data This is the input dataset stored in a list created in the \code{reslr_mcmc} function.
+#'
+#' @return The plot of the model fit
+#' @export
+#'
+#' @examples
+create_model_fit_plot <- function(output_dataframes,data){
+  # Plot
+  plot <-
+    ggplot2::ggplot() +
+    ggplot2::geom_rect(data = data, ggplot2::aes(
+      xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+      ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
+    ), alpha = 0.4) +
+    ggplot2::geom_point(
+      data = data,
+      ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+    ) +
+    ggplot2::geom_line(
+      data = output_dataframes,
+      ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+    ) +
+    ggplot2::geom_ribbon(
+      data = output_dataframes,
+      ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
+    ) +
+    # ggplot2::geom_ribbon(
+    #   data = output_dataframes,
+    #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+    # ) +
+    ggplot2::xlab("Age (CE)") +
+    ggplot2::ylab("Relative Sea Level (m)") +
+    ggplot2::theme_bw() +
+    ggplot2::theme(
+      plot.title = ggplot2::element_text(size = 15),
+      axis.title = ggplot2::element_text(size = 12, face = "bold"),
+      axis.text = ggplot2::element_text(size = 12),
+      legend.text = ggplot2::element_text(size = 10)
+    ) +
+    ggplot2::theme(
+      strip.text.x = ggplot2::element_text(size = 10),
+      strip.background = ggplot2::element_rect(fill = c("white"))
+    ) +
+    ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+    ggplot2::labs(colour = "") +
+    ggplot2::scale_fill_manual("",
+                               values = c(
+                                 "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                 "95" = ggplot2::alpha("purple3", 0.2) #
+                                 # "50" = ggplot2::alpha("purple3", 0.3)
+                               ),
+                               labels = c(
+                                 "95% Credible Interval",
+                                 expression(paste("1 sigma error"))
+                                 # , "50% Credible Interval"
+                               )
+    ) +
+    ggplot2::scale_colour_manual("",
+                                 values = c("black" = "black", "mean" = "purple3"),
+                                 labels = c("Data", "Posterior Fit")
+    ) +
+    ggplot2::guides(
+      fill = ggplot2::guide_legend(override.aes = list(
+        alpha = c(0.4, 0.2), # , 0.4),
+        size = 1
+      )),
+      colour = ggplot2::guide_legend(override.aes = list(
+        linetype = c(0, 1),
+        shape = c(16, NA),
+        size = 2
+      ))
+    )+
+    ggplot2::facet_wrap(~SiteName)
+  return(plot)
+}
+
 #' In this function, tide gauge data from the Permanent Service for Mean Sea Level online database is accessed in a temporary path.
 #' The tide gauge data undergo a cleaning process in this function where flagged stations are removed as recommended by the online database.
 #' Next, the data is averaged using a rolling window over a decade to ensure it is comparable with proxy data and the tide gauge data is given an RSL uncertainty with is the standard deviation of the data over the decade and an Age error of 5 years corresponding to half a decade.

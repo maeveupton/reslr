@@ -49,73 +49,74 @@ plot.reslr_output <- function(x,
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
     output_dataframes <- jags_output$output_dataframes
     data <- jags_output$data
-
-    # Plot
-    plot_result <-
-      ggplot2::ggplot() +
-      ggplot2::geom_rect(data = data, ggplot2::aes(
-        xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
-        ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
-      ), alpha = 0.4) +
-      ggplot2::geom_point(
-        data = data,
-        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
-      ) +
-      ggplot2::geom_line(
-        data = output_dataframes,
-        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
-      ) +
-      ggplot2::geom_ribbon(
-        data = output_dataframes,
-        ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
-      ) +
-      # ggplot2::geom_ribbon(
-      #   data = output_dataframes,
-      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-      # ) +
-      ggplot2::xlab("Age (CE)") +
-      ggplot2::ylab("Relative Sea Level (m)") +
-      ggplot2::theme_bw() +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 15),
-        axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 10)
-      ) +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 10),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      ggplot2::labs(colour = "") +
-      ggplot2::scale_fill_manual("",
-                                 values = c(
-                                   "Uncertainty" = ggplot2::alpha("grey", 0.3),
-                                   "95" = ggplot2::alpha("purple3", 0.2) #
-                                   # "50" = ggplot2::alpha("purple3", 0.3)
-                                 ),
-                                 labels = c(
-                                   "95% Credible Interval",
-                                   expression(paste("1 sigma error"))
-                                   # , "50% Credible Interval"
-                                 )
-      ) +
-      ggplot2::scale_colour_manual("",
-                                   values = c("black" = "black", "mean" = "purple3"),
-                                   labels = c("Data", "Posterior Fit")
-      ) +
-      ggplot2::guides(
-        fill = ggplot2::guide_legend(override.aes = list(
-          alpha = c(0.4, 0.2), # , 0.4),
-          size = 1
-        )),
-        colour = ggplot2::guide_legend(override.aes = list(
-          linetype = c(0, 1),
-          shape = c(16, NA),
-          size = 2
-        ))
-      )+
-      ggplot2::facet_wrap(~SiteName)
+    plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
+                                         data = data)
+    # # Plot
+    # plot_result <-
+    #   ggplot2::ggplot() +
+    #   ggplot2::geom_rect(data = data, ggplot2::aes(
+    #     xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+    #     ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
+    #   ), alpha = 0.4) +
+    #   ggplot2::geom_point(
+    #     data = data,
+    #     ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+    #   ) +
+    #   ggplot2::geom_line(
+    #     data = output_dataframes,
+    #     ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = output_dataframes,
+    #     ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
+    #   ) +
+    #   # ggplot2::geom_ribbon(
+    #   #   data = output_dataframes,
+    #   #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+    #   # ) +
+    #   ggplot2::xlab("Age (CE)") +
+    #   ggplot2::ylab("Relative Sea Level (m)") +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::theme(
+    #     plot.title = ggplot2::element_text(size = 15),
+    #     axis.title = ggplot2::element_text(size = 12, face = "bold"),
+    #     axis.text = ggplot2::element_text(size = 12),
+    #     legend.text = ggplot2::element_text(size = 10)
+    #   ) +
+    #   ggplot2::theme(
+    #     strip.text.x = ggplot2::element_text(size = 10),
+    #     strip.background = ggplot2::element_rect(fill = c("white"))
+    #   ) +
+    #   ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+    #   ggplot2::labs(colour = "") +
+    #   ggplot2::scale_fill_manual("",
+    #                              values = c(
+    #                                "Uncertainty" = ggplot2::alpha("grey", 0.3),
+    #                                "95" = ggplot2::alpha("purple3", 0.2) #
+    #                                # "50" = ggplot2::alpha("purple3", 0.3)
+    #                              ),
+    #                              labels = c(
+    #                                "95% Credible Interval",
+    #                                expression(paste("1 sigma error"))
+    #                                # , "50% Credible Interval"
+    #                              )
+    #   ) +
+    #   ggplot2::scale_colour_manual("",
+    #                                values = c("black" = "black", "mean" = "purple3"),
+    #                                labels = c("Data", "Posterior Fit")
+    #   ) +
+    #   ggplot2::guides(
+    #     fill = ggplot2::guide_legend(override.aes = list(
+    #       alpha = c(0.4, 0.2), # , 0.4),
+    #       size = 1
+    #     )),
+    #     colour = ggplot2::guide_legend(override.aes = list(
+    #       linetype = c(0, 1),
+    #       shape = c(16, NA),
+    #       size = 2
+    #     ))
+    #   )+
+    #   ggplot2::facet_wrap(~SiteName)
 
     cat("Plotted EIV Simple linear regression. \n")
 
@@ -127,73 +128,75 @@ plot.reslr_output <- function(x,
     # Output from mcmc & dataframes for plots
     output_dataframes <- jags_output$output_dataframes
     data <- jags_output$data
+    plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
+                                         data = data)
 
-    # Plot
-    plot_result <-
-      ggplot2::ggplot() +
-      ggplot2::geom_rect(data = data, ggplot2::aes(
-        xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
-        ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
-      ), alpha = 0.4) +
-      ggplot2::geom_point(
-        data = data,
-        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
-      ) +
-      ggplot2::geom_line(
-        data = output_dataframes,
-        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
-      ) +
-      ggplot2::geom_ribbon(
-        data = output_dataframes,
-        ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
-      ) +
-      # ggplot2::geom_ribbon(
-      #   data = output_dataframes,
-      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-      # ) +
-      ggplot2::xlab("Age (CE)") +
-      ggplot2::ylab("Relative Sea Level (m)") +
-      ggplot2::theme_bw() +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 15),
-        axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 10)
-      ) +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 10),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      ggplot2::labs(colour = "") +
-      ggplot2::scale_fill_manual("",
-                                 values = c(
-                                   "Uncertainty" = ggplot2::alpha("grey", 0.3),
-                                   "95" = ggplot2::alpha("purple3", 0.2) #
-                                   # "50" = ggplot2::alpha("purple3", 0.3)
-                                 ),
-                                 labels = c(
-                                   "95% Credible Interval",
-                                   expression(paste("1 sigma error"))
-                                   # , "50% Credible Interval"
-                                 )
-      ) +
-      ggplot2::scale_colour_manual("",
-                                   values = c("black" = "black", "mean" = "purple3"),
-                                   labels = c("Data", "Posterior Fit")
-      ) +
-      ggplot2::guides(
-        fill = ggplot2::guide_legend(override.aes = list(
-          alpha = c(0.4, 0.2), # , 0.4),
-          size = 1
-        )),
-        colour = ggplot2::guide_legend(override.aes = list(
-          linetype = c(0, 1),
-          shape = c(16, NA),
-          size = 2
-        ))
-      )+
-      ggplot2::facet_wrap(~SiteName)
+    # # Plot
+    # plot_result <-
+    #   ggplot2::ggplot() +
+    #   ggplot2::geom_rect(data = data, ggplot2::aes(
+    #     xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+    #     ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
+    #   ), alpha = 0.4) +
+    #   ggplot2::geom_point(
+    #     data = data,
+    #     ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+    #   ) +
+    #   ggplot2::geom_line(
+    #     data = output_dataframes,
+    #     ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+    #   ) +
+    #   ggplot2::geom_ribbon(
+    #     data = output_dataframes,
+    #     ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
+    #   ) +
+    #   # ggplot2::geom_ribbon(
+    #   #   data = output_dataframes,
+    #   #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+    #   # ) +
+    #   ggplot2::xlab("Age (CE)") +
+    #   ggplot2::ylab("Relative Sea Level (m)") +
+    #   ggplot2::theme_bw() +
+    #   ggplot2::theme(
+    #     plot.title = ggplot2::element_text(size = 15),
+    #     axis.title = ggplot2::element_text(size = 12, face = "bold"),
+    #     axis.text = ggplot2::element_text(size = 12),
+    #     legend.text = ggplot2::element_text(size = 10)
+    #   ) +
+    #   ggplot2::theme(
+    #     strip.text.x = ggplot2::element_text(size = 10),
+    #     strip.background = ggplot2::element_rect(fill = c("white"))
+    #   ) +
+    #   ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+    #   ggplot2::labs(colour = "") +
+    #   ggplot2::scale_fill_manual("",
+    #                              values = c(
+    #                                "Uncertainty" = ggplot2::alpha("grey", 0.3),
+    #                                "95" = ggplot2::alpha("purple3", 0.2) #
+    #                                # "50" = ggplot2::alpha("purple3", 0.3)
+    #                              ),
+    #                              labels = c(
+    #                                "95% Credible Interval",
+    #                                expression(paste("1 sigma error"))
+    #                                # , "50% Credible Interval"
+    #                              )
+    #   ) +
+    #   ggplot2::scale_colour_manual("",
+    #                                values = c("black" = "black", "mean" = "purple3"),
+    #                                labels = c("Data", "Posterior Fit")
+    #   ) +
+    #   ggplot2::guides(
+    #     fill = ggplot2::guide_legend(override.aes = list(
+    #       alpha = c(0.4, 0.2), # , 0.4),
+    #       size = 1
+    #     )),
+    #     colour = ggplot2::guide_legend(override.aes = list(
+    #       linetype = c(0, 1),
+    #       shape = c(16, NA),
+    #       size = 2
+    #     ))
+    #   )+
+    #   ggplot2::facet_wrap(~SiteName)
 
     cat("Plotted EIV 1 Change Point model. \n")
 
