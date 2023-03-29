@@ -137,8 +137,7 @@ Within the `reslr_load` function, the user has three options to choose from:
 
 
 ### Glacial Isostatic Adjustment (GIA) 
-
-For the NI GAM decomposition, the statistical model requires an estimate for the local linear rate arising from processes such as GIA and associated uncertainty for this rate each site. These are included as additional columns, `linear_rate` and `linear_rate_err`, in the input dataframe.
+For the NI GAM decomposition, the statistical model requires an estimate for the local linear rate arising from processes such as GIA and associated uncertainty for this rate each site.  According to Whitehouse (2018), GIA represents the Earth's reaction to the growth or melting of ice sheets, including the gravitational field and ocean. GIA can be approximated as a linear contribution over a short timescale, but with variable effects along the coast (Engelhart et al., 2009). Earth-ice models, which incorporate the physical structure of the Earth to predict GIA changes due to ice loading and unloading, can provide estimates of GIA rates. An example of such a model is the ICE5G VM2-90 (Peltier, 2004). It should be noted that other processes, such as tectonic vertical land motion, can mimic the linear trend of GIA. Therefore, the linear local component within the NI GAM decomposition may account for contributions from processes other than GIA that drive changes in relative sea level. These are included as additional columns, `linear_rate` and `linear_rate_err`, in the input dataframe provided by the user.
 
 If it is not provided then package will automatically calculate these rates using the data provided. We do not provide the rates from any Earth-ice physical model for the proxy records. To obtain this data check out [Peltier's webpage](https://www.atmosp.physics.utoronto.ca/~peltier/data.php) and the associated publication (Peltier, 2004) or the recent Caron et al 2018 publication and [data](https://vesl.jpl.nasa.gov/solid-earth/gia/). 
 
@@ -950,6 +949,10 @@ For the maths on the original NIGAM:
 Upton, Maeve, Parnell, Andrew C,  Kemp, Andrew C , Ashe, Erica, McCarthy, Gerard and Cahill, Niamh (2023) 'A noisy-input generalised additive model for relative sea-level change along the Atlantic coast of North America'
 
 For the background of GIA rates:
+
+Whitehouse, Pippa L (2018), ‘Glacial isostatic adjustment modelling: historical perspectives, recent
+advances, and future directions’, Earth Surf. Dynam 6, 401–429.
+
 Engelhart, Simon E., Benjamin P. Horton, Bruce C. Douglas, W. Richard Peltier and Torbj ̈orn E.
 T ̈ornqvist (2009), ‘Spatial variability of late Holocene and 20th century sea-level rise along the
 Atlantic coast of the United States’, Geology 37(12), 1115–1118

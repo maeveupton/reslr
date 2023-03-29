@@ -1,4 +1,7 @@
-#' Plot data with measurement uncertainty
+#' Plot data with measurement uncertainty.
+#' For all models except the NI GAM decomposition, additional tide gauge data is not recommended. However, using this function the user has the ability to plot the tide gauge data with the proxy data.
+#' For the NI GAM decomposition, additional tide gauge data is recommended and this function will create plots of the proxy sites with their uncertainty boxes and the tide gauge sites.
+#' For the NI spline in space time, additional tide gauge data can be used but it will needed to be examined by the user.
 #'
 #' @param x An object created via the function \code{\link{reslr_load}}
 #' @param title Title of the Plot

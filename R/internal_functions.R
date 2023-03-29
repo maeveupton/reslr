@@ -1,4 +1,8 @@
-#' Including tide gauge data
+#' In this function, tide gauge data from the Permanent Service for Mean Sea Level online database is accessed in a temporary path.
+#' The tide gauge data undergo a cleaning process in this function where flagged stations are removed as recommended by the online database.
+#' Next, the data is averaged using a rolling window over a decade to ensure it is comparable with proxy data and the tide gauge data is given an RSL uncertainty with is the standard deviation of the data over the decade and an Age error of 5 years corresponding to half a decade.
+#' Then, the user selects their preferred tide gauge based on three criteria: 1.nearest tide gauge to the proxy site; 2. User supplies a list of names of preferred tide gauges; 3. all tide gauges within 1 degree are chosen.
+#' The tide gauge dataframe is joined with the proxy dataframe with an ID column for data source, "ProxyRecord" or "TideGaugeData"
 #'
 #' @param data Input data
 #' @param list_preferred_TGs user can supply the name or names of the preferred tide gauges
@@ -405,7 +409,11 @@ clean_tidal_gauge_data <- function(data,
 
 }
 
-#' Adding linear rate to the sites from Tide Gauges
+#' If the user decides to include tide gauge data, this function adds the linear rate and the associated linear rate error for those sites.
+#' The linear rate comes from a physical model known as an Earth-ice models which use a representation of the physical Earth structure (such as lithospheric thickness and properties such as mantle viscosity) topredict changes in GIA that occur through loading and unloading of ice, and provide estimates of GIA rates.
+#' One such example of an Earth-ice physical model is the ICE5G VM2-90 created by Peltier, 2004 and is used as the source of the linear rates for the tide gauges.
+#' Engelhart et al 2009 demonstrated the associated uncertainty for the linear rate for tide gauges to be 0.3mm per year.
+#' Hence, this function calculates these rates and uncertainty values for tide gauge data.
 #'
 #' @param data Input data
 #' @noRd

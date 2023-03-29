@@ -1,4 +1,7 @@
-#' Plotting the results for Noisy Input GAM decomposition
+#' Plotting the results for each statistical model. For the EIV simple linear regression and the Change point models the model fit plots are created, preferably for 1 proxy site.
+#' For the EIV IGP and the NI spline in time the plots of the model fits and the derivative of the model fit are produced for 1 proxy site, as running these models with more than 1 site or with tide gauge data is not recommended.
+#' For the NI spline in space time, the plots of the model fits and the derivatives of the model fits are produced for any amount of proxy sites.
+#' For the NI GAM decomposition, the plots of the model fits and the derivatives of the model fits are produced for any amount of sites including tide gauges and proxy sites. It is important to note that tide gauge data is strongly recommended for this model. Also, the ni_gam_decomp model will produce plots for each individual component,i.e. the regional component and its rate of change, the linear local component, the non-linear local component and its rate of change.
 #'
 #' @param x An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}
 #' @param plot_tide_gauges Plotting the tide gauge data as well as proxy data
@@ -109,7 +112,8 @@ plot.reslr_output <- function(x,
           shape = c(16, NA),
           size = 2
         ))
-      )
+      )+
+      ggplot2::facet_wrap(~SiteName)
 
     cat("Plotted EIV Simple linear regression. \n")
 
@@ -186,7 +190,8 @@ plot.reslr_output <- function(x,
           shape = c(16, NA),
           size = 2
         ))
-      )
+      )+
+      ggplot2::facet_wrap(~SiteName)
 
     cat("Plotted EIV 1 Change Point model. \n")
 
@@ -264,7 +269,8 @@ plot.reslr_output <- function(x,
           shape = c(16, NA),
           size = 2
         ))
-      )
+      )+
+      ggplot2::facet_wrap(~SiteName)
     cat("Plotted 2 Change Point Model \n")
 
     output_plots <- list(plot_result = plot_result)
@@ -338,7 +344,8 @@ plot.reslr_output <- function(x,
           linetype = c(0, 1),
           shape = c(16, NA),
           size = 2
-        )))
+        )))+
+      ggplot2::facet_wrap(~SiteName)
 
     cat("Plotted 3 Change Point \n")
 
@@ -414,7 +421,8 @@ plot.reslr_output <- function(x,
           linetype = c(0, 1),
           shape = c(16, NA),
           size = 2
-        )))
+        )))+
+      ggplot2::facet_wrap(~SiteName)
 
     cat("Plotted NI spline in time using data \n")
 
@@ -471,7 +479,8 @@ plot.reslr_output <- function(x,
           linetype = c(1),
           shape = c( NA),
           size = 2
-        )))
+        )))+
+      ggplot2::facet_wrap(~SiteName)
 
     cat("Plotted EIV-IGP model & rate \n")
     output_plots <- list(plot_result = plot_result, plot_rate = plot_rate)
@@ -546,7 +555,8 @@ plot.reslr_output <- function(x,
           linetype = c(0, 1),
           shape = c(16, NA),
           size = 2
-        )))
+        )))+
+      ggplot2::facet_wrap(~SiteName)
 
     cat("Plotted NI spline in time using data \n")
 
@@ -603,7 +613,8 @@ plot.reslr_output <- function(x,
           linetype = c(1),
           shape = c( NA),
           size = 2
-        )))
+        )))+
+      ggplot2::facet_wrap(~SiteName)
     cat("Plotted rate of change for NI spline in time \n")
 
 
