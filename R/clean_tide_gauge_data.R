@@ -85,7 +85,8 @@ clean_tidal_gauge_data <- function(data,
   # Remove the temporary file and directory
   unlink(temp_file)
   unlink(temp_dir, recursive = TRUE)
-
+  annual_SL_tide_df <- annual_SL_tide_df %>% dplyr::filter(name == "ARGENTIA")
+  plot(annual_SL_tide_df$Age,annual_SL_tide_df$RSL)
   # Annual Tidal Gauge data----
   annual_tidal_gauge_data_df <- annual_SL_tide_df %>%
     dplyr::select(Age, RSL, Latitude, Longitude, name, RSL_offset, Age_epoch_id) %>%
@@ -94,33 +95,40 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(RSL = RSL / 1000) %>%
     # Reordering by group
     dplyr::group_by(SiteName) %>%
-    dplyr::arrange(SiteName, .by_group = TRUE)
+    dplyr::arrange(SiteName, .by_group = TRUE) %>%
+    dplyr::arrange(Age)
 
 
   # # Set the window size for the moving average (in this case, 10 years)
   # I don't know if this is correct?
-  # window_size <- 10
-  #
-  # # Create a new column with the rolling average
-  # annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
-  #                                                          width = window_size,
-  #                                                          FUN = mean,
-  #                                                          align = "right",
-  #                                                          fill = NA)
-  #
-  # # create a new column for the decade based on the midpoint of the rolling window
-  # annual_tidal_gauge_data_df$decade <- as.integer(floor((annual_tidal_gauge_data_df$Age - (window_size/2))/10)*10)
-  #
-  # # calculate the decadal averages based on the rolling average
-  # decadal_averages_TG <-
-  #   annual_tidal_gauge_data_df %>%
-  #   dplyr::group_by(decade, SiteName) %>%
-  #   dplyr::summarise(
-  #     decade_meanRSL = mean(rolling_avg, na.rm = TRUE),
-  #     Age = max(Age),
-  #     rows_site = dplyr::n()
-  #   )
+  window_size <- 10
 
+  # Create a new column with the rolling average
+  annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
+                                                           width = window_size,
+                                                           FUN = mean,
+                                                           align = "right",#"right",
+                                                           fill = NA)
+
+  # create a new column for the decade based on the midpoint of the rolling window
+  #annual_tidal_gauge_data_df$decade <- as.integer(floor((annual_tidal_gauge_data_df$Age - (window_size/2))/10)*10)
+  annual_tidal_gauge_data_df$decade <- zoo::rollapply(annual_tidal_gauge_data_df$Age,
+                                                      width = window_size,
+                                                      FUN = median,
+                                                      align = "right",#"right",
+                                                      fill = NA)
+
+  # calculate the decadal averages based on the rolling average
+  decadal_averages_TG <- annual_tidal_gauge_data_df %>% drop_na()
+    # annual_tidal_gauge_data_df %>%
+    # dplyr::group_by(decade, SiteName) %>%
+    # dplyr::summarise(
+    #   #decade_meanRSL = mean(rolling_avg, na.rm = TRUE),
+    #   decade_meanRSL = mean(rolling_avg, na.rm = TRUE),
+    #   Age = max(Age),
+    #   rows_site = dplyr::n()
+    # )
+  plot(decadal_averages_TG$decade,decadal_averages_TG$rolling_avg)
 
 
   # Decadal Averages------ I don't know if this is too simple to calculate the decadal averages
@@ -167,7 +175,7 @@ clean_tidal_gauge_data <- function(data,
     dplyr::filter(dplyr::n() >= 2) %>%
     dplyr::mutate(data_type_id = "TideGaugeData")%>%
     dplyr::select(!decade, decade_meanRSL, RSL_annual)
-
+  plot(decadal_NA_TG_df$Age,decadal_NA_TG_df$RSL)
   #-----Uniting original dataset and model run to give a site index to model_result data set-----
   SL_site_df <- data %>%
     dplyr::mutate(Longitude = round(Longitude, 1)) %>%

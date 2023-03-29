@@ -32,12 +32,14 @@ summary.reslr_output <- function(object,#jags_output,#
       dplyr::filter(variable %in% c(
         "alpha", "beta", "sigma_res"
       )) %>%
-      dplyr::mutate(
+      dplyr::select(
+        variable = variable,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
         par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95 # * mod$scale_factor_y
+        par_q95 = q95, # * mod$scale_factor_y
+        rhat = rhat
       )
     #return(par_summary)
     # }
@@ -61,25 +63,27 @@ summary.reslr_output <- function(object,#jags_output,#
       dplyr::filter(variable %in% c(
         "alpha", "beta[1]", "beta[2]", "cp", "sigma_res"
       )) %>%
-      dplyr::mutate(
+      dplyr::select(
+        variable = variable,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
         par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95 # * mod$scale_factor_y
+        par_q95 = q95, # * mod$scale_factor_y
+        rhat = rhat
       )
-    par_summary
+    #par_summary
     # }
-    # if ("diagnostics" %in% type) {
-    #Check convergence
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-      cat("No convergence issues detected. \n")
-    }
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-      cat("Convergence issues detected. \n")
-      cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    }
-   # }
+   #  # if ("diagnostics" %in% type) {
+   #  #Check convergence
+   #  if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+   #    cat("No convergence issues detected. \n")
+   #  }
+   #  if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+   #    cat("Convergence issues detected. \n")
+   #    cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
+   #  }
+   # # }
   }
 
   # EIV cp 2
@@ -94,25 +98,27 @@ summary.reslr_output <- function(object,#jags_output,#
         "beta[3]", "cp[1]",
         "cp[2]", "sigma_res"
       )) %>%
-      dplyr::mutate(
+      dplyr::select(
+        variable = variable,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
         par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95 # * mod$scale_factor_y
+        par_q95 = q95, # * mod$scale_factor_y
+        rhat = rhat
       )
-    par_summary
+    # par_summary
+    # # }
+    # # if ("diagnostics" %in% type) {
+    # # Check convergence
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+    #   cat("No convergence issues detected. \n")
     # }
-    # if ("diagnostics" %in% type) {
-    # Check convergence
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-      cat("No convergence issues detected. \n")
-    }
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-      cat("Convergence issues detected. \n")
-      cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    }
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+    #   cat("Convergence issues detected. \n")
+    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
     # }
+    # # }
   }
 
   # EIV cp 3
@@ -127,25 +133,27 @@ summary.reslr_output <- function(object,#jags_output,#
         "beta[3]", "beta[4]", "cp[1]",
         "cp[2]", "cp[3]", "sigma_res"
       )) %>%
-      dplyr::mutate(
+      dplyr::select(
+        variable = variable,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
         par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95 # * mod$scale_factor_y
+        par_q95 = q95, # * mod$scale_factor_y
+        rhat = rhat
       )
-    par_summary
+    # par_summary
+    # # }
+    # # if ("diagnostics" %in% type) {
+    # # Check convergence
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+    #   cat("No convergence issues detected. \n")
     # }
-    # if ("diagnostics" %in% type) {
-    # Check convergence
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-      cat("No convergence issues detected. \n")
-    }
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-      cat("Convergence issues detected. \n")
-      cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    }
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+    #   cat("Convergence issues detected. \n")
+    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
     # }
+    # # }
   }
 
   # EIV IGP t
@@ -158,25 +166,27 @@ summary.reslr_output <- function(object,#jags_output,#
       dplyr::filter(variable %in% c(
         "phi", "sigma_g", "sigma_res"
       )) %>%
-      dplyr::mutate(
+      dplyr::select(
+        variable = variable,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
         par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95 # * mod$scale_factor_y
+        par_q95 = q95, # * mod$scale_factor_y
+        rhat = rhat
       )
-    par_summary
+    # par_summary
+    # # }
+    # # if ("diagnostics" %in% type) {
+    # # Check convergence
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+    #   cat("No convergence issues detected. \n")
     # }
-    # if ("diagnostics" %in% type) {
-    # Check convergence
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-      cat("No convergence issues detected. \n")
-    }
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-      cat("Convergence issues detected. \n")
-      cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    }
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+    #   cat("Convergence issues detected. \n")
+    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
     # }
+    # # }
   }
 
 
@@ -189,25 +199,27 @@ summary.reslr_output <- function(object,#jags_output,#
       dplyr::filter(variable %in% c(
         "b_t", "sigma_t", "sigma_res"
       )) %>%
-      dplyr::mutate(
+      dplyr::select(
+        variable = variable,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
         par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95 # * mod$scale_factor_y
+        par_q95 = q95, # * mod$scale_factor_y
+        rhat = rhat
       )
-    par_summary
+    # par_summary
+    # # }
+    # # if ("diagnostics" %in% type) {
+    # # Check convergence
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+    #   cat("No convergence issues detected. \n")
     # }
-    # if ("diagnostics" %in% type) {
-    # Check convergence
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-      cat("No convergence issues detected. \n")
-    }
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-      cat("Convergence issues detected. \n")
-      cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    }
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+    #   cat("Convergence issues detected. \n")
+    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
     # }
+    # # }
   }
 
   # NI Spline st
@@ -219,26 +231,28 @@ summary.reslr_output <- function(object,#jags_output,#
       dplyr::filter(variable %in% c(
         "b_st", "sigma_st", "sigma_res"
       )) %>%
-      dplyr::mutate(
+      dplyr::select(
+        variable = variable,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
         par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95 # * mod$scale_factor_y
+        par_q95 = q95, # * mod$scale_factor_y
+        rhat = rhat
       )
-    par_summary
+    # par_summary
+    # # }
+    #
+    # # if ("diagnostics" %in% type) {
+    # # Check convergence
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+    #   cat("No convergence issues detected. \n")
     # }
-
-    # if ("diagnostics" %in% type) {
-    # Check convergence
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-      cat("No convergence issues detected. \n")
-    }
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-      cat("Convergence issues detected. \n")
-      cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    }
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+    #   cat("Convergence issues detected. \n")
+    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
     # }
+    # # }
   }
   # NI GAM decomposition
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
@@ -251,25 +265,27 @@ summary.reslr_output <- function(object,#jags_output,#
         "b_st", "sigma_st",
         "sigma_t", "sigma_res"
       )) %>%
-      dplyr::mutate(
+      dplyr::select(
+        variable = variable,
         par_mean = mean, #* mod$scale_factor_y,
         par_sd = sd, #* mod$scale_factor_y,
         par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
         par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95 # * mod$scale_factor_y
+        par_q95 = q95, # * mod$scale_factor_y
+        rhat = rhat
       )
-    par_summary
+    # par_summary
+    # # }
+    # # if ("diagnostics" %in% type) {
+    # # Check convergence
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
+    #   cat("No convergence issues detected. \n")
     # }
-    # if ("diagnostics" %in% type) {
-    # Check convergence
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-      cat("No convergence issues detected. \n")
-    }
-    if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-      cat("Convergence issues detected. \n")
-      cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    }
+    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
+    #   cat("Convergence issues detected. \n")
+    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
     # }
+    # # }
   }
   # }
 

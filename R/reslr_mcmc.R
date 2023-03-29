@@ -475,7 +475,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Classing the JAGS output in NIGAM time--------------
     class(jags_output) <- c("reslr_output", "ni_spline_t")
 
-    message("JAGS model run finished for the NIGAM in time")
+    message("JAGS model run finished for the NI spline in time")
   }
 
   # Noisy Input GAM in Space Time-------------------------------------------
@@ -591,7 +591,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in NIGAM space time--------------
     class(jags_output) <- c("reslr_output", "ni_spline_st")
-    message("JAGS model run finished for the NIGAM in space time")
+    message("JAGS model run finished for the NI spline in space time")
   }
 
   # Noisy Input GAM for decomposition of RSL signal-------------------------------------------
