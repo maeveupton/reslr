@@ -17,7 +17,7 @@
 summary.reslr_output <- function(object,#jags_output,#
                                  # type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",#' @param type User decides which type of summary they require
                                  ...) {
-  mu_pred <- sd <- mad <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
+  mu_pred <- sd <- mad <- rhat <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
    jags_output <- object
    jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
    sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
