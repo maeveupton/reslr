@@ -106,7 +106,7 @@ clean_tidal_gauge_data <- function(data,
   # Create a new column with the rolling average
   annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
                                                            width = window_size,
-                                                           FUN = stats::mean,
+                                                           FUN = mean,
                                                            align = "right",#"right",
                                                            fill = NA)
 
@@ -114,7 +114,7 @@ clean_tidal_gauge_data <- function(data,
   #annual_tidal_gauge_data_df$decade <- as.integer(floor((annual_tidal_gauge_data_df$Age - (window_size/2))/10)*10)
   annual_tidal_gauge_data_df$decade <- zoo::rollapply(annual_tidal_gauge_data_df$Age,
                                                       width = window_size,
-                                                      FUN = median,
+                                                      FUN = stats::median,
                                                       align = "right",#"right",
                                                       fill = NA)
 

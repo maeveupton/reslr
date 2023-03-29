@@ -9,11 +9,11 @@ jags_output_1 <- reslr_mcmc(input_data = reslr_input_1,
                             n_chains = 1)
 
 # Test printing input
-test_that("print.reslr_input", {
+testthat::test_that("print.reslr_input", {
   testthat::expect_output(print(reslr_input_1))
 })
 # Test printing output
-test_that("print.reslr_output", {
+testthat::test_that("print.reslr_output", {
   testthat::expect_output(print(jags_output_1))
 })
 # # Test summary function --> not working
