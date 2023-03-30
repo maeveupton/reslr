@@ -54,7 +54,7 @@ The `reslr` package uses the JAGS (Just Another Gibbs Sampler) software to run t
 
 Next, start Rstudio and find the window with the command prompt (the symbol `>`). Type
 
-```{r,eval = TRUE,message=FALSE}
+```{r,eval = FALSE,message=FALSE}
 #install.packages("reslr")
 #library(devtools)
 #devtools::install()
