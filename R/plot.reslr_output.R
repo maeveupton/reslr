@@ -1174,15 +1174,6 @@ plot.reslr_output <- function(x,
 
     # Separate Components on one plot with CI --------
     all_components_CI_plot <- ggplot2::ggplot() +
-      # Linear Local Component + site specific vertical offset
-      ggplot2::geom_line(
-        data = lin_loc_component_df,
-        ggplot2::aes(x = Age * 1000, y = pred, colour = ID)
-      ) +
-      ggplot2::geom_ribbon(
-        data = lin_loc_component_df,
-        ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
-      ) +
       # Local
       ggplot2::geom_line(
         data = non_lin_loc_component_df,
@@ -1192,7 +1183,6 @@ plot.reslr_output <- function(x,
         data = non_lin_loc_component_df,
         ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
       ) +
-
       # Regional Component
       ggplot2::geom_line(
         data = regional_component_df,
@@ -1202,6 +1192,17 @@ plot.reslr_output <- function(x,
         data = regional_component_df,
         ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
       ) +
+      # Linear Local Component + site specific vertical offset
+      ggplot2::geom_line(
+        data = lin_loc_component_df,
+        ggplot2::aes(x = Age * 1000, y = pred, colour = ID)
+      ) +
+      ggplot2::geom_ribbon(
+        data = lin_loc_component_df,
+        ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
+      ) +
+
+
       # Total Model
       ggplot2::geom_line(
         data = total_model_fit_df,
@@ -1217,11 +1218,12 @@ plot.reslr_output <- function(x,
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
       ggplot2::scale_fill_manual(
-        name = "", values = c("#5bac06", "#ad4c14", "#3b47ad", "purple3"),
+        name = "", values = c("#3b47ad", "#ad4c14","#5bac06", "purple3"),
         guide = ggplot2::guide_legend(override.aes = list(alpha = 0.1))
       ) +
       ggplot2::scale_colour_manual(name = "",
-                                   values = c("#5bac06", "#ad4c14", "#3b47ad", "purple3")) +
+                                   values = c(
+                                     "#3b47ad","#ad4c14","#5bac06",  "purple3")) +
       ggplot2::ylab("Sea Level (m)") +
       ggplot2::facet_wrap(~SiteName) +
       ggplot2::xlab("Age (CE)") +
