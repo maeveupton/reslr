@@ -816,9 +816,9 @@ For the parameter estimates, we can present the standard deviation associated wi
 
 **Step 5:** The results from the `ni_gam_decomp` model can be illustrated using:
 ```{r eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
-plot(x = jags_output.ni_gam_decomp)
+plot(x = jags_output.ni_gam_decomp,plot_tide_gauge = FALSE)
 ```
-The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the total model fit for the `ni_gam_decomp` is presented when using this function. 
+In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot. The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. Also, the rate of change for the total model fit for the `ni_gam_decomp` is presented when using this function. 
 To examine the data creating the total model result plot, the user can use:
 ```{r eval = TRUE}
 total_model_fit_df <- jags_output.ni_gam_decomp$output_dataframes$total_model_fit_df
