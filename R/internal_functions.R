@@ -169,7 +169,7 @@ clean_tidal_gauge_data <- function(data,
   unlink(temp_file)
   unlink(temp_dir, recursive = TRUE)
   #annual_SL_tide_df <- annual_SL_tide_df %>% dplyr::filter(name == "ARGENTIA")
-  plot(annual_SL_tide_df$Age,annual_SL_tide_df$RSL)
+  #plot(annual_SL_tide_df$Age,annual_SL_tide_df$RSL)
   # Annual Tidal Gauge data----
   annual_tidal_gauge_data_df <- annual_SL_tide_df %>%
     dplyr::select(Age, RSL, Latitude, Longitude, name, RSL_offset, Age_epoch_id) %>%
@@ -179,7 +179,8 @@ clean_tidal_gauge_data <- function(data,
     # Reordering by group
     dplyr::group_by(SiteName) %>%
     dplyr::arrange(SiteName, .by_group = TRUE) %>%
-    dplyr::arrange(Age)
+    dplyr::arrange(Age) %>%
+    dplyr::mutate(data_type_id = "TideGaugeData")
 
 
   # # Set the window size for the moving average (in this case, 10 years)
@@ -250,24 +251,24 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(Age_err = Age_err / 1000) %>%
     dplyr::mutate(RSL_annual = RSL) %>%
     #dplyr::mutate(RSL = decade_meanRSL)
-    dplyr::mutate(RSL = rolling_avg)
+    dplyr::mutate(RSL = rolling_avg) %>%
+    dplyr::select(!c(decade, Age_epoch_id,rolling_avg,RSL_annual,RSL_offset))
 
   # No user option here -> this is a must: Removing sites with only 2 points (20 years of data)-----
-  decadal_NA_TG_df <-
+  decadal_TG_df <-
     tidal_gauge_full_df %>%
     #decadal_NA_TG %>%
     dplyr::group_by(SiteName) %>%
-    dplyr::filter(dplyr::n() >= 2) %>%
-    dplyr::mutate(data_type_id = "TideGaugeData")#%>%
-  #dplyr::select(!decade, decade_meanRSL, RSL_annual)
-  #plot(decadal_NA_TG_df$Age,decadal_NA_TG_df$RSL)
+    dplyr::filter(dplyr::n() >= 2)
+    #dplyr::mutate(data_type_id = "TideGaugeData") %>%
+
   #-----Uniting original dataset and model run to give a site index to model_result data set-----
   SL_site_df <- data %>%
     dplyr::mutate(Longitude = round(Longitude, 1)) %>%
     dplyr::mutate(Latitude = round(Latitude, 1)) %>%
     tidyr::unite("LongLat", Latitude:Longitude, remove = FALSE) %>% # Uniting 2 columns
     dplyr::mutate(site = sprintf("%02d", as.integer(as.factor(LongLat)))) %>%
-    #dplyr::mutate(data_type_id = "ProxyRecord") %>%
+    dplyr::mutate(data_type_id = "ProxyRecord") %>%
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(
       Longitude = dplyr::first(Longitude),
@@ -277,13 +278,13 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(n_obs_by_site = dplyr::n()) %>%
     dplyr::ungroup()
 
-  SL_tide_site_df <- decadal_NA_TG_df %>%
+  SL_tide_site_df <- decadal_TG_df %>%
     # dplyr::select(!all_tidal_data_sites) %>%
     dplyr::mutate(Longitude = round(Longitude, 1)) %>%
     dplyr::mutate(Latitude = round(Latitude, 1)) %>%
     tidyr::unite("LongLat", Latitude:Longitude, remove = FALSE) %>% # Uniting 2 columns
     dplyr::mutate(site = sprintf("%02d", as.integer(as.factor(LongLat)))) %>%
-    # dplyr::mutate(data_type_id = "TideGaugeData")%>%
+    dplyr::mutate(data_type_id = "TideGaugeData")%>%
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(n_obs_by_site = dplyr::n()) %>%
     dplyr::ungroup()
@@ -342,29 +343,30 @@ clean_tidal_gauge_data <- function(data,
   # Criteria 1: User provides a list of TGs------------------------
   if(is.null(list_preferred_TGs) == FALSE){
     # Check if TG exists in the list
-    check_TG <- all(list_preferred_TGs %in% unique(decadal_NA_TG_df$SiteName))
+    check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
     if(check_TG == FALSE){
       cat("Warning: Tide Gauge provided does not exist or may contain a misprint.")
       stop()
     }
 
-    decadal_NA_TG_df_filter <- subset(decadal_NA_TG_df, SiteName %in% list_preferred_TGs)
+    decadal_TG_df_filter <- subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
     #--There will be NAs were the proxy data doesn't have a corresponding index--
     data_tide_proxy <- plyr::rbind.fill(
       SL_site_df,
-      decadal_NA_TG_df_filter
+      decadal_TG_df_filter
     ) # stacking rows
 
     # Ensuring the SiteName is a factor
     data <- data_tide_proxy %>%
       dplyr::select(!c(
-        RSL_annual, Age_epoch_id,
-        RSL_offset, sd_TG, rows_site,
-        decade_meanRSL,#rolling_avg,
+        #RSL_annual, Age_epoch_id,
+        #RSL_offset, sd_TG, rows_site,
+        #decade_meanRSL,#rolling_avg,
         n_obs_by_site,site
         # Indicator,Basin,
       )) %>%
-      dplyr::mutate(SiteName = as.factor(SiteName))
+      dplyr::mutate(SiteName = as.factor(SiteName),
+                    data_type_id = as.factor(data_type_id))
 
   }
 
@@ -391,13 +393,14 @@ clean_tidal_gauge_data <- function(data,
     # Ensuring the SiteName is a factor
     data <- data_tide_proxy %>%
       dplyr::select(!c(
-        RSL_annual, Age_epoch_id,
-        RSL_offset, sd_TG, rows_site,
-        decade_meanRSL,#rolling_avg,
+        #RSL_annual, Age_epoch_id,
+        #RSL_offset, sd_TG, rows_site,
+        #decade_meanRSL,#rolling_avg,
         n_obs_by_site,site
         # Indicator,Basin,
       )) %>%
-      dplyr::mutate(SiteName = as.factor(SiteName))
+      dplyr::mutate(SiteName = as.factor(SiteName),
+                    data_type_id = as.factor(data_type_id))
 
   }
   # Criteria 3: All tide gauges within 1 degree away from proxy site
@@ -421,13 +424,14 @@ clean_tidal_gauge_data <- function(data,
     # Ensuring the SiteName is a factor
     data <- data_tide_proxy %>%
       dplyr::select(!c(
-        RSL_annual, Age_epoch_id,
-        RSL_offset, sd_TG, rows_site,
-        decade_meanRSL,#rolling_avg,
+        #RSL_annual, Age_epoch_id,
+        #RSL_offset, sd_TG, rows_site,
+        #decade_meanRSL,#rolling_avg,
         n_obs_by_site,site
         # Indicator,Basin,
       )) %>%
-      dplyr::mutate(SiteName = as.factor(SiteName))
+      dplyr::mutate(SiteName = as.factor(SiteName),
+                    data_type_id = as.factor(data_type_id))
 
   }
   # #   #------Joining proxy dataframe to Tide gauges data----

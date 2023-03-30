@@ -60,6 +60,7 @@ reslr_load <- function(data,
   }
   # Including TGs and no linear rates
   if(include_tide_gauge == TRUE & include_linear_rate == FALSE){
+    data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
     data <- clean_tidal_gauge_data(data = data,
                                    list_preferred_TGs = list_preferred_TGs,
                                    TG_minimum_dist_proxy= TG_minimum_dist_proxy,
