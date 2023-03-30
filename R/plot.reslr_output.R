@@ -535,132 +535,6 @@ plot.reslr_output <- function(x,
           )))+
         ggplot2::facet_wrap(~SiteName)
     }
-    # # Dataframes to plot
-    # output_dataframes <- jags_output$output_dataframes
-    # data <- jags_output$data
-    # # Plot
-    # plot_result <-
-    #   ggplot2::ggplot() +
-    #   ggplot2::geom_rect(data = data, ggplot2::aes(
-    #     xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
-    #     ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
-    #   ), alpha = 0.4) +
-    #   ggplot2::geom_point(
-    #     data = data,
-    #     ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
-    #   ) +
-    #   ggplot2::geom_line(
-    #     data = output_dataframes,
-    #     ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
-    #   ) +
-    #   ggplot2::geom_ribbon(
-    #     data = output_dataframes,
-    #     ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
-    #   ) +
-    #   # ggplot2::geom_ribbon(
-    #   #   data = output_dataframes,
-    #   #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-    #   # ) +
-    #   ggplot2::xlab("Age (CE)") +
-    #   ggplot2::ylab("Relative Sea Level (m)") +
-    #   ggplot2::facet_wrap(~SiteName) +
-    #   ggplot2::theme_bw() +
-    #   ggplot2::theme(
-    #     plot.title = ggplot2::element_text(size = 15),
-    #     axis.title = ggplot2::element_text(size = 12, face = "bold"),
-    #     axis.text = ggplot2::element_text(size = 12),
-    #     legend.text = ggplot2::element_text(size = 10)
-    #   ) +
-    #   ggplot2::theme(
-    #     strip.text.x = ggplot2::element_text(size = 10),
-    #     strip.background = ggplot2::element_rect(fill = c("white"))
-    #   ) +
-    #   ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-    #   ggplot2::labs(colour = "") +
-    #   ggplot2::scale_fill_manual("",
-    #                              values = c(
-    #                                "Uncertainty" = ggplot2::alpha("grey", 0.3),
-    #                                "95" = ggplot2::alpha("purple3", 0.2) #
-    #                                # "50" = ggplot2::alpha("purple3", 0.3)
-    #                              ),
-    #                              labels = c(
-    #                                "95% Credible Interval",
-    #                                expression(paste("1 sigma error"))
-    #                                # , "50% Credible Interval"
-    #                              )
-    #   ) +
-    #   ggplot2::scale_colour_manual("",
-    #                                values = c("black" = "black", "mean" = "purple3"),
-    #                                labels = c("Data", "Posterior Fit")
-    #   ) +
-    #   ggplot2::guides(
-    #     fill = ggplot2::guide_legend(override.aes = list(
-    #       alpha = c(0.4, 0.2), # , 0.4),
-    #       size = 1
-    #     )),
-    #     colour = ggplot2::guide_legend(override.aes = list(
-    #       linetype = c(0, 1),
-    #       shape = c(16, NA),
-    #       size = 2
-    #     )))
-    #
-    # cat("Plotted NI spline in time using data \n")
-    #
-    # # Plotting Rate of Change for Total component----------
-    # plot_rate <-
-    #   ggplot2::ggplot() +
-    #   ggplot2::geom_line(
-    #     data = output_dataframes,
-    #     ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
-    #   ) +
-    #   ggplot2::geom_ribbon(
-    #     data = output_dataframes,
-    #     ggplot2::aes(y = rate_pred, ymin = rate_lwr_95, ymax = rate_upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
-    #   ) +
-    #   # ggplot2::geom_ribbon(
-    #   #   data = output_dataframes,
-    #   #   ggplot2::aes(y = pred_rate, ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-    #   # ) +
-    #   ggplot2::xlab("Age (CE)") +
-    #   ggplot2::facet_wrap(~SiteName) +
-    #   ggplot2::ylab("Rate of Change (mm/year)") +
-    #   ggplot2::theme_bw() +
-    #   ggplot2::theme(
-    #     plot.title = ggplot2::element_text(size = 15),
-    #     axis.title = ggplot2::element_text(size = 12, face = "bold"),
-    #     axis.text = ggplot2::element_text(size = 12),
-    #     legend.text = ggplot2::element_text(size = 10)
-    #   ) +
-    #   ggplot2::theme(
-    #     strip.text.x = ggplot2::element_text(size = 10),
-    #     strip.background = ggplot2::element_rect(fill = c("white"))
-    #   ) +
-    #   ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-    #   ggplot2::labs(colour = "") +
-    #   ggplot2::scale_fill_manual("",
-    #                              values = c(
-    #                                "95" = ggplot2::alpha("purple3", 0.2) #
-    #                                # "50" = ggplot2::alpha("purple3", 0.3)
-    #                              ),
-    #                              labels = c(
-    #                                "95% Credible Interval"
-    #                                # , "50% Credible Interval"
-    #                              )
-    #   ) +
-    #   ggplot2::scale_colour_manual("",
-    #                                values = c("mean" = "purple3"),
-    #                                labels = c( "Posterior Fit")
-    #   ) +
-    #   ggplot2::guides(
-    #     fill = ggplot2::guide_legend(override.aes = list(
-    #       alpha = c(0.4), # , 0.4),
-    #       size = 1
-    #     )),
-    #     colour = ggplot2::guide_legend(override.aes = list(
-    #       linetype = c(1),
-    #       shape = c( NA),
-    #       size = 2
-    #     )))
     cat("NI spline in space time plotted and rate of change. \n")
 
     output_plots <- list(
@@ -671,10 +545,364 @@ plot.reslr_output <- function(x,
 
   # NIGAM decomposition
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
+    if (plot_tide_gauges == FALSE){
+      output_dataframes <- jags_output$output_dataframes
+      data <- jags_output$data %>%
+        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+      # Plots Total --------
+      total_model_fit_df <-
+        output_dataframes$total_model_fit_df %>%
+        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
 
-    # Dataframes to plot
-    output_dataframes <- jags_output$output_dataframes
-    data <- jags_output$data
+      plot_result<-
+        ggplot2::ggplot() +
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
+        ), alpha = 0.4) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+        ) +
+        ggplot2::geom_line(
+          data = total_model_fit_df,
+          ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = total_model_fit_df,
+          ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
+        ) +
+        # ggplot2::geom_ribbon(
+        #   data = total_model_fit_df,
+        #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+        # ) +
+        ggplot2::xlab("Age (CE)") +
+        ggplot2::ylab("Relative Sea Level (m)") +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 15),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          axis.text = ggplot2::element_text(size = 12),
+          legend.text = ggplot2::element_text(size = 10)
+        ) +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 10),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::labs(colour = "") +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "95" = ggplot2::alpha("purple3", 0.2),
+                                     "Uncertainty" = ggplot2::alpha("grey", 0.4)
+                                     # "50" = ggplot2::alpha("purple3", 0.3)
+                                   ),
+                                   labels = c(
+                                     "95% Credible Interval",
+                                     expression(paste("1-sigma error"))
+                                     # , "50% Credible Interval"
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c("black" = "black", "mean" = "purple3"),
+                                     labels = c("Data", "Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.4, 0.2), # , 0.4),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(0, 1),
+            shape = c(16, NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName)
+
+      cat("Plotted the total model fit for the NIGAM decomposition \n")
+
+      # Plotting Rate of Change for Total component
+      total_model_rate_df <- output_dataframes$total_model_rate_df %>%
+        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+
+      plot_rate <-
+        ggplot2::ggplot() +
+        ggplot2::geom_line(
+          data = total_model_rate_df,
+          ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = total_model_rate_df,
+          ggplot2::aes(ymin = rate_lwr_95, ymax = rate_upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
+        ) +
+        ggplot2::geom_ribbon(
+          data = total_model_rate_df,
+          ggplot2::aes(ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::ylab("Rate of change (mm/yr)") +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 22),
+          axis.title = ggplot2::element_text(size = 14, face = "bold"),
+          axis.text = ggplot2::element_text(size = 12),
+          legend.text = ggplot2::element_text(size = 12)
+        ) +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 10),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::xlab("Age (CE)") +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::labs(colour = "") +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "95" = ggplot2::alpha("purple3", 0.2),
+                                     "50" = ggplot2::alpha("purple3", 0.3)
+                                   ),
+                                   labels = c("95% Credible Interval", "50% Credible Interval")
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c("mean" = "purple3"),
+                                     labels = c("Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.4, 0.2), # , 0.4),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(1),
+            shape = c(NA),
+            size = 2
+          ))
+        )
+      cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
+
+
+      # Regional Component Plot---------------------------
+      regional_component_df <-  output_dataframes$regional_component_df %>%
+        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+
+      regional_plot<-
+        ggplot2::ggplot()+
+        ggplot2::geom_line(data=regional_component_df,
+                           ggplot2::aes(x=Age*1000,y=pred),colour="#3b47ad")+
+        ggplot2::geom_ribbon(data=regional_component_df,
+                             ggplot2::aes(ymin=lwr_95,ymax=upr_95,x=Age*1000),fill="#3b47ad",alpha=0.2)+
+        ggplot2::geom_ribbon(data=regional_component_df,
+                             ggplot2::aes(ymin=lwr_50,ymax=upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
+        ggplot2::theme_bw()+
+        ggplot2::theme(plot.title = ggplot2::element_text(size=15),
+                       axis.title=ggplot2::element_text(size=12,face="bold"),
+                       axis.text=ggplot2::element_text(size=12),
+                       legend.text=ggplot2::element_text(size=12))+
+        #ggplot2::ggtitle("Prediction")+
+        ggplot2::ylab('Sea Level (m)')+
+        ggplot2::xlab('Age (CE)')
+
+      cat("Regional Component plotted \n")
+
+      # Derivative of Predicted Regional Component Plot---------------------------
+      regional_rate_component_df <-  output_dataframes$regional_rate_component_df %>%
+        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+
+      regional_rate_plot<-
+        ggplot2::ggplot()+
+        ggplot2::geom_line(data=regional_rate_component_df,
+                           ggplot2::aes(x=Age*1000,y=rate_pred),colour="#3b47ad")+
+        ggplot2::geom_ribbon(data=regional_rate_component_df,
+                             ggplot2::aes(ymin=rate_lwr_95,ymax=rate_upr_95,x=Age*1000),fill="#3b47ad",alpha=0.2)+
+        ggplot2::geom_ribbon(data=regional_rate_component_df,
+                             ggplot2::aes(ymin=rate_lwr_50,ymax=rate_upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
+        ggplot2::theme_bw()+
+        #ggplot2::ggtitle("Prediction Rate of Change")+
+        ggplot2::theme(plot.title = ggplot2::element_text(size=15),
+                       axis.title=ggplot2::element_text(size=12,face="bold"),
+                       axis.text=ggplot2::element_text(size=12),
+                       legend.text=ggplot2::element_text(size=12))+
+        ggplot2::ylab('Rate of Change (mm/yr)')+
+        ggplot2::xlab('Age (CE)')
+
+      cat("Regional Rate Component plotted \n")
+
+
+      # Linear Local + Site specific vertical offset ---------------------
+      lin_loc_component_df <-  output_dataframes$lin_loc_component_df %>%
+        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+      lin_loc_plot <-
+        ggplot2::ggplot() +
+        ggplot2::geom_line(
+          data = lin_loc_component_df,
+          ggplot2::aes(x = Age * 1000, y = pred), colour = "#5bac06"
+        ) +
+        ggplot2::geom_ribbon(
+          data = lin_loc_component_df,
+          ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000),
+          fill = "#5bac06", alpha = 0.3
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 22),
+          axis.title = ggplot2::element_text(size = 14, face = "bold"),
+          axis.text = ggplot2::element_text(size = 12),
+          legend.text = ggplot2::element_text(size = 12)
+        ) +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 14),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::ylab("Sea Level (m)") +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::xlab("Age (CE)")
+
+      cat("Linear Local Component plotted \n")
+
+      # Non-Linear Local Component: Spline in Space Time ----------------
+      non_lin_loc_component_df <-  output_dataframes$non_lin_loc_component_df %>%
+        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+
+      non_lin_loc_plot <-
+        ggplot2::ggplot() +
+        ggplot2::geom_line(
+          data = non_lin_loc_component_df,
+          ggplot2::aes(x = Age * 1000, y = pred), colour = "#ad4c14"
+        ) +
+        ggplot2::geom_ribbon(
+          data = non_lin_loc_component_df,
+          ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000), fill = "#ad4c14", alpha = 0.2
+        ) +
+        ggplot2::geom_ribbon(
+          data = non_lin_loc_component_df,
+          ggplot2::aes(ymin = lwr_50, ymax = upr_50, x = Age * 1000), fill = "#ad4c14", alpha = 0.3
+        ) +
+        ggplot2::geom_hline(yintercept = 0) +
+        ggplot2::theme_bw() +
+        ggplot2::ylab("Sea Level (m)") +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 22),
+          axis.title = ggplot2::element_text(size = 14, face = "bold"),
+          axis.text = ggplot2::element_text(size = 12),
+          legend.text = ggplot2::element_text(size = 12)
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 10),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::xlab("Age (CE)")
+      cat("Non-Linear Local Component Plot \n")
+
+      # Non-Linear Local Component: Rate of change for Spline in Space Time --------------
+      non_lin_loc_rate_component_df <-   output_dataframes$non_lin_loc_rate_component_df %>%
+        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+      non_lin_loc_rate_plot <-
+        ggplot2::ggplot() +
+        ggplot2::geom_line(
+          data = non_lin_loc_rate_component_df,
+          ggplot2::aes(x = Age * 1000, y = rate_pred), colour = "#ad4c14"
+        ) +
+        ggplot2::geom_ribbon(
+          data = non_lin_loc_rate_component_df,
+          ggplot2::aes(ymin = rate_lwr_95, ymax = rate_upr_95, x = Age * 1000), fill = "#ad4c14", alpha = 0.2
+        ) +
+        ggplot2::geom_ribbon(
+          data = non_lin_loc_rate_component_df,
+          ggplot2::aes(ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000), fill = "#ad4c14", alpha = 0.3
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::ylab("Rate of Change (mm/year)") +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 22),
+          axis.title = ggplot2::element_text(size = 14, face = "bold"),
+          axis.text = ggplot2::element_text(size = 12),
+          legend.text = ggplot2::element_text(size = 12)
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 10),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::xlab("Age (CE)")
+
+      cat("Rate of change of Non-Linear Local Component Plot \n")
+
+      # Separate Components on one plot with CI --------
+      all_components_CI_plot <- ggplot2::ggplot() +
+        # Linear Local Component + site specific vertical offset
+        ggplot2::geom_line(
+          data = lin_loc_component_df,
+          ggplot2::aes(x = Age * 1000, y = pred, colour = ID)
+        ) +
+        ggplot2::geom_ribbon(
+          data = lin_loc_component_df,
+          ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
+        ) +
+        # Local
+        ggplot2::geom_line(
+          data = non_lin_loc_component_df,
+          ggplot2::aes(x = Age * 1000, y = pred, colour = ID)
+        ) +
+        ggplot2::geom_ribbon(
+          data = non_lin_loc_component_df,
+          ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
+        ) +
+
+        # Regional Component
+        ggplot2::geom_line(
+          data = regional_component_df,
+          ggplot2::aes(x = Age * 1000, y = pred, colour = ID)
+        ) +
+        ggplot2::geom_ribbon(
+          data = regional_component_df,
+          ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
+        ) +
+        # Total Model
+        ggplot2::geom_line(
+          data = total_model_fit_df,
+          ggplot2::aes(x = Age * 1000, y = pred, colour = ID)
+        ) +
+        ggplot2::geom_ribbon(
+          data = total_model_fit_df,
+          ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 9),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_fill_manual(
+          name = "", values = c("#5bac06", "#ad4c14", "#3b47ad", "purple3"),
+          guide = ggplot2::guide_legend(override.aes = list(alpha = 0.1))
+        ) +
+        ggplot2::scale_colour_manual(name = "",
+                                     values = c("#5bac06", "#ad4c14", "#3b47ad", "purple3")) +
+        ggplot2::ylab("Sea Level (m)") +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::xlab("Age (CE)") +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom")
+      # ggplot2::theme(
+      #   legend.position = c(0.95, -0.05),
+      #   legend.justification = c(1, 0),
+      #   legend.spacing.y = ggplot2::unit(0.1, "cm"),
+      #   legend.title = ggplot2::element_blank(),
+      #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
+      # )
+
+    }
+      else{
+        output_dataframes <- jags_output$output_dataframes
+        data <- jags_output$data
+
     # Plots Total --------
     total_model_fit_df <-
       output_dataframes$total_model_fit_df
@@ -1005,6 +1233,8 @@ plot.reslr_output <- function(x,
       #   legend.title = ggplot2::element_blank(),
       #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
       # )
+    }
+
 
     cat("All Components plotted \n")
 
