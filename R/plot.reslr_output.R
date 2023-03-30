@@ -18,7 +18,7 @@
 #' jags_output <- reslr_mcmc(x, model_type = "eiv_slr_t")
 #' plot(x =jags_output)
 plot.reslr_output <- function(x,
-                        plot_tide_gauges = TRUE,
+                        plot_tide_gauges = FALSE,
                         ...) {
   Age <- RSL <-Age_err <- ID <- RSL_err <- lwr_95 <- upr_95 <- lwr_50 <- lwr_95 <- upr_50 <- rate_pred <- rate_lwr_95 <- rate_upr_95 <- rate_lwr_50 <- rate_upr_50 <- SiteName <- data_type_id <- pred <- NULL
   jags_output <- x
