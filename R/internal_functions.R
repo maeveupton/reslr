@@ -4,10 +4,9 @@
 #' @param data This is the input dataset stored in a list created in the \code{reslr_mcmc} function.
 #'
 #' @return The plot of the model fit
-#' @export
-#'
-#' @examples
+#' @noRd
 create_model_fit_plot <- function(output_dataframes,data){
+  data_type_id <- pred <- lwr_95 <- upr_95<- Age <- RSL <- Age_err<- RSL_err  <-SiteName <- Longitude <- Latitude <- NULL
   # Plot
   plot <-
     ggplot2::ggplot() +

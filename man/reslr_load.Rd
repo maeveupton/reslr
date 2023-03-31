@@ -2,7 +2,17 @@
 % Please edit documentation in R/reslr_load.R
 \name{reslr_load}
 \alias{reslr_load}
-\title{Loading input data}
+\title{In this function, the data provided by the user is loaded into the package. The prerequisites of the input data structure has been given in the vignettes and the structure needs to be followed prior to running this function.
+Within this function, a factor is created called "SiteName" which will be a combination of the Region and the Site name for each data site.
+The n_prediction corresponds to the output resolution the user requires. The default is 100 and can be altered based on the users requirements.
+The input Age column is examined to identify the input unit. The package has the ability to convert Before Common Era Age observations into Common Era Age estimates which is the preferred structure of the package.
+Next, the user has to decided whether they require tide gauge data. The tide gauge data from the Permanent Service for Mean Sea Level online database is accessed in a temporary path.
+The tide gauge data undergo a cleaning process in this function where flagged stations are removed as recommended by the online database.
+From this the data is averaged using a rolling window over a decade to ensure it is comparable with proxy data and the tide gauge data is given an RSL uncertainty with is the standard deviation of the data over the decade and an Age error of 5 years corresponding to half a decade.
+Then, the user selects their preferred tide gauge based on three criteria: 1.nearest tide gauge to the proxy site; 2. User supplies a list of names of preferred tide gauges; 3. all tide gauges within 1 degree are chosen.
+The tide gauge dataframe is joined with the proxy dataframe with an ID column for data source, "ProxyRecord" or "TideGaugeData".
+The other option the user must decide is whether to use linear rate which corresponds to an important physical process that impacts sea level observations which is glacial isostatic adjustment (GIA). The user can refer to the vignette about this process in detail.
+For the linear_rate and its associated linear_rate_err, the user can provide these values as additional columns in the input dataframe. If they prefer, the package will calculate the linear_rate and the linear_rate_err using the data.}
 \usage{
 reslr_load(
   data,
@@ -20,7 +30,7 @@ reslr_load(
 
 \item{n_prediction}{Predictions over every 100 years(default) can vary based on user preference}
 
-\item{include_tide_gauge}{Including decadaly average tide gauge data from PSMSL website}
+\item{include_tide_gauge}{Including decadaly average tide gauge data from SMSL website}
 
 \item{include_linear_rate}{User decides to include linear_rate and linear_rate_err}
 
@@ -36,7 +46,7 @@ reslr_load(
 A list containing data frame of data and prediction grid
 }
 \description{
-Loading input data
+The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")

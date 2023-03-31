@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.reslr_output.R
 \name{print.reslr_output}
 \alias{print.reslr_output}
-\title{Print a reslr output object}
+\title{Print a reslr output object which is created from the \code{reslr_mcmc} function. This will be very high level printing the number of iterations used by the user.}
 \usage{
 \method{print}{reslr_output}(x, ...)
 }
@@ -15,7 +15,7 @@
 Returns a neat summary of the object
 }
 \description{
-Print a reslr output object
+Print a reslr output object which is created from the \code{reslr_mcmc} function. This will be very high level printing the number of iterations used by the user.
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
