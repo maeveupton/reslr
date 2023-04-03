@@ -191,10 +191,10 @@ reslr_input_1 <- reslr_load(data = data,
   jags_output_slr <- reslr_mcmc(
     input_data = reslr_input_1,
     model_type = "eiv_slr_t",
-    n_iterations = 10,
-    n_burnin = 1,
-    n_thin = 1,
-    n_chains = 1
+    n_iterations = 1000,
+    n_burnin = 10,
+    n_thin = 5,
+    n_chains = 2
   )
 
 testthat::test_that("Basic reslr_output plot for SLR", {
@@ -206,10 +206,10 @@ testthat::test_that("Basic reslr_output plot for SLR", {
   jags_output_cp1 <- reslr_mcmc(
     input_data = reslr_input_1,
     model_type = "eiv_cp_t",
-    n_iterations = 10,
-    n_burnin = 1,
-    n_thin = 1,
-    n_chains = 1,
+    n_iterations = 1000,
+    n_burnin = 10,
+    n_thin = 5,
+    n_chains = 2,
     n_cp = 1
   )
 
@@ -222,10 +222,10 @@ testthat::test_that("Basic reslr_output plot for EIV cp 1", {
   jags_output_cp2 <- reslr_mcmc(
     input_data = reslr_input_1,
     model_type = "eiv_cp_t",
-    n_iterations = 10,
-    n_burnin = 1,
-    n_thin = 1,
-    n_chains = 1,
+    n_iterations = 1000,
+    n_burnin = 10,
+    n_thin = 5,
+    n_chains = 2,
     n_cp = 2
   )
 testthat::test_that("Basic reslr_output plot for EIV cp 2", {
