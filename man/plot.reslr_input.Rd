@@ -2,10 +2,7 @@
 % Please edit documentation in R/plot.reslr_input.R
 \name{plot.reslr_input}
 \alias{plot.reslr_input}
-\title{Plot data with measurement uncertainty.
-For all models except the NI GAM decomposition, additional tide gauge data is not recommended. However, using this function the user has the ability to plot the tide gauge data with the proxy data.
-For the NI GAM decomposition, additional tide gauge data is recommended and this function will create plots of the proxy sites with their uncertainty boxes and the tide gauge sites.
-For the NI spline in space time, additional tide gauge data can be used but it will needed to be examined by the user.}
+\title{Plot raw data with measurement uncertainty.}
 \usage{
 \method{plot}{reslr_input}(
   x,
@@ -30,10 +27,13 @@ For the NI spline in space time, additional tide gauge data can be used but it w
 \item{...}{Not used}
 }
 \value{
-Plot of the RSL data
+Plot of the raw data with the measurement uncertainty.
 }
 \description{
-#'If tide gauges are used in the model, the user has the ability plot the output with or without the inclusion of the tide gauges.
+For all models except the NI GAM decomposition, additional tide gauge data is not recommended. However, using this function the user has the ability to plot the tide gauge data with the proxy data.
+For the NI GAM decomposition, additional tide gauge data is recommended and this function will create plots of the proxy sites with their uncertainty boxes and the tide gauge sites.
+For the NI spline in space time, additional tide gauge data can be used but it will needed to be examined by the user.
+If tide gauges are used in the model, the user has the ability plot the output with or without the inclusion of the tide gauges.
 }
 \examples{
 full_dataset <- reslr_load(NAACproxydata)

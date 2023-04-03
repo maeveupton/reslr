@@ -6,10 +6,11 @@
 # * https://r-pkgs.org/tests.html
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
-#library(testthat)
+library(testthat)
 library(reslr)
-#library(vdiffr)
+library(vdiffr)
 
 co <- function(expr) capture.output(expr, file = "NUL")
 
-testthat::test_check("reslr")
+#testthat::test_check("reslr")
+test_check("reslr")

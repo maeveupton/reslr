@@ -1,10 +1,11 @@
-#' Produces summaries and convergence diagnostics for an object created with \code{\link{reslr_mcmc}}. A warning message will appear if the model has not been converge. If this appears the user is recommended to re-run the model and alter the \code{reslr_mcmc} function default iteration and MCMC settings.
-#' Also, it provides high-level summaries of the estimated parameters.
+#' Produces summaries and convergence diagnostics for an object created with \code{\link{reslr_mcmc}}.
+#'
+#' A warning message will appear if the model has not been converge. If this appears the user is recommended to re-run the model and alter the \code{reslr_mcmc} function default iteration and MCMC settings. Also, it provides high-level summaries of the estimated parameters.
 #'
 #' @param object Output object from the \code{\link{reslr_mcmc}}
 #' @param ... Not in use
 #'
-#' @return A list containing convergence diagnostics
+#' @return A list containing convergence diagnostics and parameter estimates for the output.
 #' @export
 #'
 #' @examples

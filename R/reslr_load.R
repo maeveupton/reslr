@@ -1,3 +1,5 @@
+#' Loading in data for the \code{reslr} package
+#'
 #' In this function, the data provided by the user is loaded into the package. The prerequisites of the input data structure has been given in the vignettes and the structure needs to be followed prior to running this function.
 #' Within this function, a factor is created called "SiteName" which will be a combination of the Region and the Site name for each data site.
 #' The n_prediction corresponds to the output resolution the user requires. The default is 100 and can be altered based on the users requirements.
@@ -10,7 +12,6 @@
 #' The other option the user must decide is whether to use linear rate which corresponds to an important physical process that impacts sea level observations which is glacial isostatic adjustment (GIA). The user can refer to the vignette about this process in detail.
 #' For the linear_rate and its associated linear_rate_err, the user can provide these values as additional columns in the input dataframe. If they prefer, the package will calculate the linear_rate and the linear_rate_err using the data.
 #'
-#' The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.
 #'
 #' @param data The data of interest
 #' @param n_prediction Predictions over every 100 years(default) can vary based on user preference
@@ -21,7 +22,7 @@
 #' @param TG_minimum_dist_proxy The package finds the tide gauge closest to the proxy site
 #' @param all_TG_1deg The package finds all tide gauges within 1 degree of the proxy site
 #'
-#' @return A list containing data frame of data and prediction grid
+#' @return A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.
 #' @export
 #'
 #' @examples
@@ -45,11 +46,11 @@ reslr_load <- function(data,
     cat("User must provide a site name and a region name. \n")
   }
   if (input_Age_type == "BCE") {
-    cat("The inputed age value will be converted to units of Common Era. \n")
+    cat("\n The inputed age value will be converted to units of Common Era. \n")
     data <- data %>%
       dplyr::mutate(Age = 1950 - Age)
   } else {
-    cat("The inputed age value is units of Common Era. \n")
+    cat("\n The inputed age value is units of Common Era. \n")
     data <- data
   }
   # Including no TG or linear rates

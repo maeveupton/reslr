@@ -1,15 +1,16 @@
-#' Plotting the results for each statistical model. For the EIV simple linear regression and the Change point models the model fit plots are created, preferably for 1 proxy site.
+#' Plotting the results for each statistical model from the \code{reslr_mcmc} function.
+#'
+#' For the EIV simple linear regression and the Change point models the model fit plots are created, preferably for 1 proxy site.
 #' For the EIV IGP and the NI spline in time the plots of the model fits and the derivative of the model fit are produced for 1 proxy site, as running these models with more than 1 site or with tide gauge data is not recommended.
 #' For the NI spline in space time, the plots of the model fits and the derivatives of the model fits are produced for any amount of proxy sites.
 #' For the NI GAM decomposition, the plots of the model fits and the derivatives of the model fits are produced for any amount of sites including tide gauges and proxy sites. It is important to note that tide gauge data is strongly recommended for this model. Also, the ni_gam_decomp model will produce plots for each individual component,i.e. the regional component and its rate of change, the linear local component, the non-linear local component and its rate of change.
-#'
-#'If tide gauges are used in the model, the user has the ability plot the output with or without the inclusion of the tide gauges.
+#' If tide gauges are used in the model, the user has the ability plot the output with or without the inclusion of the tide gauges.
 #'
 #' @param x An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}
 #' @param plot_tide_gauges Plotting the tide gauge data as well as proxy data
 #' @param ...  Not used
 #'
-#' @return Plot of model fit
+#' @return Plot of model fit and the rate of change depending on the statistical model in question.
 #' @export
 #'
 #' @examples

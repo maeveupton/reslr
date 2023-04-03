@@ -2,8 +2,7 @@
 % Please edit documentation in R/summary.reslr_output.R
 \name{summary.reslr_output}
 \alias{summary.reslr_output}
-\title{Produces summaries and convergence diagnostics for an object created with \code{\link{reslr_mcmc}}. A warning message will appear if the model has not been converge. If this appears the user is recommended to re-run the model and alter the \code{reslr_mcmc} function default iteration and MCMC settings.
-Also, it provides high-level summaries of the estimated parameters.}
+\title{Produces summaries and convergence diagnostics for an object created with \code{\link{reslr_mcmc}}.}
 \usage{
 \method{summary}{reslr_output}(object, ...)
 }
@@ -13,11 +12,10 @@ Also, it provides high-level summaries of the estimated parameters.}
 \item{...}{Not in use}
 }
 \value{
-A list containing convergence diagnostics
+A list containing convergence diagnostics and parameter estimates for the output.
 }
 \description{
-Produces summaries and convergence diagnostics for an object created with \code{\link{reslr_mcmc}}. A warning message will appear if the model has not been converge. If this appears the user is recommended to re-run the model and alter the \code{reslr_mcmc} function default iteration and MCMC settings.
-Also, it provides high-level summaries of the estimated parameters.
+A warning message will appear if the model has not been converge. If this appears the user is recommended to re-run the model and alter the \code{reslr_mcmc} function default iteration and MCMC settings. Also, it provides high-level summaries of the estimated parameters.
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")

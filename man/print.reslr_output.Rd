@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.reslr_output.R
 \name{print.reslr_output}
 \alias{print.reslr_output}
-\title{Print a reslr output object which is created from the \code{reslr_mcmc} function. This will be very high level printing the number of iterations used by the user.}
+\title{Print a reslr output object which is created from the \code{reslr_mcmc} function.}
 \usage{
 \method{print}{reslr_output}(x, ...)
 }
@@ -12,10 +12,10 @@
 \item{...}{Other arguments (not supported)}
 }
 \value{
-Returns a neat summary of the object
+Returns high level information about the reslr_output object, i.e. the number of iterations and chains used.
 }
 \description{
-Print a reslr output object which is created from the \code{reslr_mcmc} function. This will be very high level printing the number of iterations used by the user.
+This will be very high level printing that the user can use to obtain information about the MCMC run using JAGS. The number of iterations and chains used by the user is printed
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")

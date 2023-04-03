@@ -1,4 +1,6 @@
-#' In this function, the reslr input object is printed. This is a high-level summary which provides the number of observations and the number of sites utilies in the dataset.
+#' Print a reslr output object which is created from the \code{reslr_load} function.
+#'
+#' In this function, the reslr input object is printed. This is a high-level summary which provides the number of observations and the number of sites utilised in the dataset.
 #'
 #' @param x An object of class \code{reslr_input}
 #' @param ... Other arguments (not supported)

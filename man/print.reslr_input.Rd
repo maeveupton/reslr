@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.reslr_input.R
 \name{print.reslr_input}
 \alias{print.reslr_input}
-\title{In this function, the reslr input object is printed. This is a high-level summary which provides the number of observations and the number of sites utilies in the dataset.}
+\title{Print a reslr output object which is created from the \code{reslr_load} function.}
 \usage{
 \method{print}{reslr_input}(x, ...)
 }
@@ -15,7 +15,7 @@
 A neat presentation of your input reslr object
 }
 \description{
-In this function, the reslr input object is printed. This is a high-level summary which provides the number of observations and the number of sites utilies in the dataset.
+In this function, the reslr input object is printed. This is a high-level summary which provides the number of observations and the number of sites utilised in the dataset.
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")

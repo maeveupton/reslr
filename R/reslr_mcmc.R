@@ -1,12 +1,12 @@
+#' Running a range of Bayesian statistical models using JAGS
+#'
 #' In this function, a variety of statistical models can be run depending on the requirements of the user. All models are written within a Bayesian framework and use JAGS (Just Another Gibbs Sampler) to calculate Markov Chain Monte Carlo (MCMC) simulation to obtain estimates of unknown parameters. The user has the cability to alter the number of iterations, the number of burnin, the number of chains and the thinning. These options relate to the amount of MCMC simulations required and should be reviewed by the user to ensure model convergence is achieved without excessively long run times.
 #' Prior to using this function, the user is recommended to use the reslr_load function which organises the input data into the correct structure required for this function.
-#'
 #' The user chooses their 'model_type' and as a range of models to choose from. The simplest model available is the EIV simple linear regression. Followed by the EIV change point model which the user change decide how many change points are required using the n_cp function. This is limited to 3 change points.
 #' The EIV IGP and NI spline in time models allows for model fits as well as rate of change estimates for one site as it is not recommended to use more than one site for all these models mentioned above.
 #' The final two model options allow for examining model fits as well as rate of change estimates for multiple sites where the number of sites has no limit. The first option is the NI spline in space time.
 #' The final option is the NI GAM decomposition which also allows for the decomposition of the signal into a regional, a linear local component and a non-linear local component as describe by Upton et al 2023.
 #'
-#' The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
 #'
 #' @param input_data Input data from the reslr_load function
 #' @param model_type Statistical Model type
@@ -17,7 +17,7 @@
 #' @param igp_smooth Informs prior for the smoothness (correlation) parameter if model = "igp" is chosen. Choose a value between 0 and 1. Closer to 1 will increase smoothness.
 #' @param n_cp Number of change points 1,2 or 3
 #'
-#' @return A list containing the input data, the JAGS output and output dataframes used for final plots.
+#' @return A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export
 #'
 #' @examples

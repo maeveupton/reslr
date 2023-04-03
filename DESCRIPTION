@@ -26,12 +26,13 @@ Imports:
     purrr,
     R2jags,
     stringr,
-    testthat,
     tidybayes,
     tidyr,
     zoo
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat,
+    vdiffr
 VignetteBuilder: knitr
 Config/testthat/edition: 3

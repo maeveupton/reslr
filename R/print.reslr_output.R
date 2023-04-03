@@ -1,9 +1,11 @@
-#' Print a reslr output object which is created from the \code{reslr_mcmc} function. This will be very high level printing the number of iterations used by the user.
+#' Print a reslr output object which is created from the \code{reslr_mcmc} function.
+#'
+#' This will be very high level printing that the user can use to obtain information about the MCMC run using JAGS. The number of iterations and chains used by the user is printed
 #'
 #' @param x An object of class \code{reslr_output}
 #' @param ... Other arguments (not supported)
 #'
-#' @return Returns a neat summary of the object
+#' @return Returns high level information about the reslr_output object, i.e. the number of iterations and chains used.
 #'
 #' @export
 #' @examples
