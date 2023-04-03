@@ -944,6 +944,7 @@ add_noisy_input <- function(model_run, model_type, data) {
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
+        #NO = nseg = 4
         nseg = 5
       )
       #----Deriv----
@@ -1170,7 +1171,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       return(B_st)
     }
     # Now create derivatives----
-    h <- 0.001
+    h <- 0.0001
 
     first_deriv_step1 <- first_deriv_calc(t + h)
     first_deriv_step2 <- first_deriv_calc(t - h)
@@ -1250,7 +1251,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       B_st <- B_st_full[, -remove_col_index]
       return(B_st)
     }
-    h <- 0.001
+    h <- 0.0001
     t_pred <- data_grid$Age
 
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
@@ -1484,12 +1485,12 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age), deg = 2,nseg = 6
+        xr = max(data$Age), #deg = 2,nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude), deg = 2,nseg = 6
+        xr = max(data$Latitude),# deg = 2,nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase(data$Longitude,
