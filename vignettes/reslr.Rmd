@@ -599,10 +599,12 @@ jags_output.ni_spline_t <- reslr::reslr_mcmc(input_data =  CedarIslandNC,
 ```
 The output object `jags_output.ni_spline_t` stores the JAGS model run. 
 Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
+
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printresspt, eval=TRUE}
 print(jags_output.ni_spline_t)
 ```
+
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r,summaryspt, eval = TRUE}
 summary(jags_output.ni_spline_t)
@@ -660,10 +662,12 @@ The output of this function is a list of two dataframes called `data` and `data_
 - The `data` dataframe is the inputted data with additional columns for the linear_rate, linear_rate_err and data_type_id which will contain two options, "ProxyRecord" or "TideGaugeData". It can be accessed by:
 ```{r,dataspst,eval=TRUE}
 data <- multi_site$data
+head(data)
 ```
 - The `data_grid` is a dataframe that is evenly spaced in time based on the `n_prediction` value chosen by the user and is used to create the plots and is accessed by
 ```{r,datagridspst, eval = TRUE}
 data_grid <- multi_site$data_grid
+head(data_grid)
 ```
 
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
@@ -694,10 +698,12 @@ jags_output.ni_spline_st <- reslr::reslr_mcmc(input_data =  multi_site,
 ```
 The output object `jags_output.ni_spline_st` stores the JAGS model run. 
 Note that additional computational run time is required for the model compared with the ni_spline_t. 
+
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printspstout,eval=TRUE}
 print(jags_output.ni_spline_st)
 ```
+
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r,summaryspst, eval = TRUE}
 summary(jags_output.ni_spline_st)
@@ -773,6 +779,7 @@ data <- multi_site$data
 ```{r,datagridnigam, eval = TRUE}
 data_grid <- multi_site$data_grid
 ```
+
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
 ```{r,printnigam, eval=TRUE}
 print(multi_site)
@@ -802,10 +809,12 @@ jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
 ```
 The output object `jags_output.ni_gam_decomp` stores the JAGS model run. 
 Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
+
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printnigamout, eval=TRUE}
 print(jags_output.ni_gam_decomp)
 ```
+
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r,summarynigam, eval = TRUE}
 summary(jags_output.ni_gam_decomp)
