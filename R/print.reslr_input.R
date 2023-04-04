@@ -17,15 +17,17 @@ print.reslr_input <- function(x,
   data <- x$data
   n_obs <- nrow(data)
   n_sites <- length(data$SiteName %>% unique)
-  # n_proxy <- data %>%
-  #   dplyr::select(SiteName,data_type_id) %>%
-  #   unique() %>%
-  #   length()
+  n_proxy <- data %>%
+    dplyr::filter(data_type_id == "ProxyRecord") %>%
+    dplyr::select(SiteName,data_type_id) %>%
+    unique() %>%
+    nrow()
 
   # if(data$data_type == "TideGaugeData"){
   #   n_tg <- data %>%
   #     dplyr::filter(data_type_id == "TideGaugeData") %>%
-  #     unique() %>% length()
+  #     dplyr::select(SiteName,data_type_id) %>%
+  #     unique() %>% nrow()#length()
   # }
   # else{
   #   n_tg = 0
@@ -35,6 +37,6 @@ print.reslr_input <- function(x,
   cat("This is a valid reslr input object with ")
   cat(paste(n_obs, "observations "))
   cat("and ",paste(n_sites),"sites.\n")
-  #cat("There are ", paste(n_proxy)," proxy sites ")
-  #cat("and ", paste(n_tg)," tide gauge sites.\n")
+  cat("There are ", paste(n_proxy)," proxy sites ")
+  cat("and ", paste(n_sites - n_proxy)," tide gauge sites.\n")
 }

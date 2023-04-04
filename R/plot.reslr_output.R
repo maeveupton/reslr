@@ -1251,6 +1251,5 @@ plot.reslr_output <- function(x,
       non_lin_loc_rate_plot = non_lin_loc_rate_plot,
       all_components_CI_plot = all_components_CI_plot)
   }
-
   return(output_plots)
 }

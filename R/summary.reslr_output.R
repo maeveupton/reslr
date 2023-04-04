@@ -33,11 +33,11 @@ summary.reslr_output <- function(object,#jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        par_mean = mean, #* mod$scale_factor_y,
-        par_sd = sd, #* mod$scale_factor_y,
-        par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95, # * mod$scale_factor_y
+        mean = mean, #* mod$scale_factor_y,
+        sd = sd, #* mod$scale_factor_y,
+        mad = mad, #* mod$scale_factor_y, # WHAT this one?
+        q5 = q5, #* mod$scale_factor_y,
+        q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
     #return(par_summary)
@@ -64,11 +64,11 @@ summary.reslr_output <- function(object,#jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        par_mean = mean, #* mod$scale_factor_y,
-        par_sd = sd, #* mod$scale_factor_y,
-        par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95, # * mod$scale_factor_y
+        mean = mean, #* mod$scale_factor_y,
+        sd = sd, #* mod$scale_factor_y,
+        mad = mad, #* mod$scale_factor_y, # WHAT this one?
+        q5 = q5, #* mod$scale_factor_y,
+        q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
     #par_summary
@@ -99,11 +99,11 @@ summary.reslr_output <- function(object,#jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        par_mean = mean, #* mod$scale_factor_y,
-        par_sd = sd, #* mod$scale_factor_y,
-        par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95, # * mod$scale_factor_y
+        mean = mean, #* mod$scale_factor_y,
+        sd = sd, #* mod$scale_factor_y,
+        mad = mad, #* mod$scale_factor_y, # WHAT this one?
+        q5 = q5, #* mod$scale_factor_y,
+        q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
     # par_summary
@@ -134,11 +134,11 @@ summary.reslr_output <- function(object,#jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        par_mean = mean, #* mod$scale_factor_y,
-        par_sd = sd, #* mod$scale_factor_y,
-        par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95, # * mod$scale_factor_y
+        mean = mean, #* mod$scale_factor_y,
+        sd = sd, #* mod$scale_factor_y,
+        mad = mad, #* mod$scale_factor_y, # WHAT this one?
+        q5 = q5, #* mod$scale_factor_y,
+        q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
     # par_summary
@@ -167,11 +167,11 @@ summary.reslr_output <- function(object,#jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        par_mean = mean, #* mod$scale_factor_y,
-        par_sd = sd, #* mod$scale_factor_y,
-        par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95, # * mod$scale_factor_y
+        mean = mean, #* mod$scale_factor_y,
+        sd = sd, #* mod$scale_factor_y,
+        mad = mad, #* mod$scale_factor_y, # WHAT this one?
+        q5 = q5, #* mod$scale_factor_y,
+        q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
     # par_summary
@@ -200,11 +200,11 @@ summary.reslr_output <- function(object,#jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        par_mean = mean, #* mod$scale_factor_y,
-        par_sd = sd, #* mod$scale_factor_y,
-        par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95, # * mod$scale_factor_y
+        mean = mean, #* mod$scale_factor_y,
+        sd = sd, #* mod$scale_factor_y,
+        mad = mad, #* mod$scale_factor_y, # WHAT this one?
+        q5 = q5, #* mod$scale_factor_y,
+        q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
     # par_summary
@@ -232,11 +232,11 @@ summary.reslr_output <- function(object,#jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        par_mean = mean, #* mod$scale_factor_y,
-        par_sd = sd, #* mod$scale_factor_y,
-        par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95, # * mod$scale_factor_y
+        mean = mean, #* mod$scale_factor_y,
+        sd = sd, #* mod$scale_factor_y,
+        mad = mad, #* mod$scale_factor_y, # WHAT this one?
+        q5 = q5, #* mod$scale_factor_y,
+        q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
     # par_summary
@@ -266,11 +266,11 @@ summary.reslr_output <- function(object,#jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        par_mean = mean, #* mod$scale_factor_y,
-        par_sd = sd, #* mod$scale_factor_y,
-        par_mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        par_q5 = q5, #* mod$scale_factor_y,
-        par_q95 = q95, # * mod$scale_factor_y
+        mean = mean, #* mod$scale_factor_y,
+        sd = sd, #* mod$scale_factor_y,
+        mad = mad, #* mod$scale_factor_y, # WHAT this one?
+        q5 = q5, #* mod$scale_factor_y,
+        q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
     # par_summary

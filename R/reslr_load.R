@@ -97,12 +97,6 @@ reslr_load <- function(data,
   # Including linear rates & TG data
   if (include_linear_rate == TRUE & include_tide_gauge == TRUE){
     data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
-    cat("Warning: provide a method of selecting tide gauge data \n")
-    data <- clean_tidal_gauge_data(data = data,
-                                   list_preferred_TGs = list_preferred_TGs,
-                                   TG_minimum_dist_proxy = TG_minimum_dist_proxy,
-                                   all_TG_1deg = all_TG_1deg)
-    cat("Decadally averaged tide gauge data included by the package. \n")
     # Checking if user provided GIA rates----------
     if (!("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data))) {
       lm_data_rates <- linear_reg_rates(data)
@@ -113,6 +107,12 @@ reslr_load <- function(data,
       data <- data
       cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
     }
+    #cat("Warning: provide a method of selecting tide gauge data \n")
+    data <- clean_tidal_gauge_data(data = data,
+                                   list_preferred_TGs = list_preferred_TGs,
+                                   TG_minimum_dist_proxy = TG_minimum_dist_proxy,
+                                   all_TG_1deg = all_TG_1deg)
+    cat("Decadally averaged tide gauge data included by the package. \n")
     #---Adding linear rates from ICE5G for TG-----
     data <- add_linear_rate(data = data)
     data <- data %>%
@@ -122,7 +122,6 @@ reslr_load <- function(data,
           )
     cat("Tide Gauge data & linear_rate included")
   }
-#browser()
   # Prediction dataframe-------------------------------------
   sites <- data %>%
     dplyr::select(
