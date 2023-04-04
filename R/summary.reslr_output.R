@@ -259,10 +259,8 @@ summary.reslr_output <- function(object,#jags_output,#
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
     # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
-      dplyr::filter(variable %in% c(
-        "b_t", "g_h_z_x",
-        "b_st", "sigma_st",
-        "sigma_t", "sigma_res"
+      dplyr::filter(variable %in% c("sigma_st",
+        "sigma_t[1]", "sigma_res"
       )) %>%
       dplyr::select(
         variable = variable,

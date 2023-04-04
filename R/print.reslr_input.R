@@ -14,6 +14,7 @@
 #' print(x = reslr_input)
 print.reslr_input <- function(x,
                               ...){
+  SiteName <-data_type_id <- NULL
   data <- x$data
   n_obs <- nrow(data)
   n_sites <- length(data$SiteName %>% unique)
@@ -22,17 +23,6 @@ print.reslr_input <- function(x,
     dplyr::select(SiteName,data_type_id) %>%
     unique() %>%
     nrow()
-
-  # if(data$data_type == "TideGaugeData"){
-  #   n_tg <- data %>%
-  #     dplyr::filter(data_type_id == "TideGaugeData") %>%
-  #     dplyr::select(SiteName,data_type_id) %>%
-  #     unique() %>% nrow()#length()
-  # }
-  # else{
-  #   n_tg = 0
-  # }
-
 
   cat("This is a valid reslr input object with ")
   cat(paste(n_obs, "observations "))

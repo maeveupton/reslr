@@ -125,16 +125,18 @@ The user must ensure that the input data is a dataframe. For a single site or mu
 - **Optional** linear_rate_err is a column that contains associated uncertainty for the linear rate in mm per year. *This is not a requirement*. For the NI GAM decomposition model, the user has the option of using their value, otherwise the package will calculate it using the data. It is important to note that if the linear_rate_err is provided without the linear_rate column this will lead to issues, i.e. both columns need to be provided.
 
 ### Tide Gauge Data
-There is an option in the `reslr` package to include tide gauge data as an additional source of data which we recommend when using the `model_type = "ni_gam_decomp"`. The package will select a tide gauge site utilising the annual data from the [PSMSL website](https://psmsl.org/data/obtaining/complete.php). Within the package, the tide gauge data is averaged over a decade to make it comparable with proxy records. An additional column, called `data_type_id`, is added to the dataset which identifies the data source "ProxyRecord" or "TideGaugeData" depending on the observation in question.
-The tide gauges undergo a cleaning process within the package. Firstly, certain tide gauges have been flagged by the PSMSL website and have been removed. Secondly, each tide gauge data record must have data longer than 20 years and if this is not the case, the tide gauge is removed. The output will be tide gauge data averaged over a decade. 
+There is an option in the `reslr` package to include tide gauge data as an additional source of data which we recommend when using the `model_type = "ni_gam_decomp"`. The package will extract tide gauge data from the [PSMSL website](https://psmsl.org/data/obtaining/complete.php). The data is downloaded from this website and stored in a temporary directory.
+The tide gauges undergo a cleaning process within the package. Firstly, certain tide gauges have been flagged by the PSMSL website and we remove these locations. As collection of proxy reconstructions began in approximately 2000 CE, the tide gauge records are given in meters relative to the average over a time window, 2000 - 2018 CE, which corresponds to the variability of 19-year astronomical tides (Pugh and Woodworth 2014). Next, the tide gauge data is averaged over a decade to make it comparable with sedimentation rates associated proxy records sedimentation rates. 
 
 Within the `reslr_load` function, the user has three options to choose from:
-1. Provide a list of the preferred tide gauges from the [PSMSL website](https://psmsl.org/data/obtaining/), ensuring spelling, captailisation and spacing is exactly the same as the website. Note, the package will not work if error in spelling occurs. In addition, certain tide gauges have been flagged by the PSMSL website and are not included in this package and will return an error if selected. This is done by giving a using the `list_preferred_TGs` opt
+
+1. Provide a list of the preferred tide gauges from the [PSMSL website](https://psmsl.org/data/obtaining/), ensuring spelling, captailisation and spacing is exactly the same as the website. Note, the package will not work if error in spelling occurs. In addition, certain tide gauges have been flagged by the PSMSL website and are not included in this package and will return an error if selected. This is done by giving a list to the `list_preferred_TGs = c("ARGENTIA)` option in the `reslr_mcmc` function
 
 2. The nearest tide gauge to proxy site based on minimum distance in kilometers, which is done by setting `TG_minimum_dist_proxy = TRUE`.
 
 3. Any tide gauge within 1 degree from the proxy site, which is done by setting `all_TG_1deg = TRUE`.
 
+The final output data frame contains an additional column, called `data_type_id`, which identifies the data source "ProxyRecord" or "TideGaugeData" depending on the observation in question.
 
 
 ### Glacial Isostatic Adjustment (GIA) 
@@ -243,6 +245,7 @@ In this function, the user can select to add tide gauge data and estimates for l
 Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `n_prediction` with the default set at 100 years. 
 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
+
 - The `data` dataframe is the inputted data with additional columns for the linear_rate, linear_rate_err and data_type_id which will contain two options, "ProxyRecord" or "TideGaugeData". It can be accessed by:
 ```{r, slrdata,eval=TRUE}
 data <- CedarIslandNC$data
@@ -251,6 +254,7 @@ data <- CedarIslandNC$data
 ```{r, datagridslr, eval = TRUE}
 data_grid <- CedarIslandNC$data_grid
 ```
+
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
 ```{r, printdata, eval=TRUE}
 print(CedarIslandNC)
@@ -282,10 +286,12 @@ jags_output.eiv_slr_t <- reslr::reslr_mcmc(
 ```
 This command takes the input data and the user specifies the statistical model, i.e. a simple linear regression using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `jags_ouput.eiv_slr_t`.
 
+
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r, printrunslr,eval=TRUE}
 print(jags_output.eiv_slr_t)
 ```
+
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r, summaryslr, eval = TRUE}
 summary(jags_output.eiv_slr_t)
@@ -347,18 +353,21 @@ The output of this function is a list of two dataframes called `data` and `data_
 - The `data` dataframe is the inputted data with additional column for the data_type_id which will contain, "ProxyRecord". It can be accessed by:
 ```{r,datacp,eval=TRUE}
 data <- CedarIslandNC$data
+head(data)
 ```
 - The `data_grid` is a dataframe that is evenly spaced in time based on the `n_prediction` value chosen by the user and is used to create the plots and is accessed by
 ```{r,datagridcp, eval = TRUE}
 data_grid <- CedarIslandNC$data_grid
+head(data_grid)
 ```
+
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
 ```{r,printcp, eval=TRUE}
 print(CedarIslandNC)
 ```
 
 **Step 2:** Plotting the data the raw data with:
-```{r,plotdatacp,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotdatacp,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x =  CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
@@ -389,6 +398,7 @@ jags_output.eiv_cp2_t <- reslr::reslr_mcmc(
 ```
 
 Similar to the earlier model, the output object `jags_output.eiv_cp1_t` stores the JAGS model run and should take a second to run.
+
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printcpout, eval=TRUE}
 print(jags_output.eiv_cp1_t)
@@ -457,13 +467,14 @@ data <- CedarIslandNC$data
 ```{r,datagridigp, eval = TRUE}
 data_grid <- CedarIslandNC$data_grid
 ```
+
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
 ```{r,printigp, eval=TRUE}
 print(CedarIslandNC)
 ```
 
 **Step 2:** Plotting the data the raw data with:
-```{r, plotigpdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r, plotigpdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x =  CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
@@ -477,6 +488,7 @@ plot(
   plot_tide_gauges = FALSE
 )
 ```
+
 **Step 3:** To run the eiv_igp_t model the following function should be used:
 ```{r,runigp, eval = TRUE}
 jags_output.eiv_igp_t <- reslr::reslr_mcmc(
@@ -484,7 +496,7 @@ jags_output.eiv_igp_t <- reslr::reslr_mcmc(
   model_type = "eiv_igp_t"
 )
 ```
-This command takes the input data and the user specifies the statistical model, i.e. an integrated Gaussian process using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `jags_output.eiv_igp_t`. The computational run time for this model is long **XXX minutes??**
+This command takes the input data and the user specifies the statistical model, i.e. an integrated Gaussian process using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `jags_output.eiv_igp_t`. The computational run time for this model is approximately 14 minutes.
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printigpout, eval=TRUE}
@@ -512,7 +524,7 @@ For the parameter estimates, the length scale parameter, "phi" determines the di
 
 **Step 5:** The results from the EIV IGP model can be illustrated using:
 ```{r,plotigpres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(x = jags_output.eiv_igp_t)
+plot(jags_output.eiv_igp_t)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. In addition, the rate of change is plotted using this function.
 
@@ -564,7 +576,7 @@ print(CedarIslandNC)
 ```
 
 **Step 2:** Plotting the data the raw data with:
-```{r,plotspt,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotspt,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(x =  CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
@@ -661,7 +673,7 @@ print(multi_site)
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,plotspst,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(x =  multi_site)
+plot(multi_site)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
@@ -959,4 +971,13 @@ Atlantic coast of the United States’, Geology 37(12), 1115–1118
 Peltier, W.R (2004), ‘Global Glacial Isostasy and the Surface of the Ice-Age Earth: The ICE-5G (VM2)
 Model and GRACE’, Annual Review of Earth and Planetary Sciences 32, 111–149
 
+For the background to tide gauge data:
 
+Pugh, David, and Philip Woodworth. 2014. “Tidal Forces: Sea-Level Science: Understanding Tides,
+Surges, Tsunamis and Mean Sea-Level Changes.” In Sea-Level Science: Understanding Tides, Surges,
+Tsunamis and Mean Sea-Level Changes, 36–59. Cambridge University Press. 
+
+Holgate, Simon J., Andrew Matthews, Philip L. Woodworth, Lesley J. Rickards, Mark E. Tamisiea,
+Elizabeth Bradshaw, Peter R. Foden, Kathleen M. Gordon, Svetlana Jevrejeva, and Jeff Pugh. 2013.
+“New Data Systems and Products at the Permanent Service for Mean Sea Level.” Journal of Coastal
+Research 29 (3): 493–504. 
