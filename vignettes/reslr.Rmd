@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
   fig.path = "vig/"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
-library(tidyverse)
+#library(tidyverse)
 ```
 
 <!-- avoid border around images -->
