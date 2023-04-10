@@ -1038,7 +1038,6 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # #Z_t <- B_t_old %*% Q_t
     # B_t <- B_t_old %*% Q_t
     # B_t <- B_t_old
-
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
       # Create the regional basis functions
@@ -1059,7 +1058,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     }
     # Now create derivatives----------------------
     # h <- 0.001
-    h <- 0.01
+    h <- 0.001
     first_deriv_step1 <- first_deriv_calc(t + h)
     first_deriv_step2 <- first_deriv_calc(t - h)
     B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
@@ -1639,8 +1638,8 @@ bs_bbase <- function(x,
     nrow = length(x)
   )
   # Remove columns that contain zero only
-  bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  #bs_matrix <-get_bs_matrix
+  #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  bs_matrix <-get_bs_matrix
   #print(dim(bs_matrix))
   return(bs_matrix)
 }

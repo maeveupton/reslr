@@ -415,7 +415,6 @@ reslr_mcmc.reslr_input <- function(input_data,
       model_run = model_run,
       model_type = model_type
     )
-
     # Include Noise-----------------------
     # noisy_jags_file <- "inst/jags_models/noisy_model_ni_spline_t.jags"
     noisy_jags_file <- system.file("jags_models", "noisy_model_ni_spline_t.jags", package = "reslr")
