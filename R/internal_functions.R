@@ -1647,7 +1647,8 @@ bs_bbase <- function(x,
                      xr = max(x),
                      deg = 3,
                      #nseg = 20){
-                     nseg = NULL){
+                     nseg = NULL,
+                     data = NULL){
   # Create basis functions------------------------------------------------------
   if(is.null(nseg)){
     nseg <- round(deg / (1 + deg / length(x)))
