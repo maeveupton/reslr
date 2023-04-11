@@ -8,6 +8,7 @@
 #'
 #' @param x An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}
 #' @param plot_tide_gauges Plotting the tide gauge data as well as proxy data
+#' @param plot_type The user can select the type of output plot they require from the following: "rate_plot","model_fit_plot","regional_plot","regional_rate_plot","linear_local_plot","non_linear_local_plot","non_linear_local_rate_plot","nigam_component_plot"
 #' @param ...  Not used
 #'
 #' @return Plot of model fit and the rate of change depending on the statistical model in question.
@@ -20,15 +21,7 @@
 #' plot(x =jags_output)
 plot.reslr_output <- function(x,
                         plot_tide_gauges = FALSE,
-                        plot_type = c("rate_plot",
-                                      "model_fit_plot",
-                                      "total_model_fit_plot",
-                                      "total_model_fit_rate_plot",
-                                      "regional_plot",
-                                      "regional_rate_plot",
-                                      "linear_local_plot",
-                                      "non_linear_local_plot",
-                                      "non_lin_loc_rate_plot"
+                        plot_type = c("model_fit_plot"
                                       ),
                         ...) {
   Age <- RSL <-Age_err <- ID <- RSL_err <- lwr_95 <- upr_95 <- lwr_50 <- lwr_95 <- upr_50 <- rate_pred <- rate_lwr_95 <- rate_upr_95 <- rate_lwr_50 <- rate_upr_50 <- SiteName <- data_type_id <- pred <- NULL
@@ -105,7 +98,7 @@ plot.reslr_output <- function(x,
       plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
                                            data = data)
     }
-    cat("Plotted 2 Change Point Model \n")
+    cat("Plotted EIV 2 Change Point Model \n")
 
     output_plots <- list(plot_result = plot_result)
   }
@@ -131,7 +124,7 @@ plot.reslr_output <- function(x,
                                            data = data)
     }
 
-    cat("Plotted 3 Change Point \n")
+    cat("Plotted model fit for EIV 3 Change Point \n")
 
     output_plots <- list(plot_result = plot_result)
   }
@@ -405,7 +398,7 @@ plot.reslr_output <- function(x,
           )))+
         ggplot2::facet_wrap(~SiteName)
     }
-    cat("Plotted rate of change for NI spline in time \n")
+    cat("NI spline in time plotted and rate of change. \n")
 
 
     output_plots <- list(
@@ -1261,5 +1254,37 @@ plot.reslr_output <- function(x,
       non_lin_loc_rate_plot = non_lin_loc_rate_plot,
       all_components_CI_plot = all_components_CI_plot)
   }
-  return(output_plots)
+  if("model_fit_plot" %in% plot_type){
+    message("Print plot of the model fit\n")
+    return(output_plots$plot_result)
+  }
+  if("rate_plot" %in% plot_type){
+    message("Print plot of the rate of change \n")
+    return(output_plots$plot_rate)
+  }
+  if("regional_plot" %in% plot_type){
+    message("Print plot of the regional component \n")
+    return(output_plots$regional_plot)
+  }
+  if("regional_rate_plot" %in% plot_type){
+    message("Print plot of the rate of change for the regional component \n")
+    return(output_plots$regional_rate_plot)
+  }
+  if("linear_local_plot" %in% plot_type){
+    message("Print plot of the linear local component \n")
+    return(output_plots$lin_loc_plot)
+  }
+  if("non_linear_local_plot" %in% plot_type){
+    message("Print plot of the non-linear local component \n")
+    return(output_plots$non_lin_loc_plot)
+  }
+  if("non_linear_local_rate_plot" %in% plot_type){
+    message("Print plot of the rate of change of the non-linear local component \n")
+    return(output_plots$non_lin_loc_rate_plot)
+  }
+  if("nigam_component_plot" %in% plot_type){
+    message("Print plot of all the components of the NI GAM decomposition \n")
+    return(output_plots$all_components_CI_plot)
+  }
+
 }
