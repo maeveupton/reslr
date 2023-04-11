@@ -4,12 +4,14 @@
 \alias{plot.reslr_output}
 \title{Plotting the results for each statistical model from the \code{reslr_mcmc} function.}
 \usage{
-\method{plot}{reslr_output}(x, plot_tide_gauges = FALSE, ...)
+\method{plot}{reslr_output}(x, plot_tide_gauges = FALSE, plot_type = c("model_fit_plot"), ...)
 }
 \arguments{
 \item{x}{An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}}
 
 \item{plot_tide_gauges}{Plotting the tide gauge data as well as proxy data}
+
+\item{plot_type}{The user can select the type of output plot they require from the following: "rate_plot","model_fit_plot","regional_plot","regional_rate_plot","linear_local_plot","non_linear_local_plot","non_linear_local_rate_plot","nigam_component_plot"}
 
 \item{...}{Not used}
 }

@@ -217,7 +217,7 @@ The `input_Age_type` argument is associated with the type of input Age where the
 
 **Step 4.** Check the model converged and examine the results of the parameters with the `summary` function 
 
-**Step 5.** Visualise the results with `plot` and access the dataframes used to create the plots
+**Step 5.** Visualise the results with `plot` and access the dataframes used to create the plots. 
 
 ## Errors-in-Variables Simple Linear Regression (**"eiv_slr_t"**)
 
