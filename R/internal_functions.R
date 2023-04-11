@@ -1641,6 +1641,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 #   print(dim(B))
 #   return(B)
 # }
+
 # Old basis function approach
 bs_bbase <- function(x,
                      xl = min(x),
