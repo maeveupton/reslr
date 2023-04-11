@@ -20,6 +20,16 @@
 #' plot(x =jags_output)
 plot.reslr_output <- function(x,
                         plot_tide_gauges = FALSE,
+                        plot_type = c("rate_plot",
+                                      "model_fit_plot",
+                                      "total_model_fit_plot",
+                                      "total_model_fit_rate_plot",
+                                      "regional_plot",
+                                      "regional_rate_plot",
+                                      "linear_local_plot",
+                                      "non_linear_local_plot",
+                                      "non_lin_loc_rate_plot"
+                                      ),
                         ...) {
   Age <- RSL <-Age_err <- ID <- RSL_err <- lwr_95 <- upr_95 <- lwr_50 <- lwr_95 <- upr_50 <- rate_pred <- rate_lwr_95 <- rate_upr_95 <- rate_lwr_50 <- rate_upr_50 <- SiteName <- data_type_id <- pred <- NULL
   jags_output <- x
