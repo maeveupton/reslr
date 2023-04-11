@@ -635,7 +635,7 @@ plot(jags_output.ni_spline_t)
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. In order to view the rate of change plot, the following setting should be used:
 
 ```{r,plotsptresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(jags_output.ni_spline_st,plot_type = "rate_plot")
+plot(jags_output.ni_spline_t,plot_type = "rate_plot")
 ```
 This will print the plot of the rate of change with 95 \% uncertainty intervals. 
 To examine the data creating these plots, can be accessed by the user:
