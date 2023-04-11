@@ -868,7 +868,7 @@ add_noisy_input <- function(model_run, model_type, data) {
       # Create the regional basis functions
       B_deriv_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age))
+        xr = max(data$Age),data = data)
       # # Create the regional basis functions
       # B_deriv_t_old <- bs_bbase(t_new,
       #                       xl = min(data$Age),
@@ -1030,7 +1030,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
   if (model_type == "ni_spline_t") {
     t <- data$Age
     # Basis functions in time for data-----------------------
-    B_t<- bs_bbase(t, xl = min(t), xr = max(t))
+    B_t<- bs_bbase(t, xl = min(t), xr = max(t),data = data)
     # B_t_old <- bs_bbase(t, xl = min(t), xr = max(t))
     # #--------Create the differencing matrix for spline in time------
     # D_t <- diff(diag(ncol(B_t_old)), diff = 2)#2)
@@ -1043,7 +1043,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Create the regional basis functions
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age))
+        xr = max(data$Age),data = data)
       # # Create the regional basis functions
       # B_t_old <- bs_bbase(t_new,
       #                 xl = min(data$Age),
@@ -1066,7 +1066,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # Basis functions in time using prediction data frame-----------------------
     t_pred <- sort(data_grid$Age)
     B_t_pred <- bs_bbase(t_pred,
-      xl = min(t), xr = max(t)
+      xl = min(t), xr = max(t),data = data
     )
     # B_t_pred_old <- bs_bbase(t_pred,
     #                      xl = min(t), xr = max(t)
@@ -1582,29 +1582,65 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 #' @param deg Degree of polynomial
 #' @param data Input data
 #' @noRd
-tpower <- function(x, t, p) {
-  # Truncated p-th power function
-  return((x - t)^p * (x > t))
+# Basis functions using mgcv knots
+bs_bbase <- function(x,
+                     xl = min(x),
+                     xr = max(x),
+                     deg = 3,
+                     data = NULL,
+                     #nseg = 20){
+                     nseg = NULL){
+  # Create basis functions using mgcv---------------
+  mgcv_gam <- mgcv::gam(RSL ~ s(Age, bs = "bs"), data = data)
+  # Extract the basis function matrix
+  knots<- mgcv_gam$smooth[[1]]$knots
+  # # Create equally spaced knots
+  # knots <- seq(xl - deg * dx,
+  #   xr + deg * dx,
+  #   by = dx
+  # )
+  #print(length(knots))
+  # Use bs() function to generate the B-spline basis
+  get_bs_matrix <- matrix(
+    splines::bs(x,
+      knots = knots,
+      degree = deg,
+      Boundary.knots = c(knots[1], knots[length(knots)]),
+      intercept = TRUE
+    ),
+    nrow = length(x)
+  )
+  # Remove columns that contain zero only
+  #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  bs_matrix <-get_bs_matrix
+  #print(dim(bs_matrix))
+  return(bs_matrix)
 }
-bs_bbase <- function(x, xl = min(x), xr = max(x), # 30
-                     #nseg = 10,
-                     #nseg = 8,
-                     nseg = NULL,
-                     deg = 3) {
-  if(is.null(nseg)){
-    nseg <- round(deg / (1 + deg / length(x)))
-  }
-  # Construct B-spline basis
-  dx <- (xr - xl) / nseg
-  knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)
-  print(length(knots))
-  P <- outer(x, knots, tpower, deg)
-  n <- dim(P)[2]
-  D <- diff(diag(n), diff = deg + 1) / (gamma(deg + 1) * dx^deg)
-  B <- (-1)^(deg + 1) * P %*% t(D)
-  print(dim(B))
-  return(B)
-}
+
+
+# tpower <- function(x, t, p) {
+#   # Truncated p-th power function
+#   return((x - t)^p * (x > t))
+# }
+# bs_bbase <- function(x, xl = min(x), xr = max(x), # 30
+#                      #nseg = 10,
+#                      #nseg = 8,
+#                      nseg = NULL,
+#                      deg = 3) {
+#   if(is.null(nseg)){
+#     nseg <- round(deg / (1 + deg / length(x)))
+#   }
+#   # Construct B-spline basis
+#   dx <- (xr - xl) / nseg
+#   knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)
+#   print(length(knots))
+#   P <- outer(x, knots, tpower, deg)
+#   n <- dim(P)[2]
+#   D <- diff(diag(n), diff = deg + 1) / (gamma(deg + 1) * dx^deg)
+#   B <- (-1)^(deg + 1) * P %*% t(D)
+#   print(dim(B))
+#   return(B)
+# }
 # # Old basis function approach
 # bs_bbase <- function(x,
 #                      xl = min(x),
@@ -1663,24 +1699,29 @@ bs_bbase <- function(x, xl = min(x), xr = max(x), # 30
 #   # Compute the length of the partitions
 #   dx <- (xr - xl) / nseg
 #   # Create equally spaced knots
-#   # knots <- seq(xl - deg * dx,
-#   #   xr + deg * dx,
-#   #   by = dx
-#   # )
-#   nIknots <- 5
-#   knots <- quantile(x, seq(0, 1, length.out = nIknots))#+2))#[-c(1, nIknots + 2)]
+#   knots <- seq(xl - deg * dx,
+#     xr + deg * dx,
+#     by = dx
+#   )
+#   #nIknots <- 5
+#   #knots <- quantile(x, seq(0, 1, length.out = nIknots))#+2))#[-c(1, nIknots + 2)]
 #   #knots <- c(-0.8,0.3,0.8,1.3,1.7,1.9,2.000)
 #   print(length(knots))
 #   # Use ns() function to generate the natural  basis
 #   get_bs_matrix <- matrix(
 #     splines::ns(x,
-#       knots = knots#,
-#       #df = deg+1#,
+#       #knots = knots,
+#       df = deg,
 #       #intercept = FALSE#,
-#       #Boundary.knots = c(xl,xr),#c(knots[1], knots[length(knots)])
+#       Boundary.knots = c(xl,xr)#,#c(knots[1], knots[length(knots)])
 #     ),
 #     nrow = length(x)
 #   )
+#   # plot(x,get_bs_matrix[,1])
+#   # points(x,get_bs_matrix[,2])
+#   # points(x,get_bs_matrix[,3])
+#   # points(x,get_bs_matrix[,4])
+#   # plot(x, data1site_example$RSL)
 #   # Remove columns that contain zero only
 #   #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
 #   bs_matrix <-get_bs_matrix
