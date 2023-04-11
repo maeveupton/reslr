@@ -20,6 +20,7 @@ Imports:
     geosphere,
     ggplot2,
     magrittr,
+    mgcv,
     ncdf4,
     plyr,
     posterior,

@@ -8,7 +8,7 @@ testthat::test_that("Full data set example", {
   # Load in with reslr_load
   reslr_1 <-
     reslr_load(data = data_testsite,
-               n_prediction = 100,
+               prediction_interval = 100,
                include_tide_gauge = FALSE,
                include_linear_rate = FALSE,
                list_preferred_TGs = NULL,
@@ -29,7 +29,7 @@ testthat::test_that("One site example", {
   reslr_1 <-
     reslr_load(
       data = data_testsite,
-      n_prediction = 100,
+      prediction_interval = 100,
       include_tide_gauge = FALSE,
       include_linear_rate = FALSE,
       list_preferred_TGs = NULL,
@@ -51,7 +51,7 @@ testthat::test_that("Simplest example with closest tide gauge", {
   reslr_1 <-
     reslr_load(
       data = data_testsite,
-      n_prediction = 100,
+      prediction_interval = 100,
       include_tide_gauge = TRUE,
       include_linear_rate = FALSE,
       list_preferred_TGs = NULL,
@@ -73,7 +73,7 @@ testthat::test_that("Simplest example with list of tide gauges", {
   reslr_1 <-
     reslr_load(
       data = data_testsite,
-      n_prediction = 100,
+      prediction_interval = 100,
       include_tide_gauge = TRUE,
       include_linear_rate = FALSE,
       list_preferred_TGs = c("ARGENTIA"),
@@ -95,7 +95,7 @@ testthat::test_that("Simplest example with all tide gauges within 1 degree", {
   reslr_1 <-
     reslr_load(
       data = data_testsite,
-      n_prediction = 100,
+      prediction_interval = 100,
       include_tide_gauge = TRUE,
       include_linear_rate = FALSE,
       list_preferred_TGs = NULL,
@@ -117,7 +117,7 @@ testthat::test_that("Simplest example with linear rate", {
   reslr_1 <-
     reslr_load(
       data = data_testsite,
-      n_prediction = 100,
+      prediction_interval = 100,
       include_tide_gauge = FALSE,
       include_linear_rate = TRUE,
       list_preferred_TGs = NULL,
@@ -139,7 +139,7 @@ testthat::test_that("Simplest example with linear rate and closes tide gauge", {
   reslr_1 <-
     reslr_load(
       data = data_testsite,
-      n_prediction = 100,
+      prediction_interval = 100,
       include_tide_gauge = TRUE,
       include_linear_rate = TRUE,
       list_preferred_TGs = NULL,

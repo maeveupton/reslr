@@ -6,7 +6,7 @@
 \usage{
 reslr_load(
   data,
-  n_prediction = 100,
+  prediction_interval = 100,
   include_tide_gauge = FALSE,
   include_linear_rate = FALSE,
   list_preferred_TGs = NULL,
@@ -18,7 +18,7 @@ reslr_load(
 \arguments{
 \item{data}{The data of interest}
 
-\item{n_prediction}{Predictions over every 100 years(default) can vary based on user preference}
+\item{prediction_interval}{Predictions over every 100 years(default) can vary based on user preference}
 
 \item{include_tide_gauge}{Including decadaly average tide gauge data from SMSL website}
 
@@ -38,7 +38,7 @@ A list containing data frame of data and prediction grid. The output of this fun
 \description{
 In this function, the data provided by the user is loaded into the package. The prerequisites of the input data structure has been given in the vignettes and the structure needs to be followed prior to running this function.
 Within this function, a factor is created called "SiteName" which will be a combination of the Region and the Site name for each data site.
-The n_prediction corresponds to the output resolution the user requires. The default is 100 and can be altered based on the users requirements.
+The prediction_interval corresponds to the output resolution the user requires. The default is 100 and can be altered based on the users requirements.
 The input Age column is examined to identify the input unit. The package has the ability to convert Before Common Era Age observations into Common Era Age estimates which is the preferred structure of the package.
 Next, the user has to decided whether they require tide gauge data. The tide gauge data from the Permanent Service for Mean Sea Level online database is accessed in a temporary path.
 The tide gauge data undergo a cleaning process in this function where flagged stations are removed as recommended by the online database.
