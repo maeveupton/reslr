@@ -63,7 +63,7 @@ plot.reslr_input <- function(x,
       ) +
       ggplot2::scale_fill_manual("",
         values = "grey",
-        labels = expression(paste("1 sigma error")),
+        labels = expression(paste("1-sigma Error")),
         guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
       ) +
       ggplot2::scale_colour_manual(
@@ -102,7 +102,7 @@ plot.reslr_input <- function(x,
       ) +
       ggplot2::scale_fill_manual("",
         values = "grey",
-        labels = expression(paste("1 sigma error")),
+        labels = expression(paste("1-sigma Error")),
         guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
       ) +
       ggplot2::scale_colour_manual(
