@@ -917,7 +917,11 @@ The rate of change of the non-linear local component is plotted with with 95\% u
 non_lin_loc_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$non_lin_loc_rate_component_df
 ```
 
-
+In order to examine how all components vary, the user can examine the plot using the following method:
+```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+plot(jags_output.ni_gam_decomp,plot_type = "nigam_component_plot")
+```
+Each component is plotted with an 95\% uncertainty interval and this plot gives insight into the variablity of the different components through time and at the different locations in question.
 ## Advanced 
 
 ### Including Tide Gauge data
