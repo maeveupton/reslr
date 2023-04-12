@@ -15,7 +15,7 @@
 #'
 #' @param data The data of interest
 #' @param prediction_interval Predictions over every 100 years(default) can vary based on user preference
-#' @param include_tide_gauge Including decadaly average tide gauge data from SMSL website
+#' @param include_tide_gauge Including tide gauge data from PSMSL website that is averaged over a decade using a rolling window
 #' @param include_linear_rate User decides to include linear_rate and linear_rate_err
 #' @param input_Age_type The inputted age in years CE or year BCE
 #' @param list_preferred_TGs The user can supply the name or names of the preferred tide gauges
@@ -133,6 +133,7 @@ reslr_load <- function(data,
       dplyr::contains("data_type_id")
     ) %>%
     unique()
+
   times <- rep(seq(min(data$Age) ,
     max(data$Age),
     by = prediction_interval / 1000
@@ -154,8 +155,8 @@ reslr_load <- function(data,
   data_age_boundary <- data %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(
-      max_Age = max(Age)  + (prediction_interval / 1000),
-      min_Age = min(Age) -(prediction_interval / 1000)
+      max_Age = max(Age)+Age_err[1], # + (prediction_interval / 1000),
+      min_Age = min(Age)-Age_err[length(Age_err)]#0.05 #-(prediction_interval / 1000)
     ) %>%
     unique()
   # Filtering prediction grids to just cover the data
@@ -167,6 +168,8 @@ reslr_load <- function(data,
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(Age = replace(Age, Age == min(Age), unique(min_Age))) %>%
     dplyr::mutate(Age = replace(Age, Age == max(Age), unique(max_Age)))
+    #dplyr::mutate(Age = replace(Age, Age == min(Age), unique(min_Age)-0.5)) %>%
+    #dplyr::mutate(Age = replace(Age, Age == max(Age), unique(max_Age)+0.5))
 
   # data_grid <- data_grid_full %>%
   #   dplyr::left_join(data_age_boundary, by = "SiteName") %>%

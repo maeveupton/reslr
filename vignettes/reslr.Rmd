@@ -130,7 +130,7 @@ The tide gauges undergo a cleaning process within the package. Firstly, certain 
 
 Within the `reslr_load` function, the user has three options to choose from:
 
-1. Provide a list of the preferred tide gauges from the [PSMSL website](https://psmsl.org/data/obtaining/), ensuring spelling, captailisation and spacing is exactly the same as the website. Note, the package will not work if error in spelling occurs. In addition, certain tide gauges have been flagged by the PSMSL website and are not included in this package and will return an error if selected. This is done by giving a list to the `list_preferred_TGs = c("ARGENTIA)` option in the `reslr_mcmc` function
+1. Provide a list of the preferred tide gauges from the [PSMSL website](https://psmsl.org/data/obtaining/), ensuring spelling, capitalisation and spacing is exactly the same as the website. Note, the package will not work if error in spelling occurs. In addition, certain tide gauges have been flagged by the PSMSL website and are not included in this package and will return an error if selected. This is done by giving a list to the `list_preferred_TGs = c("ARGENTIA)` option in the `reslr_mcmc` function
 
 2. The nearest tide gauge to proxy site based on minimum distance in kilometers, which is done by setting `TG_minimum_dist_proxy = TRUE`.
 
@@ -142,7 +142,7 @@ The final output data frame contains an additional column, called `data_type_id`
 ### Glacial Isostatic Adjustment (GIA) 
 For the NI GAM decomposition, the statistical model requires an estimate for the local linear rate arising from processes such as GIA and associated uncertainty for this rate each site.  According to Whitehouse (2018), GIA represents the Earth's reaction to the growth or melting of ice sheets, including the gravitational field and ocean. GIA can be approximated as a linear contribution over a short timescale, but with variable effects along the coast (Engelhart et al., 2009). Earth-ice models, which incorporate the physical structure of the Earth to predict GIA changes due to ice loading and unloading, can provide estimates of GIA rates. An example of such a model is the ICE5G VM2-90 (Peltier, 2004). It should be noted that other processes, such as tectonic vertical land motion, can mimic the linear trend of GIA. Therefore, the linear local component within the NI GAM decomposition may account for contributions from processes other than GIA that drive changes in relative sea level. These are included as additional columns, `linear_rate` and `linear_rate_err`, in the input dataframe provided by the user.
 
-If it is not provided then package will automatically calculate these rates using the data provided. We do not provide the rates from any Earth-ice physical model for the proxy records. To obtain this data check out [Peltier's webpage](https://www.atmosp.physics.utoronto.ca/~peltier/data.php) and the associated publication (Peltier, 2004) or the recent Caron et al 2018 publication and [data](https://vesl.jpl.nasa.gov/solid-earth/gia/). 
+If it is not provided then package will automatically calculate these rates using the data provided. We do not provide the rates from any Earth-ice physical model for the proxy records. To obtain this data check out [Peltier's webpage](https://www.atmosp.physics.utoronto.ca/~peltier/data.php) and the associated publication (Peltier, 2004) or the recent Caron et al. 2018 publication and [data](https://vesl.jpl.nasa.gov/solid-earth/gia/). 
 
 Important to note, the tide gauge data require values for the `linear_rate` and `linear_rate_err` columns. This is calculated using [Peltier's  Earth ice model: ICE5G](https://www.atmosp.physics.utoronto.ca/~peltier/data.php) with an uncertainty value of 0.3 mm/year from [Englehart et al 2009](https://eartharxiv.org/repository/view/1157/).
 
@@ -919,7 +919,8 @@ In order to examine how all components vary, the user can examine the plot using
 ```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output.ni_gam_decomp,plot_type = "nigam_component_plot")
 ```
-Each component is plotted with an 95\% uncertainty interval and this plot gives insight into the variablity of the different components through time and at the different locations in question.
+Each component is plotted with an 95\% uncertainty interval and this plot gives insight into the variability of the different components through time and at the different locations in question.
+
 ## Advanced 
 
 ### Including Tide Gauge data
@@ -982,7 +983,7 @@ final_plots$plot_result + ggplot2::xlab("New x axis label Added as Example")
 final_plots$plot_result + ggplot2::ylab("New y axis label Added as Example")
 ```
 ### Accessing the posterior samples
-In the package the user has the ability accesss all the posterior sample for each unknown parameter in the following way:
+In the package the user has the ability access all the posterior sample for each unknown parameter in the following way:
 ```{r, eval = FALSE}
 # Example
 jags_output.eiv_slr_t <- reslr::reslr_mcmc(x =  CedarIslandNC, model_type = "eiv_slr_t")
@@ -1011,9 +1012,9 @@ Upton, Maeve, Parnell, Andrew C,  Kemp, Andrew C , Ashe, Erica, McCarthy, Gerard
 For the background of GIA rates:
 
 Whitehouse, Pippa L (2018), ‘Glacial isostatic adjustment modelling: historical perspectives, recent
-advances, and future directions’, Earth Surf. Dynam 6, 401–429.
+advances, and future directions ’, Earth Surf. Dynam 6, 401–429.
 
-Engelhart, Simon E., Benjamin P. Horton, Bruce C. Douglas, W. Richard Peltier and Torbj ̈orn E.
+Engelhart, Simon E., Benjamin P. Horton, Bruce C. Douglas, W. Richard Peltier and Torbj&oorn E.
 T ̈ornqvist (2009), ‘Spatial variability of late Holocene and 20th century sea-level rise along the
 Atlantic coast of the United States’, Geology 37(12), 1115–1118
 
