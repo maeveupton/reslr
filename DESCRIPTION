@@ -19,6 +19,7 @@ Imports:
     fields,
     geosphere,
     ggplot2,
+    ggpubr,
     magrittr,
     mgcv,
     ncdf4,
