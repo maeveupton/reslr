@@ -14,7 +14,7 @@
 #'
 #'
 #' @param data The data of interest
-#' @param prediction_interval Predictions over every 100 years(default) can vary based on user preference
+#' @param prediction_interval Predictions over every 20 years(default) can vary based on user preference as larger prediction_interval will reduce computational run time.
 #' @param include_tide_gauge Including tide gauge data from PSMSL website that is averaged over a decade using a rolling window
 #' @param include_linear_rate User decides to include linear_rate and linear_rate_err
 #' @param input_Age_type The inputted age in years CE or year BCE
@@ -29,7 +29,7 @@
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' reslr_load(data = data)
 reslr_load <- function(data,
-                       prediction_interval = 100,
+                       prediction_interval = 20,
                        include_tide_gauge = FALSE,
                        include_linear_rate = FALSE,
                        list_preferred_TGs = NULL,
