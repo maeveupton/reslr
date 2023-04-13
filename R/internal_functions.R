@@ -1699,7 +1699,7 @@ bs_bbase <- function(x,
       by = dx
     )
   get_bs_matrix <- splines::ns(x,
-                df = 12,
+                df = 5,
                 #knots = knots,
                 intercept = TRUE)
   bs_matrix <- get_bs_matrix
