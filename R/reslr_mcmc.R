@@ -413,7 +413,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     data <- add_noisy_input(
       data = data,
       model_run = model_run,
-      model_type = model_type
+      model_type = model_type,
+      jags_data = jags_data
     )
     # Include Noise-----------------------
     # noisy_jags_file <- "inst/jags_models/noisy_model_ni_spline_t.jags"
@@ -432,7 +433,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       "r_deriv",
       "sigma_t",
       "sigmasq_all",
-      "r_pred"
+      "r_pred",
+      "tau_t"
     )
 
     # JAGS data for second model run-----------
@@ -465,7 +467,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid,
+                                          data_grid = data_grid,#CHANGE
                                           rate_grid = TRUE,
                                           decomposition = FALSE)
     # Output with everything-------------

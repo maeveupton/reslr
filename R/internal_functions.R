@@ -701,30 +701,19 @@ create_output_df <- function(noisy_model_run_output,
                              data_grid,#jags_output,
                              rate_grid = FALSE,
                              decomposition = FALSE) {
-  # mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-  # output_dataframes <- data.frame(
-  #   #jags_output$data_grid,
-  #   data_grid,
-  #   pred = apply(mu_post_pred, 2, mean),
-  #   upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-  #   lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-  #   upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-  #   lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
-  # ID = "Total Posterior Model"
   if (rate_grid == TRUE) {
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    #mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
     output_dataframes <- data.frame(
-      #jags_output$data_grid,
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
       upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
       lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
       upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
       lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
-    # ID = "Total Posterior Model"
 
-    #mu_pred_deriv_post <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
+    #mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
     output_dataframes <- data.frame(
       output_dataframes,
       rate_pred =  apply(mu_pred_deriv_post, 2, mean),
@@ -734,17 +723,14 @@ create_output_df <- function(noisy_model_run_output,
       rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
     )
   } else {
-    #mu_post_pred <- jags_output$noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     output_dataframes <- data.frame(
-      #jags_output$data_grid,
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
       upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
       lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
       upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
       lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
-    # ID = "Total Posterior Model"
     output_dataframes <- output_dataframes
   }
 
@@ -859,16 +845,19 @@ create_output_df <- function(noisy_model_run_output,
 #' @param model_type NIGAM in time or space time or the full decomposition
 #' @param data Input data
 #' @noRd
-add_noisy_input <- function(model_run, model_type, data) {
+add_noisy_input <- function(model_run,jags_data, model_type, data) {
   if (model_type == "ni_spline_t") {
     #-----Get posterior samples for SL-----
+    B_t <- jags_data$B_t
     b_t_post <- model_run$BUGSoutput$sims.list$b_t
 
-    pred_mean_calc <- function(t_new) {
+    pred_mean_calc <- function(B_t,t_new) {
       # Create the regional basis functions
-      B_deriv_t <- bs_bbase(t_new,
-        xl = min(data$Age),
-        xr = max(data$Age),data = data)
+      B_deriv_t <- predict(B_t,t_new)
+
+      # B_deriv_t <- bs_bbase(t_new,
+      #   xl = min(data$Age),
+      #   xr = max(data$Age))#,data = data)
       # # Create the regional basis functions
       # B_deriv_t_old <- bs_bbase(t_new,
       #                       xl = min(data$Age),
@@ -886,7 +875,7 @@ add_noisy_input <- function(model_run, model_type, data) {
     #-------Now create derivatives----
     h <- 0.001
     t <- data$Age
-    deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
+    deriv <- (pred_mean_calc(B_t,t + h) - pred_mean_calc(B_t,t - h)) / (2 * h)
   }
 
   if (model_type == "ni_spline_st") {
@@ -1030,8 +1019,8 @@ spline_basis_fun <- function(data, data_grid, model_type) {
   if (model_type == "ni_spline_t") {
     t <- data$Age
     # Basis functions in time for data-----------------------
-    B_t<- bs_bbase(t, xl = min(t), xr = max(t),data = data)
-    # B_t_old <- bs_bbase(t, xl = min(t), xr = max(t))
+    #B_t<- bs_bbase(t, xl = min(t), xr = max(t),data = data)
+    B_t <- bs_bbase(t, xl = min(t), xr = max(t))
     # #--------Create the differencing matrix for spline in time------
     # D_t <- diff(diag(ncol(B_t_old)), diff = 2)#2)
     # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
@@ -1039,11 +1028,15 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # B_t <- B_t_old %*% Q_t
     # B_t <- B_t_old
     # Finding derivative  of basis functions using first principals-----------
-    first_deriv_calc <- function(t_new) {
+    first_deriv_calc <- function(B_t,t_new) {
       # Create the regional basis functions
-      B_t <- bs_bbase(t_new,
-        xl = min(data$Age),
-        xr = max(data$Age),data = data)
+      # B_t <- bs_bbase(t_new,
+      #   xl = min(data$Age),
+      #   xr = max(data$Age))#,x_train = t_old)t_old
+
+      B_t_deriv <- predict(B_t,t_new)#,x_train = t_old)t_old
+
+
       # # Create the regional basis functions
       # B_t_old <- bs_bbase(t_new,
       #                 xl = min(data$Age),
@@ -1054,20 +1047,22 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # #Z_t <- B_t_old %*% Q_t
       # B_t <- B_t_old %*% Q_t
       # B_t <- B_t_old
-      return(B_t)
+      return(B_t_deriv)
     }
     # Now create derivatives----------------------
     # h <- 0.001
-    h <- 0.00000001
-    first_deriv_step1 <- first_deriv_calc(t + h)
-    first_deriv_step2 <- first_deriv_calc(t - h)
+    h <- 0.000001
+    first_deriv_step1 <- first_deriv_calc(B_t = B_t,t_new = t + h)#,t_old=t)
+    first_deriv_step2 <- first_deriv_calc(B_t=B_t,t_new = t - h)#,t_old=t)
     B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
 
     # Basis functions in time using prediction data frame-----------------------
     t_pred <- sort(data_grid$Age)
-    B_t_pred <- bs_bbase(t_pred,
-      xl = min(t), xr = max(t),data = data
-    )
+    B_t_pred <- predict(B_t,t_pred)
+
+    # B_t_pred <- bs_bbase(t_pred,
+    #   xl = min(t), xr = max(t)#,data = data
+    # )
     # B_t_pred_old <- bs_bbase(t_pred,
     #                      xl = min(t), xr = max(t)
     # )
@@ -1080,10 +1075,12 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 
     # Now create derivatives----------------------
     # h <- 0.001
-    h <- 0.00000001
+    h <- 0.000001
     t_pred <- data_grid$Age
-    first_deriv_step1 <- first_deriv_calc(t_pred + h)
-    first_deriv_step2 <- first_deriv_calc(t_pred - h)
+    #first_deriv_step1 <- first_deriv_calc(t_new = t_pred + h)#,t_old=t)
+    #first_deriv_step2 <- first_deriv_calc(t_new = t_pred + h)#,t_old=t)
+    first_deriv_step1 <- first_deriv_calc(B_t = B_t,t_new = t_pred + h)#,t_old=t)
+    first_deriv_step2 <- first_deriv_calc(B_t=B_t,t_new = t_pred - h)#,t_old=t)
     B_t_pred_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
 
     spline_basis_fun_list <- list(
@@ -1642,56 +1639,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 #   return(B)
 # }
 
-# Old basis function approach
-bs_bbase <- function(x,
-                     xl = min(x),
-                     xr = max(x),
-                     deg = 3,
-                     #nseg = 20){
-                     nseg = NULL,
-                     data = NULL){
-  # Create basis functions------------------------------------------------------
-  if(is.null(nseg)){
-    nseg <- round(deg / (1 + deg / length(data$Age)))
-  }
-
-  #df <- sqrt(length(x)) - 4
-  # too big
-  #nseg <- round(df/(1+df/length(x)))
-
-  # Compute the length of the partitions
-  dx <- (xr - xl) / nseg
-  # Create equally spaced knots
-  knots <- seq(xl - deg * dx,
-    xr + deg * dx,
-    by = dx
-  )
-  #print(length(knots))
-  # Use bs() function to generate the B-spline basis
-  get_bs_matrix <- matrix(
-    splines::bs(x,
-      knots = knots,
-      degree = deg, Boundary.knots = c(knots[1], knots[length(knots)])
-    ),
-    nrow = length(x)
-  )
-  # Remove columns that contain zero only
-  bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  #bs_matrix <-get_bs_matrix
-  #print(dim(bs_matrix))
-  return(bs_matrix)
-}
-
-# # Using natural splines instead
+# # Old basis function approach
 # bs_bbase <- function(x,
 #                      xl = min(x),
 #                      xr = max(x),
 #                      deg = 3,
 #                      #nseg = 20){
-#                      nseg = NULL){
+#                      nseg = NULL,
+#                      data = NULL){
 #   # Create basis functions------------------------------------------------------
 #   if(is.null(nseg)){
-#     nseg <- round(deg / (1 + deg / length(x)))
+#     nseg <- round(deg / (1 + deg / length(data$Age)))
 #   }
 #
 #   #df <- sqrt(length(x)) - 4
@@ -1705,28 +1663,45 @@ bs_bbase <- function(x,
 #     xr + deg * dx,
 #     by = dx
 #   )
-#   #nIknots <- 5
-#   #knots <- quantile(x, seq(0, 1, length.out = nIknots))#+2))#[-c(1, nIknots + 2)]
-#   #knots <- c(-0.8,0.3,0.8,1.3,1.7,1.9,2.000)
-#   print(length(knots))
-#   # Use ns() function to generate the natural  basis
+#   #print(length(knots))
+#   # Use bs() function to generate the B-spline basis
 #   get_bs_matrix <- matrix(
-#     splines::ns(x,
-#       #knots = knots,
-#       df = deg,
-#       #intercept = FALSE#,
-#       Boundary.knots = c(xl,xr)#,#c(knots[1], knots[length(knots)])
+#     splines::bs(x,
+#       knots = knots,
+#       degree = deg, Boundary.knots = c(knots[1], knots[length(knots)])
 #     ),
 #     nrow = length(x)
 #   )
-#   # plot(x,get_bs_matrix[,1])
-#   # points(x,get_bs_matrix[,2])
-#   # points(x,get_bs_matrix[,3])
-#   # points(x,get_bs_matrix[,4])
-#   # plot(x, data1site_example$RSL)
 #   # Remove columns that contain zero only
-#   #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-#   bs_matrix <-get_bs_matrix
-#   print(dim(bs_matrix))
+#   bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+#   #bs_matrix <-get_bs_matrix
+#   #print(dim(bs_matrix))
 #   return(bs_matrix)
 # }
+
+# # Using natural splines instead
+bs_bbase <- function(x,
+                    #x_train = NULL,
+                     xl = min(x),
+                     xr = max(x),
+                     deg = 3,
+                    nseg = 2,
+                    data= data){
+
+  # # Use Ns() function to generate the B-spline basis
+  deg <- deg
+  nseg <- 3
+    # Compute the length of the partitions
+    dx <- (xr - xl) / nseg
+    # Create equally spaced knots
+    knots <- seq(xl - deg * dx,
+      xr + deg * dx,
+      by = dx
+    )
+  get_bs_matrix <- splines::ns(x,
+                df = 12,
+                #knots = knots,
+                intercept = TRUE)
+  bs_matrix <- get_bs_matrix
+  return(bs_matrix)
+}
