@@ -701,7 +701,7 @@ plot(
 ```
 
 **Step 3:** Run the model for the two sites.
-```{r,runspst,eval = TRUE}
+```{r,runspst,eval = FALSE}
 jags_output.ni_spline_st <- reslr::reslr_mcmc(input_data =  multi_site, 
                                               model_type = "ni_spline_st")
 ```
@@ -709,12 +709,12 @@ The output object `jags_output.ni_spline_st` stores the JAGS model run.
 Note that additional computational run time is required for the model compared with the ni_spline_t. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
-```{r,printspstout,eval=TRUE}
+```{r,printspstout,eval=FALSE}
 print(jags_output.ni_spline_st)
 ```
 
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r,summaryspst, eval = TRUE}
+```{r,summaryspst, eval = FALSE}
 summary(jags_output.ni_spline_st)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
@@ -732,18 +732,18 @@ jags_output.ni_spline_st <- reslr::reslr_mcmc(
 For the parameter estimates, we can present the standard deviation associated with the NI spline space time model. Where "sigma_l" highlights the variation associated with the spatial temporal model and "sigma_res" presenting the overall variation.
 
 **Step 5:** the results from the ni_spline_st model can be illustrated using:
-```{r,plotspstres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
+```{r,plotspstres, eval = FALSE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(jags_output.ni_spline_st)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(jags_output.ni_spline_st,plot_type = "rate_plot")
 ```
 This will print the plot of the rate of change with 95 \% uncertainty intervals. 
 
 To examine the data creating these plots, can be accessed by the user:
-```{r,outdfspst, eval = TRUE}
+```{r,outdfspst, eval = FALSE}
 output_dataframes <- jags_output.ni_spline_st$output_dataframes
 head(output_dataframes)
 ```
@@ -814,7 +814,7 @@ plot(
 ```
 
 **Step 3:** Run the model
-```{r,runnigam,eval = TRUE}
+```{r,runnigam,eval = FALSE}
 jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
   input_data =  multi_site,
   model_type = "ni_gam_decomp")
@@ -823,12 +823,12 @@ The output object `jags_output.ni_gam_decomp` stores the JAGS model run.
 Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
-```{r,printnigamout, eval=TRUE}
+```{r,printnigamout, eval=FALSE}
 print(jags_output.ni_gam_decomp)
 ```
 
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r,summarynigam, eval = TRUE}
+```{r,summarynigam, eval = FALSE}
 summary(jags_output.ni_gam_decomp)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
@@ -847,13 +847,13 @@ jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
 For the parameter estimates, we can present the standard deviation associated with each component of the NIGAM decomposition. This gives an insight into the variation caused by the different components with "sigma_r" representing the regional component, "sigma_l" highlighting the non-linear local component, "sigma_res" presenting the overall variation and "sigma_h" representing the site specific vertical offset.
 
 **Step 5:** The results from the `ni_gam_decomp` model can be illustrated with the option of excluding the tide gauge using:
-```{r,plotnigamres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
+```{r,plotnigamres, eval = FALSE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(jags_output.ni_gam_decomp,plot_tide_gauge = FALSE)
 ```
 In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot. The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. 
 In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotnigamresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(jags_output.ni_gam_decomp,plot_type = "rate_plot")
 ```
 This will print the plot of the rate of change with 95 \% uncertainty intervals. To examine the data creating the total model fit result plot, the user can use:
@@ -866,7 +866,7 @@ total_model_rate_df <-jags_output.ni_gam_decomp$output_dataframes$total_model_ra
 ```
 
 There are separate settings to examine the plot of each component and its associated rate. To examine the regional component plot use:
-```{r,plotnigamregres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamregres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(jags_output.ni_gam_decomp,plot_type = "regional_plot")
 ```
 The regional component and the rate of change of the regional component is presented with 95\% Uncertainty interval. To examine the data creating the regional component plot, the user can use:
@@ -874,7 +874,7 @@ The regional component and the rate of change of the regional component is prese
 regional_component_df <- jags_output.ni_gam_decomp$output_dataframes$regional_component_df
 ```
 The rate for the regional component can be accessed using:
-```{r,plotnigamregresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamregresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(jags_output.ni_gam_decomp,plot_type = "regional_rate_plot")
 ```
 Similarly, the rate of change of the regional component is presented with 95\% Uncertainty interval. To examine the data creating the regional component rate of change plot the user can use:
@@ -883,7 +883,7 @@ regional_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$regiona
 ```
 
 To examine the linear local component plot use:
-```{r,plotnigamlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(jags_output.ni_gam_decomp,plot_type = "linear_local_plot")
 ```
 The linear local component is plotted with 95\% Uncertainty interval. To examine the data creating the linear local component plot, the user can use:
@@ -899,7 +899,8 @@ lin_loc_component_rates <- lin_loc_component_df %>%
 ```
 
 To examine the non-linear local component plot use:
-```{r,plotnigamnonlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+
+```{r,plotnigamnonlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(jags_output.ni_gam_decomp,plot_type = "non_linear_local_plot")
 ```
 The non-linear local component is plotted with with 95\% Uncertainty interval. To examine the data creating the non-linear local component plot, the user can use:
@@ -907,7 +908,7 @@ The non-linear local component is plotted with with 95\% Uncertainty interval. T
 non_lin_loc_component_df <- jags_output.ni_gam_decomp$output_dataframes$non_lin_loc_component_df
 ```
 The plot of the rate of change for the non-linear local component use:
-```{r,plotnigamnonlinresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamnonlinresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(jags_output.ni_gam_decomp,plot_type = "non_linear_local_rate_plot")
 ```
 The rate of change of the non-linear local component is plotted with with 95\% uncertainty interval. To examine the data creating the non-linear local component plot rate of change plot the user can use:
@@ -916,7 +917,7 @@ non_lin_loc_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$non_
 ```
 
 In order to examine how all components vary, the user can examine the plot using the following method:
-```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(jags_output.ni_gam_decomp,plot_type = "nigam_component_plot")
 ```
 Each component is plotted with an 95\% uncertainty interval and this plot gives insight into the variability of the different components through time and at the different locations in question.

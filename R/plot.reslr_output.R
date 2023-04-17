@@ -339,7 +339,6 @@ plot.reslr_output <- function(x,
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
       # Plot
-      browser()
       plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
                                            data = data,plot_tide_gauges = TRUE)
 

@@ -468,7 +468,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid = data_grid,#CHANGE
+                                          data_grid = data,#data_grid,#CHANGE
                                           rate_grid = TRUE,
                                           decomposition = FALSE)
     # Output with everything-------------
@@ -490,7 +490,6 @@ reslr_mcmc.reslr_input <- function(input_data,
 
   # Noisy Input GAM in Space Time-------------------------------------------
   if (model_type == "ni_spline_st") {
-    # jags_file <- "inst/jags_models/model_ni_spline_st.jags"
     jags_file <- system.file("jags_models", "model_ni_spline_st.jags", package = "reslr")
     # Basis functions in space time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
@@ -541,7 +540,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
 
     #----NI JAGS model-----
-    noisy_jags_file <- system.file("jags_models", "noisy_model_ni_spline_st.jags", package = "reslr")
+    noisy_jags_file <- system.file("jags_models",
+                                   "noisy_model_ni_spline_st.jags", package = "reslr")
 
     # JAGS input data
     jags_data <- list(
@@ -587,7 +587,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid,
+                                          data_grid = data,# CHANGE
                                           rate_grid = TRUE,
                                           decomposition = FALSE)
     # Output with everything-------------
@@ -689,7 +689,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
 
     #----NI JAGS model-----
-    noisy_jags_file <- system.file("jags_models", "noisy_model_ni_gam_decomp.jags", package = "reslr")
+    noisy_jags_file <- system.file("jags_models",
+                                   "noisy_model_ni_gam_decomp.jags", package = "reslr")
 
     # JAGS input data
     jags_data <- list(
@@ -779,7 +780,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       suppressWarnings(R2jags::jags(
         data = jags_data,
         parameters.to.save = jags_pars,
-        model.file = noisy_jags_file, # textConnection(noise_model_file),
+        model.file = noisy_jags_file,
         n.iter = n_iterations,
         n.burnin = n_burnin,
         n.thin = n_thin,
@@ -788,7 +789,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid,
+                                          data_grid = data_grid,
                                           rate_grid = TRUE,
                                           decomposition = TRUE)
     # Output with everything-------------

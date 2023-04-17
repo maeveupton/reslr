@@ -713,6 +713,7 @@ create_igp_output_df <- function(model_run,jags_data,data_grid){
   K.gw <- K <- K.w.inv <- array(NA, c(n_iter, Ngrid, Ngrid))
 
   ######## Initialize quadrature for the integration########
+  # DOES this need to change if I change the size of the prediction grids?
   L <- 30 ## this sets the precision of the integration quadrature (higher is better but more computationally expensive)
   index <- 1:L
   cosfunc <- cos(((2 * index - 1) * pi) / (2 * L))
@@ -775,18 +776,20 @@ create_output_df <- function(noisy_model_run_output,
                              rate_grid = FALSE,
                              decomposition = FALSE) {
   if (rate_grid == TRUE) {
-    mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    #mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
+    #CHANGE BACK
+    #mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
     output_dataframes <- data.frame(
-      data_grid,
+      data_grid,# CHANGE
+      #data,
       pred = apply(mu_post_pred, 2, mean),
       upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
       lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
       upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
       lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
-
-    mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
-    #mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
+    # CHANGE BACK
+    #mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
+    mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
     output_dataframes <- data.frame(
       output_dataframes,
       rate_pred =  apply(mu_pred_deriv_post, 2, mean),
@@ -810,6 +813,7 @@ create_output_df <- function(noisy_model_run_output,
   if (decomposition == TRUE & rate_grid == TRUE) {
     # Total Component from JAGS output
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    #mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
     total_model_fit_df <- data.frame(
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
@@ -819,7 +823,9 @@ create_output_df <- function(noisy_model_run_output,
       lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
       ID = "Total Posterior Model")
 
+    # Total model fit rate
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
+    #mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
     total_model_rate_df <-
       data.frame(
         data_grid,
@@ -829,8 +835,10 @@ create_output_df <- function(noisy_model_run_output,
         rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
         rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75),
         ID = "Total Rate of Change for Posterior Model")
+
     # Regional component
     time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred
+    #time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r
     regional_component_df <- data.frame(
       data_grid,
       pred = apply(time_component_pred_post, 2, mean),
@@ -841,6 +849,7 @@ create_output_df <- function(noisy_model_run_output,
       ID = "Regional Component")
 
     time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred_deriv
+    #time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_deriv
     regional_rate_component_df <-
       data.frame(
       data_grid,
@@ -853,6 +862,7 @@ create_output_df <- function(noisy_model_run_output,
 
     # Vertical Offset & Linear Local Component
     g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x_pred
+    #g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x
     lin_loc_component_df <-
       data.frame(
         data_grid,
@@ -865,6 +875,7 @@ create_output_df <- function(noisy_model_run_output,
 
     # Non linear local component
     space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred
+    #space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l
     non_lin_loc_component_df <-
       data.frame(
         data_grid,
@@ -875,6 +886,7 @@ create_output_df <- function(noisy_model_run_output,
         lwr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.75),
         ID = "Non Linear Local Component")
     space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred_deriv
+    #space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_deriv
     non_lin_loc_rate_component_df <-
       data.frame(
         data_grid,
@@ -1200,53 +1212,54 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     }
 
     # Get rid of all the columns which are just zero
-    B_st <- B_st_full
-    #B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
+    #B_st <- B_st_full
+    B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
 
     # Find the index here that you remove then use this in the derivative
-    #remove_col_index <- which(colSums(B_st_full) < 0.1)
-    browser()
-    first_deriv_calc <- function(B_st,t_new) {
-      B_st_deriv <- predict(object = B_st,newx = t_new)#,x_train = t_old)t_old
-      # # Now the local basis functions
-      # B_time <- bs_bbase(t_new,
-      #   xl = min(data$Age),
-      #   xr = max(data$Age),data = data
-      # )
-      # B_space_1 <- bs_bbase(data$Latitude,
-      #   xl = min(data$Latitude),
-      #   xr = max(data$Latitude),data = data
-      # )
-      # B_space_2 <- bs_bbase(data$Longitude,
-      #   xl = min(data$Longitude),
-      #   xr = max(data$Longitude),data = data
-      # )
-      #
-      # B_st_full <- matrix(NA,
-      #   ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
-      #   nrow = nrow(data)
-      # )
-      # regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
-      # count <- 1
-      # for (i in 1:ncol(B_time)) {
-      #   for (j in 1:ncol(B_space_1)) {
-      #     for (k in 1:ncol(B_space_2)) {
-      #       regional_knots_loc[count] <- i
-      #       B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
-      #       count <- count + 1
-      #     }
-      #   }
-      # }
-      #
-      # # Get rid of all the columns which are just zero
-      # B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
+    remove_col_index <- which(colSums(B_st_full) < 0.1)
+
+    #first_deriv_calc <- function(B_st,t_new) {
+    first_deriv_calc <- function(t_new) {
+      #B_st_deriv <- predict(object = B_st,newx = t_new)#,x_train = t_old)t_old
+      # Now the local basis functions
+      B_time <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age),data = data
+      )
+      B_space_1 <- bs_bbase(data$Latitude,
+        xl = min(data$Latitude),
+        xr = max(data$Latitude),data = data
+      )
+      B_space_2 <- bs_bbase(data$Longitude,
+        xl = min(data$Longitude),
+        xr = max(data$Longitude),data = data
+      )
+
+      B_st_full <- matrix(NA,
+        ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+        nrow = nrow(data)
+      )
+      regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
+      count <- 1
+      for (i in 1:ncol(B_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero
+      B_st_deriv <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
       return(B_st_deriv)
     }
     # Now create derivatives----
     h <- 0.0001
 
-    first_deriv_step1 <- first_deriv_calc(B_st,t_new = t + h)
-    first_deriv_step2 <- first_deriv_calc(B_st, t_new = t - h)
+    first_deriv_step1 <- first_deriv_calc(t_new = t + h)
+    first_deriv_step2 <- first_deriv_calc(t_new = t - h)
     B_st_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
 
 
