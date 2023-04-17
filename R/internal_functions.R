@@ -1356,7 +1356,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
   if (model_type == "ni_gam_decomp") {
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase_old(data$Age,
-      xl = min(data$Age), xr = max(data$Age)#, nseg = 3
+      xl = min(data$Age), xr = max(data$Age),data = data #nseg = 3
     )
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
@@ -1786,7 +1786,7 @@ bs_bbase_old <- function(x,
                      deg = 3,
                      #nseg = 20){
                      nseg = NULL,
-                     data = NULL){
+                     data = data){
   # Create basis functions------------------------------------------------------
   if(is.null(nseg)){
     nseg <- round(deg / (1 + deg / length(data$Age)))
@@ -1807,10 +1807,11 @@ bs_bbase_old <- function(x,
   # Use bs() function to generate the B-spline basis
   get_bs_matrix <- matrix(
     splines::bs(x,
-                df = 5,
-                degree = 3
-      #knots = knots,
-      #degree = deg#, Boundary.knots = c(knots[1], knots[length(knots)])
+                #df = 5,
+                degree = 3,
+      knots = knots,
+      Boundary.knots = c(knots[1], knots[length(knots)])
+      #degree = deg#,
     ),
     nrow = length(x)
   )
