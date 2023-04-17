@@ -379,6 +379,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "sigma_t",
       "sigmasq_all"
     )
+
     # Basis functions in time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,

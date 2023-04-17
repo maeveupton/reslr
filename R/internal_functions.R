@@ -2,13 +2,15 @@
 #'
 #' @param output_dataframes These are dataframes created for plotting and are outputs from the \code{reslr_mcmc} function.
 #' @param data This is the input dataset stored in a list created in the \code{reslr_mcmc} function.
+#' @param plot_tide_gauges If plotting tide gauges add them onto the end of the proxy record
 #'
 #' @return The plot of the model fit
 #' @noRd
-create_model_fit_plot <- function(output_dataframes,data){
+create_model_fit_plot <- function(output_dataframes,data,plot_tide_gauges = FALSE){
   data_type_id <- pred <- lwr_95 <- upr_95<- Age <- RSL <- Age_err<- RSL_err  <-SiteName <- Longitude <- Latitude <- NULL
-  # Plot
-  plot <-
+  if(plot_tide_gauges == FALSE){
+    # Plot
+    plot <-
     ggplot2::ggplot() +
     ggplot2::geom_rect(data = data, ggplot2::aes(
       xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
@@ -73,6 +75,77 @@ create_model_fit_plot <- function(output_dataframes,data){
       ))
     )+
     ggplot2::facet_wrap(~SiteName)
+
+  }
+  else{
+    # Plot
+    plot <-
+      ggplot2::ggplot() +
+      ggplot2::geom_rect(data = data, ggplot2::aes(
+        xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+        ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
+      ), alpha = 0.4) +
+      ggplot2::geom_point(
+        data = data,
+        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black",shape = data_type_id), size = 0.5
+      ) +
+      ggplot2::geom_line(
+        data = output_dataframes,
+        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+      ) +
+      ggplot2::geom_ribbon(
+        data = output_dataframes,
+        ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
+      ) +
+      # ggplot2::geom_ribbon(
+      #   data = output_dataframes,
+      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+      # ) +
+      ggplot2::xlab("Age (CE)") +
+      ggplot2::ylab("Relative Sea Level (m)") +
+      ggplot2::theme_bw() +
+      ggplot2::theme(
+        plot.title = ggplot2::element_text(size = 15),
+        axis.title = ggplot2::element_text(size = 12, face = "bold"),
+        axis.text = ggplot2::element_text(size = 12),
+        legend.text = ggplot2::element_text(size = 10)
+      ) +
+      ggplot2::theme(
+        strip.text.x = ggplot2::element_text(size = 10),
+        strip.background = ggplot2::element_rect(fill = c("white"))
+      ) +
+      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+      ggplot2::labs(colour = "") +
+      ggplot2::scale_fill_manual("",
+                                 values = c(
+                                   "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                   "95" = ggplot2::alpha("purple3", 0.2) #
+                                   # "50" = ggplot2::alpha("purple3", 0.3)
+                                 ),
+                                 labels = c(
+                                   "95% Credible Interval",
+                                   expression(paste("1-sigma Error"))
+                                   # , "50% Credible Interval"
+                                 )
+      ) +
+      ggplot2::scale_colour_manual("",
+                                   values = c("black" = "black", "mean" = "purple3"),
+                                   labels = c("Data", "Posterior Fit")
+      ) +
+      ggplot2::guides(
+        fill = ggplot2::guide_legend(override.aes = list(
+          alpha = c(0.4, 0.2), # , 0.4),
+          size = 1
+        )),
+        colour = ggplot2::guide_legend(override.aes = list(
+          linetype = c(0, 1),
+          #shape = c(16, NA),
+          size = 2
+        ))
+      )#+
+      #ggplot2::facet_wrap(~SiteName)
+
+  }
   return(plot)
 }
 
@@ -1127,51 +1200,53 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     }
 
     # Get rid of all the columns which are just zero
-    B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
+    B_st <- B_st_full
+    #B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
 
     # Find the index here that you remove then use this in the derivative
-    remove_col_index <- which(colSums(B_st_full) < 0.1)
-
-    first_deriv_calc <- function(t_new) {
-      # Now the local basis functions
-      B_time <- bs_bbase(t_new,
-        xl = min(data$Age),
-        xr = max(data$Age),data = data
-      )
-      B_space_1 <- bs_bbase(data$Latitude,
-        xl = min(data$Latitude),
-        xr = max(data$Latitude),data = data
-      )
-      B_space_2 <- bs_bbase(data$Longitude,
-        xl = min(data$Longitude),
-        xr = max(data$Longitude),data = data
-      )
-
-      B_st_full <- matrix(NA,
-        ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
-        nrow = nrow(data)
-      )
-      regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
-      count <- 1
-      for (i in 1:ncol(B_time)) {
-        for (j in 1:ncol(B_space_1)) {
-          for (k in 1:ncol(B_space_2)) {
-            regional_knots_loc[count] <- i
-            B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
-            count <- count + 1
-          }
-        }
-      }
-
-      # Get rid of all the columns which are just zero
-      B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
-      return(B_st)
+    #remove_col_index <- which(colSums(B_st_full) < 0.1)
+    browser()
+    first_deriv_calc <- function(B_st,t_new) {
+      B_st_deriv <- predict(object = B_st,newx = t_new)#,x_train = t_old)t_old
+      # # Now the local basis functions
+      # B_time <- bs_bbase(t_new,
+      #   xl = min(data$Age),
+      #   xr = max(data$Age),data = data
+      # )
+      # B_space_1 <- bs_bbase(data$Latitude,
+      #   xl = min(data$Latitude),
+      #   xr = max(data$Latitude),data = data
+      # )
+      # B_space_2 <- bs_bbase(data$Longitude,
+      #   xl = min(data$Longitude),
+      #   xr = max(data$Longitude),data = data
+      # )
+      #
+      # B_st_full <- matrix(NA,
+      #   ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+      #   nrow = nrow(data)
+      # )
+      # regional_knots_loc <- rep(NA, ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1))
+      # count <- 1
+      # for (i in 1:ncol(B_time)) {
+      #   for (j in 1:ncol(B_space_1)) {
+      #     for (k in 1:ncol(B_space_2)) {
+      #       regional_knots_loc[count] <- i
+      #       B_st_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+      #       count <- count + 1
+      #     }
+      #   }
+      # }
+      #
+      # # Get rid of all the columns which are just zero
+      # B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
+      return(B_st_deriv)
     }
     # Now create derivatives----
     h <- 0.0001
 
-    first_deriv_step1 <- first_deriv_calc(t + h)
-    first_deriv_step2 <- first_deriv_calc(t - h)
+    first_deriv_step1 <- first_deriv_calc(B_st,t_new = t + h)
+    first_deriv_step2 <- first_deriv_calc(B_st, t_new = t - h)
     B_st_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
 
 
@@ -1640,80 +1715,85 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 #   return(B)
 # }
 
-# Old basis function approach
-bs_bbase <- function(x,
-                     xl = min(x),
-                     xr = max(x),
-                     deg = 3,
-                     #nseg = 20){
-                     nseg = NULL,
-                     data = NULL){
-  # Create basis functions------------------------------------------------------
-  if(is.null(nseg)){
-    nseg <- round(deg / (1 + deg / length(data$Age)))
-  }
-  df <- sqrt(length(x)) - 4
-  print(df)
-  # too big
-  #nseg <- round(df/(1+df/length(x)))
-
-  # Compute the length of the partitions
-  dx <- (xr - xl) / nseg
-  # Create equally spaced knots
-  knots <- seq(xl - deg * dx,
-    xr + deg * dx,
-    by = dx
-  )
-  #print(length(knots))
-  # Use bs() function to generate the B-spline basis
-  # get_bs_matrix <- matrix(
-  #   splines::bs(x,
-  #               df = 5,
-  #               degree = 3
-  #     #knots = knots,
-  #     #degree = deg#, Boundary.knots = c(knots[1], knots[length(knots)])
-  #   ),
-  #   nrow = length(x)
-  # )
-  get_bs_matrix <-
-    splines::bs(x,
-                df = round(df),#5,
-                degree = 3,
-                #knots = knots,
-                intercept = TRUE
-                #degree = deg#, Boundary.knots = c(knots[1], knots[length(knots)])
-    )
-  # Remove columns that contain zero only
-  #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  bs_matrix <-get_bs_matrix
-  #class(bs_matrix) <- c("ns","basis","matrix")
-  #print(dim(bs_matrix))
-  return(bs_matrix)
-}
-
-# # # Using natural splines instead
+# # Old basis function approach
 # bs_bbase <- function(x,
-#                     #x_train = NULL,
 #                      xl = min(x),
 #                      xr = max(x),
 #                      deg = 3,
-#                     nseg = 2,
-#                     data= data){
+#                      #nseg = 20){
+#                      nseg = NULL,
+#                      data = NULL){
+#   # Create basis functions------------------------------------------------------
+#   if(is.null(nseg)){
+#     nseg <- round(deg / (1 + deg / length(data$Age)))
+#   }
+#   df <- sqrt(length(x)) - 4
+#   print(df)
+#   # too big
+#   #nseg <- round(df/(1+df/length(x)))
 #
-#   # # Use Ns() function to generate the B-spline basis
-#   deg <- deg
-#   nseg <- 3
-#     # Compute the length of the partitions
-#     dx <- (xr - xl) / nseg
-#     # Create equally spaced knots
-#     knots <- seq(xl - deg * dx,
-#       xr + deg * dx,
-#       by = dx
-#     )
-#   get_bs_matrix <- splines::ns(x,
-#                 df = 5,
+#   # Compute the length of the partitions
+#   dx <- (xr - xl) / nseg
+#   # Create equally spaced knots
+#   knots <- seq(xl - deg * dx,
+#     xr + deg * dx,
+#     by = dx
+#   )
+#   #print(length(knots))
+#   # Use bs() function to generate the B-spline basis
+#   # get_bs_matrix <- matrix(
+#   #   splines::bs(x,
+#   #               df = 5,
+#   #               degree = 3
+#   #     #knots = knots,
+#   #     #degree = deg#, Boundary.knots = c(knots[1], knots[length(knots)])
+#   #   ),
+#   #   nrow = length(x)
+#   # )
+#   get_bs_matrix <-
+#     splines::bs(x,
+#                 #df = round(df)+2,#5,
+#                 #degree = 3,
 #                 #knots = knots,
-#                 intercept = TRUE)
-#   bs_matrix <- get_bs_matrix
+#                 intercept = TRUE,
+#                 #degree = deg#,
+#                 Boundary.knots = c(knots[1], knots[length(knots)])
+#     )
+#   # Remove columns that contain zero only
+#   #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+#   bs_matrix <-get_bs_matrix
+#   #class(bs_matrix) <- c("ns","basis","matrix")
+#   #print(dim(bs_matrix))
 #   return(bs_matrix)
 # }
+
+# # Using natural splines instead
+bs_bbase <- function(x,
+                    #x_train = NULL,
+                     xl = min(x),
+                     xr = max(x),
+                     deg = 3,
+                    nseg = 2,
+                    data= data){
+
+  # # Use Ns() function to generate the B-spline basis
+  deg <- deg
+  nseg <- 3
+    # Compute the length of the partitions
+    dx <- (xr - xl) / nseg
+    # Create equally spaced knots
+    knots <- seq(xl - deg * dx,
+      xr + deg * dx,
+      by = dx
+    )
+    k <- length(knots)
+    df <- k+deg
+    print(df)
+  get_bs_matrix <- splines::ns(x,
+                df = 5,#df,
+                #knots = knots,
+                intercept = TRUE,
+                Boundary.knots = c(knots[1], knots[length(knots)]))
+  bs_matrix <- get_bs_matrix
+  return(bs_matrix)
+}

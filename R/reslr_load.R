@@ -134,7 +134,7 @@ reslr_load <- function(data,
     ) %>%
     unique()
 
-  times <- rep(seq(min(data$Age) ,
+  times <- rep(seq(min(data$Age),
     max(data$Age),
     by = prediction_interval / 1000
   ), nrow(sites))

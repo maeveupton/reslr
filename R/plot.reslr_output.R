@@ -44,7 +44,7 @@ plot.reslr_output <- function(x,
       data <- jags_output$data
       # Plot
       plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
-                                           data = data)
+                                           data = data,plot_tide_gauges = TRUE)
     }
 
     cat("Plotted EIV Simple linear regression. \n")
@@ -70,7 +70,7 @@ plot.reslr_output <- function(x,
       data <- jags_output$data
       # Plot
       plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
-                                           data = data)
+                                           data = data,plot_tide_gauges = TRUE)
     }
     cat("Plotted EIV 1 Change Point model. \n")
 
@@ -96,7 +96,7 @@ plot.reslr_output <- function(x,
       data <- jags_output$data
       # Plot
       plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
-                                           data = data)
+                                           data = data,plot_tide_gauges = TRUE)
     }
     cat("Plotted EIV 2 Change Point Model \n")
 
@@ -121,7 +121,7 @@ plot.reslr_output <- function(x,
       data <- jags_output$data
       # Plot
       plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
-                                           data = data)
+                                           data = data,plot_tide_gauges = TRUE)
     }
 
     cat("Plotted model fit for EIV 3 Change Point \n")
@@ -204,7 +204,7 @@ plot.reslr_output <- function(x,
       data <- jags_output$data
       # Plot
       plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
-                                           data = data)
+                                           data = data,plot_tide_gauges = TRUE)
       # Plotting Rate of Change for Total component----------
       plot_rate <-
         ggplot2::ggplot() +
@@ -258,8 +258,8 @@ plot.reslr_output <- function(x,
             linetype = c(1),
             shape = c( NA),
             size = 2
-          )))+
-        ggplot2::facet_wrap(~SiteName)
+          )))#+
+        #ggplot2::facet_wrap(~SiteName)
     }
 
     cat("Plotted EIV-IGP model & rate \n")
