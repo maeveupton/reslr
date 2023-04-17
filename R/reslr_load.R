@@ -120,7 +120,7 @@ reslr_load <- function(data,
             linear_rate = ifelse(data_type_id == "TideGaugeData", ICE5_GIA_slope, linear_rate),
             linear_rate_err = ifelse(data_type_id == "TideGaugeData", 0.3, linear_rate_err)
           )
-    cat("Tide Gauge data & linear_rate included")
+    cat("Tide Gauge data & linear_rate included \n")
   }
   # Prediction dataframe-------------------------------------
   sites <- data %>%
@@ -183,6 +183,7 @@ reslr_load <- function(data,
       SiteName = as.factor(SiteName),
       data_type_id = as.factor(data_type_id)
     )
+
   data_grid <- data_grid %>%
     dplyr::mutate(
       SiteName = as.factor(SiteName),
@@ -194,6 +195,5 @@ reslr_load <- function(data,
     data_grid = data_grid
   )
   class(input_data) <- "reslr_input"
-
   return(input_data)
 }

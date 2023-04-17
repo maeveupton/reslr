@@ -25,7 +25,6 @@ plot.reslr_input <- function(x,
                              plot_tide_gauges = FALSE,
                              ...) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <- NULL
-
   # Input data-------
   input_data <- x
   data <- input_data$data

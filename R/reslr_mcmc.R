@@ -607,200 +607,201 @@ reslr_mcmc.reslr_input <- function(input_data,
   # Noisy Input GAM for decomposition of RSL signal-------------------------------------------
   if (model_type == "ni_gam_decomp") {
     # jags file
-    jags_file <- system.file("jags_models", "model_ni_gam_decomp.jags", package = "reslr")
+    #jags_file <- system.file("jags_models", "model_ni_gam_decomp.jags", package = "reslr")
 
-    # Basis functions in space time -----------------------------
-    spline_basis_fun_list <- spline_basis_fun(
-      data = data,
-      data_grid = data_grid,
-      model_type = model_type
-    )
+    # # Basis functions in space time -----------------------------
+    # spline_basis_fun_list <- spline_basis_fun(
+    #   data = data,
+    #   data_grid = data_grid,
+    #   model_type = model_type
+    # )
 
-    # JAGS data
-    jags_data <- list(
-      y = data$RSL,
-      y_err = data$RSL_err,
-      t = data$Age,
-      t_pred = data_grid$Age,
-      site = as.factor(data$SiteName),
-      site_pred = as.factor(data_grid$SiteName),
-      n_sites = length(unique(data$SiteName)),
-      n_site_pred = length(unique(data_grid$SiteName)),
-      n_obs = nrow(data),
-      n_pred = nrow(data_grid),
-      B_t = spline_basis_fun_list$B_t,
-      B_t_pred = spline_basis_fun_list$B_t_pred,
-      n_knots_t = ncol(spline_basis_fun_list$B_t),
-      linear_rate = data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::slice(1) %>%
-        dplyr::select(linear_rate) %>%
-        dplyr::pull(),
-      linear_rate_err = data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::slice(1) %>%
-        dplyr::select(linear_rate_err) %>%
-        dplyr::pull(),
-      linear_rate_pred = data_grid %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::slice(1) %>%
-        dplyr::select(linear_rate) %>%
-        dplyr::pull(),
-      linear_rate_err_pred = data_grid %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::slice(1) %>%
-        dplyr::select(linear_rate_err) %>%
-        dplyr::pull(),
-        nu = 2
-    )
+    # # JAGS data
+    # jags_data <- list(
+    #   y = data$RSL,
+    #   y_err = data$RSL_err,
+    #   t = data$Age,
+    #   t_pred = data_grid$Age,
+    #   site = as.factor(data$SiteName),
+    #   site_pred = as.factor(data_grid$SiteName),
+    #   n_sites = length(unique(data$SiteName)),
+    #   n_site_pred = length(unique(data_grid$SiteName)),
+    #   n_obs = nrow(data),
+    #   n_pred = nrow(data_grid),
+    #   B_t = spline_basis_fun_list$B_t,
+    #   B_t_pred = spline_basis_fun_list$B_t_pred,
+    #   n_knots_t = ncol(spline_basis_fun_list$B_t),
+    #   linear_rate = data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::slice(1) %>%
+    #     dplyr::select(linear_rate) %>%
+    #     dplyr::pull(),
+    #   linear_rate_err = data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::slice(1) %>%
+    #     dplyr::select(linear_rate_err) %>%
+    #     dplyr::pull(),
+    #   linear_rate_pred = data_grid %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::slice(1) %>%
+    #     dplyr::select(linear_rate) %>%
+    #     dplyr::pull(),
+    #   linear_rate_err_pred = data_grid %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::slice(1) %>%
+    #     dplyr::select(linear_rate_err) %>%
+    #     dplyr::pull(),
+    #     nu = 2
+    # )
+    #
+    # # Parameters to save in JAGs
+    # jags_pars <- c(
+    #   "mu_y",
+    #   "sigma_res",
+    #   "b_t",
+    #   "h_z_x",
+    #   "g_h_z_x",
+    #   "g_z_x",
+    #   "r",
+    #   "intercept",
+    #   "sigma_t",
+    #   "b_g",
+    #   "sigma_h",
+    #   "sigmasq_all"
+    # )
 
-    # Parameters to save in JAGs
-    jags_pars <- c(
-      "mu_y",
-      "sigma_res",
-      "b_t",
-      "h_z_x",
-      "g_h_z_x",
-      "g_z_x",
-      "r",
-      "intercept",
-      "sigma_t",
-      "b_g",
-      "sigma_h",
-      "sigmasq_all"
-    )
-
-    # Run JAGS------------------------
-    model_run <- suppressWarnings(R2jags::jags(
-      data = jags_data,
-      parameters.to.save = jags_pars,
-      model.file = jags_file,
-      n.iter = n_iterations,
-      n.burnin = n_burnin,
-      n.thin = n_thin,
-      n.chains = n_chains
-    ))
-
-    # Adding Noisy Input-------------------
-    data <- add_noisy_input(
-      data = data,
-      model_run = model_run,
-      model_type = model_type
-    )
-
-    #----NI JAGS model-----
-    noisy_jags_file <- system.file("jags_models",
-                                   "noisy_model_ni_gam_decomp.jags", package = "reslr")
-
-    # JAGS input data
-    jags_data <- list(
-      NI_var_term = data$NI_var_term,
-      b_t_value = model_run$BUGSoutput$median$b_t,
-      b_t_sd_value = model_run$BUGSoutput$sd$b_t,
-      h_value = model_run$BUGSoutput$median$intercept,
-      h_sd_value = model_run$BUGSoutput$sd$intercept,
-      y = data$RSL,
-      y_err = data$RSL_err,
-      t = data$Age,
-      t_pred = data_grid$Age,
-      site = as.factor(data$SiteName),
-      site_pred = as.factor(data_grid$SiteName),
-      n_sites = length(unique(data$SiteName)),
-      n_sites_pred = length(unique(data_grid$SiteName)),
-      n_pred = length(data_grid$Age),
-      n_obs = nrow(data),
-      B_t = spline_basis_fun_list$B_t,
-      B_t_deriv = spline_basis_fun_list$B_t_deriv,
-      B_t_pred = spline_basis_fun_list$B_t_pred,
-      B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv,
-      n_knots_t = ncol(spline_basis_fun_list$B_t),
-      B_st = spline_basis_fun_list$B_st,
-      B_st_pred = spline_basis_fun_list$B_st_pred,
-      B_st_deriv = spline_basis_fun_list$B_st_deriv,
-      B_st_deriv_pred = spline_basis_fun_list$B_st_deriv_pred,
-      n_knots_st = ncol(spline_basis_fun_list$B_st),
-      linear_rate = data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::slice(1) %>%
-        dplyr::select(linear_rate) %>%
-        dplyr::pull(),
-      linear_rate_err = data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::slice(1) %>%
-        dplyr::select(linear_rate_err) %>%
-        dplyr::pull(),
-      linear_rate_pred = data_grid %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::slice(1) %>%
-        dplyr::select(linear_rate) %>%
-        dplyr::pull(),
-      linear_rate_err_pred = data_grid %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::slice(1) %>%
-        dplyr::select(linear_rate_err) %>%
-        dplyr::pull(),
-        nu = 2
-    )
-
-    # Parameters to save in JAGs
-    jags_pars <- c(
-      "mu_y",
-      "mu_deriv",
-      "mu_pred",
-      "mu_pred_deriv",
-      "sigma_res",
-      "sigma_h", # ?
-      "sigma_t", # ?
-      "sigma_st",
-      "sigmasq_all",
-      "b_t",
-      "b_st",
-      "b_g",
-      "intercept",
-      "h_z_x",
-      "h_z_x_pred",
-      "g_h_z_x",
-      "g_h_z_x_pred",
-      "g_z_x",
-      "g_z_x_deriv",
-      "g_z_x_pred",
-      "g_z_x_pred_deriv",
-      "r",
-      "r_deriv",
-      "r_pred",
-      "r_pred_deriv",
-      "l",
-      "l_deriv",
-      "l_pred",
-      "l_pred_deriv"
-    )
-
-    # Run JAGS--------------
-    noisy_model_run_output <-
-      suppressWarnings(R2jags::jags(
-        data = jags_data,
-        parameters.to.save = jags_pars,
-        model.file = noisy_jags_file,
-        n.iter = n_iterations,
-        n.burnin = n_burnin,
-        n.thin = n_thin,
-        n.chains = n_chains
-      ))
-
-    # Output from mcmc & dataframes for plots
-    output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid = data_grid,
-                                          rate_grid = TRUE,
-                                          decomposition = TRUE)
-    # Output with everything-------------
-    jags_output <- list(
-      noisy_model_run_output = noisy_model_run_output,
-      jags_data = jags_data,
-      data = data,
-      data_grid = data_grid,
-      output_dataframes = output_dataframes
-    )
-
+    # # Run JAGS------------------------
+    # model_run <- suppressWarnings(R2jags::jags(
+    #   data = jags_data,
+    #   parameters.to.save = jags_pars,
+    #   model.file = jags_file,
+    #   n.iter = n_iterations,
+    #   n.burnin = n_burnin,
+    #   n.thin = n_thin,
+    #   n.chains = n_chains
+    # ))
+    #
+    # # Adding Noisy Input-------------------
+    # data <- add_noisy_input(
+    #   data = data,
+    #   model_run = model_run,
+    #   model_type = model_type
+    # )
+    #
+    # #----NI JAGS model-----
+    # noisy_jags_file <- system.file("jags_models",
+    #                                "noisy_model_ni_gam_decomp.jags", package = "reslr")
+    #
+    # # JAGS input data
+    # jags_data <- list(
+    #   NI_var_term = data$NI_var_term,
+    #   b_t_value = model_run$BUGSoutput$median$b_t,
+    #   b_t_sd_value = model_run$BUGSoutput$sd$b_t,
+    #   h_value = model_run$BUGSoutput$median$intercept,
+    #   h_sd_value = model_run$BUGSoutput$sd$intercept,
+    #   y = data$RSL,
+    #   y_err = data$RSL_err,
+    #   t = data$Age,
+    #   t_pred = data_grid$Age,
+    #   site = as.factor(data$SiteName),
+    #   site_pred = as.factor(data_grid$SiteName),
+    #   n_sites = length(unique(data$SiteName)),
+    #   n_sites_pred = length(unique(data_grid$SiteName)),
+    #   n_pred = length(data_grid$Age),
+    #   n_obs = nrow(data),
+    #   B_t = spline_basis_fun_list$B_t,
+    #   B_t_deriv = spline_basis_fun_list$B_t_deriv,
+    #   B_t_pred = spline_basis_fun_list$B_t_pred,
+    #   B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv,
+    #   n_knots_t = ncol(spline_basis_fun_list$B_t),
+    #   B_st = spline_basis_fun_list$B_st,
+    #   B_st_pred = spline_basis_fun_list$B_st_pred,
+    #   B_st_deriv = spline_basis_fun_list$B_st_deriv,
+    #   B_st_deriv_pred = spline_basis_fun_list$B_st_deriv_pred,
+    #   n_knots_st = ncol(spline_basis_fun_list$B_st),
+    #   linear_rate = data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::slice(1) %>%
+    #     dplyr::select(linear_rate) %>%
+    #     dplyr::pull(),
+    #   linear_rate_err = data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::slice(1) %>%
+    #     dplyr::select(linear_rate_err) %>%
+    #     dplyr::pull(),
+    #   linear_rate_pred = data_grid %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::slice(1) %>%
+    #     dplyr::select(linear_rate) %>%
+    #     dplyr::pull(),
+    #   linear_rate_err_pred = data_grid %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::slice(1) %>%
+    #     dplyr::select(linear_rate_err) %>%
+    #     dplyr::pull(),
+    #     nu = 2
+    # )
+    #
+    # # Parameters to save in JAGs
+    # jags_pars <- c(
+    #   "mu_y",
+    #   "mu_deriv",
+    #   "mu_pred",
+    #   "mu_pred_deriv",
+    #   "sigma_res",
+    #   "sigma_h", # ?
+    #   "sigma_t", # ?
+    #   "sigma_st",
+    #   "sigmasq_all",
+    #   "b_t",
+    #   "b_st",
+    #   "b_g",
+    #   "intercept",
+    #   "h_z_x",
+    #   "h_z_x_pred",
+    #   "g_h_z_x",
+    #   "g_h_z_x_pred",
+    #   "g_z_x",
+    #   "g_z_x_deriv",
+    #   "g_z_x_pred",
+    #   "g_z_x_pred_deriv",
+    #   "r",
+    #   "r_deriv",
+    #   "r_pred",
+    #   "r_pred_deriv",
+    #   "l",
+    #   "l_deriv",
+    #   "l_pred",
+    #   "l_pred_deriv"
+    # )
+    #
+    # # Run JAGS--------------
+    # noisy_model_run_output <-
+    #   suppressWarnings(R2jags::jags(
+    #     data = jags_data,
+    #     parameters.to.save = jags_pars,
+    #     model.file = noisy_jags_file,
+    #     n.iter = n_iterations,
+    #     n.burnin = n_burnin,
+    #     n.thin = n_thin,
+    #     n.chains = n_chains
+    #   ))
+    #
+    # # Output from mcmc & dataframes for plots
+    # output_dataframes <- create_output_df(noisy_model_run_output,
+    #                                       data_grid = data_grid,
+    #                                       rate_grid = TRUE,
+    #                                       decomposition = TRUE)
+    # # Output with everything-------------
+    # jags_output <- list(
+    #   noisy_model_run_output = noisy_model_run_output,
+    #   jags_data = jags_data,
+    #   data = data,
+    #   data_grid = data_grid,
+    #   output_dataframes = output_dataframes
+    # )
+    #
+    jags_output <- "test"
     # Classing the JAGS output in NIGAM for RSL decomposition--------------
     class(jags_output) <- c("reslr_output", "ni_gam_decomp")
     message("JAGS model run finished for the NI GAM Decomposition")
