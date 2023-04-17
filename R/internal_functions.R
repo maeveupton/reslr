@@ -1715,85 +1715,85 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 #   return(B)
 # }
 
-# # Old basis function approach
-# bs_bbase <- function(x,
-#                      xl = min(x),
-#                      xr = max(x),
-#                      deg = 3,
-#                      #nseg = 20){
-#                      nseg = NULL,
-#                      data = NULL){
-#   # Create basis functions------------------------------------------------------
-#   if(is.null(nseg)){
-#     nseg <- round(deg / (1 + deg / length(data$Age)))
-#   }
-#   df <- sqrt(length(x)) - 4
-#   print(df)
-#   # too big
-#   #nseg <- round(df/(1+df/length(x)))
-#
-#   # Compute the length of the partitions
-#   dx <- (xr - xl) / nseg
-#   # Create equally spaced knots
-#   knots <- seq(xl - deg * dx,
-#     xr + deg * dx,
-#     by = dx
-#   )
-#   #print(length(knots))
-#   # Use bs() function to generate the B-spline basis
-#   # get_bs_matrix <- matrix(
-#   #   splines::bs(x,
-#   #               df = 5,
-#   #               degree = 3
-#   #     #knots = knots,
-#   #     #degree = deg#, Boundary.knots = c(knots[1], knots[length(knots)])
-#   #   ),
-#   #   nrow = length(x)
-#   # )
-#   get_bs_matrix <-
-#     splines::bs(x,
-#                 #df = round(df)+2,#5,
-#                 #degree = 3,
-#                 #knots = knots,
-#                 intercept = TRUE,
-#                 #degree = deg#,
-#                 Boundary.knots = c(knots[1], knots[length(knots)])
-#     )
-#   # Remove columns that contain zero only
-#   #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-#   bs_matrix <-get_bs_matrix
-#   #class(bs_matrix) <- c("ns","basis","matrix")
-#   #print(dim(bs_matrix))
-#   return(bs_matrix)
-# }
-
-# # Using natural splines instead
+# Old basis function approach
 bs_bbase <- function(x,
-                    #x_train = NULL,
                      xl = min(x),
                      xr = max(x),
                      deg = 3,
-                    nseg = 2,
-                    data= data){
+                     #nseg = 20){
+                     nseg = NULL,
+                     data = NULL){
+  # Create basis functions------------------------------------------------------
+  if(is.null(nseg)){
+    nseg <- round(deg / (1 + deg / length(data$Age)))
+  }
+  df <- sqrt(length(x)) - 4
+  print(df)
+  # too big
+  #nseg <- round(df/(1+df/length(x)))
 
-  # # Use Ns() function to generate the B-spline basis
-  deg <- deg
-  nseg <- 3
-    # Compute the length of the partitions
-    dx <- (xr - xl) / nseg
-    # Create equally spaced knots
-    knots <- seq(xl - deg * dx,
-      xr + deg * dx,
-      by = dx
-    )
-    k <- length(knots)
-    df <- k+deg
-    print(df)
-  get_bs_matrix <- splines::ns(x,
-                df = 5,#df,
-                #knots = knots,
+  # Compute the length of the partitions
+  dx <- (xr - xl) / nseg
+  # Create equally spaced knots
+  knots <- seq(xl - deg * dx,
+    xr + deg * dx,
+    by = dx
+  )
+  #print(length(knots))
+  # Use bs() function to generate the B-spline basis
+  # get_bs_matrix <- matrix(
+  #   splines::bs(x,
+  #               df = 5,
+  #               degree = 3
+  #     #knots = knots,
+  #     #degree = deg#, Boundary.knots = c(knots[1], knots[length(knots)])
+  #   ),
+  #   nrow = length(x)
+  # )
+  get_bs_matrix <-
+    splines::bs(x,
+                #df = round(df)+2,#5,
+                #degree = 3,
+                knots = knots,
                 intercept = TRUE,
-                Boundary.knots = c(knots[1], knots[length(knots)]))
-  bs_matrix <- get_bs_matrix
+                #degree = deg#,
+                Boundary.knots = c(knots[1], knots[length(knots)])
+    )
+  # Remove columns that contain zero only
+  #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  bs_matrix <-get_bs_matrix
+  #class(bs_matrix) <- c("ns","basis","matrix")
+  #print(dim(bs_matrix))
   return(bs_matrix)
 }
+
+# # # Using natural splines instead
+# bs_bbase <- function(x,
+#                     #x_train = NULL,
+#                      xl = min(x),
+#                      xr = max(x),
+#                      deg = 3,
+#                     nseg = 2,
+#                     data= data){
+#
+#   # # Use Ns() function to generate the B-spline basis
+#   deg <- deg
+#   nseg <- 3
+#     # Compute the length of the partitions
+#     dx <- (xr - xl) / nseg
+#     # Create equally spaced knots
+#     knots <- seq(xl - deg * dx,
+#       xr + deg * dx,
+#       by = dx
+#     )
+#     k <- length(knots)
+#     df <- k+deg
+#     print(df)
+#   get_bs_matrix <- splines::ns(x,
+#                 df = 5,#df,
+#                 #knots = knots,
+#                 intercept = TRUE,
+#                 Boundary.knots = c(knots[1], knots[length(knots)]))
+#   bs_matrix <- get_bs_matrix
+#   return(bs_matrix)
+# }
