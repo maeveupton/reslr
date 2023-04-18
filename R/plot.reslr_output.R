@@ -341,6 +341,7 @@ plot.reslr_output <- function(x,
     else{
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
+
       # Plot
       plot_result <- create_model_fit_plot(output_dataframes= output_dataframes,
                                            data = data,plot_tide_gauges = TRUE)
@@ -399,8 +400,8 @@ plot.reslr_output <- function(x,
             linetype = c(1),
             shape = c( NA),
             size = 2
-          )))#+
-        #ggplot2::facet_wrap(~SiteName)
+          )))+
+        ggplot2::facet_wrap(~SiteName)
     }
     cat("NI spline in time plotted and rate of change. \n")
 

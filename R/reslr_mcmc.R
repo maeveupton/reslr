@@ -47,7 +47,7 @@ reslr_mcmc.reslr_input <- function(input_data,
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
   # Input Data -------------
-  data <- input_data$data # Add the function here
+  data <- input_data$data
   data_grid <- input_data$data_grid
 
   # Simple Linear Regression ----------------

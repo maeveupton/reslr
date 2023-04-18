@@ -184,7 +184,8 @@ reslr_load <- function(data,
 
   input_data <- base::list(
     data = data,
-    data_grid = data_grid
+    data_grid = data_grid,
+    prediction_interval = prediction_interval
   )
   class(input_data) <- "reslr_input"
   return(input_data)

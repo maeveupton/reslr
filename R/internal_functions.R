@@ -83,6 +83,7 @@ create_model_fit_plot <- function(output_dataframes, data, plot_tide_gauges = FA
         xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
         ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
       ), alpha = 0.4) +
+      ggplot2::ggtitle(paste0("Proxy data & Tide gauge data from:",unique(as.factor(data$SiteName))))+
       ggplot2::geom_point(
         data = data,
         ggplot2::aes(y = RSL, x = Age * 1000, colour = "black", shape = data_type_id), size = 0.5
@@ -99,6 +100,7 @@ create_model_fit_plot <- function(output_dataframes, data, plot_tide_gauges = FA
       #   data = output_dataframes,
       #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
+
       ggplot2::xlab("Age (CE)") +
       ggplot2::ylab("Relative Sea Level (m)") +
       ggplot2::theme_bw() +
@@ -141,7 +143,7 @@ create_model_fit_plot <- function(output_dataframes, data, plot_tide_gauges = FA
           size = 2
         ))
       ) #+
-    # ggplot2::facet_wrap(~SiteName)
+    #ggplot2::facet_wrap(~SiteName)
   }
   return(plot)
 }
