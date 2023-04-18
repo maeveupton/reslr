@@ -471,7 +471,7 @@ reslr_mcmc.reslr_input <- function(input_data,
                                           decomposition = FALSE)
     # Output with everything-------------
     jags_output <- list(
-      noisy_model_run_output = noisy_model_run_output, # Watch this
+      noisy_model_run_output = noisy_model_run_output,
       jags_data = jags_data,
       data = data,
       data_grid = data_grid,
@@ -585,7 +585,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid = data,# CHANGE
+                                          data_grid = data_grid,# CHANGE
                                           rate_grid = TRUE,
                                           decomposition = FALSE)
     # Output with everything-------------

@@ -187,6 +187,7 @@ plot.reslr_output <- function(x,
                                      values = c("mean" = "purple3"),
                                      labels = c( "Posterior Fit")
         ) +
+        ggplot2::geom_hline(yintercept = 0)+
         ggplot2::guides(
           fill = ggplot2::guide_legend(override.aes = list(
             alpha = c(0.4), # , 0.4),
@@ -220,6 +221,7 @@ plot.reslr_output <- function(x,
         #   data = output_dataframes,
         #   ggplot2::aes(y = pred_rate, ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
         # ) +
+        ggplot2::geom_hline(yintercept = 0)+
         ggplot2::xlab("Age (CE)") +
         ggplot2::ylab("Rate of Change (mm/year)") +
         ggplot2::theme_bw() +
@@ -323,6 +325,7 @@ plot.reslr_output <- function(x,
                                      values = c("mean" = "purple3"),
                                      labels = c( "Posterior Fit")
         ) +
+        ggplot2::geom_hline(yintercept = 0)+
         ggplot2::guides(
           fill = ggplot2::guide_legend(override.aes = list(
             alpha = c(0.4), # , 0.4),
@@ -386,6 +389,7 @@ plot.reslr_output <- function(x,
                                      values = c("mean" = "purple3"),
                                      labels = c( "Posterior Fit")
         ) +
+        ggplot2::geom_hline(yintercept = 0)+
         ggplot2::guides(
           fill = ggplot2::guide_legend(override.aes = list(
             alpha = c(0.4), # , 0.4),
@@ -444,6 +448,7 @@ plot.reslr_output <- function(x,
           axis.text = ggplot2::element_text(size = 12),
           legend.text = ggplot2::element_text(size = 10)
         ) +
+        ggplot2::geom_hline(yintercept = 0)+
         ggplot2::theme(
           strip.text.x = ggplot2::element_text(size = 10),
           strip.background = ggplot2::element_rect(fill = c("white"))
@@ -501,6 +506,7 @@ plot.reslr_output <- function(x,
         ggplot2::xlab("Age (CE)") +
         ggplot2::ylab("Rate of Change (mm/year)") +
         ggplot2::theme_bw() +
+        ggplot2::geom_hline(yintercept = 0)+
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 15),
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
@@ -660,6 +666,7 @@ plot.reslr_output <- function(x,
           strip.text.x = ggplot2::element_text(size = 10),
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
+        ggplot2::geom_hline(yintercept = 0)+
         ggplot2::xlab("Age (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(colour = "") +
@@ -726,6 +733,7 @@ plot.reslr_output <- function(x,
         ggplot2::geom_ribbon(data=regional_rate_component_df,
                              ggplot2::aes(ymin=rate_lwr_50,ymax=rate_upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
         ggplot2::theme_bw()+
+        ggplot2::geom_hline(yintercept = 0)+
         #ggplot2::ggtitle("Prediction Rate of Change")+
         ggplot2::theme(plot.title = ggplot2::element_text(size=15),
                        axis.title=ggplot2::element_text(size=12,face="bold"),
@@ -824,6 +832,7 @@ plot.reslr_output <- function(x,
           ggplot2::aes(ymin = rate_lwr_50, ymax = rate_upr_50, x = Age * 1000), fill = "#ad4c14", alpha = 0.3
         ) +
         ggplot2::theme_bw() +
+        ggplot2::geom_hline(yintercept = 0)+
         ggplot2::ylab("Rate of Change (mm/year)") +
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 22),
@@ -1068,6 +1077,7 @@ plot.reslr_output <- function(x,
       ggplot2::geom_ribbon(data=regional_rate_component_df,
                            ggplot2::aes(ymin=rate_lwr_50,ymax=rate_upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
       ggplot2::theme_bw()+
+      ggplot2::geom_hline(yintercept = 0)+
       #ggplot2::ggtitle("Prediction Rate of Change")+
       ggplot2::theme(plot.title = ggplot2::element_text(size=15),
                      axis.title=ggplot2::element_text(size=12,face="bold"),
@@ -1178,7 +1188,17 @@ plot.reslr_output <- function(x,
 
     # Separate Components on one plot with CI --------
     all_components_CI_plot <- ggplot2::ggplot() +
-      # Local
+      # Linear Local Component + site specific vertical offset
+      ggplot2::geom_line(
+        data = lin_loc_component_df,
+        ggplot2::aes(x = Age * 1000, y = pred, colour = ID)
+      ) +
+      ggplot2::geom_ribbon(
+        data = lin_loc_component_df,
+        ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
+      ) +
+
+      # Non linear Local
       ggplot2::geom_line(
         data = non_lin_loc_component_df,
         ggplot2::aes(x = Age * 1000, y = pred, colour = ID)
@@ -1196,15 +1216,7 @@ plot.reslr_output <- function(x,
         data = regional_component_df,
         ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
       ) +
-      # Linear Local Component + site specific vertical offset
-      ggplot2::geom_line(
-        data = lin_loc_component_df,
-        ggplot2::aes(x = Age * 1000, y = pred, colour = ID)
-      ) +
-      ggplot2::geom_ribbon(
-        data = lin_loc_component_df,
-        ggplot2::aes(ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = ID), alpha = 0.3
-      ) +
+
 
 
       # Total Model
@@ -1222,12 +1234,12 @@ plot.reslr_output <- function(x,
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
       ggplot2::scale_fill_manual(
-        name = "", values = c("#3b47ad", "#ad4c14","#5bac06", "purple3"),
+        name = "", values = c( "#5bac06","#ad4c14","#3b47ad", "purple3"),
         guide = ggplot2::guide_legend(override.aes = list(alpha = 0.1))
       ) +
       ggplot2::scale_colour_manual(name = "",
                                    values = c(
-                                     "#3b47ad","#ad4c14","#5bac06",  "purple3")) +
+                                     "#5bac06", "#ad4c14","#3b47ad",  "purple3")) +
       ggplot2::ylab("Sea Level (m)") +
       ggplot2::facet_wrap(~SiteName) +
       ggplot2::xlab("Age (CE)") +
