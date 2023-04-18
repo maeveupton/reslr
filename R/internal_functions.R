@@ -255,28 +255,28 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(data_type_id = "TideGaugeData")
 
 
-  # # Set the window size for the moving average (in this case, 10 years)
-  window_size <- 10
-
-  # Create a new column with the rolling average
-  annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
-    width = window_size,
-    FUN = mean,
-    align = "right", # "right",
-    fill = NA
-  )
-
-  # create a new column for the decade based on the midpoint of the rolling window
-  # annual_tidal_gauge_data_df$decade <- as.integer(floor((annual_tidal_gauge_data_df$Age - (window_size/2))/10)*10)
-  annual_tidal_gauge_data_df$decade <- zoo::rollapply(annual_tidal_gauge_data_df$Age,
-    width = window_size,
-    FUN = stats::median,
-    align = "right", # "right",
-    fill = NA
-  )
-
-  # calculate the decadal averages based on the rolling average
-  decadal_averages_TG <- annual_tidal_gauge_data_df %>% tidyr::drop_na()
+  # # # Set the window size for the moving average (in this case, 10 years)
+  # window_size <- 10
+  #
+  # # Create a new column with the rolling average
+  # annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
+  #   width = window_size,
+  #   FUN = mean,
+  #   align = "right", # "right",
+  #   fill = NA
+  # )
+  #
+  # # create a new column for the decade based on the midpoint of the rolling window
+  # # annual_tidal_gauge_data_df$decade <- as.integer(floor((annual_tidal_gauge_data_df$Age - (window_size/2))/10)*10)
+  # annual_tidal_gauge_data_df$decade <- zoo::rollapply(annual_tidal_gauge_data_df$Age,
+  #   width = window_size,
+  #   FUN = stats::median,
+  #   align = "right", # "right",
+  #   fill = NA
+  # )
+  #
+  # # calculate the decadal averages based on the rolling average
+  # decadal_averages_TG <- annual_tidal_gauge_data_df %>% tidyr::drop_na()
   # annual_tidal_gauge_data_df %>%
   # dplyr::group_by(decade, SiteName) %>%
   # dplyr::summarise(
@@ -288,16 +288,18 @@ clean_tidal_gauge_data <- function(data,
   # plot(decadal_averages_TG$decade,decadal_averages_TG$rolling_avg)
 
 
-  # # Decadal Averages------ I don't know if this is too simple to calculate the decadal averages
-  # decadal_averages_TG <-
-  #   annual_tidal_gauge_data_df %>%
-  #   dplyr::mutate(decade = (Age - 1) %/% 10) %>%
-  #   dplyr::group_by(decade, SiteName) %>%
-  #   dplyr::summarise(
-  #     decade_meanRSL = mean(RSL),
-  #     Age = max(Age),
-  #     rows_site = dplyr::n()
-  #   ) # Age=min(Age)
+  # Decadal Averages------ I don't know if this is too simple to calculate the decadal averages
+  #offset works better with this
+  decadal_averages_TG <-
+    annual_tidal_gauge_data_df %>%
+    dplyr::mutate(decade = (Age - 1) %/% 10) %>%
+    dplyr::group_by(decade, SiteName) %>%
+    dplyr::summarise(
+      #decade_meanRSL = mean(RSL),
+      rolling_avg = mean(RSL),
+      Age = max(Age),
+      rows_site = dplyr::n()
+    ) # Age=min(Age)
 
   #---Using standard deviation of RSL over the decade as uncertainty----
   decadal_averages_TG <- decadal_averages_TG %>%
@@ -1119,7 +1121,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     #B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (h)
 
     # Basis functions in time using prediction data frame-----------------------
-    t_pred <- sort(data_grid$Age)
+    #t_pred <- sort(data_grid$Age)# CHECK this
     #B_t_pred <- predict(B_t, t_pred)
 
     B_t_pred <- bs_bbase(t_pred,
@@ -1662,6 +1664,7 @@ bs_bbase <- function(x,
     nrow = length(x)
   )
   # Remove columns that contain zero only
-  bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  bs_matrix <-get_bs_matrix
   return(bs_matrix)
 }

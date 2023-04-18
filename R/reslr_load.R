@@ -35,7 +35,8 @@ reslr_load <- function(data,
                        list_preferred_TGs = NULL,
                        TG_minimum_dist_proxy = FALSE,
                        all_TG_1deg = FALSE,
-                       input_Age_type = "CE") {
+                       input_Age_type = "CE",
+                       model_type) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
 
   # Tidy Original data-------------------------------
@@ -155,8 +156,8 @@ reslr_load <- function(data,
   data_age_boundary <- data %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(
-      max_Age = max(Age)+2*Age_err[1],
-      min_Age = min(Age)-2*Age_err[length(Age_err)]
+      max_Age = max(Age)+Age_err[1],#*2?
+      min_Age = min(Age)-Age_err[length(Age_err)]
     ) %>%
     unique()
   # Filtering prediction grids to just cover the data
@@ -180,7 +181,9 @@ reslr_load <- function(data,
     dplyr::mutate(
       SiteName = as.factor(SiteName),
       data_type_id = as.factor(data_type_id)
-    ) %>% dplyr::select(!c(max_Age,min_Age))
+    ) %>%
+    dplyr::select(!c(max_Age,min_Age)) %>%
+    dplyr::arrange(Age)
 
   input_data <- base::list(
     data = data,
