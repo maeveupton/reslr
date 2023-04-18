@@ -155,8 +155,8 @@ reslr_load <- function(data,
   data_age_boundary <- data %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(
-      max_Age = max(Age)+Age_err[1], # + (prediction_interval / 1000),
-      min_Age = min(Age)-Age_err[length(Age_err)]#0.05 #-(prediction_interval / 1000)
+      max_Age = max(Age)+2*Age_err[1],
+      min_Age = min(Age)-2*Age_err[length(Age_err)]
     ) %>%
     unique()
   # Filtering prediction grids to just cover the data
@@ -168,14 +168,6 @@ reslr_load <- function(data,
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(Age = replace(Age, Age == min(Age), unique(min_Age))) %>%
     dplyr::mutate(Age = replace(Age, Age == max(Age), unique(max_Age)))
-    #dplyr::mutate(Age = replace(Age, Age == min(Age), unique(min_Age)-0.5)) %>%
-    #dplyr::mutate(Age = replace(Age, Age == max(Age), unique(max_Age)+0.5))
-
-  # data_grid <- data_grid_full %>%
-  #   dplyr::left_join(data_age_boundary, by = "SiteName") %>%
-  #   dplyr::group_by(SiteName) %>%
-  #   dplyr::filter(Age >= (min_Age) & Age <= (max_Age)) %>%
-  #   dplyr::tibble()
 
   # Ensuring SiteName is a factor
   data <- data %>%

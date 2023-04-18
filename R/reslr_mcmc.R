@@ -398,8 +398,6 @@ reslr_mcmc.reslr_input <- function(input_data,
       nu = 2
     )
 
-
-
     # Run JAGS------------------------
     model_run <- suppressWarnings(R2jags::jags(
       data = jags_data,
@@ -468,7 +466,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid = data,#data_grid,#CHANGE
+                                          data_grid = data_grid,
                                           rate_grid = TRUE,
                                           decomposition = FALSE)
     # Output with everything-------------

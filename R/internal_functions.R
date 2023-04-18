@@ -6,78 +6,9 @@
 #'
 #' @return The plot of the model fit
 #' @noRd
-create_model_fit_plot <- function(output_dataframes,data,plot_tide_gauges = FALSE){
-  data_type_id <- pred <- lwr_95 <- upr_95<- Age <- RSL <- Age_err<- RSL_err  <-SiteName <- Longitude <- Latitude <- NULL
-  if(plot_tide_gauges == FALSE){
-    # Plot
-    plot <-
-    ggplot2::ggplot() +
-    ggplot2::geom_rect(data = data, ggplot2::aes(
-      xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
-      ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
-    ), alpha = 0.4) +
-    ggplot2::geom_point(
-      data = data,
-      ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
-    ) +
-    ggplot2::geom_line(
-      data = output_dataframes,
-      ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
-    ) +
-    ggplot2::geom_ribbon(
-      data = output_dataframes,
-      ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
-    ) +
-    # ggplot2::geom_ribbon(
-    #   data = output_dataframes,
-    #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-    # ) +
-    ggplot2::xlab("Age (CE)") +
-    ggplot2::ylab("Relative Sea Level (m)") +
-    ggplot2::theme_bw() +
-    ggplot2::theme(
-      plot.title = ggplot2::element_text(size = 15),
-      axis.title = ggplot2::element_text(size = 12, face = "bold"),
-      axis.text = ggplot2::element_text(size = 12),
-      legend.text = ggplot2::element_text(size = 10)
-    ) +
-    ggplot2::theme(
-      strip.text.x = ggplot2::element_text(size = 10),
-      strip.background = ggplot2::element_rect(fill = c("white"))
-    ) +
-    ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-    ggplot2::labs(colour = "") +
-    ggplot2::scale_fill_manual("",
-                               values = c(
-                                 "Uncertainty" = ggplot2::alpha("grey", 0.3),
-                                 "95" = ggplot2::alpha("purple3", 0.2) #
-                                 # "50" = ggplot2::alpha("purple3", 0.3)
-                               ),
-                               labels = c(
-                                 "95% Credible Interval",
-                                 expression(paste("1-sigma Error"))
-                                 # , "50% Credible Interval"
-                               )
-    ) +
-    ggplot2::scale_colour_manual("",
-                                 values = c("black" = "black", "mean" = "purple3"),
-                                 labels = c("Data", "Posterior Fit")
-    ) +
-    ggplot2::guides(
-      fill = ggplot2::guide_legend(override.aes = list(
-        alpha = c(0.4, 0.2), # , 0.4),
-        size = 1
-      )),
-      colour = ggplot2::guide_legend(override.aes = list(
-        linetype = c(0, 1),
-        shape = c(16, NA),
-        size = 2
-      ))
-    )+
-    ggplot2::facet_wrap(~SiteName)
-
-  }
-  else{
+create_model_fit_plot <- function(output_dataframes, data, plot_tide_gauges = FALSE) {
+  data_type_id <- pred <- lwr_95 <- upr_95 <- Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- NULL
+  if (plot_tide_gauges == FALSE) {
     # Plot
     plot <-
       ggplot2::ggplot() +
@@ -87,7 +18,7 @@ create_model_fit_plot <- function(output_dataframes,data,plot_tide_gauges = FALS
       ), alpha = 0.4) +
       ggplot2::geom_point(
         data = data,
-        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black",shape = data_type_id), size = 0.5
+        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
       ) +
       ggplot2::geom_line(
         data = output_dataframes,
@@ -117,20 +48,20 @@ create_model_fit_plot <- function(output_dataframes,data,plot_tide_gauges = FALS
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
       ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
-                                 values = c(
-                                   "Uncertainty" = ggplot2::alpha("grey", 0.3),
-                                   "95" = ggplot2::alpha("purple3", 0.2) #
-                                   # "50" = ggplot2::alpha("purple3", 0.3)
-                                 ),
-                                 labels = c(
-                                   "95% Credible Interval",
-                                   expression(paste("1-sigma Error"))
-                                   # , "50% Credible Interval"
-                                 )
+        values = c(
+          "Uncertainty" = ggplot2::alpha("grey", 0.3),
+          "95" = ggplot2::alpha("purple3", 0.2) #
+          # "50" = ggplot2::alpha("purple3", 0.3)
+        ),
+        labels = c(
+          "95% Credible Interval",
+          expression(paste("1-sigma Error"))
+          # , "50% Credible Interval"
+        )
       ) +
       ggplot2::scale_colour_manual("",
-                                   values = c("black" = "black", "mean" = "purple3"),
-                                   labels = c("Data", "Posterior Fit")
+        values = c("black" = "black", "mean" = "purple3"),
+        labels = c("Data", "Posterior Fit")
       ) +
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(
@@ -139,12 +70,78 @@ create_model_fit_plot <- function(output_dataframes,data,plot_tide_gauges = FALS
         )),
         colour = ggplot2::guide_legend(override.aes = list(
           linetype = c(0, 1),
-          #shape = c(16, NA),
+          shape = c(16, NA),
           size = 2
         ))
-      )#+
-      #ggplot2::facet_wrap(~SiteName)
-
+      ) +
+      ggplot2::facet_wrap(~SiteName)
+  } else {
+    # Plot
+    plot <-
+      ggplot2::ggplot() +
+      ggplot2::geom_rect(data = data, ggplot2::aes(
+        xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+        ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
+      ), alpha = 0.4) +
+      ggplot2::geom_point(
+        data = data,
+        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black", shape = data_type_id), size = 0.5
+      ) +
+      ggplot2::geom_line(
+        data = output_dataframes,
+        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+      ) +
+      ggplot2::geom_ribbon(
+        data = output_dataframes,
+        ggplot2::aes(y = pred, ymin = lwr_95, ymax = upr_95, x = Age * 1000, fill = "95"), alpha = 0.2
+      ) +
+      # ggplot2::geom_ribbon(
+      #   data = output_dataframes,
+      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
+      # ) +
+      ggplot2::xlab("Age (CE)") +
+      ggplot2::ylab("Relative Sea Level (m)") +
+      ggplot2::theme_bw() +
+      ggplot2::theme(
+        plot.title = ggplot2::element_text(size = 15),
+        axis.title = ggplot2::element_text(size = 12, face = "bold"),
+        axis.text = ggplot2::element_text(size = 12),
+        legend.text = ggplot2::element_text(size = 10)
+      ) +
+      ggplot2::theme(
+        strip.text.x = ggplot2::element_text(size = 10),
+        strip.background = ggplot2::element_rect(fill = c("white"))
+      ) +
+      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+      ggplot2::labs(colour = "") +
+      ggplot2::scale_fill_manual("",
+        values = c(
+          "Uncertainty" = ggplot2::alpha("grey", 0.3),
+          "95" = ggplot2::alpha("purple3", 0.2) #
+          # "50" = ggplot2::alpha("purple3", 0.3)
+        ),
+        labels = c(
+          "95% Credible Interval",
+          expression(paste("1-sigma Error"))
+          # , "50% Credible Interval"
+        )
+      ) +
+      ggplot2::scale_colour_manual("",
+        values = c("black" = "black", "mean" = "purple3"),
+        labels = c("Data", "Posterior Fit")
+      ) +
+      ggplot2::guides(
+        fill = ggplot2::guide_legend(override.aes = list(
+          alpha = c(0.4, 0.2), # , 0.4),
+          size = 1
+        )),
+        colour = ggplot2::guide_legend(override.aes = list(
+          linetype = c(0, 1),
+          # shape = c(16, NA),
+          size = 2
+        ))
+      ) #+
+    # ggplot2::facet_wrap(~SiteName)
   }
   return(plot)
 }
@@ -163,9 +160,8 @@ create_model_fit_plot <- function(output_dataframes,data,plot_tide_gauges = FALS
 clean_tidal_gauge_data <- function(data,
                                    list_preferred_TGs = NULL,
                                    TG_minimum_dist_proxy = FALSE,
-                                   all_TG_1deg = FALSE
-) {
-  Age_epoch_id <-  LongLat <- rolling_avg<- median<-  nearest_proxy_site<- RSL_annual<- TG_min_dist1 <- minimum_dist<-nearest_TG<-rows_site<-site<-min_dist1<-stationflag<-name<-sd<-sd_TG<- n_obs_by_site<-RSL_offset <- data_type_id <-decade<- decade_meanRSL<- Age <- RSL <- Age_err<- RSL_err <- linear_rate <- linear_rate_err <-SiteName <- Longitude <- Latitude <- id <- NULL
+                                   all_TG_1deg = FALSE) {
+  Age_epoch_id <- LongLat <- rolling_avg <- median <- nearest_proxy_site <- RSL_annual <- TG_min_dist1 <- minimum_dist <- nearest_TG <- rows_site <- site <- min_dist1 <- stationflag <- name <- sd <- sd_TG <- n_obs_by_site <- RSL_offset <- data_type_id <- decade <- decade_meanRSL <- Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- id <- NULL
   # Using data from PSMSL website for annual tide gauge data----------------------------------
   # Set up the URL for downloading the data
   url <- "https://psmsl.org/data/obtaining/rlr.annual.data/rlr_annual.zip"
@@ -180,50 +176,53 @@ clean_tidal_gauge_data <- function(data,
   temp_dir <- tempfile()
   utils::unzip(temp_file, exdir = temp_dir)
 
-  ###------------Loop to open all RSL & Age data files------------
+  ### ------------Loop to open all RSL & Age data files------------
   read_plus <- function(flnm) {
-    data.table::fread(flnm, sep= ";") %>% # fread quicker way to read in & allows for ; to be used
+    data.table::fread(flnm, sep = ";") %>% # fread quicker way to read in & allows for ; to be used
       dplyr::mutate(filename = flnm) # allows you to include the file name as id
   }
   # Warnings: there are some files without data
   suppressWarnings(
-    temp_SL<-
-      list.files(path = file.path(temp_dir, "rlr_annual", "data"),
-                 #path = "rlr_annual/data",
-                 pattern = "*.rlrdata",
-                 full.names = T) %>%
-      purrr::map_df(~read_plus(.)) %>%
-      dplyr::tibble())
+    temp_SL <-
+      list.files(
+        path = file.path(temp_dir, "rlr_annual", "data"),
+        # path = "rlr_annual/data",
+        pattern = "*.rlrdata",
+        full.names = T
+      ) %>%
+      purrr::map_df(~ read_plus(.)) %>%
+      dplyr::tibble()
+  )
 
-  colnames(temp_SL) = c("Age","RSL","flag_attention_1","flag_attention_2","id")
-  temp_SL$id <- stringr::str_extract(basename(temp_SL$id),"[0-9]+")
+  colnames(temp_SL) <- c("Age", "RSL", "flag_attention_1", "flag_attention_2", "id")
+  temp_SL$id <- stringr::str_extract(basename(temp_SL$id), "[0-9]+")
 
   # Access the individual data files within the 'rlr_annual' folder
   file_path <- file.path(temp_dir, "rlr_annual", "filelist.txt")
-  file_list <- utils::read.csv(file_path,stringsAsFactors = FALSE, header=F,sep=";")
-  colnames(file_list)<- c("id","Latitude","Longitude","name","coastline","stationcode","stationflag")
+  file_list <- utils::read.csv(file_path, stringsAsFactors = FALSE, header = F, sep = ";")
+  colnames(file_list) <- c("id", "Latitude", "Longitude", "name", "coastline", "stationcode", "stationflag")
   # Removing white space in the name of each site
-  file_list$name <- stringr::str_trim(file_list$name,side = "both")
-  file_list$stationflag <-  stringr::str_trim(file_list$stationflag,side = "both")
+  file_list$name <- stringr::str_trim(file_list$name, side = "both")
+  file_list$stationflag <- stringr::str_trim(file_list$stationflag, side = "both")
   # Data from the PSMSL website
   data_TG <- temp_SL %>%
     # pulling out the file number from string so that it matches the name from other files
-    dplyr::mutate(id = stringr::str_extract(basename(temp_SL$id),"[0-9]+")) %>%
+    dplyr::mutate(id = stringr::str_extract(basename(temp_SL$id), "[0-9]+")) %>%
     # Cases where bad data was collected
-    dplyr::filter(!RSL== -99999) %>%
+    dplyr::filter(!RSL == -99999) %>%
     dplyr::group_by(id) %>%
-    #2000-2018 used as the tidal epoch
-    dplyr::mutate(Age_epoch_id = ifelse(dplyr::between(Age,2000,2018),TRUE,FALSE))
+    # 2000-2018 used as the tidal epoch
+    dplyr::mutate(Age_epoch_id = ifelse(dplyr::between(Age, 2000, 2018), TRUE, FALSE))
 
   # Removing offset based on the location---
   # Offset value is the mean of RSL over the tidal epoch
   # Setting 2000-2018 as the tidal epoch
-  Age_epoch_ref <-  data_TG %>%
-    dplyr::select(RSL,Age_epoch_id) %>%
+  Age_epoch_ref <- data_TG %>%
+    dplyr::select(RSL, Age_epoch_id) %>%
     dplyr::filter(Age_epoch_id == TRUE) %>%
-    dplyr::summarise(RSL_offset  = unique(mean(RSL)))
+    dplyr::summarise(RSL_offset = unique(mean(RSL)))
 
-  data_TG <- merge(data_TG,Age_epoch_ref,by = "id",all=TRUE)
+  data_TG <- merge(data_TG, Age_epoch_ref, by = "id", all = TRUE)
   # Cases where no data between 2000-2018 set the offset to 7000
   data_TG$RSL_offset[is.na(data_TG$RSL_offset)] <- 7000
 
@@ -231,7 +230,7 @@ clean_tidal_gauge_data <- function(data,
   data_TG$RSL <- data_TG$RSL - data_TG$RSL_offset
 
   #--Joining SL data with location names--
-  annual_SL_tide_df <-merge(data_TG,file_list,by = "id",all = TRUE)
+  annual_SL_tide_df <- merge(data_TG, file_list, by = "id", all = TRUE)
   #-- Removing sites which have a station flag raised as they are poor sites---
   annual_SL_tide_df <- annual_SL_tide_df %>%
     dplyr::filter(!stationflag == "Y") %>%
@@ -240,8 +239,8 @@ clean_tidal_gauge_data <- function(data,
   # Remove the temporary file and directory
   unlink(temp_file)
   unlink(temp_dir, recursive = TRUE)
-  #annual_SL_tide_df <- annual_SL_tide_df %>% dplyr::filter(name == "ARGENTIA")
-  #plot(annual_SL_tide_df$Age,annual_SL_tide_df$RSL)
+  # annual_SL_tide_df <- annual_SL_tide_df %>% dplyr::filter(name == "ARGENTIA")
+  # plot(annual_SL_tide_df$Age,annual_SL_tide_df$RSL)
   # Annual Tidal Gauge data----
   annual_tidal_gauge_data_df <- annual_SL_tide_df %>%
     dplyr::select(Age, RSL, Latitude, Longitude, name, RSL_offset, Age_epoch_id) %>%
@@ -261,18 +260,20 @@ clean_tidal_gauge_data <- function(data,
 
   # Create a new column with the rolling average
   annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
-                                                           width = window_size,
-                                                           FUN = mean,
-                                                           align = "right",#"right",
-                                                           fill = NA)
+    width = window_size,
+    FUN = mean,
+    align = "right", # "right",
+    fill = NA
+  )
 
   # create a new column for the decade based on the midpoint of the rolling window
-  #annual_tidal_gauge_data_df$decade <- as.integer(floor((annual_tidal_gauge_data_df$Age - (window_size/2))/10)*10)
+  # annual_tidal_gauge_data_df$decade <- as.integer(floor((annual_tidal_gauge_data_df$Age - (window_size/2))/10)*10)
   annual_tidal_gauge_data_df$decade <- zoo::rollapply(annual_tidal_gauge_data_df$Age,
-                                                      width = window_size,
-                                                      FUN = stats::median,
-                                                      align = "right",#"right",
-                                                      fill = NA)
+    width = window_size,
+    FUN = stats::median,
+    align = "right", # "right",
+    fill = NA
+  )
 
   # calculate the decadal averages based on the rolling average
   decadal_averages_TG <- annual_tidal_gauge_data_df %>% tidyr::drop_na()
@@ -284,7 +285,7 @@ clean_tidal_gauge_data <- function(data,
   #   Age = max(Age),
   #   rows_site = dplyr::n()
   # )
-  #plot(decadal_averages_TG$decade,decadal_averages_TG$rolling_avg)
+  # plot(decadal_averages_TG$decade,decadal_averages_TG$rolling_avg)
 
 
   # # Decadal Averages------ I don't know if this is too simple to calculate the decadal averages
@@ -301,7 +302,7 @@ clean_tidal_gauge_data <- function(data,
   #---Using standard deviation of RSL over the decade as uncertainty----
   decadal_averages_TG <- decadal_averages_TG %>%
     dplyr::group_by(SiteName) %>%
-    #dplyr::mutate(sd_TG = sd(decade_meanRSL))
+    # dplyr::mutate(sd_TG = sd(decade_meanRSL))
     dplyr::mutate(sd_TG = sd(rolling_avg))
 
   #----- New df with decadal averages for tide gauges-----
@@ -310,7 +311,7 @@ clean_tidal_gauge_data <- function(data,
   #---Rsl & Age error for tidal gauge data----
   tidal_gauge_full_df <- tidal_gauge_average_10_df %>%
     dplyr::mutate(
-      Age_err= 5, # years --> half a year/half a decade
+      Age_err = 0.5,# half a year?#5, # years --> half a year/half a decade
     ) %>%
     dplyr::mutate(sd_TG = ifelse(is.na(sd_TG), 0.001, sd_TG)) %>%
     dplyr::group_by(SiteName) %>%
@@ -322,17 +323,16 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(Age = Age / 1000) %>%
     dplyr::mutate(Age_err = Age_err / 1000) %>%
     dplyr::mutate(RSL_annual = RSL) %>%
-    #dplyr::mutate(RSL = decade_meanRSL)
     dplyr::mutate(RSL = rolling_avg) %>%
-    dplyr::select(!c(decade, Age_epoch_id,rolling_avg,RSL_annual,RSL_offset))
+    dplyr::select(!c(decade, Age_epoch_id, rolling_avg, RSL_annual, RSL_offset))
 
   # No user option here -> this is a must: Removing sites with only 2 points (20 years of data)-----
   decadal_TG_df <-
     tidal_gauge_full_df %>%
-    #decadal_NA_TG %>%
+    # decadal_NA_TG %>%
     dplyr::group_by(SiteName) %>%
     dplyr::filter(dplyr::n() >= 2)
-    #dplyr::mutate(data_type_id = "TideGaugeData") %>%
+  # dplyr::mutate(data_type_id = "TideGaugeData") %>%
 
   #-----Uniting original dataset and model run to give a site index to model_result data set-----
   SL_site_df <- data %>%
@@ -356,67 +356,78 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(Latitude = round(Latitude, 1)) %>%
     tidyr::unite("LongLat", Latitude:Longitude, remove = FALSE) %>% # Uniting 2 columns
     dplyr::mutate(site = sprintf("%02d", as.integer(as.factor(LongLat)))) %>%
-    dplyr::mutate(data_type_id = "TideGaugeData")%>%
+    dplyr::mutate(data_type_id = "TideGaugeData") %>%
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(n_obs_by_site = dplyr::n()) %>%
     dplyr::ungroup()
 
   #------Joining proxy sites to gauges based on shortest distance----
   SL_proxy_unique <- SL_site_df %>%
-    dplyr::select(SiteName, Longitude, Latitude, data_type_id,n_obs_by_site) %>%
-    unique() %>% as.data.frame()
+    dplyr::select(SiteName, Longitude, Latitude, data_type_id, n_obs_by_site) %>%
+    unique() %>%
+    as.data.frame()
   SL_tide_unique <- SL_tide_site_df %>%
-    dplyr::select(SiteName, Longitude, Latitude, data_type_id,n_obs_by_site) %>%
-    unique() %>% as.data.frame()
+    dplyr::select(SiteName, Longitude, Latitude, data_type_id, n_obs_by_site) %>%
+    unique() %>%
+    as.data.frame()
 
   #---Distance Matrix for each site to each other---
-  mat.distance<- geosphere::distm(SL_proxy_unique[,2:3],SL_tide_unique[,2:3])
-  #fun = distGeo)
+  mat.distance <- geosphere::distm(SL_proxy_unique[, 2:3], SL_tide_unique[, 2:3])
+  # fun = distGeo)
   mat.distance_m <- as.matrix(mat.distance)
   #--finding row mins & corresponding tidal gauge--
-  rownames(mat.distance) = SL_proxy_unique$SiteName
-  colnames(mat.distance) = SL_tide_unique$SiteName
+  rownames(mat.distance) <- SL_proxy_unique$SiteName
+  colnames(mat.distance) <- SL_tide_unique$SiteName
   #--finding row mins & corresponding tidal gauge--
   dist_TG_proxy <- t(sapply(seq(nrow(mat.distance)), function(z) {
-    js <- order((mat.distance[z,]))[1:5]
-    c(rownames(mat.distance)[z], colnames(mat.distance)[js[1]], mat.distance[z,js[1]],
-      colnames(mat.distance)[js[2]], mat.distance[z,js[2]],
-      colnames(mat.distance)[js[3]], mat.distance[z,js[3]],
-      colnames(mat.distance)[js[4]], mat.distance[z,js[4]],
-      colnames(mat.distance)[js[5]], mat.distance[z,js[5]])
+    js <- order((mat.distance[z, ]))[1:5]
+    c(
+      rownames(mat.distance)[z], colnames(mat.distance)[js[1]], mat.distance[z, js[1]],
+      colnames(mat.distance)[js[2]], mat.distance[z, js[2]],
+      colnames(mat.distance)[js[3]], mat.distance[z, js[3]],
+      colnames(mat.distance)[js[4]], mat.distance[z, js[4]],
+      colnames(mat.distance)[js[5]], mat.distance[z, js[5]]
+    )
   }))
 
   dist_TG_proxy <- as.data.frame(dist_TG_proxy)
-  colnames(dist_TG_proxy) <- c("nearest_proxy_site",
-                               "TG_site_1", "TG_min_dist1",
-                               "TG_site_2", "TG_min_dist2",
-                               "TG_site_3","TG_min_dist3",
-                               "TG_site_4","TG_min_dist4",
-                               "TG_site_5","TG_min_dist5"
+  colnames(dist_TG_proxy) <- c(
+    "nearest_proxy_site",
+    "TG_site_1", "TG_min_dist1",
+    "TG_site_2", "TG_min_dist2",
+    "TG_site_3", "TG_min_dist3",
+    "TG_site_4", "TG_min_dist4",
+    "TG_site_5", "TG_min_dist5"
   )
   # Sorting the minimum distances from lowest to highest
   dist_TG_proxy <- dist_TG_proxy %>% dplyr::arrange(dplyr::desc(TG_min_dist1))
 
   dist_TG_proxy_long_1 <- dist_TG_proxy %>%
-    tidyr::pivot_longer(cols = dplyr::starts_with(c("TG_min_dist")),
-                        values_to = c("minimum_distance"))
+    tidyr::pivot_longer(
+      cols = dplyr::starts_with(c("TG_min_dist")),
+      values_to = c("minimum_distance")
+    )
   dist_TG_proxy_long_2 <- dist_TG_proxy %>%
-    tidyr::pivot_longer(cols = dplyr::starts_with(c("TG_site")),
-                        values_to = c("nearest_TG"))
+    tidyr::pivot_longer(
+      cols = dplyr::starts_with(c("TG_site")),
+      values_to = c("nearest_TG")
+    )
   obs_sites <- SL_tide_unique %>%
     dplyr::filter(SiteName %in% dist_TG_proxy_long_2$nearest_TG) %>%
     dplyr::select(n_obs_by_site)
-  dist_TG_proxy_df_new <- data.frame(nearest_proxy_site = dist_TG_proxy_long_1$nearest_proxy_site,
-                                     nearest_TG = dist_TG_proxy_long_2$nearest_TG,
-                                     minimum_dist = as.numeric(dist_TG_proxy_long_1$minimum_distance))#,
-                                     #n_obs_tg = obs_sites)
+  dist_TG_proxy_df_new <- data.frame(
+    nearest_proxy_site = dist_TG_proxy_long_1$nearest_proxy_site,
+    nearest_TG = dist_TG_proxy_long_2$nearest_TG,
+    minimum_dist = as.numeric(dist_TG_proxy_long_1$minimum_distance)
+  ) # ,
+  # n_obs_tg = obs_sites)
 
 
   # Criteria 1: User provides a list of TGs------------------------
-  if(is.null(list_preferred_TGs) == FALSE){
+  if (is.null(list_preferred_TGs) == FALSE) {
     # Check if TG exists in the list
     check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
-    if(check_TG == FALSE){
+    if (check_TG == FALSE) {
       cat("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
       stop()
     }
@@ -431,24 +442,25 @@ clean_tidal_gauge_data <- function(data,
     # Ensuring the SiteName is a factor
     data <- data_tide_proxy %>%
       dplyr::select(!c(
-        #RSL_annual, Age_epoch_id,
-        #RSL_offset, sd_TG, rows_site,
-        #decade_meanRSL,#rolling_avg,
-        n_obs_by_site,site,sd_TG
+        # RSL_annual, Age_epoch_id,
+        # RSL_offset, sd_TG, rows_site,
+        # decade_meanRSL,#rolling_avg,
+        n_obs_by_site, site, sd_TG
         # Indicator,Basin,
       )) %>%
-      dplyr::mutate(SiteName = as.factor(SiteName),
-                    data_type_id = as.factor(data_type_id))
-
+      dplyr::mutate(
+        SiteName = as.factor(SiteName),
+        data_type_id = as.factor(data_type_id)
+      )
   }
 
   # Criteria 2: Minimum distance to proxy site
-  if(TG_minimum_dist_proxy == TRUE){
+  if (TG_minimum_dist_proxy == TRUE) {
     # Finding the closest TG
     all_nearest_TG_closest <- dist_TG_proxy_df_new %>%
       dplyr::group_by(nearest_proxy_site) %>%
       dplyr::filter(minimum_dist == min(minimum_dist)) %>%
-      dplyr::distinct(nearest_TG,.keep_all = TRUE)# Removing any duplicate tide gauge sites.
+      dplyr::distinct(nearest_TG, .keep_all = TRUE) # Removing any duplicate tide gauge sites.
 
 
     # Joining the selected TG sites back with the original data
@@ -465,22 +477,23 @@ clean_tidal_gauge_data <- function(data,
     # Ensuring the SiteName is a factor
     data <- data_tide_proxy %>%
       dplyr::select(!c(
-        #RSL_annual, Age_epoch_id,
-        #RSL_offset,  rows_site,
-        #decade_meanRSL,#rolling_avg,
-        n_obs_by_site,site,sd_TG
+        # RSL_annual, Age_epoch_id,
+        # RSL_offset,  rows_site,
+        # decade_meanRSL,#rolling_avg,
+        n_obs_by_site, site, sd_TG
         # Indicator,Basin,
       )) %>%
-      dplyr::mutate(SiteName = as.factor(SiteName),
-                    data_type_id = as.factor(data_type_id))
-
+      dplyr::mutate(
+        SiteName = as.factor(SiteName),
+        data_type_id = as.factor(data_type_id)
+      )
   }
   # Criteria 3: All tide gauges within 1 degree away from proxy site
-  if(all_TG_1deg == TRUE){
+  if (all_TG_1deg == TRUE) {
     # 1 degree away from proxy site is 111.1km
     all_nearest_TG_closest <- dist_TG_proxy_df_new %>%
       dplyr::filter(minimum_dist <= 111100) %>%
-      dplyr::distinct(nearest_TG,.keep_all = TRUE)# Removing any duplicate tide gauge sites.
+      dplyr::distinct(nearest_TG, .keep_all = TRUE) # Removing any duplicate tide gauge sites.
 
     # Joining the selected TG sites back with the original data
     join_new_index_tide_df <- SL_tide_site_df %>%
@@ -496,15 +509,16 @@ clean_tidal_gauge_data <- function(data,
     # Ensuring the SiteName is a factor
     data <- data_tide_proxy %>%
       dplyr::select(!c(
-        #RSL_annual, Age_epoch_id,
-        #RSL_offset, sd_TG, rows_site,
-        #decade_meanRSL,#rolling_avg,
-        n_obs_by_site,site,sd_TG
+        # RSL_annual, Age_epoch_id,
+        # RSL_offset, sd_TG, rows_site,
+        # decade_meanRSL,#rolling_avg,
+        n_obs_by_site, site, sd_TG
         # Indicator,Basin,
       )) %>%
-      dplyr::mutate(SiteName = as.factor(SiteName),
-                    data_type_id = as.factor(data_type_id))
-
+      dplyr::mutate(
+        SiteName = as.factor(SiteName),
+        data_type_id = as.factor(data_type_id)
+      )
   }
   # #   #------Joining proxy dataframe to Tide gauges data----
   # #   SL_tide_proxy <- dplyr::bind_rows(SL_site_df, SL_tide_site_df)
@@ -561,7 +575,6 @@ clean_tidal_gauge_data <- function(data,
   #   #      data=data)
 
   return(data)
-
 }
 
 #' If the user decides to include tide gauge data, this function adds the linear rate and the associated linear rate error for those sites.
@@ -581,8 +594,8 @@ add_linear_rate <- function(data) {
 
   # Download the file and save it to the temporary file
   utils::download.file(url,
-                       destfile = temp_file, # "dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc",#temp_file,
-                       method = "libcurl", mode = "wb"
+    destfile = temp_file, # "dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc",#temp_file,
+    method = "libcurl", mode = "wb"
   )
   # Unzip the data file to a temporary directory
   temp_dir <- tempfile()
@@ -690,7 +703,7 @@ linear_reg_rates <- function(data) {
 #' @param jags_data Data associated with IGP data
 #' @param data_grid Input data grid
 #' @noRd
-create_igp_output_df <- function(model_run,jags_data,data_grid){
+create_igp_output_df <- function(model_run, jags_data, data_grid) {
   m <- model_run$BUGSoutput$sims.matrix
   sample_draws <- tidybayes::tidy_draws(m)
   n_iter <- sample_draws$.iteration %>%
@@ -772,23 +785,24 @@ create_igp_output_df <- function(model_run,jags_data,data_grid){
 #' @param decomposition Is the full model decomposition included in dataframe
 #' @noRd
 create_output_df <- function(noisy_model_run_output,
-                             data_grid,#jags_output,
+                             data_grid, # jags_output,
                              rate_grid = FALSE,
                              decomposition = FALSE) {
   if (rate_grid == TRUE) {
-    #CHANGE BACK
-    #mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    # CHANGE BACK
+    # mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
     output_dataframes <- data.frame(
-      data_grid,# CHANGE
-      #data,
+      data_grid, # CHANGE
+      # data,
       pred = apply(mu_post_pred, 2, mean),
       upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
       lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
       upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
+      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+    )
     # CHANGE BACK
-    #mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
+    # mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
     output_dataframes <- data.frame(
       output_dataframes,
@@ -806,14 +820,15 @@ create_output_df <- function(noisy_model_run_output,
       upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
       lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
       upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75))
+      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+    )
     output_dataframes <- output_dataframes
   }
 
   if (decomposition == TRUE & rate_grid == TRUE) {
     # Total Component from JAGS output
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    #mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
+    # mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
     total_model_fit_df <- data.frame(
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
@@ -821,24 +836,26 @@ create_output_df <- function(noisy_model_run_output,
       lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
       upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
       lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
-      ID = "Total Posterior Model")
+      ID = "Total Posterior Model"
+    )
 
     # Total model fit rate
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
-    #mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
+    # mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
     total_model_rate_df <-
       data.frame(
         data_grid,
-        rate_pred =  apply(mu_pred_deriv_post, 2, mean),
+        rate_pred = apply(mu_pred_deriv_post, 2, mean),
         rate_upr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
         rate_lwr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
         rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
         rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75),
-        ID = "Total Rate of Change for Posterior Model")
+        ID = "Total Rate of Change for Posterior Model"
+      )
 
     # Regional component
     time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred
-    #time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r
+    # time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r
     regional_component_df <- data.frame(
       data_grid,
       pred = apply(time_component_pred_post, 2, mean),
@@ -846,23 +863,25 @@ create_output_df <- function(noisy_model_run_output,
       lwr_95 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.975),
       upr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.25),
       lwr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.75),
-      ID = "Regional Component")
+      ID = "Regional Component"
+    )
 
     time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred_deriv
-    #time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_deriv
+    # time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_deriv
     regional_rate_component_df <-
       data.frame(
-      data_grid,
-      rate_pred =  apply(time_component_pred_deriv_post, 2, mean),
-      rate_upr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-      rate_lwr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-      rate_upr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-      rate_lwr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
-      ID = "Rate of Change for Regional Component")
+        data_grid,
+        rate_pred = apply(time_component_pred_deriv_post, 2, mean),
+        rate_upr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+        rate_lwr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+        rate_upr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
+        rate_lwr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
+        ID = "Rate of Change for Regional Component"
+      )
 
     # Vertical Offset & Linear Local Component
     g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x_pred
-    #g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x
+    # g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x
     lin_loc_component_df <-
       data.frame(
         data_grid,
@@ -871,11 +890,12 @@ create_output_df <- function(noisy_model_run_output,
         lwr_95 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.975),
         upr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.25),
         lwr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.75),
-        ID = "Site Specific vertical offset + \n Linear Local Component")
+        ID = "Site Specific vertical offset + \n Linear Local Component"
+      )
 
     # Non linear local component
     space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred
-    #space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l
+    # space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l
     non_lin_loc_component_df <-
       data.frame(
         data_grid,
@@ -884,18 +904,20 @@ create_output_df <- function(noisy_model_run_output,
         lwr_95 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.975),
         upr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.25),
         lwr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.75),
-        ID = "Non Linear Local Component")
+        ID = "Non Linear Local Component"
+      )
     space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred_deriv
-    #space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_deriv
+    # space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_deriv
     non_lin_loc_rate_component_df <-
       data.frame(
         data_grid,
-        rate_pred =  apply(space_time_component_pred_deriv_post, 2, mean),
+        rate_pred = apply(space_time_component_pred_deriv_post, 2, mean),
         rate_upr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
         rate_lwr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
         rate_upr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
         rate_lwr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
-        ID = "Rate of Change for Non Linear Local Component")
+        ID = "Rate of Change for Non Linear Local Component"
+      )
 
 
     output_dataframes <- list(
@@ -904,7 +926,7 @@ create_output_df <- function(noisy_model_run_output,
       regional_component_df = regional_component_df,
       regional_rate_component_df = regional_rate_component_df,
       lin_loc_component_df = lin_loc_component_df,
-      non_lin_loc_component_df=non_lin_loc_component_df,
+      non_lin_loc_component_df = non_lin_loc_component_df,
       non_lin_loc_rate_component_df = non_lin_loc_rate_component_df
     )
   }
@@ -930,37 +952,28 @@ create_output_df <- function(noisy_model_run_output,
 #' @param model_type NIGAM in time or space time or the full decomposition
 #' @param data Input data
 #' @noRd
-add_noisy_input <- function(model_run,jags_data, model_type, data) {
+add_noisy_input <- function(model_run, jags_data, model_type, data) {
   if (model_type == "ni_spline_t") {
     #-----Get posterior samples for SL-----
     B_t <- jags_data$B_t
     b_t_post <- model_run$BUGSoutput$sims.list$b_t
 
-    pred_mean_calc <- function(B_t,t_new) {
+    pred_mean_calc <- function(t_new) {
       # Create the regional basis functions
-      B_deriv_t <- predict(B_t,t_new)
+      #B_deriv_t <- predict(B_t, t_new)
 
-      # B_deriv_t <- bs_bbase(t_new,
-      #   xl = min(data$Age),
-      #   xr = max(data$Age))#,data = data)
-      # # Create the regional basis functions
-      # B_deriv_t_old <- bs_bbase(t_new,
-      #                       xl = min(data$Age),
-      #                       xr = max(data$Age))
-      # #--------New Create the differencing matrix------
-      # D_new_t <- diff(diag(ncol(B_deriv_t_old)), diff = 2)#diff = 2)
-      # Q_new_t <- t(D_new_t) %*% solve(D_new_t %*% t(D_new_t))
-      # #Z_new_t <- B_deriv_t_old %*% Q_new_t
-      # B_deriv_t <- B_deriv_t_old %*% Q_new_t
-      #B_deriv_t <- B_deriv_t_old
+      B_deriv_t <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age),data = data)
 
       #----Deriv----
       return(B_deriv_t %*% colMeans(b_t_post))
     }
     #-------Now create derivatives----
-    h <- 0.001
+    h <- 0.00001
     t <- data$Age
-    deriv <- (pred_mean_calc(B_t,t + h) - pred_mean_calc(B_t,t - h)) / (2 * h)
+
+    deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
   }
 
   if (model_type == "ni_spline_st") {
@@ -969,15 +982,15 @@ add_noisy_input <- function(model_run,jags_data, model_type, data) {
     pred_mean_calc <- function(t_new) {
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),data = data
+        xr = max(data$Age), data = data
       )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude),data = data
+        xr = max(data$Latitude), data = data
       )
       B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude),data = data
+        xr = max(data$Longitude), data = data
       )
       B_l_deriv_full <- matrix(NA,
         ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
@@ -1015,11 +1028,9 @@ add_noisy_input <- function(model_run,jags_data, model_type, data) {
 
     pred_mean_calc <- function(t_new) {
       # Create the regional basis functions
-      B_t <- bs_bbase_old(t_new,
+      B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),data = data
-        #NO = nseg = 4
-        #nseg = 3
+        xr = max(data$Age), data = data
       )
       #----Deriv----
       return(intercept_post[data$SiteName] + B_t %*% colMeans(b_t_post) + b_g_post[data$SiteName] * (t_new))
@@ -1104,69 +1115,40 @@ spline_basis_fun <- function(data, data_grid, model_type) {
   if (model_type == "ni_spline_t") {
     t <- data$Age
     # Basis functions in time for data-----------------------
-    B_t<- bs_bbase(t, xl = min(t), xr = max(t),data = data)
-    class(B_t)
-    #B_t <- bs_bbase(t, xl = min(t), xr = max(t))
-    # #--------Create the differencing matrix for spline in time------
-    # D_t <- diff(diag(ncol(B_t_old)), diff = 2)#2)
-    # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
-    # #Z_t <- B_t_old %*% Q_t
-    # B_t <- B_t_old %*% Q_t
-    # B_t <- B_t_old
+    B_t <- bs_bbase(t, xl = min(t), xr = max(t), data = data)
     # Finding derivative  of basis functions using first principals-----------
-    first_deriv_calc <- function(B_t,t_new) {
+    first_deriv_calc <- function(t_new) {
       # Create the regional basis functions
-      # B_t <- bs_bbase(t_new,
-      #   xl = min(data$Age),
-      #   xr = max(data$Age))#,x_train = t_old)t_old
+      B_t <- bs_bbase(t_new,
+        xl = min(data$Age),
+        xr = max(data$Age),data = data)
 
-      B_t_deriv <- predict(object = B_t,newx = t_new)#,x_train = t_old)t_old
-
-
-      # # Create the regional basis functions
-      # B_t_old <- bs_bbase(t_new,
-      #                 xl = min(data$Age),
-      #                 xr = max(data$Age))
-      # #--------Create the differencing matrix for spline in time------
-      # D_t <- diff(diag(ncol(B_t_old)), diff = 2)#diff = 2)
-      # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
-      # #Z_t <- B_t_old %*% Q_t
-      # B_t <- B_t_old %*% Q_t
-      # B_t <- B_t_old
+      #B_t_deriv <- predict(object = B_t, newx = t_new)
       return(B_t_deriv)
     }
     # Now create derivatives----------------------
     # h <- 0.001
     h <- 0.000001
-    first_deriv_step1 <- first_deriv_calc(B_t = B_t,t_new = t + h)#,t_old=t)
-    first_deriv_step2 <- first_deriv_calc(B_t=B_t,t_new = t - h)#,t_old=t)
+    first_deriv_step1 <- first_deriv_calc(t_new = t + h)
+    first_deriv_step2 <- first_deriv_calc(t_new = t - h)
     B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
 
     # Basis functions in time using prediction data frame-----------------------
     t_pred <- sort(data_grid$Age)
-    B_t_pred <- predict(B_t,t_pred)
+    #B_t_pred <- predict(B_t, t_pred)
 
-    # B_t_pred <- bs_bbase(t_pred,
-    #   xl = min(t), xr = max(t)#,data = data
-    # )
-    # B_t_pred_old <- bs_bbase(t_pred,
-    #                      xl = min(t), xr = max(t)
-    # )
-    # #--------Create the differencing matrix for spline in time------
-    # D_t <- diff(diag(ncol(B_t_old)),diff = 2)# diff = 2)
-    # Q_t <- t(D_t) %*% solve(D_t %*% t(D_t))
-    # #Z_t <- B_t_old %*% Q_t
-    # B_t_pred <- B_t_pred_old %*% Q_t
-    # B_t_pred <- B_t_pred_old
+    B_t_pred <- bs_bbase(t_pred,
+      xl = min(t), xr = max(t),data = data
+    )
 
     # Now create derivatives----------------------
     # h <- 0.001
     h <- 0.000001
     t_pred <- data_grid$Age
-    #first_deriv_step1 <- first_deriv_calc(t_new = t_pred + h)#,t_old=t)
-    #first_deriv_step2 <- first_deriv_calc(t_new = t_pred + h)#,t_old=t)
-    first_deriv_step1 <- first_deriv_calc(B_t = B_t,t_new = t_pred + h)#,t_old=t)
-    first_deriv_step2 <- first_deriv_calc(B_t=B_t,t_new = t_pred - h)#,t_old=t)
+    first_deriv_step1 <- first_deriv_calc(t_new = t_pred + h)#,t_old=t)
+    first_deriv_step2 <- first_deriv_calc(t_new = t_pred + h)#,t_old=t)
+    #first_deriv_step1 <- first_deriv_calc(B_t = B_t, t_new = t_pred + h) # ,t_old=t)
+    #first_deriv_step2 <- first_deriv_calc(B_t = B_t, t_new = t_pred - h) # ,t_old=t)
     B_t_pred_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
 
     spline_basis_fun_list <- list(
@@ -1182,15 +1164,15 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # Basis functions in space time for data-----------------------
     B_time <- bs_bbase(t,
       xl = min(t),
-      xr = max(t),data = data
+      xr = max(t), data = data
     )
     B_space_1 <- bs_bbase(data$Latitude,
       xl = min(data$Latitude),
-      xr = max(data$Latitude),data = data
+      xr = max(data$Latitude), data = data
     )
     B_space_2 <- bs_bbase(data$Longitude,
       xl = min(data$Longitude),
-      xr = max(data$Longitude),data = data
+      xr = max(data$Longitude), data = data
     )
 
     B_st_full <- matrix(NA,
@@ -1212,27 +1194,27 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     }
 
     # Get rid of all the columns which are just zero
-    #B_st <- B_st_full
+    # B_st <- B_st_full
     B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
 
     # Find the index here that you remove then use this in the derivative
     remove_col_index <- which(colSums(B_st_full) < 0.1)
 
-    #first_deriv_calc <- function(B_st,t_new) {
+    # first_deriv_calc <- function(B_st,t_new) {
     first_deriv_calc <- function(t_new) {
-      #B_st_deriv <- predict(object = B_st,newx = t_new)#,x_train = t_old)t_old
+      # B_st_deriv <- predict(object = B_st,newx = t_new)#,x_train = t_old)t_old
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),data = data
+        xr = max(data$Age), data = data
       )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude),data = data
+        xr = max(data$Latitude), data = data
       )
       B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude),data = data
+        xr = max(data$Longitude), data = data
       )
 
       B_st_full <- matrix(NA,
@@ -1266,15 +1248,15 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # Basis functions in space time using prediction data frame-----------------------
     B_pred_time <- bs_bbase(data_grid$Age,
       xl = min(data$Age),
-      xr = max(data$Age),data = data
+      xr = max(data$Age), data = data
     )
     B_space_1 <- bs_bbase(data_grid$Latitude,
       xl = min(data$Latitude),
-      xr = max(data$Latitude),data = data
+      xr = max(data$Latitude), data = data
     )
     B_space_2 <- bs_bbase(data_grid$Longitude,
       xl = min(data$Longitude),
-      xr = max(data$Longitude),data = data
+      xr = max(data$Longitude), data = data
     )
 
     suppressWarnings({
@@ -1304,15 +1286,15 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),data = data
+        xr = max(data$Age), data = data
       )
       B_space_1 <- bs_bbase(data_grid$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude),data = data
+        xr = max(data$Latitude), data = data
       )
       B_space_2 <- bs_bbase(data_grid$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude),data = data
+        xr = max(data$Longitude), data = data
       )
 
       B_st_full <- matrix(NA,
@@ -1356,15 +1338,15 @@ spline_basis_fun <- function(data, data_grid, model_type) {
   if (model_type == "ni_gam_decomp") {
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase_old(data$Age,
-      xl = min(data$Age), xr = max(data$Age),data = data #nseg = 3
+      xl = min(data$Age), xr = max(data$Age), data = data # nseg = 3
     )
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
       # Create the regional basis functions
       B_t <- bs_bbase_old(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),data = data#,
-        #nseg = 3
+        xr = max(data$Age), data = data # ,
+        # nseg = 3
       ) # nseg = 20)
       return(B_t)
     }
@@ -1377,7 +1359,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 
     # Basis functions in time using prediction data frame-----------------------
     B_t_pred <- bs_bbase_old(data_grid$Age,
-      xl = min(data$Age), xr = max(data$Age),data = data# nseg = 3
+      xl = min(data$Age), xr = max(data$Age), data = data # nseg = 3
     )
     # Now create derivatives----------------------
     h <- 0.00001 # h <- 0.001
@@ -1390,15 +1372,15 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # Basis functions in space time for data-----------------------
     B_time <- bs_bbase_old(data$Age,
       xl = min(data$Age),
-      xr = max(data$Age),data = data#,deg = 2, nseg = 6
+      xr = max(data$Age), data = data # ,deg = 2, nseg = 6
     )
     B_space_1 <- bs_bbase_old(data$Latitude,
       xl = min(data$Latitude),
-      xr = max(data$Latitude),data = data#,deg = 2, nseg = 6
+      xr = max(data$Latitude), data = data # ,deg = 2, nseg = 6
     )
     B_space_2 <- bs_bbase_old(data$Longitude,
       xl = min(data$Longitude),
-      xr = max(data$Longitude),data = data#,deg = 2, nseg = 6
+      xr = max(data$Longitude), data = data # ,deg = 2, nseg = 6
     )
 
     B_st_full <- matrix(NA,
@@ -1429,17 +1411,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase_old(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),data = data#,deg = 2, nseg = 6
+        xr = max(data$Age), data = data # ,deg = 2, nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase_old(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude),data = data#,deg = 2, nseg = 6
+        xr = max(data$Latitude), data = data # ,deg = 2, nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase_old(data$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude),data = data#,deg = 2, nseg = 6
+        xr = max(data$Longitude), data = data # ,deg = 2, nseg = 6
         # deg = 2
       )
 
@@ -1475,17 +1457,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     # Basis functions in space time using prediction data frame-----------------------
     B_pred_time <- bs_bbase_old(data_grid$Age,
       xl = min(data$Age),
-      xr = max(data$Age),data = data#,deg = 2, nseg = 6
+      xr = max(data$Age), data = data # ,deg = 2, nseg = 6
       # deg = 2
     )
     B_space_1 <- bs_bbase_old(data_grid$Latitude,
       xl = min(data$Latitude),
-      xr = max(data$Latitude),data = data#,deg = 2, nseg = 6
+      xr = max(data$Latitude), data = data # ,deg = 2, nseg = 6
       # deg = 2
     )
     B_space_2 <- bs_bbase_old(data_grid$Longitude,
       xl = min(data$Longitude),
-      xr = max(data$Longitude),data = data#,deg = 2, nseg = 6
+      xr = max(data$Longitude), data = data # ,deg = 2, nseg = 6
       # deg = 2
     )
 
@@ -1516,17 +1498,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Now the local basis functions
       B_time <- bs_bbase_old(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),data = data#,deg = 2, nseg = 6
+        xr = max(data$Age), data = data # ,deg = 2, nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase_old(data_grid$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude),data = data#,deg = 2, nseg = 6
+        xr = max(data$Latitude), data = data # ,deg = 2, nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase_old(data_grid$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude),data = data#,deg = 2, nseg = 6
+        xr = max(data$Longitude), data = data # ,deg = 2, nseg = 6
         # deg = 2
       )
 
@@ -1563,24 +1545,24 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Create the regional basis functions
       B_t <- bs_bbase_old(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),data = data
+        xr = max(data$Age), data = data
       ) # nseg = 20)
       colnames(B_t) <- c(paste("B_t", 1:ncol(B_t), sep = ""))
 
       # Now the local basis functions
       B_time <- bs_bbase_old(t_new,
         xl = min(data$Age),
-        xr = max(data$Age),data = data#, deg = 2,nseg = 6
+        xr = max(data$Age), data = data # , deg = 2,nseg = 6
         # deg = 2
       )
       B_space_1 <- bs_bbase_old(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude),data = data#, deg = 2,nseg = 6
+        xr = max(data$Latitude), data = data # , deg = 2,nseg = 6
         # deg = 2
       )
       B_space_2 <- bs_bbase_old(data$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude),data = data#,deg = 2, nseg = 6
+        xr = max(data$Longitude), data = data # ,deg = 2, nseg = 6
         # deg = 2
       )
 
@@ -1668,83 +1650,17 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 #' @param deg Degree of polynomial
 #' @param data Input data
 #' @noRd
-# # Basis functions using mgcv knots
-# bs_bbase <- function(x,
-#                      xl = min(x),
-#                      xr = max(x),
-#                      deg = 3,
-#                      data = NULL,
-#                      #nseg = 20){
-#                      nseg = NULL){
-#   # Create basis functions using mgcv---------------
-#   mgcv_gam <- mgcv::gam(RSL ~ s(Age, bs = "ps"), data = data)
-#   # Extract the basis function matrix
-#   knots<- mgcv_gam$smooth[[1]]$knots
-#   # # Create equally spaced knots
-#   # knots <- seq(xl - deg * dx,
-#   #   xr + deg * dx,
-#   #   by = dx
-#   # )
-#   #print(length(knots))
-#   # Use bs() function to generate the B-spline basis
-#   get_bs_matrix <- matrix(
-#     splines::bs(x,
-#       knots = knots,
-#       degree = deg,
-#       Boundary.knots = c(knots[1], knots[length(knots)]),
-#       intercept = TRUE
-#     ),
-#     nrow = length(x)
-#   )
-#   # Remove columns that contain zero only
-#   #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-#   bs_matrix <-get_bs_matrix
-#   #print(dim(bs_matrix))
-#   return(bs_matrix)
-# }
-
-
-# tpower <- function(x, t, p) {
-#   # Truncated p-th power function
-#   return((x - t)^p * (x > t))
-# }
-# bs_bbase <- function(x, xl = min(x), xr = max(x), # 30
-#                      #nseg = 10,
-#                      #nseg = 8,
-#                      nseg = NULL,
-#                      deg = 3) {
-#   if(is.null(nseg)){
-#     nseg <- round(deg / (1 + deg / length(x)))
-#   }
-#   # Construct B-spline basis
-#   dx <- (xr - xl) / nseg
-#   knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)
-#   print(length(knots))
-#   P <- outer(x, knots, tpower, deg)
-#   n <- dim(P)[2]
-#   D <- diff(diag(n), diff = deg + 1) / (gamma(deg + 1) * dx^deg)
-#   B <- (-1)^(deg + 1) * P %*% t(D)
-#   print(dim(B))
-#   return(B)
-# }
-
-# Old basis function approach
+# Basis function approach
 bs_bbase <- function(x,
                      xl = min(x),
                      xr = max(x),
                      deg = 3,
-                     #nseg = 20){
                      nseg = NULL,
-                     data = NULL){
+                     data = data) {
   # Create basis functions------------------------------------------------------
-  if(is.null(nseg)){
+  if (is.null(nseg)) {
     nseg <- round(deg / (1 + deg / length(data$Age)))
   }
-  df <- sqrt(length(x)) - 4
-  print(df)
-  # too big
-  #nseg <- round(df/(1+df/length(x)))
-
   # Compute the length of the partitions
   dx <- (xr - xl) / nseg
   # Create equally spaced knots
@@ -1752,113 +1668,17 @@ bs_bbase <- function(x,
     xr + deg * dx,
     by = dx
   )
-  #print(length(knots))
-  # Use bs() function to generate the B-spline basis
-  # get_bs_matrix <- matrix(
-  #   splines::bs(x,
-  #               df = 5,
-  #               degree = 3
-  #     #knots = knots,
-  #     #degree = deg#, Boundary.knots = c(knots[1], knots[length(knots)])
-  #   ),
-  #   nrow = length(x)
-  # )
-  get_bs_matrix <-
-    splines::bs(x,
-                #df = round(df)+2,#5,
-                #degree = 3,
-                knots = knots,
-                intercept = TRUE,
-                #degree = deg#,
-                Boundary.knots = c(knots[1], knots[length(knots)])
-    )
-  # Remove columns that contain zero only
-  #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  bs_matrix <-get_bs_matrix
-  #class(bs_matrix) <- c("ns","basis","matrix")
-  #print(dim(bs_matrix))
-  return(bs_matrix)
-}
-# Old basis function approach
-bs_bbase_old <- function(x,
-                     xl = min(x),
-                     xr = max(x),
-                     deg = 3,
-                     #nseg = 20){
-                     nseg = NULL,
-                     data = data){
-  # Create basis functions------------------------------------------------------
-  if(is.null(nseg)){
-    nseg <- round(deg / (1 + deg / length(data$Age)))
-  }
-  df <- sqrt(length(x)) - 4
-  print(df)
-  # too big
-  #nseg <- round(df/(1+df/length(x)))
 
-  # Compute the length of the partitions
-  dx <- (xr - xl) / nseg
-  # Create equally spaced knots
-  knots <- seq(xl - deg * dx,
-               xr + deg * dx,
-               by = dx
-  )
-  #print(length(knots))
   # Use bs() function to generate the B-spline basis
   get_bs_matrix <- matrix(
     splines::bs(x,
-                #df = 5,
-                degree = 3,
+      degree = deg,
       knots = knots,
       Boundary.knots = c(knots[1], knots[length(knots)])
-      #degree = deg#,
     ),
     nrow = length(x)
   )
-  # get_bs_matrix <-
-  #   splines::bs(x,
-  #               #df = round(df)+2,#5,
-  #               #degree = 3,
-  #               knots = knots,
-  #               intercept = TRUE,
-  #               #degree = deg#,
-  #               Boundary.knots = c(knots[1], knots[length(knots)])
-  #   )
   # Remove columns that contain zero only
-  #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  bs_matrix <-get_bs_matrix
-  #class(bs_matrix) <- c("ns","basis","matrix")
-  #print(dim(bs_matrix))
+  bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
   return(bs_matrix)
 }
-
-# # # Using natural splines instead
-# bs_bbase <- function(x,
-#                     #x_train = NULL,
-#                      xl = min(x),
-#                      xr = max(x),
-#                      deg = 3,
-#                     nseg = 2,
-#                     data= data){
-#
-#   # # Use Ns() function to generate the B-spline basis
-#   deg <- deg
-#   nseg <- 3
-#     # Compute the length of the partitions
-#     dx <- (xr - xl) / nseg
-#     # Create equally spaced knots
-#     knots <- seq(xl - deg * dx,
-#       xr + deg * dx,
-#       by = dx
-#     )
-#     k <- length(knots)
-#     df <- k+deg
-#     print(df)
-#   get_bs_matrix <- splines::ns(x,
-#                 df = 5,#df,
-#                 #knots = knots,
-#                 intercept = TRUE,
-#                 Boundary.knots = c(knots[1], knots[length(knots)]))
-#   bs_matrix <- get_bs_matrix
-#   return(bs_matrix)
-# }
