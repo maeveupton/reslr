@@ -83,11 +83,11 @@ create_model_fit_plot <- function(output_dataframes, data, plot_tide_gauges = FA
         xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
         ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
       ), alpha = 0.4) +
-      ggplot2::ggtitle(paste0("Proxy data & Tide gauge data from:",unique(as.factor(data$SiteName))))+
+      #ggplot2::ggtitle(paste0("Proxy data & Tide gauge data from:",unique(as.factor(data$SiteName))))+
       ggplot2::geom_point(
         data = data,
-        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black", shape = data_type_id), size = 0.5
-      ) +
+        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+      ) +#, shape = data_type_id
       ggplot2::geom_line(
         data = output_dataframes,
         ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
@@ -142,8 +142,8 @@ create_model_fit_plot <- function(output_dataframes, data, plot_tide_gauges = FA
           # shape = c(16, NA),
           size = 2
         ))
-      ) #+
-    #ggplot2::facet_wrap(~SiteName)
+      ) +
+    ggplot2::facet_wrap(~SiteName)
   }
   return(plot)
 }
@@ -255,18 +255,18 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(data_type_id = "TideGaugeData")
 
 
-  # # # Set the window size for the moving average (in this case, 10 years)
-  # window_size <- 10
-  #
-  # # Create a new column with the rolling average
-  # annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
-  #   width = window_size,
-  #   FUN = mean,
-  #   align = "right", # "right",
-  #   fill = NA
-  # )
-  #
-  # # create a new column for the decade based on the midpoint of the rolling window
+  # # Set the window size for the moving average (in this case, 10 years)
+  window_size <- 10
+
+  # Create a new column with the rolling average
+  annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
+    width = window_size,
+    FUN = mean,
+    align = "right", # "right",
+    fill = NA
+  )
+
+  # create a new column for the decade based on the midpoint of the rolling window
   # # annual_tidal_gauge_data_df$decade <- as.integer(floor((annual_tidal_gauge_data_df$Age - (window_size/2))/10)*10)
   # annual_tidal_gauge_data_df$decade <- zoo::rollapply(annual_tidal_gauge_data_df$Age,
   #   width = window_size,
@@ -275,8 +275,8 @@ clean_tidal_gauge_data <- function(data,
   #   fill = NA
   # )
   #
-  # # calculate the decadal averages based on the rolling average
-  # decadal_averages_TG <- annual_tidal_gauge_data_df %>% tidyr::drop_na()
+  # calculate the decadal averages based on the rolling average
+  decadal_averages_TG <- annual_tidal_gauge_data_df %>% tidyr::drop_na()
   # annual_tidal_gauge_data_df %>%
   # dplyr::group_by(decade, SiteName) %>%
   # dplyr::summarise(
@@ -289,17 +289,17 @@ clean_tidal_gauge_data <- function(data,
 
 
   # Decadal Averages------ I don't know if this is too simple to calculate the decadal averages
-  #offset works better with this
-  decadal_averages_TG <-
-    annual_tidal_gauge_data_df %>%
-    dplyr::mutate(decade = (Age - 1) %/% 10) %>%
-    dplyr::group_by(decade, SiteName) %>%
-    dplyr::summarise(
-      #decade_meanRSL = mean(RSL),
-      rolling_avg = mean(RSL),
-      Age = max(Age),
-      rows_site = dplyr::n()
-    ) # Age=min(Age)
+  # #offset works better with this
+  # decadal_averages_TG <-
+  #   annual_tidal_gauge_data_df %>%
+  #   dplyr::mutate(decade = (Age - 1) %/% 10) %>%
+  #   dplyr::group_by(decade, SiteName) %>%
+  #   dplyr::summarise(
+  #     #decade_meanRSL = mean(RSL),
+  #     rolling_avg = mean(RSL),
+  #     Age = max(Age),
+  #     rows_site = dplyr::n()
+  #   ) # Age=min(Age)
 
   #---Using standard deviation of RSL over the decade as uncertainty----
   decadal_averages_TG <- decadal_averages_TG %>%
