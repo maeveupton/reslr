@@ -223,7 +223,7 @@ The `input_Age_type` argument is associated with the type of input Age where the
 
 The simplest model the `reslr` package can fit is a simple linear regression using the Errors-in-Variables method to account for the uncertainty associated with the proxy records, i.e. uncertainty associated with input (age) and the output (RSL). We would not recommend any model simpler than this (e.g. `lm`) as it will ignore some of the key uncertainties in the data. 
 
-This technique focuses on 1 site and is not recommended for multiple sites together. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
+This technique focuses on 1 site and is not recommended for multiple proxy sites together. Tide gauge data can be included to gain insight into recent changes in RSL, however, the user must investigate which tide gauge is suitable. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r, example1dataagain, eval = TRUE}
 example_data_set <- reslr::NAACproxydata 
 # For 1 site
@@ -327,7 +327,7 @@ head(output_dataframes)
 ## Errors-in-Variable Change Point Model (**"eiv_cp_t"**)
 The Errors-in-Variable Change Point model is an extension of the linear regression and allows the user to specify the number of change points required. 
 
-This technique focuses on 1 site and the maximum number of change points available to the user is 3. We do not recommended for multiple sites together. It is important to note that not certain data sites will not work with 2 or 3 change points as there is no distinct changing points in the data. In this case, we recommend testing different number of change points and reviewing the resulting plots to confirm the correct number of change points is selected.
+This technique focuses on 1 site and the maximum number of change points available to the user is 3. We do not recommended for multiple proxy sites together. Tide gauge data can be included to gain insight into recent changes in RSL, however, the user must investigate which tide gauge is suitable. It is important to note that certain data sites will not work with 2 or 3 change points as there is no distinct changing points in the data. In this case, we recommend testing different number of change points and reviewing the resulting plots to confirm the correct number of change points is selected.
 
 As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledata1, eval = TRUE}
@@ -438,7 +438,7 @@ head(output_dataframes)
 ## Errors-in-Variable Integrated Gaussian Process Model (**"eiv_igp_t"**)
 The EIV Integrated Gaussian Process model provides the underlying rate of the process directly from the model. Further reading on this modeling approach can be found [here](https://projecteuclid.org/journals/annals-of-applied-statistics/volume-9/issue-2/Modeling-sea-level-change-using-errors-in-variables-integrated-Gaussian/10.1214/15-AOAS824.full). 
 
-This technique focuses on 1 site and we do not recommended for multiple sites together. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
+This technique focuses on 1 site and we do not recommended for multiple proxy sites together. Tide gauge data can be included to gain insight into recent changes in RSL, however, the user must investigate which tide gauge is suitable. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledataset2 ,eval = TRUE}
 example_data_set <- reslr::NAACproxydata
 # For 1 site
