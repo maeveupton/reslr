@@ -1,4 +1,9 @@
 # reslr
+
+<!-- badges: start -->
+<img src="https://www.dropbox.com/s/smnrjfnvsebdq5c/DSC_0774.jpg?dl=0" width="240" height="276" align="right" />
+<!-- badges: end -->
+
  
 `reslr` is a package designed to account for measurement errors within commonly used models (e.g. linear regression, change-point regression, Integrated Gaussian process regression, splines, generalised additive models) for examining data in time and space. The package has the ability to utilise data derived from paleoenvironmental reconstructions such as examining relative sea level (RSL) over time and space. 
 
