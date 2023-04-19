@@ -189,7 +189,7 @@ data_grid <- CedarIslandNC$data_grid
 print(CedarIslandNC)
 
 ## ---- plotigpdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
-plot(x =  CedarIslandNC)
+plot(CedarIslandNC)
 
 ## ---- plotigpdatamore,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE----
 #  plot(
