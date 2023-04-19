@@ -313,7 +313,7 @@ clean_tidal_gauge_data <- function(data,
   #---Rsl & Age error for tidal gauge data----
   tidal_gauge_full_df <- tidal_gauge_average_10_df %>%
     dplyr::mutate(
-      Age_err = 0.5,# half a year?#5, # years --> half a year/half a decade
+      Age_err = 5, # years --> half a year/half a decade
     ) %>%
     dplyr::mutate(sd_TG = ifelse(is.na(sd_TG), 0.001, sd_TG)) %>%
     dplyr::group_by(SiteName) %>%
@@ -439,21 +439,18 @@ clean_tidal_gauge_data <- function(data,
     data_tide_proxy <- plyr::rbind.fill(
       SL_site_df,
       decadal_TG_df_filter
-    ) # stacking rows
+    )
 
     # Ensuring the SiteName is a factor
     data <- data_tide_proxy %>%
       dplyr::select(!c(
-        # RSL_annual, Age_epoch_id,
-        # RSL_offset, sd_TG, rows_site,
-        # decade_meanRSL,#rolling_avg,
         n_obs_by_site, site, sd_TG
-        # Indicator,Basin,
       )) %>%
       dplyr::mutate(
         SiteName = as.factor(SiteName),
         data_type_id = as.factor(data_type_id)
       )
+    message("Choosing the tide gauges that the user listed as their preferred tide gauges. \n")
   }
 
   # Criteria 2: Minimum distance to proxy site
@@ -489,6 +486,7 @@ clean_tidal_gauge_data <- function(data,
         SiteName = as.factor(SiteName),
         data_type_id = as.factor(data_type_id)
       )
+    message("Selecting the tide gauge with the minimum distance to the proxy site \n")
   }
   # Criteria 3: All tide gauges within 1 degree away from proxy site
   if (all_TG_1deg == TRUE) {
@@ -521,60 +519,95 @@ clean_tidal_gauge_data <- function(data,
         SiteName = as.factor(SiteName),
         data_type_id = as.factor(data_type_id)
       )
+    message("Selecting all tide gauges within 1 degree of the proxy site \n")
   }
-  # #   #------Joining proxy dataframe to Tide gauges data----
-  # #   SL_tide_proxy <- dplyr::bind_rows(SL_site_df, SL_tide_site_df)
-  #
-  #
-  #
-  #   # Criteria 3: TG near the proxy sites & TG longer than 150 years (New York(The Battery))
-  #   # all_nearest_TG <- dist_TG_proxy %>%
-  #   #   dplyr::select(!c(nearest_proxy_site)) %>%
-  #   #   tidyr::pivot_longer(
-  #   #     cols = starts_with("SiteName"),
-  #   #     values_to = "SiteName"
-  #   #   ) %>%
-  #   #   dplyr::select(!name) %>%
-  #   #   tidyr::pivot_longer(
-  #   #     cols = starts_with("min_dist"),
-  #   #     values_to = "MinimumDistance"
-  #   #   )
-  #
-  #   # Criteria 4: 1 degree away from proxy site is 111.1km
-  #   #all_nearest_TG_closest <- all_nearest_TG %>% dplyr::filter(MinimumDistance > 111100)
-  #
-  #   # Finding the closest TG
-  #   all_nearest_TG_closest <- dist_TG_proxy_df_new %>%
-  #     dplyr::group_by(nearest_proxy_site) %>%
-  #     dplyr::filter(minimum_dist == min(minimum_dist)) %>%
-  #     dplyr::distinct(nearest_TG,.keep_all = TRUE)# Removing any duplicate tide gauge sites.
-  #
-  #
-  #
-  #   # Joining the selected TG sites back with the original data
-  #   join_new_index_tide_df <- SL_tide_site_df %>%
-  #     dplyr::filter(SiteName %in% all_nearest_TG_closest$nearest_TG)
-  #
-  #   #--There will be NAs were the proxy data doesn't have a corresponding index--
-  #   data_tide_proxy <- plyr::rbind.fill(
-  #     SL_site_df,
-  #     join_new_index_tide_df
-  #   ) # stacking rows
-  #
-  #
-  #   # Ensuring the SiteName is a factor
-  #   data <- data_tide_proxy %>%
-  #     dplyr::select(!c(
-  #       RSL_annual, Age_epoch_id,
-  #       RSL_offset, sd_TG, rows_site,
-  #       decade_meanRSL,#rolling_avg,
-  #       n_obs_by_site,site
-  #       # Indicator,Basin,
-  #     )) %>%
-  #     dplyr::mutate(SiteName = as.factor(SiteName))
-  #   # additional_datasets <-
-  #   #   list(annual_tidal_gauge_data_df = annual_tidal_gauge_data_df,
-  #   #      data=data)
+
+  # Criteria 4: All tide gauges within 1 degree away from proxy site & the preferred tide gauges listed by user
+  if (TG_minimum_dist_proxy == TRUE  & is.null(list_preferred_TGs) == FALSE) {
+    # Check if TG exists in the list
+    check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
+    if (check_TG == FALSE) {
+      cat("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
+      stop()
+    }
+    decadal_TG_df_filter <- subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
+    #--There will be NAs were the proxy data doesn't have a corresponding index--
+    data_tide_proxy_TGlist <- plyr::rbind.fill(
+      SL_site_df,
+      decadal_TG_df_filter
+    ) # stacking rows
+
+    # 1 degree away from proxy site is 111.1km-------------
+    all_nearest_TG_closest <- dist_TG_proxy_df_new %>%
+      dplyr::filter(minimum_dist <= 111100) %>%
+      dplyr::distinct(nearest_TG, .keep_all = TRUE) # Removing any duplicate tide gauge sites.
+
+    # Joining the selected TG sites back with the original data
+    join_new_index_tide_df <- SL_tide_site_df %>%
+      dplyr::filter(SiteName %in% all_nearest_TG_closest$nearest_TG)
+
+    #--There will be NAs were the proxy data doesn't have a corresponding index--
+    data_tide_proxy_all_1deg <- plyr::rbind.fill(
+      SL_site_df,
+      join_new_index_tide_df
+    )
+
+    # Combining both dataframes & removing duplicates----
+    data_tide_proxy <- merge(data_tide_proxy_all_1deg,data_tide_proxy_TGlist,all = TRUE)
+    data <- data_tide_proxy %>%
+      dplyr::select(!c(
+        n_obs_by_site, site, sd_TG
+      )) %>%
+      dplyr::mutate(
+        SiteName = as.factor(SiteName),
+        data_type_id = as.factor(data_type_id)
+      )
+  }
+  # Criteria 5: Closest tide gauges to the proxy site & the preferred tide gauges listed by user
+  if (all_TG_1deg == TRUE  & is.null(list_preferred_TGs) == FALSE) {
+    # Check if TG exists in the list
+    check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
+    if (check_TG == FALSE) {
+      cat("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
+      stop()
+    }
+    decadal_TG_df_filter <- subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
+    #--There will be NAs were the proxy data doesn't have a corresponding index--
+    data_tide_proxy_TGlist <- plyr::rbind.fill(
+      SL_site_df,
+      decadal_TG_df_filter
+    ) # stacking rows
+
+    # Finding the closest TG
+    all_nearest_TG_closest <- dist_TG_proxy_df_new %>%
+      dplyr::group_by(nearest_proxy_site) %>%
+      dplyr::filter(minimum_dist == min(minimum_dist)) %>%
+      dplyr::distinct(nearest_TG, .keep_all = TRUE) # Removing any duplicate tide gauge sites.
+
+
+    # Joining the selected TG sites back with the original data
+    join_new_index_tide_df <- SL_tide_site_df %>%
+      dplyr::filter(SiteName %in% all_nearest_TG_closest$nearest_TG)
+
+    #--There will be NAs were the proxy data doesn't have a corresponding index--
+    data_tide_proxy_closestTG <- plyr::rbind.fill(
+      SL_site_df,
+      join_new_index_tide_df
+    ) # stacking rows
+
+
+    # Combining both dataframes & removing duplicates----
+    data_tide_proxy <- merge(data_tide_proxy_all_1deg,data_tide_proxy_closestTG,all = TRUE)
+    # Ensuring the SiteName is a factor
+    data <- data_tide_proxy %>%
+      dplyr::select(!c(
+        n_obs_by_site, site, sd_TG
+      )) %>%
+      dplyr::mutate(
+        SiteName = as.factor(SiteName),
+        data_type_id = as.factor(data_type_id)
+      )
+  }
 
   return(data)
 }

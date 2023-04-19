@@ -12,7 +12,8 @@ reslr_load(
   list_preferred_TGs = NULL,
   TG_minimum_dist_proxy = FALSE,
   all_TG_1deg = FALSE,
-  input_Age_type = "CE"
+  input_Age_type = "CE",
+  model_type
 )
 }
 \arguments{
