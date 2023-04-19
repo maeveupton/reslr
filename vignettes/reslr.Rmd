@@ -868,7 +868,7 @@ head(total_model_rate_df)
 ```
 
 There are separate settings to examine the plot of each component and its associated rate. To examine the regional component plot use:
-```{r,plotnigamregres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotnigamregres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output.ni_gam_decomp,plot_type = "regional_plot")
 ```
 The regional component and the rate of change of the regional component is presented with 95\% Uncertainty interval. To examine the data creating the regional component plot, the user can use:
@@ -876,7 +876,7 @@ The regional component and the rate of change of the regional component is prese
 regional_component_df <- jags_output.ni_gam_decomp$output_dataframes$regional_component_df
 ```
 The rate for the regional component can be accessed using:
-```{r,plotnigamregresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotnigamregresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output.ni_gam_decomp,plot_type = "regional_rate_plot")
 ```
 Similarly, the rate of change of the regional component is presented with 95\% Uncertainty interval. To examine the data creating the regional component rate of change plot the user can use:
@@ -885,7 +885,7 @@ regional_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$regiona
 ```
 
 To examine the linear local component plot use:
-```{r,plotnigamlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotnigamlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output.ni_gam_decomp,plot_type = "linear_local_plot")
 ```
 The linear local component is plotted with 95\% Uncertainty interval. To examine the data creating the linear local component plot, the user can use:
@@ -902,7 +902,7 @@ lin_loc_component_rates <- lin_loc_component_df %>%
 
 To examine the non-linear local component plot use:
 
-```{r,plotnigamnonlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotnigamnonlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output.ni_gam_decomp,plot_type = "non_linear_local_plot")
 ```
 The non-linear local component is plotted with with 95\% Uncertainty interval. To examine the data creating the non-linear local component plot, the user can use:
@@ -910,7 +910,7 @@ The non-linear local component is plotted with with 95\% Uncertainty interval. T
 non_lin_loc_component_df <- jags_output.ni_gam_decomp$output_dataframes$non_lin_loc_component_df
 ```
 The plot of the rate of change for the non-linear local component use:
-```{r,plotnigamnonlinresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotnigamnonlinresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval =TRUE}
 plot(jags_output.ni_gam_decomp,plot_type = "non_linear_local_rate_plot")
 ```
 The rate of change of the non-linear local component is plotted with with 95\% uncertainty interval. To examine the data creating the non-linear local component plot rate of change plot the user can use:
@@ -919,7 +919,7 @@ non_lin_loc_rate_component_df <-jags_output.ni_gam_decomp$output_dataframes$non_
 ```
 
 In order to examine how all components vary, the user can examine the plot using the following method:
-```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output.ni_gam_decomp,plot_type = "nigam_component_plot")
 ```
 Each component is plotted with an 95\% uncertainty interval and this plot gives insight into the variability of the different components through time and at the different locations in question.
