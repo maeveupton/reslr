@@ -1,7 +1,7 @@
 # reslr
 
 <!-- badges: start -->
-<img src="https://www.dropbox.com/s/smnrjfnvsebdq5c/DSC_0774.jpg?dl=1" width="240" height="276" align="right" />
+<img src="https://www.dropbox.com/s/smnrjfnvsebdq5c/DSC_0774.jpg?dl=0" width="240" height="276" align="right" />
 <!-- badges: end -->
 
  
