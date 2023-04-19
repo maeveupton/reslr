@@ -200,3 +200,205 @@ plot(CedarIslandNC)
 #    plot_tide_gauges = FALSE
 #  )
 
+## ----runigp, eval = TRUE------------------------------------------------------
+jags_output.eiv_igp_t <- reslr::reslr_mcmc(
+  input_data =  CedarIslandNC,
+  model_type = "eiv_igp_t"
+)
+
+## ----printigpout, eval=TRUE---------------------------------------------------
+print(jags_output.eiv_igp_t)
+
+## ----summaryigp, eval = TRUE--------------------------------------------------
+summary(jags_output.eiv_igp_t)
+
+## ----runigpmore, eval = FALSE-------------------------------------------------
+#  jags_output.eiv_igp_t <- reslr::reslr_mcmc(
+#    input_data =  CedarIslandNC,
+#    model_type = "eiv_igp_t",
+#    # Update these values
+#    n_iterations = 6000,# Number of iterations
+#    n_burnin = 1000,# Number of iterations to discard at the beginning
+#    n_thin = 4,# Reduces number of output samples to save memory and computation time
+#    n_chains = 3 # Number of Markov chains
+#    )
+
+## ----plotigpres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(jags_output.eiv_igp_t)
+
+## ----plotigpresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(jags_output.eiv_igp_t,plot_type = "rate_plot")
+
+## ----igpdataout, eval = TRUE--------------------------------------------------
+output_dataframes <- jags_output.eiv_igp_t$output_dataframes
+head(output_dataframes)
+
+## ---- dataexample3,eval = TRUE------------------------------------------------
+example_data_set <- reslr::NAACproxydata
+# For 1 site
+CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
+
+## ----loadspt, eval = TRUE-----------------------------------------------------
+CedarIslandNC <- reslr::reslr_load(data = CedarIslandNC,
+                                  include_tide_gauge = FALSE,
+                                  include_linear_rate = FALSE,
+                                  TG_minimum_dist_proxy = FALSE,
+                                  list_preferred_TGs = NULL,
+                                  all_TG_1deg = FALSE,
+                                  prediction_interval = 20)
+
+## ----dataspt, eval=TRUE-------------------------------------------------------
+data <- CedarIslandNC$data
+
+## ----datagridspt, eval = TRUE-------------------------------------------------
+data_grid <- CedarIslandNC$data_grid
+
+## ----printspt, eval=TRUE------------------------------------------------------
+print(CedarIslandNC)
+
+## ----plotspt,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(CedarIslandNC)
+
+## ----plotsptextra,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE----
+#  plot(
+#    x =  CedarIslandNC,
+#    title = "Plot of the raw data",
+#    xlab = "Age (CE)",
+#    ylab = "Relative Sea Level (m)",
+#    plot_tide_gauges = FALSE
+#  )
+
+## ----runspt,eval = TRUE-------------------------------------------------------
+jags_output.ni_spline_t <- reslr::reslr_mcmc(input_data =  CedarIslandNC,
+                                   model_type = "ni_spline_t")
+
+## ----printresspt, eval=TRUE---------------------------------------------------
+print(jags_output.ni_spline_t)
+
+## ----summaryspt, eval = TRUE--------------------------------------------------
+summary(jags_output.ni_spline_t)
+
+## ---- runsptmore,eval = FALSE-------------------------------------------------
+#  jags_output.ni_spline_t <- reslr::reslr_mcmc(
+#    input_data =  CedarIslandNC,
+#    model_type = "ni_spline_t",
+#    # Update these values
+#    n_iterations = 6000,# Number of iterations
+#    n_burnin = 1000,# Number of iterations to discard at the beginning
+#    n_thin = 4,# Reduces number of output samples to save memory and computation time
+#    n_chains = 3 # Number of Markov chains
+#    )
+
+## ---- plotsptres,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(jags_output.ni_spline_t)
+
+## ----plotsptresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(jags_output.ni_spline_t,plot_type = "rate_plot")
+
+## ----outdfspt, eval = TRUE----------------------------------------------------
+output_dataframes <- jags_output.ni_spline_t$output_dataframes
+head(output_dataframes)
+
+## ----data2sites, eval = TRUE--------------------------------------------------
+example_data_set <- reslr::NAACproxydata
+# For 2 site
+multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nassau"))
+
+## ----loadspst, eval = TRUE----------------------------------------------------
+multi_site <- reslr::reslr_load(data = multi_site,
+                                  include_tide_gauge = FALSE,
+                                  include_linear_rate = FALSE,
+                                  TG_minimum_dist_proxy = FALSE,
+                                  list_preferred_TGs = NULL,
+                                  all_TG_1deg = FALSE,
+                                  prediction_interval = 20)
+
+## ----dataspst,eval=TRUE-------------------------------------------------------
+data <- multi_site$data
+head(data)
+
+## ----datagridspst, eval = TRUE------------------------------------------------
+data_grid <- multi_site$data_grid
+head(data_grid)
+
+## ----printspst, eval=TRUE-----------------------------------------------------
+print(multi_site)
+
+## ----plotspst,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(multi_site)
+
+## ----plotspstmore,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(
+  x =  multi_site,
+  title = "Plot of the raw data",
+  xlab = "Age (CE)",
+  ylab = "Relative Sea Level (m)",
+  plot_tide_gauges = FALSE
+)
+
+## ----runspst,eval = TRUE------------------------------------------------------
+jags_output.ni_spline_st <- reslr::reslr_mcmc(input_data =  multi_site, 
+                                              model_type = "ni_spline_st")
+
+## ----printspstout,eval=TRUE---------------------------------------------------
+print(jags_output.ni_spline_st)
+
+## ----summaryspst, eval = TRUE-------------------------------------------------
+summary(jags_output.ni_spline_st)
+
+## ---- runspstmore,eval = FALSE------------------------------------------------
+#  jags_output.ni_spline_st <- reslr::reslr_mcmc(
+#    input_data =  multi_site,
+#    model_type = "ni_spline_st",
+#    # Update these values
+#    n_iterations = 6000,# Number of iterations
+#    n_burnin = 1000,# Number of iterations to discard at the beginning
+#    n_thin = 4,# Reduces number of output samples to save memory and computation time
+#    n_chains = 3 # Number of Markov chains
+#    )
+
+## ----plotspstres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5----
+plot(jags_output.ni_spline_st)
+
+## ----plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(jags_output.ni_spline_st,plot_type = "rate_plot")
+
+## ----outdfspst, eval = TRUE---------------------------------------------------
+output_dataframes <- jags_output.ni_spline_st$output_dataframes
+head(output_dataframes)
+
+## ----data2sitesmore, eval = TRUE----------------------------------------------
+example_data_set <- reslr::NAACproxydata
+# For 2 site
+multi_site <- example_data_set %>% dplyr::filter(Site %in% c("Cedar Island","Nassau","Snipe Key","Placentia","Cape May Courthouse","Saint Simeon","Leeds Point","Wood Island"))
+
+## ----loadnigam, eval = TRUE---------------------------------------------------
+multi_site <- reslr::reslr_load(data = multi_site,
+                                include_tide_gauge = TRUE,
+                                include_linear_rate = TRUE,
+                                TG_minimum_dist_proxy = FALSE,
+                                list_preferred_TGs = NULL,
+                                all_TG_1deg = TRUE,
+                                prediction_interval = 50)
+
+## ----datanigam,eval=TRUE------------------------------------------------------
+data <- multi_site$data
+
+## ----datagridnigam, eval = TRUE-----------------------------------------------
+data_grid <- multi_site$data_grid
+
+## ----printnigam, eval=TRUE----------------------------------------------------
+print(multi_site)
+
+## ---- plotnigam,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(x =  multi_site)
+
+## ----plotnigammore, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(
+  x =  multi_site,
+  title = "Plot of the raw data",
+  xlab = "Age (CE)",
+  ylab = "Relative Sea Level (m)",
+  plot_tide_gauges = TRUE
+)
+
