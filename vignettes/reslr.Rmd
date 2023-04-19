@@ -130,13 +130,13 @@ The tide gauges undergo a cleaning process within the package. Firstly, certain 
 
 Within the `reslr_load` function, the user has three options to choose from:
 
-1. Provide a list of the preferred tide gauges from the [PSMSL website](https://psmsl.org/data/obtaining/), ensuring spelling, capitalisation and spacing is exactly the same as the website. Note, the package will not work if error in spelling occurs. In addition, certain tide gauges have been flagged by the PSMSL website and are not included in this package and will return an error if selected. This is done by giving a list to the `list_preferred_TGs = c("ARGENTIA)` option in the `reslr_mcmc` function
+1. Provide a list of the preferred tide gauges from the [PSMSL website](https://psmsl.org/data/obtaining/), ensuring spelling, capitalisation and spacing is exactly the same as the website. Note, the package will not work if error in spelling occurs. In addition, certain tide gauges have been flagged by the PSMSL website and are not included in this package and will return an error if selected. This is done by giving a list to the `list_preferred_TGs = c("ARGENTIA","MAYPORT")` option in the `reslr_mcmc` function
 
 2. The nearest tide gauge to proxy site based on minimum distance in kilometers, which is done by setting `TG_minimum_dist_proxy = TRUE`.
 
 3. Any tide gauge within 1 degree from the proxy site, which is done by setting `all_TG_1deg = TRUE`.
 
-The final output data frame contains an additional column, called `data_type_id`, which identifies the data source "ProxyRecord" or "TideGaugeData" depending on the observation in question.
+The user can select a combination of option 1 and option 2 or option 1 and option 3 which allows for additional tide gauge data to be included. The final output is a data frame which contains an additional column, called `data_type_id`, identifying the data source "ProxyRecord" or "TideGaugeData" depending on the observation in question.
 
 
 ### Glacial Isostatic Adjustment (GIA) 
