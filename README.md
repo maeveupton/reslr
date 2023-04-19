@@ -1,7 +1,7 @@
 # reslr
 
 <!-- badges: start -->
-<img src="https://github.com/maeveupton/reslr_extra/blob/main/PosterpicA4.jpg" width="240" height="276" align="right" />
+<img src="https://github.com/maeveupton/reslr_extra/blob/main/reslr_badge/reslr_badge.png" width="240" height="276" align="right" />
 <!-- badges: end -->
 
  
