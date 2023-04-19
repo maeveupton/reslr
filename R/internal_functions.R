@@ -1155,6 +1155,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 
     # Basis functions in time using prediction data frame-----------------------
     #t_pred <- sort(data_grid$Age)# CHECK this
+    t_pred <- data_grid$Age# CHECK this
     #B_t_pred <- predict(B_t, t_pred)
 
     B_t_pred <- bs_bbase(t_pred,
