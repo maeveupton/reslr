@@ -35,8 +35,7 @@ reslr_load <- function(data,
                        list_preferred_TGs = NULL,
                        TG_minimum_dist_proxy = FALSE,
                        all_TG_1deg = FALSE,
-                       input_Age_type = "CE",
-                       model_type) {
+                       input_Age_type = "CE") {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
 
   # Tidy Original data-------------------------------

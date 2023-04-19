@@ -170,9 +170,9 @@ testthat::test_that("Testing ni GAM decomposition with closest tide gauge and li
                               prediction_interval = 100,
                               include_tide_gauge = TRUE,
                               include_linear_rate = TRUE,
-                              list_preferred_TGs = c("ARGENTIA","MAYPORT", "JACKSONVILLE","LAKE WORTH PIER",
-                                                                          "MAYPORT (BAR PILOTS DOCK), FLORIDA"),
-                              TG_minimum_dist_proxy = FALSE,
+                              # list_preferred_TGs = c("ARGENTIA","MAYPORT", "JACKSONVILLE","LAKE WORTH PIER",
+                              #                                             "MAYPORT (BAR PILOTS DOCK), FLORIDA"),
+                              TG_minimum_dist_proxy = TRUE,
                               all_TG_1deg = FALSE,
                               input_Age_type = "CE")
   jags_output_1 <- reslr_mcmc(
