@@ -1154,8 +1154,8 @@ spline_basis_fun <- function(data, data_grid, model_type) {
     #B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (h)
 
     # Basis functions in time using prediction data frame-----------------------
-    #t_pred <- sort(data_grid$Age)# CHECK this
-    t_pred <- data_grid$Age# CHECK this
+    #t_pred <- sort(data_grid$Age)
+    t_pred <- data_grid$Age
     #B_t_pred <- predict(B_t, t_pred)
 
     B_t_pred <- bs_bbase(t_pred,
