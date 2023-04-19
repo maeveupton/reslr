@@ -475,7 +475,7 @@ print(CedarIslandNC)
 
 **Step 2:** Plotting the data the raw data with:
 ```{r, plotigpdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(x =  CedarIslandNC)
+plot(CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
@@ -582,7 +582,7 @@ print(CedarIslandNC)
 
 **Step 2:** Plotting the data the raw data with:
 ```{r,plotspt,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
-plot(x =  CedarIslandNC)
+plot(CedarIslandNC)
 ```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. To alter the further plot, the following extra arguments can be used which allows the user to updated the titles and axis labels. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot:
 
@@ -701,7 +701,7 @@ plot(
 ```
 
 **Step 3:** Run the model for the two sites.
-```{r,runspst,eval = FALSE}
+```{r,runspst,eval = TRUE}
 jags_output.ni_spline_st <- reslr::reslr_mcmc(input_data =  multi_site, 
                                               model_type = "ni_spline_st")
 ```
@@ -709,12 +709,12 @@ The output object `jags_output.ni_spline_st` stores the JAGS model run.
 Note that additional computational run time is required for the model compared with the ni_spline_t. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
-```{r,printspstout,eval=FALSE}
+```{r,printspstout,eval=TRUE}
 print(jags_output.ni_spline_st)
 ```
 
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r,summaryspst, eval = FALSE}
+```{r,summaryspst, eval = TRUE}
 summary(jags_output.ni_spline_st)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
@@ -732,18 +732,18 @@ jags_output.ni_spline_st <- reslr::reslr_mcmc(
 For the parameter estimates, we can present the standard deviation associated with the NI spline space time model. Where "sigma_l" highlights the variation associated with the spatial temporal model and "sigma_res" presenting the overall variation.
 
 **Step 5:** the results from the ni_spline_st model can be illustrated using:
-```{r,plotspstres, eval = FALSE,fig.align = 'center',fig.width = 7,fig.height = 5}
+```{r,plotspstres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(jags_output.ni_spline_st)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output.ni_spline_st,plot_type = "rate_plot")
 ```
 This will print the plot of the rate of change with 95 \% uncertainty intervals. 
 
 To examine the data creating these plots, can be accessed by the user:
-```{r,outdfspst, eval = FALSE}
+```{r,outdfspst, eval = TRUE}
 output_dataframes <- jags_output.ni_spline_st$output_dataframes
 head(output_dataframes)
 ```
@@ -814,7 +814,7 @@ plot(
 ```
 
 **Step 3:** Run the model
-```{r,runnigam,eval = FALSE}
+```{r,runnigam,eval = TRUE}
 jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
   input_data =  multi_site,
   model_type = "ni_gam_decomp")
@@ -823,12 +823,12 @@ The output object `jags_output.ni_gam_decomp` stores the JAGS model run.
 Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
-```{r,printnigamout, eval=FALSE}
+```{r,printnigamout, eval=TRUE}
 print(jags_output.ni_gam_decomp)
 ```
 
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r,summarynigam, eval = FALSE}
+```{r,summarynigam, eval = TRUE}
 summary(jags_output.ni_gam_decomp)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
@@ -847,22 +847,24 @@ jags_output.ni_gam_decomp <- reslr::reslr_mcmc(
 For the parameter estimates, we can present the standard deviation associated with each component of the NIGAM decomposition. This gives an insight into the variation caused by the different components with "sigma_r" representing the regional component, "sigma_l" highlighting the non-linear local component, "sigma_res" presenting the overall variation and "sigma_h" representing the site specific vertical offset.
 
 **Step 5:** The results from the `ni_gam_decomp` model can be illustrated with the option of excluding the tide gauge using:
-```{r,plotnigamres, eval = FALSE,fig.align = 'center',fig.width = 7,fig.height = 5}
+```{r,plotnigamres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(jags_output.ni_gam_decomp,plot_tide_gauge = FALSE)
 ```
 In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot. The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% uncertainty interval. 
 In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotnigamresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotnigamresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(jags_output.ni_gam_decomp,plot_type = "rate_plot")
 ```
 This will print the plot of the rate of change with 95 \% uncertainty intervals. To examine the data creating the total model fit result plot, the user can use:
-```{r,totaldf, eval = FALSE}
+```{r,totaldf, eval = TRUE}
 total_model_fit_df <- jags_output.ni_gam_decomp$output_dataframes$total_model_fit_df
+head(total_model_fit_df)
 ```
 To examine the data creating the total model rate of change plot the user can use:
-```{r,totalrate, eval = FALSE}
+```{r,totalrate, eval = TRUE}
 total_model_rate_df <-jags_output.ni_gam_decomp$output_dataframes$total_model_rate_df
+head(total_model_rate_df)
 ```
 
 There are separate settings to examine the plot of each component and its associated rate. To examine the regional component plot use:
