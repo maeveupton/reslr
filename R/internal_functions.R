@@ -1133,6 +1133,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
 
   if (model_type == "ni_spline_t") {
     t <- data$Age
+    #t_in <- sp_interval$Age
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase(t, xl = min(t), xr = max(t), data = data)
     # Finding derivative  of basis functions using first principals-----------
