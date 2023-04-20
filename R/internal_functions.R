@@ -139,7 +139,7 @@ create_model_fit_plot <- function(output_dataframes, data, plot_tide_gauges = FA
         )),
         colour = ggplot2::guide_legend(override.aes = list(
           linetype = c(0, 1),
-          # shape = c(16, NA),
+          shape = c(16, NA),
           size = 2
         ))
       ) +
