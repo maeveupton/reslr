@@ -12,7 +12,8 @@ reslr_load(
   list_preferred_TGs = NULL,
   TG_minimum_dist_proxy = FALSE,
   all_TG_1deg = FALSE,
-  input_Age_type = "CE"
+  input_Age_type = "CE",
+  rolling_window_average = 10
 )
 }
 \arguments{
@@ -30,7 +31,9 @@ reslr_load(
 
 \item{all_TG_1deg}{The package finds all tide gauges within 1 degree of the proxy site}
 
-\item{input_Age_type}{The inputted age in years CE or year BCE}
+\item{input_Age_type}{The inputted age in years "CE" or year "BCE"}
+
+\item{rolling_window_average}{A rolling window that averages tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.}
 }
 \value{
 A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.

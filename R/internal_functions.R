@@ -324,8 +324,8 @@ clean_tidal_gauge_data <- function(data,
     )
 
   tidal_gauge_full_df <- tidal_gauge_full_df %>%
-    dplyr::mutate(Age = Age / 1000) %>%
-    dplyr::mutate(Age_err = Age_err / 1000) %>%
+    #dplyr::mutate(Age = Age / 1000) %>%
+    #dplyr::mutate(Age_err = Age_err / 1000) %>%
     dplyr::mutate(RSL_annual = RSL) %>%
     dplyr::mutate(RSL = rolling_avg) %>%
     dplyr::select(!c(decade, Age_epoch_id, rolling_avg, RSL_annual, RSL_offset))

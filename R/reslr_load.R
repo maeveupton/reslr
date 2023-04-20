@@ -124,6 +124,10 @@ reslr_load <- function(data,
           )
     cat("Tide Gauge data & linear_rate included \n")
   }
+  # Dividing Age & Age_err by 1000 for easier calculations-----
+  data <- data %>%
+    dplyr::mutate(Age = Age/1000) %>%
+    dplyr::mutate(Age_err = Age_err/1000)
   # Prediction dataframe-------------------------------------
   sites <- data %>%
     dplyr::select(

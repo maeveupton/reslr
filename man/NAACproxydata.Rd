@@ -5,7 +5,7 @@
 \alias{NAACproxydata}
 \title{Relative Sea level example dataset}
 \format{
-A data frame with 1705 rows and 9 columns:
+A data frame with 1934 rows and 8 columns:
 \describe{
 \item{Region}{All regions along Atlantic coast of North America}
 \item{Site}{All sites along Atlantic coast of North America}
@@ -24,6 +24,6 @@ Check out the vignettes to see the sources
 NAACproxydata
 }
 \description{
-An example dataset for 21 proxy sites along the Atlantic coast of North America
+An example dataset for 22 proxy sites along the Atlantic coast of North America
 }
 \keyword{datasets}
