@@ -17,10 +17,11 @@
 #' @param prediction_interval Predictions over every 20 years(default) can vary based on user preference as larger prediction_interval will reduce computational run time.
 #' @param include_tide_gauge Including tide gauge data from PSMSL website that is averaged over a decade using a rolling window
 #' @param include_linear_rate User decides to include linear_rate and linear_rate_err
-#' @param input_Age_type The inputted age in years CE or year BCE
+#' @param input_Age_type The inputted age in years "CE" or year "BCE"
 #' @param list_preferred_TGs The user can supply the name or names of the preferred tide gauges
 #' @param TG_minimum_dist_proxy The package finds the tide gauge closest to the proxy site
 #' @param all_TG_1deg The package finds all tide gauges within 1 degree of the proxy site
+#' @param rolling_window_average A rolling window that averages tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.
 #'
 #' @return A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.
 #' @export
@@ -35,7 +36,8 @@ reslr_load <- function(data,
                        list_preferred_TGs = NULL,
                        TG_minimum_dist_proxy = FALSE,
                        all_TG_1deg = FALSE,
-                       input_Age_type = "CE") {
+                       input_Age_type = "CE",
+                       rolling_window_average = 10) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
 
   # Tidy Original data-------------------------------

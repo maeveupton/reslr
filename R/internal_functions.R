@@ -158,11 +158,13 @@ create_model_fit_plot <- function(output_dataframes, data, plot_tide_gauges = FA
 #' @param list_preferred_TGs user can supply the name or names of the preferred tide gauges
 #' @param TG_minimum_dist_proxy The user wants the tide gauge closest to the proxy site
 #' @param all_TG_1deg The user wants all tide gauges within 1 degree of the proxy site
+#' @param rolling_window_average A rolling window that averages tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.
 #' @noRd
 clean_tidal_gauge_data <- function(data,
                                    list_preferred_TGs = NULL,
                                    TG_minimum_dist_proxy = FALSE,
-                                   all_TG_1deg = FALSE) {
+                                   all_TG_1deg = FALSE,
+                                   rolling_window_average = 10) {
   Age_epoch_id <- LongLat <- rolling_avg <- median <- nearest_proxy_site <- RSL_annual <- TG_min_dist1 <- minimum_dist <- nearest_TG <- rows_site <- site <- min_dist1 <- stationflag <- name <- sd <- sd_TG <- n_obs_by_site <- RSL_offset <- data_type_id <- decade <- decade_meanRSL <- Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- id <- NULL
   # Using data from PSMSL website for annual tide gauge data----------------------------------
   # Set up the URL for downloading the data
@@ -256,7 +258,7 @@ clean_tidal_gauge_data <- function(data,
 
 
   # # Set the window size for the moving average (in this case, 10 years)
-  window_size <- 10
+  window_size <- rolling_window_average
 
   # Create a new column with the rolling average
   annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
