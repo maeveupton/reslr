@@ -16,6 +16,7 @@
 #' @param n_chains Number of chains. The number of times the model will be run.
 #' @param igp_smooth Informs prior for the smoothness (correlation) parameter if model = "igp" is chosen. Choose a value between 0 and 1. Closer to 1 will increase smoothness.
 #' @param n_cp Number of change points 1,2 or 3
+#' @param CI Size of the credible interval required by the user. The default is 95% and the user can choose from "50%", "95%" and "99%".
 #'
 #' @return A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export
@@ -31,7 +32,8 @@ reslr_mcmc <- function(input_data,
                        n_iterations = 5000,
                        n_burnin = 1000,
                        n_thin = 4,
-                       n_chains = 3) {
+                       n_chains = 3,
+                       CI = "95%") {
   UseMethod("reslr_mcmc")
 }
 
@@ -43,7 +45,8 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    n_iterations = 5000,
                                    n_burnin = 1000,
                                    n_thin = 4,
-                                   n_chains = 3) {
+                                   n_chains = 3,
+                                   CI = "95%") {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
   # Input Data -------------
@@ -91,7 +94,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     output_dataframes <- create_output_df(noisy_model_run_output = model_run,
                                           data_grid,
                                           rate_grid = FALSE,
-                                          decomposition = FALSE)
+                                          decomposition = FALSE,
+                                          CI = CI)
 
     # Output with everything-------------
     jags_output <- list(
@@ -148,7 +152,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     output_dataframes <- create_output_df(noisy_model_run_output = model_run,
                                           data_grid,
                                           rate_grid = FALSE,
-                                          decomposition = FALSE)
+                                          decomposition = FALSE,
+                                          CI = CI)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
@@ -218,7 +223,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     output_dataframes <- create_output_df(noisy_model_run_output = model_run,
                                           data_grid,
                                           rate_grid = FALSE,
-                                          decomposition = FALSE)
+                                          decomposition = FALSE,
+                                          CI = CI)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
@@ -287,7 +293,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     output_dataframes <- create_output_df(noisy_model_run_output = model_run,
                                           data_grid,
                                           rate_grid = FALSE,
-                                          decomposition = FALSE)
+                                          decomposition = FALSE,
+                                          CI = CI)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
@@ -348,7 +355,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Output dataframe for plots
     output_dataframes <- create_igp_output_df(model_run=model_run,
                                               jags_data=jags_data,
-                                              data_grid = data_grid)
+                                              data_grid = data_grid,
+                                              CI = CI)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
@@ -468,7 +476,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     output_dataframes <- create_output_df(noisy_model_run_output,
                                           data_grid = data_grid,
                                           rate_grid = TRUE,
-                                          decomposition = FALSE)
+                                          decomposition = FALSE,
+                                          CI = CI)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
@@ -585,9 +594,10 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid = data_grid,# CHANGE
+                                          data_grid = data_grid,
                                           rate_grid = TRUE,
-                                          decomposition = FALSE)
+                                          decomposition = FALSE,
+                                          CI = CI)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output, # Watch this
@@ -789,7 +799,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     output_dataframes <- create_output_df(noisy_model_run_output,
                                           data_grid = data_grid,
                                           rate_grid = TRUE,
-                                          decomposition = TRUE)
+                                          decomposition = TRUE,
+                                          CI = CI)
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,

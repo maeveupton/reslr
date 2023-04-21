@@ -66,6 +66,17 @@ reslr_load <- function(data,
     cat("No decadally averaged Tide gauge data or linear_rate included.\n")
     cat("Note: Both are required for the ni_gam_decomp model \n")
   }
+
+  # Including TG & no linear rates but forget to include TG method
+  if (include_tide_gauge == TRUE &
+      include_linear_rate == FALSE &
+      is.null(list_preferred_TGs) == TRUE &
+      TG_minimum_dist_proxy == FALSE &
+      all_TG_1deg == FALSE){
+    message("Error: No tide gauge selection method chosen, please provide criteria for choosing preferred tide gauge. \n")
+    }
+
+
   # Including TGs and no linear rates
   if(include_tide_gauge == TRUE & include_linear_rate == FALSE){
     data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
@@ -76,11 +87,9 @@ reslr_load <- function(data,
     cat("Decadally averaged tide gauge data included by the package. \n")
     cat("Note: No linear rate included. It is required for the ni_gam_decomp model \n")
   }
-  # else{
-  #   data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
-  #   cat("No decadally averaged Tide gauge data or linear_rate included.\n")
-  #   cat("Note: Both are required for the ni_gam_decomp model \n")
-  # }
+
+
+
   # Including linear rates & no TG
   if (include_linear_rate == TRUE & include_tide_gauge == FALSE){
     # Checking if user provided GIA rates----------
@@ -98,9 +107,17 @@ reslr_load <- function(data,
       cat("Note: No Tide gauge data included. It is required for the ni_gam_decomp model\n")
     }
   }
-  # else{
-  #   cat("No linear_rate or linear_rate_err selected. \n")
-  # }
+
+  # Including TG & no linear rates but forget to include TG method
+  if (include_tide_gauge == TRUE &
+      include_linear_rate == TRUE &
+      is.null(list_preferred_TGs) == TRUE &
+      TG_minimum_dist_proxy == FALSE &
+      all_TG_1deg == FALSE){
+    message("Warning: No tide gauge selection method chosen. Select criteria to chose your prefered tide gauge")
+    #stop()
+  }
+
   # Including linear rates & TG data
   if (include_linear_rate == TRUE & include_tide_gauge == TRUE){
     data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
