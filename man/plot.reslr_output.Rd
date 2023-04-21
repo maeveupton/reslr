@@ -29,5 +29,5 @@ If tide gauges are used in the model, the user has the ability plot the output w
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 x <- reslr_load(data = data)
 jags_output <- reslr_mcmc(x, model_type = "eiv_slr_t")
-plot(x =jags_output)
+plot(x = jags_output)
 }

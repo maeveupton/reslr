@@ -12,7 +12,8 @@ reslr_mcmc(
   n_iterations = 5000,
   n_burnin = 1000,
   n_thin = 4,
-  n_chains = 3
+  n_chains = 3,
+  CI = "95\%"
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ reslr_mcmc(
 \item{n_thin}{Thinning value}
 
 \item{n_chains}{Number of chains. The number of times the model will be run.}
+
+\item{CI}{Size of the credible interval required by the user. The default is 95\% and the user can choose from "50\%", "95\%" and "99\%".}
 }
 \value{
 A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
