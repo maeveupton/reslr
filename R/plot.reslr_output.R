@@ -31,15 +31,18 @@ plot.reslr_output <- function(x,
       output_dataframes <- jags_output$output_dataframes %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      data <- jags_output$data %>%
-        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
-        dplyr::filter(data_type_id == "ProxyRecord")
+      data <- jags_output$data
       n_sites <- length(data$SiteName %>% unique)
       n_proxy <- data %>%
         dplyr::filter(data_type_id == "ProxyRecord") %>%
         dplyr::select(SiteName,data_type_id) %>%
         unique() %>%
         nrow()
+      data <- jags_output$data %>%
+        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
@@ -50,11 +53,19 @@ plot.reslr_output <- function(x,
     } else {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data, plot_tide_gauges = TRUE,
-        model_caption = "model_type: Errors in Variables Simple Linear Regression \n n_proxy:"
+        model_caption = paste0("Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy)
       )
     }
 
@@ -69,23 +80,41 @@ plot.reslr_output <- function(x,
       output_dataframes <- jags_output$output_dataframes %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+      data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
       data <- jags_output$data %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data,
-        model_caption = "model_type: Errors in Variables 1 Change Point Model \n n_proxy:"
+        model_caption = paste0("Model type: Errors in Variables 1 Change Point Model \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy)
       )
     } else {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data, plot_tide_gauges = TRUE,
-        model_caption = "model_type: Errors in Variables 1 Change Point Model \n n_proxy:"
+        model_caption = paste0("Model type: Errors in Variables 1 Change Point Model \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy)
       )
     }
     cat("Plotted EIV 1 Change Point model. \n")
@@ -100,23 +129,40 @@ plot.reslr_output <- function(x,
       output_dataframes <- jags_output$output_dataframes %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+      data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
       data <- jags_output$data %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data,
-        model_caption = "model_type: Errors in Variables 2 Change Point Model \n n_proxy:"
+        model_caption = paste0("Model type: Errors in Variables 2 Change Point Model \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy)
       )
     } else {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data, plot_tide_gauges = TRUE,
-        model_caption = "model_type: Errors in Variables 2 Change Point Model \n n_proxy:"
+        model_caption = paste0("Model type: Errors in Variables 2 Change Point Model \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy)
       )
     }
     cat("Plotted EIV 2 Change Point Model \n")
@@ -130,23 +176,40 @@ plot.reslr_output <- function(x,
       output_dataframes <- jags_output$output_dataframes %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+      data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
       data <- jags_output$data %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data,
-        model_caption = "model_type: Errors in Variables 3 Change Point Model \n n_proxy:"
+        model_caption = paste0("Model type: Errors in Variables 3 Change Point Model \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy)
       )
     } else {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data, plot_tide_gauges = TRUE,
-        model_caption = "model_type: Errors in Variables 3 Change Point Model \n n_proxy:"
+        model_caption = paste0("Model type: Errors in Variables 3 Change Point Model \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy)
       )
     }
 
@@ -161,6 +224,13 @@ plot.reslr_output <- function(x,
       output_dataframes <- jags_output$output_dataframes %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+      data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
       data <- jags_output$data %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
@@ -169,7 +239,8 @@ plot.reslr_output <- function(x,
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data,
-        model_caption = "model_type: Errors in Variables Integrated Gaussian Process \n n_proxy:"
+        model_caption = paste0("Model type: Errors in Variables Integrated Gaussian Process \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy)
       )
 
       # Plotting Rate of Change for Total component----------
@@ -228,14 +299,26 @@ plot.reslr_output <- function(x,
             size = 2
           ))
         ) +
-        ggplot2::facet_wrap(~SiteName)
-    } else {
+        ggplot2::facet_wrap(~SiteName)+
+        ggplot2::labs(caption= paste0("Model type: Errors in Variables Integrated Gaussian Process \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy))
+    }
+    else {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
+      data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
-        data = data, plot_tide_gauges = TRUE
+        data = data, plot_tide_gauges = TRUE,
+        model_caption = paste0("Model type: Errors in Variables Integrated Gaussian Process \n No. proxy sites:",n_proxy,
+                               "\n No. tide gauge sites:",n_sites - n_proxy)
       )
       # Plotting Rate of Change for Total component----------
       plot_rate <-
@@ -246,7 +329,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::geom_ribbon(
           data = output_dataframes,
-          ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "95"), alpha = 0.2
+          ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
         # ggplot2::geom_ribbon(
         #   data = output_dataframes,
@@ -270,7 +353,7 @@ plot.reslr_output <- function(x,
         ggplot2::labs(colour = "") +
         ggplot2::scale_fill_manual("",
           values = c(
-            "95" = ggplot2::alpha("purple3", 0.2) #
+            "CI" = ggplot2::alpha("purple3", 0.2) #
             # "50" = ggplot2::alpha("purple3", 0.3)
           ),
           labels = c(
@@ -292,8 +375,10 @@ plot.reslr_output <- function(x,
             shape = c(NA),
             size = 2
           ))
-        ) #+
-      # ggplot2::facet_wrap(~SiteName)
+        ) +
+       ggplot2::facet_wrap(~SiteName)+
+      ggplot2::labs(caption= paste0("Model type: Errors in Variables Integrated Gaussian Process \n No. proxy sites:",n_proxy,
+                                      "\n No. tide gauge sites:",n_sites - n_proxy))
     }
 
     cat("Plotted EIV-IGP model & rate \n")
@@ -306,13 +391,22 @@ plot.reslr_output <- function(x,
       output_dataframes <- jags_output$output_dataframes %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+      data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
       data <- jags_output$data %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
-        data = data
+        data = data,
+        model_caption =
       )
 
       # Plotting Rate of Change for Total component----------
@@ -375,6 +469,12 @@ plot.reslr_output <- function(x,
     } else {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
 
       # Plot
       plot_result <- create_model_fit_plot(
@@ -455,9 +555,17 @@ plot.reslr_output <- function(x,
       output_dataframes <- jags_output$output_dataframes %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+      data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
       data <- jags_output$data %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
@@ -524,6 +632,12 @@ plot.reslr_output <- function(x,
     } else {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
@@ -600,6 +714,13 @@ plot.reslr_output <- function(x,
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
     if (plot_tide_gauges == FALSE) {
       output_dataframes <- jags_output$output_dataframes
+      data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
       data <- jags_output$data %>%
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
@@ -980,6 +1101,12 @@ plot.reslr_output <- function(x,
     } else {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
+      n_sites <- length(data$SiteName %>% unique)
+      n_proxy <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord") %>%
+        dplyr::select(SiteName,data_type_id) %>%
+        unique() %>%
+        nrow()
 
       # Plots Total --------
       total_model_fit_df <-
