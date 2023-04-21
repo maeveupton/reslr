@@ -746,6 +746,7 @@ plot.reslr_output <- function(x,
   # NIGAM decomposition
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
     if (plot_tide_gauges == FALSE) {
+      browser()
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
       n_sites <- length(data$SiteName %>% unique())
@@ -782,10 +783,6 @@ plot.reslr_output <- function(x,
           data = total_model_fit_df,
           ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
-        # ggplot2::geom_ribbon(
-        #   data = total_model_fit_df,
-        #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-        # ) +
         ggplot2::xlab("Age (CE)") +
         ggplot2::ylab("Relative Sea Level (m)") +
         ggplot2::theme_bw() +
@@ -793,24 +790,19 @@ plot.reslr_output <- function(x,
           plot.title = ggplot2::element_text(size = 15),
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
           axis.text = ggplot2::element_text(size = 12),
-          legend.text = ggplot2::element_text(size = 10)
-        ) +
-        ggplot2::theme(
+          legend.text = ggplot2::element_text(size = 10),
           strip.text.x = ggplot2::element_text(size = 10),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+          strip.background = ggplot2::element_rect(fill = c("white")),
+          legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(colour = "") +
         ggplot2::scale_fill_manual("",
           values = c(
             "CI" = ggplot2::alpha("purple3", 0.2),
             "Uncertainty" = ggplot2::alpha("grey", 0.4)
-            # "50" = ggplot2::alpha("purple3", 0.3)
           ),
           labels = c(
-            CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+            "CI" = paste0(unique(total_model_fit_df$CI), " Credible Interval"),
             expression(paste("1-sigma error"))
-            # , "50% Credible Interval"
           )
         ) +
         ggplot2::scale_colour_manual("",
@@ -870,10 +862,10 @@ plot.reslr_output <- function(x,
         ggplot2::labs(colour = "") +
         ggplot2::scale_fill_manual("",
           values = c(
-            "CI" = ggplot2::alpha("purple3", 0.2),
+            "CI" = ggplot2::alpha("purple3", 0.2)
             # "50" = ggplot2::alpha("purple3", 0.3)
           ),
-          labels = c(CI = paste0(unique(output_dataframes$CI), " Credible Interval")) # , "50% Credible Interval")
+          labels = c("CI" = paste0(unique(total_model_rate_df$CI), " Credible Interval")) # , "50% Credible Interval")
         ) +
         ggplot2::scale_colour_manual("",
           values = c("mean" = "purple3"),
@@ -881,7 +873,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::guides(
           fill = ggplot2::guide_legend(override.aes = list(
-            alpha = c(0.4, 0.2), # , 0.4),
+            alpha = c(0.2), # , 0.4),
             size = 1
           )),
           colour = ggplot2::guide_legend(override.aes = list(
@@ -927,7 +919,7 @@ plot.reslr_output <- function(x,
                                      "CI" = ggplot2::alpha("#3b47ad", 0.2)
                                    ),
                                    labels = c(
-                                     CI = paste0(unique(output_dataframes$CI)," Credible Interval")
+                                     CI = paste0(unique(regional_component_df$CI)," Credible Interval")
                                    )
         ) +
         ggplot2::scale_colour_manual("",
@@ -935,6 +927,7 @@ plot.reslr_output <- function(x,
                                       "mean" = "#3b47ad"),
                                      labels = c("Posterior Fit")
         ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::xlab("Age (CE)") +
         ggplot2::labs(caption = paste0(
@@ -966,7 +959,7 @@ plot.reslr_output <- function(x,
                                      "CI" = ggplot2::alpha("#3b47ad", 0.2)
                                    ),
                                    labels = c(
-                                     CI = paste0(unique(output_dataframes$CI)," Credible Interval")
+                                     CI = paste0(unique(regional_rate_component_df$CI)," Credible Interval")
                                    )
         ) +
         ggplot2::scale_colour_manual("",
@@ -1002,12 +995,12 @@ plot.reslr_output <- function(x,
         ggplot2::ggplot() +
         ggplot2::geom_line(
           data = lin_loc_component_df,
-          ggplot2::aes(x = Age * 1000, y = pred), colour = "#5bac06"
+          ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
         ) +
         ggplot2::geom_ribbon(
           data = lin_loc_component_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000),
-          fill = "#5bac06", alpha = 0.3
+          ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000,
+          fill = "CI"), alpha = 0.3
         ) +
         ggplot2::theme_bw() +
         ggplot2::theme(
@@ -1017,12 +1010,27 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 12)
         ) +
         ggplot2::theme(
-          strip.text.x = ggplot2::element_text(size = 14),
+          strip.text.x = ggplot2::element_text(size = 12),
           strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                       "mean" = "#5bac06"),
+                                     labels = c("Posterior Fit")
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "CI" = ggplot2::alpha("#5bac06", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(lin_loc_component_df$CI)," Credible Interval")
+                                   )
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
         ggplot2::xlab("Age (CE)") +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::labs(colour = "")+
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
