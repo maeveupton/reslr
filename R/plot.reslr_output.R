@@ -1235,27 +1235,20 @@ plot.reslr_output <- function(x,
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
       ggplot2::scale_fill_manual(
-        name = "", values = c( "Site Specific vertical offset + \n Linear Local Component" = "#5bac06",
+        name = "",
+        values = c( "Site Specific vertical offset + \n Linear Local Component" = "#5bac06",
                                "Non Linear Local Component" = "#ad4c14",
                                "Regional Component" = "#3b47ad", "purple3"),
         guide = ggplot2::guide_legend(override.aes = list(alpha = 0.1))
       ) +
-      ggplot2::scale_colour_manual(name = "",
-                                   values = c(
-                                     "Site Specific vertical offset + \n Linear Local Component" ="#5bac06",
-                                     "Non Linear Local Component" =  "#ad4c14",
-                                     "Regional Component" = "#3b47ad",  "purple3")) +
+      ggplot2::scale_colour_manual( name = "",
+                                    values = c( "Site Specific vertical offset + \n Linear Local Component" = "#5bac06",
+                                                           "Non Linear Local Component" = "#ad4c14",
+                                                           "Regional Component" = "#3b47ad", "purple3"),) +
       ggplot2::ylab("Sea Level (m)") +
       ggplot2::facet_wrap(~SiteName) +
       ggplot2::xlab("Age (CE)") +
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom")
-      # ggplot2::theme(
-      #   legend.position = c(0.95, -0.05),
-      #   legend.justification = c(1, 0),
-      #   legend.spacing.y = ggplot2::unit(0.1, "cm"),
-      #   legend.title = ggplot2::element_blank(),
-      #   legend.margin = ggplot2::margin(c(1, 1, 1, 1))
-      # )
     }
 
 

@@ -824,39 +824,72 @@ create_igp_output_df <- function(model_run, jags_data, data_grid) {
 create_output_df <- function(noisy_model_run_output,
                              data_grid, # jags_output,
                              rate_grid = FALSE,
-                             decomposition = FALSE) {
-  if (rate_grid == TRUE) {
+                             decomposition = FALSE,
+                             CI) {
+  if (rate_grid == TRUE ) {
 
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    if(CI =="95%"){
+      upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025)
+      lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.25)
+      lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+    }
+
     #mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
     output_dataframes <- data.frame(
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
-      upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+      upr = upr,
+      lwr = lwr
+      #upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+      #lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+      #upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+      #lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
     )
 
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
     #mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
+
+    if(CI =="95%"){
+      rate_upr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025)
+      rate_lwr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      rate_upr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25)
+      rate_lwr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+    }
     output_dataframes <- data.frame(
       output_dataframes,
       rate_pred =  apply(mu_pred_deriv_post, 2, mean),
-      rate_upr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-      rate_lwr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-      rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-      rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+      rate_upr = rate_upr,
+      rate_lwr = rate_lwr
+      #rate_upr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+      #rate_lwr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+      #rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
+      #rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
     )
   } else {
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+    if(CI =="95%"){
+      upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025)
+      lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.25)
+      lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+    }
     output_dataframes <- data.frame(
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
-      upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+      upr = upr,
+      lwr = lwr
+      #upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+      #lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+      #upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+      #lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
     )
     output_dataframes <- output_dataframes
   }
@@ -865,93 +898,164 @@ create_output_df <- function(noisy_model_run_output,
     # Total Component from JAGS output
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     # mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
+
+    if(CI =="95%"){
+      upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.025)
+      lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      upr = apply(mu_post_pred, 2, stats::quantile, probs = 0.25)
+      lwr = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+    }
     total_model_fit_df <- data.frame(
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
-      upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
+      upr = upr,
+      lwr = lwr,
+      #upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
+      #lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
+      #upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
+      #lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
       ID = "Total Posterior Model"
     )
 
     # Total model fit rate
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
     # mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
+    if(CI =="95%"){
+      rate_upr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025)
+      rate_lwr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      rate_upr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25)
+      rate_lwr = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+    }
     total_model_rate_df <-
       data.frame(
         data_grid,
         rate_pred = apply(mu_pred_deriv_post, 2, mean),
-        rate_upr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-        rate_lwr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-        rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-        rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75),
+        rate_upr = rate_upr,
+        rate_lwr = rate_lwr,
+        #rate_upr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+        #rate_lwr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+        #rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
+        #rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75),
         ID = "Total Rate of Change for Posterior Model"
       )
 
     # Regional component
     time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred
     # time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r
+    if(CI =="95%"){
+      upr = apply(time_component_pred_post, 2, stats::quantile, probs = 0.025)
+      lwr = apply(time_component_pred_post, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      upr = apply(time_component_pred_post, 2, stats::quantile, probs = 0.25)
+      lwr = apply(time_component_pred_post, 2, stats::quantile, probs = 0.75)
+    }
     regional_component_df <- data.frame(
       data_grid,
       pred = apply(time_component_pred_post, 2, mean),
-      upr_95 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.025),
-      lwr_95 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.975),
-      upr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.25),
-      lwr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.75),
+      upr = upr,
+      lwr = lwr,
+      #upr_95 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.025),
+      #lwr_95 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.975),
+      #upr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.25),
+      #lwr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.75),
       ID = "Regional Component"
     )
 
     time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred_deriv
     # time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_deriv
+    if(CI =="95%"){
+      rate_upr = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025)
+      rate_lwr = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      rate_upr = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25)
+      rate_lwr = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+    }
     regional_rate_component_df <-
       data.frame(
         data_grid,
         rate_pred = apply(time_component_pred_deriv_post, 2, mean),
-        rate_upr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-        rate_lwr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-        rate_upr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-        rate_lwr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
+        rate_upr = rate_upr,
+        rate_lwr = rate_lwr,
+        #rate_upr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+        #rate_lwr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+        #rate_upr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
+        #rate_lwr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
         ID = "Rate of Change for Regional Component"
       )
 
     # Vertical Offset & Linear Local Component
     g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x_pred
     # g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x
+    if(CI =="95%"){
+      upr = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.025)
+      lwr = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      upr = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.25)
+      lwr = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.75)
+    }
     lin_loc_component_df <-
       data.frame(
         data_grid,
         pred = apply(g_h_component_pred_post, 2, mean),
-        upr_95 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.025),
-        lwr_95 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.975),
-        upr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.25),
-        lwr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.75),
+        upr = upr,
+        lwr = lwr,
+        #upr_95 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.025),
+        #lwr_95 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.975),
+        #upr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.25),
+        #lwr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.75),
         ID = "Site Specific vertical offset + \n Linear Local Component"
       )
 
     # Non linear local component
     space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred
     # space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l
+    if(CI =="95%"){
+      upr = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.025)
+      lwr = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      upr = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.25)
+      lwr = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.75)
+    }
     non_lin_loc_component_df <-
       data.frame(
         data_grid,
         pred = apply(space_time_component_pred_post, 2, mean),
-        upr_95 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.025),
-        lwr_95 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.975),
-        upr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.25),
-        lwr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.75),
+        upr = upr,
+        lwr = lwr,
+        #upr_95 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.025),
+        #lwr_95 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.975),
+        #upr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.25),
+        #lwr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.75),
         ID = "Non Linear Local Component"
       )
     space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred_deriv
     # space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_deriv
+    if(CI =="95%"){
+      rate_upr = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025)
+      rate_lwr = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975)
+    }
+    if(CI == "50%"){
+      rate_upr = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25)
+      rate_lwr = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+    }
     non_lin_loc_rate_component_df <-
       data.frame(
         data_grid,
         rate_pred = apply(space_time_component_pred_deriv_post, 2, mean),
-        rate_upr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-        rate_lwr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-        rate_upr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-        rate_lwr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
+        rate_upr = rate_upr,
+        rate_lwr = rate_lwr,
+        #rate_upr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
+        #rate_lwr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
+        #rate_upr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
+        #rate_lwr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
         ID = "Rate of Change for Non Linear Local Component"
       )
 
