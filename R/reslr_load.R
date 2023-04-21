@@ -40,6 +40,11 @@ reslr_load <- function(data,
                        rolling_window_average = 10) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
 
+  # Dividing Age & Age_err by 1000 for easier calculations-----
+  data <- data %>%
+    dplyr::mutate(Age = Age/1000) %>%
+    dplyr::mutate(Age_err = Age_err/1000)
+
   # Tidy Original data-------------------------------
   if (!("SiteName" %in% colnames(data))) {
     data <- data %>%
@@ -124,10 +129,7 @@ reslr_load <- function(data,
           )
     cat("Tide Gauge data & linear_rate included \n")
   }
-  # Dividing Age & Age_err by 1000 for easier calculations-----
-  data <- data %>%
-    dplyr::mutate(Age = Age/1000) %>%
-    dplyr::mutate(Age_err = Age_err/1000)
+
   # Prediction dataframe-------------------------------------
   sites <- data %>%
     dplyr::select(

@@ -716,8 +716,8 @@ match.closest <- function(x, table, tolerance = Inf, nomatch = NA_integer_) {
 linear_reg_rates <- function(data) {
   Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- NULL
   data_filter <- data %>%
-    #dplyr::filter(!Age > 1.800) # Ignoring recent human influences to SL rise
-    dplyr::filter(!Age > 1800) # Ignoring recent human influences to SL rise
+    dplyr::filter(!Age > 1.800) # Ignoring recent human influences to SL rise
+
   # Doing linear regression on rest of data
   data_lm <- data_filter %>%
     dplyr::group_by(SiteName) %>%

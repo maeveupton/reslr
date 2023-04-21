@@ -1235,12 +1235,16 @@ plot.reslr_output <- function(x,
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
       ggplot2::scale_fill_manual(
-        name = "", values = c( "#5bac06","#ad4c14","#3b47ad", "purple3"),
+        name = "", values = c( "Site Specific vertical offset + \n Linear Local Component" = "#5bac06",
+                               "Non Linear Local Component" = "#ad4c14",
+                               "Regional Component" = "#3b47ad", "purple3"),
         guide = ggplot2::guide_legend(override.aes = list(alpha = 0.1))
       ) +
       ggplot2::scale_colour_manual(name = "",
                                    values = c(
-                                     "#5bac06", "#ad4c14","#3b47ad",  "purple3")) +
+                                     "Site Specific vertical offset + \n Linear Local Component" ="#5bac06",
+                                     "Non Linear Local Component" =  "#ad4c14",
+                                     "Regional Component" = "#3b47ad",  "purple3")) +
       ggplot2::ylab("Sea Level (m)") +
       ggplot2::facet_wrap(~SiteName) +
       ggplot2::xlab("Age (CE)") +
