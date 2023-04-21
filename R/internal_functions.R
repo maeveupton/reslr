@@ -862,6 +862,7 @@ create_output_df <- function(noisy_model_run_output,
                              rate_grid = FALSE,
                              decomposition = FALSE,
                              CI) {
+  ID <- NULL
   if (rate_grid == TRUE ) {
 
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred

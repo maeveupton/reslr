@@ -29,6 +29,13 @@ plot.reslr_input <- function(x,
   input_data <- x
   data <- input_data$data
   data_grid <- input_data$data_grid
+  n_sites <- length(data$SiteName %>% unique())
+  n_proxy <- data %>%
+    dplyr::filter(data_type_id == "ProxyRecord") %>%
+    dplyr::select(SiteName, data_type_id) %>%
+    unique() %>%
+    nrow()
+
 
   # # Not plotting the tide gauge data -------------
   # if (("data_type_id" %in% colnames(data)) & plot_tide_gauges == FALSE) {
@@ -77,7 +84,11 @@ plot.reslr_input <- function(x,
         plot.title = ggplot2::element_text(size = 18, face = "bold"),
         axis.title = ggplot2::element_text(size = 12, face = "bold"),
         legend.text = ggplot2::element_text(size = 10)
-      )
+      )+
+      ggplot2::labs(caption = paste0(
+        "No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy
+      ))
 
     # p_proxy <- ggplot2::ggplot() +
     #   ggplot2::geom_rect(data = subset(data,data_type_id =="ProxyRecord"),
@@ -189,7 +200,12 @@ plot.reslr_input <- function(x,
         plot.title = ggplot2::element_text(size = 18, face = "bold"),
         axis.title = ggplot2::element_text(size = 12, face = "bold"),
         legend.text = ggplot2::element_text(size = 10)
-      )
+      )+
+      ggplot2::labs(caption = paste0(
+        "No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy
+      ))
+
   }
 
 
