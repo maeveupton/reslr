@@ -1241,7 +1241,8 @@ add_noisy_input <- function(model_run, jags_data, model_type, data) {
       # Create the regional basis functions
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age), nseg = 20,data = data
+        xr = max(data$Age), #nseg = 20,
+        data = data
       )
       #----Deriv----
       return(intercept_post[data$SiteName] + B_t %*% colMeans(b_t_post) + b_g_post[data$SiteName] * (t_new))
