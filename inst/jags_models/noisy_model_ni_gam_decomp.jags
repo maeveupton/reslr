@@ -43,18 +43,18 @@ model {
 
 
       # Non-linear local component
-      #l <- B_st %*% b_st
-      #for (j in 1:n_knots_st) {
-        #b_st[j] ~ dnorm(0, sigma_st^-2)
-      #  b_st[j] ~ dnorm(0, tau_st)
-      #}
+      l <- B_st %*% b_st
+      for (j in 1:n_knots_st) {
+        b_st[j] ~ dnorm(0, sigma_st^-2)
+        #b_st[j] ~ dnorm(0, tau_st)
+      }
       # Non-linear local component
       l <- B_st %*% b_st
-      b_st[1] ~ dnorm(0,0.1)
-      for (j in 2:n_knots_st) {
+      #b_st[1] ~ dnorm(0,0.1)
+      #for (j in 2:n_knots_st) {
         #b_st[j] ~ dnorm(b_st[1], sigma_st^-2)
-        b_st[j] ~ dnorm(b_st[1], tau_st)
-      }
+      #  b_st[j] ~ dnorm(b_st[1], tau_st)
+      #}
 
       # Derivative of Non-linear local
       l_deriv <- B_st_deriv %*% b_st
@@ -106,10 +106,10 @@ model {
     }
 
     # Priors
-    tau_st ~ dgamma(0.5*nu,0.5*delta*nu)
+    #tau_st ~ dgamma(0.5*nu,0.5*delta*nu)
     delta ~ dgamma(0.0001,0.0001)
-    sigma_st <- tau_st^-0.5
-    #sigma_st ~ dt(0, 1^-2, 1)T(0,)
+    #sigma_st <- tau_st^-0.5
+    sigma_st ~ dt(0, 1^-2, 1)T(0,)
     sigma_res ~ dt(0, 1^-2, 1)T(0,)
     sigma_t <- b_t_sd_value
 
