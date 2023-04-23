@@ -1241,7 +1241,7 @@ add_noisy_input <- function(model_run, jags_data, model_type, data) {
       # Create the regional basis functions
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age), #nseg = 20,
+        xr = max(data$Age), nseg = 10,
         data = data
       )
       #----Deriv----
@@ -1551,14 +1551,14 @@ spline_basis_fun <- function(data, data_grid, model_type) {
   if (model_type == "ni_gam_decomp") {
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase(data$Age,
-      xl = min(data$Age), xr = max(data$Age), data = data#,nseg = 20 # nseg = 3
+      xl = min(data$Age), xr = max(data$Age), data = data,nseg = 10 # nseg = 3
     )
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
       # Create the regional basis functions
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age), data = data#,nseg = 20 # ,
+        xr = max(data$Age), data = data,nseg = 10 # ,
         # nseg = 3
       )
       return(B_t)
@@ -1758,7 +1758,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
       # Create the regional basis functions
       B_t <- bs_bbase(t_new,
         xl = min(data$Age),
-        xr = max(data$Age), data = data#,nseg = 20
+        xr = max(data$Age), data = data,nseg = 10
       ) # nseg = 20)
       colnames(B_t) <- c(paste("B_t", 1:ncol(B_t), sep = ""))
 
