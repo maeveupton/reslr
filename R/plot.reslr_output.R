@@ -22,6 +22,7 @@
 plot.reslr_output <- function(x,
                               plot_tide_gauges = FALSE,
                               plot_type = c("model_fit_plot"),
+                              plot_caption = TRUE,
                               ...) {
   Age <- RSL <- Age_err <- ID <- RSL_err <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
   jags_output <- x
@@ -42,11 +43,11 @@ plot.reslr_output <- function(x,
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
 
-
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data,
+        #plot_caption = plot_caption,
         model_caption = paste0(
           "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -65,7 +66,8 @@ plot.reslr_output <- function(x,
       # Plot
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
-        data = data, plot_tide_gauges = TRUE,
+        data = data,
+        plot_tide_gauges = TRUE,
         model_caption = paste0(
           "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
