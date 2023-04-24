@@ -1776,7 +1776,7 @@ spline_basis_fun <- function(data, data_grid, model_type) {
         xr = max(data$Age),
         nseg = 10,
         data = data
-      ) # nseg = 20)
+      ) # nseg = 10)
       colnames(B_t) <- c(paste("B_t", 1:ncol(B_t), sep = ""))
 
       # Now the local basis functions
