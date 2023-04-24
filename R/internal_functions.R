@@ -1884,9 +1884,14 @@ bs_bbase <- function(x,
                      xl = min(x),
                      xr = max(x),
                      deg = 3,
-                     nseg = NULL,
+                     nseg = NULL
+                     #spline_nseg_t = NULL,
+                     #spline_nseg_st = NULL,
                      data = data) {
   # Create basis functions------------------------------------------------------
+  # if (is.null(spline_nseg_t)) {
+  #   nseg <- round(deg / (1 + deg / length(data$Age)))
+  # }
   if (is.null(nseg)) {
     nseg <- round(deg / (1 + deg / length(data$Age)))
   }
