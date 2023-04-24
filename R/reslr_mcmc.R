@@ -33,7 +33,9 @@ reslr_mcmc <- function(input_data,
                        n_burnin = 1000,
                        n_thin = 4,
                        n_chains = 3,
-                       CI = "95%") {
+                       CI = "95%",
+                       spline_nseg_t = NULL,
+                       spline_nseg_st = NULL) {
   UseMethod("reslr_mcmc")
 }
 
