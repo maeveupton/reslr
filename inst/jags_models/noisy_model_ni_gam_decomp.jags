@@ -56,7 +56,7 @@ model {
       for (j in 2:n_knots_st) {
         b_st[j] ~ dnorm(b_st[1], sigma_st^-2)
         #b_st[j] ~ dnorm(b_st[1], tau_st)
-    #}
+    }
 
       # Derivative of Non-linear local
       l_deriv <- B_st_deriv %*% b_st

@@ -6,7 +6,7 @@
 \usage{
 reslr_load(
   data,
-  prediction_interval = 20,
+  prediction_interval = 50,
   include_tide_gauge = FALSE,
   include_linear_rate = FALSE,
   list_preferred_TGs = NULL,
@@ -19,7 +19,7 @@ reslr_load(
 \arguments{
 \item{data}{The data of interest}
 
-\item{prediction_interval}{Predictions over every 20 years(default) can vary based on user preference as larger prediction_interval will reduce computational run time.}
+\item{prediction_interval}{Predictions over every 50 years(default) can vary based on user preference as larger prediction_interval will reduce computational run time.}
 
 \item{include_tide_gauge}{Including tide gauge data from PSMSL website that is averaged over a decade using a rolling window}
 

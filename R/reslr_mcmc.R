@@ -782,7 +782,6 @@ reslr_mcmc.reslr_input <- function(input_data,
       "l_pred",
       "l_pred_deriv"
     )
-
     # Run JAGS--------------
     noisy_model_run_output <-
       suppressWarnings(R2jags::jags(
