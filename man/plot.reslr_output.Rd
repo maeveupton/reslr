@@ -4,7 +4,13 @@
 \alias{plot.reslr_output}
 \title{Plotting the results for each statistical model from the \code{reslr_mcmc} function.}
 \usage{
-\method{plot}{reslr_output}(x, plot_tide_gauges = FALSE, plot_type = c("model_fit_plot"), ...)
+\method{plot}{reslr_output}(
+  x,
+  plot_tide_gauges = FALSE,
+  plot_type = c("model_fit_plot"),
+  plot_caption = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}}

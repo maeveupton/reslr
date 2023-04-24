@@ -10,6 +10,7 @@
   xlab = "Age (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = FALSE,
+  plot_caption = TRUE,
   ...
 )
 }
@@ -23,6 +24,8 @@
 \item{ylab}{Labeling the y-axis}
 
 \item{plot_tide_gauges}{Plotting the tide gauge data with the proxy records}
+
+\item{plot_caption}{Plotting an informed caption with the number of tide gauges and proxy sites.}
 
 \item{...}{Not used}
 }

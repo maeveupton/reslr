@@ -9,6 +9,7 @@
 #' @param x An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}
 #' @param plot_tide_gauges Plotting the tide gauge data as well as proxy data
 #' @param plot_type The user can select the type of output plot they require from the following: "rate_plot","model_fit_plot","regional_plot","regional_rate_plot","linear_local_plot","non_linear_local_plot","non_linear_local_rate_plot","nigam_component_plot"
+#' @param plot_cation Plotting an informed caption with the number of tide gauges and proxy sites.
 #' @param ...  Not used
 #'
 #' @return Plot of model fit and the rate of change depending on the statistical model in question.
