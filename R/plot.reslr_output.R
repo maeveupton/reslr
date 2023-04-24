@@ -43,17 +43,29 @@ plot.reslr_output <- function(x,
         dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
         dplyr::filter(data_type_id == "ProxyRecord")
 
-      # Plot
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        #plot_caption = plot_caption,
-        model_caption = paste0(
-          "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
+      # Plot result with informed caption
+      if (plot_caption == TRUE) {
+        plot_result <- create_model_fit_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          # plot_caption = plot_caption,
+          model_caption = paste0(
+            "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
+            "\n No. tide gauge sites:", n_sites - n_proxy
+          )
         )
-      )
-    } else {
+      }
+      else {
+        # Remove informed caption from plots
+        plot_result <- create_model_fit_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          # plot_caption = plot_caption,
+          model_caption = NULL
+        )
+      }
+    }
+    else {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
       n_sites <- length(data$SiteName %>% unique())
@@ -62,17 +74,26 @@ plot.reslr_output <- function(x,
         dplyr::select(SiteName, data_type_id) %>%
         unique() %>%
         nrow()
-
-      # Plot
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        plot_tide_gauges = TRUE,
-        model_caption = paste0(
-          "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
+      # Plot result with informed caption
+      if (plot_caption == TRUE) {
+        plot_result <- create_model_fit_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          model_caption = paste0(
+            "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
+            "\n No. tide gauge sites:", n_sites - n_proxy
+          )
         )
-      )
+      }
+      else {
+        # Remove informed caption from plots
+        plot_result <- create_model_fit_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          model_caption = NULL
+        )
+      }
+
     }
 
     cat("Plotted EIV Simple linear regression. \n")
@@ -794,7 +815,8 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 10),
           strip.text.x = ggplot2::element_text(size = 10),
           strip.background = ggplot2::element_rect(fill = c("white")),
-          legend.box = "horizontal", legend.position = "bottom") +
+          legend.box = "horizontal", legend.position = "bottom"
+        ) +
         ggplot2::labs(colour = "") +
         ggplot2::scale_fill_manual("",
           values = c(
@@ -904,7 +926,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::geom_ribbon(
           data = regional_component_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000,fill = "CI"), alpha = 0.2
+          ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
         # ggplot2::geom_ribbon(data=regional_component_df,
         #                      ggplot2::aes(ymin=lwr_50,ymax=upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
@@ -916,17 +938,18 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 12)
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(regional_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#3b47ad", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(regional_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                      "mean" = "#3b47ad"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#3b47ad"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::ylab("Sea Level (m)") +
@@ -956,17 +979,18 @@ plot.reslr_output <- function(x,
         ggplot2::theme_bw() +
         ggplot2::geom_hline(yintercept = 0) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(regional_rate_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#3b47ad", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#3b47ad"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#3b47ad"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 15),
@@ -981,7 +1005,7 @@ plot.reslr_output <- function(x,
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
-        ))+
+        )) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(colour = "")
 
@@ -1000,8 +1024,10 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::geom_ribbon(
           data = lin_loc_component_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000,
-          fill = "CI"), alpha = 0.3
+          ggplot2::aes(
+            ymin = lwr, ymax = upr, x = Age * 1000,
+            fill = "CI"
+          ), alpha = 0.3
         ) +
         ggplot2::theme_bw() +
         ggplot2::theme(
@@ -1015,23 +1041,24 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#5bac06"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#5bac06"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#5bac06", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(lin_loc_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#5bac06", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(lin_loc_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
         ggplot2::xlab("Age (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::labs(colour = "")+
+        ggplot2::labs(colour = "") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -1069,17 +1096,18 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#ad4c14"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#ad4c14"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#ad4c14", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(non_lin_loc_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#ad4c14", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(non_lin_loc_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::xlab("Age (CE)") +
@@ -1113,17 +1141,18 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 12)
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#ad4c14"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#ad4c14"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#ad4c14", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(non_lin_loc_rate_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#ad4c14", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(non_lin_loc_rate_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::facet_wrap(~SiteName) +
         ggplot2::theme(
@@ -1256,21 +1285,22 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 10),
           strip.text.x = ggplot2::element_text(size = 10),
           strip.background = ggplot2::element_rect(fill = c("white")),
-          legend.box = "horizontal", legend.position = "bottom") +
+          legend.box = "horizontal", legend.position = "bottom"
+        ) +
         ggplot2::labs(colour = "") +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("purple3", 0.2),
-                                     "Uncertainty" = ggplot2::alpha("grey", 0.4)
-                                   ),
-                                   labels = c(
-                                     "CI" = paste0(unique(total_model_fit_df$CI), " Credible Interval"),
-                                     expression(paste("1-sigma error"))
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("purple3", 0.2),
+            "Uncertainty" = ggplot2::alpha("grey", 0.4)
+          ),
+          labels = c(
+            "CI" = paste0(unique(total_model_fit_df$CI), " Credible Interval"),
+            expression(paste("1-sigma error"))
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c("black" = "black", "mean" = "purple3"),
-                                     labels = c("Data", "Posterior Fit")
+          values = c("black" = "black", "mean" = "purple3"),
+          labels = c("Data", "Posterior Fit")
         ) +
         ggplot2::guides(
           fill = ggplot2::guide_legend(override.aes = list(
@@ -1320,15 +1350,15 @@ plot.reslr_output <- function(x,
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(colour = "") +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("purple3", 0.2)
-                                     # "50" = ggplot2::alpha("purple3", 0.3)
-                                   ),
-                                   labels = c("CI" = paste0(unique(total_model_rate_df$CI), " Credible Interval")) # , "50% Credible Interval")
+          values = c(
+            "CI" = ggplot2::alpha("purple3", 0.2)
+            # "50" = ggplot2::alpha("purple3", 0.3)
+          ),
+          labels = c("CI" = paste0(unique(total_model_rate_df$CI), " Credible Interval")) # , "50% Credible Interval")
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c("mean" = "purple3"),
-                                     labels = c("Posterior Fit")
+          values = c("mean" = "purple3"),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::guides(
           fill = ggplot2::guide_legend(override.aes = list(
@@ -1358,7 +1388,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::geom_ribbon(
           data = regional_component_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000,fill = "CI"), alpha = 0.2
+          ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
         # ggplot2::geom_ribbon(data=regional_component_df,
         #                      ggplot2::aes(ymin=lwr_50,ymax=upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
@@ -1370,17 +1400,18 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 12)
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(regional_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#3b47ad", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(regional_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#3b47ad"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#3b47ad"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::ylab("Sea Level (m)") +
@@ -1407,17 +1438,18 @@ plot.reslr_output <- function(x,
         ggplot2::theme_bw() +
         ggplot2::geom_hline(yintercept = 0) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(regional_rate_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#3b47ad", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#3b47ad"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#3b47ad"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 15),
@@ -1432,7 +1464,7 @@ plot.reslr_output <- function(x,
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
-        ))+
+        )) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(colour = "")
 
@@ -1449,8 +1481,10 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::geom_ribbon(
           data = lin_loc_component_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000,
-                       fill = "CI"), alpha = 0.3
+          ggplot2::aes(
+            ymin = lwr, ymax = upr, x = Age * 1000,
+            fill = "CI"
+          ), alpha = 0.3
         ) +
         ggplot2::theme_bw() +
         ggplot2::theme(
@@ -1464,23 +1498,24 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#5bac06"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#5bac06"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#5bac06", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(lin_loc_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#5bac06", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(lin_loc_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
         ggplot2::xlab("Age (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::labs(colour = "")+
+        ggplot2::labs(colour = "") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -1516,17 +1551,18 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#ad4c14"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#ad4c14"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#ad4c14", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(non_lin_loc_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#ad4c14", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(non_lin_loc_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::xlab("Age (CE)") +
@@ -1558,17 +1594,18 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 12)
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#ad4c14"),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#ad4c14"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#ad4c14", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(non_lin_loc_rate_component_df$CI)," Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#ad4c14", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(non_lin_loc_rate_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::facet_wrap(~SiteName) +
         ggplot2::theme(
@@ -1659,7 +1696,7 @@ plot.reslr_output <- function(x,
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
         ))
-      }
+    }
 
 
     cat("All Components plotted \n")
