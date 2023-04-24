@@ -19,6 +19,8 @@
 
 \item{plot_type}{The user can select the type of output plot they require from the following: "rate_plot","model_fit_plot","regional_plot","regional_rate_plot","linear_local_plot","non_linear_local_plot","non_linear_local_rate_plot","nigam_component_plot"}
 
+\item{plot_caption}{Plotting an informed caption with the number of tide gauges and proxy sites.}
+
 \item{...}{Not used}
 }
 \value{
