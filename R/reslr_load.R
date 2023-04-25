@@ -114,8 +114,8 @@ reslr_load <- function(data,
       is.null(list_preferred_TGs) == TRUE &
       TG_minimum_dist_proxy == FALSE &
       all_TG_1deg == FALSE){
-    message("Warning: No tide gauge selection method chosen. Select criteria to chose your prefered tide gauge")
-    #stop()
+    #message("Warning: No tide gauge selection method chosen. Select criteria to chose your prefered tide gauge")
+    stop("Error: No tide gauge selection method chosen. Select criteria to chose your prefered tide gauge")
   }
 
   # Including linear rates & TG data
@@ -146,6 +146,7 @@ reslr_load <- function(data,
           )
     cat("Tide Gauge data & linear_rate included \n")
   }
+
 
   # Prediction dataframe-------------------------------------
   sites <- data %>%
