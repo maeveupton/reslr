@@ -22,6 +22,8 @@
 #' @param TG_minimum_dist_proxy The package finds the tide gauge closest to the proxy site
 #' @param all_TG_1deg The package finds all tide gauges within 1 degree of the proxy site
 #' @param rolling_window_average A rolling window that averages tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.
+#' @param detrend_GIA Detrend the data using the GIA rate provided
+#' @param core_col_year The year the core was collected
 #'
 #' @return A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.
 #' @export
@@ -37,7 +39,9 @@ reslr_load <- function(data,
                        TG_minimum_dist_proxy = FALSE,
                        all_TG_1deg = FALSE,
                        input_Age_type = "CE",
-                       rolling_window_average = 10) {
+                       rolling_window_average = 10,
+                       detrend_GIA = FALSE,
+                       core_col_year = NULL) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
 
   # Dividing Age & Age_err by 1000 for easier calculations-----
@@ -147,7 +151,16 @@ reslr_load <- function(data,
     cat("Tide Gauge data & linear_rate included \n")
   }
 
-
+  if(detrend_GIA == TRUE){
+    # linear rate??
+    if(is.null(data$linear_rate) & is.null(core_col_year)){
+      stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate= TRUE")
+      stop("Error: Must provide the year the core was collected")
+    }
+    else{
+      data$SL <- (core_col_year/1000 - Age)*data$linear_rate + data$RSL
+    }
+  }
   # Prediction dataframe-------------------------------------
   sites <- data %>%
     dplyr::select(

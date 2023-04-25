@@ -52,7 +52,7 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    n_thin = 4,
                                    n_chains = 3,
                                    CI = "95%",
-                                   spline_nseg_t = 1,#Null,
+                                   spline_nseg_t = NULL,
                                    spline_nseg_st = NULL) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 

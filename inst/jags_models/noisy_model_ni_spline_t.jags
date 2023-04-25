@@ -10,12 +10,12 @@ model {
           #r[i] <- inprod(B_t[i,], b_t)
         }
 
-      # No penalty Regional term
-      r <- B_t %*% b_t
-      for (j in 1:n_knots_t) {
-         #b_t[j] ~ dnorm(0, tau_t)
-         b_t[j] ~ dnorm(0, sigma_t^-2)
-       }
+      ## No penalty Regional term
+      #r <- B_t %*% b_t
+      #for (j in 1:n_knots_t) {
+       #  #b_t[j] ~ dnorm(0, tau_t)
+        # b_t[j] ~ dnorm(0, sigma_t^-2)
+       #}
 
       ## Spline in time penalised 1st order
       #r <- B_t %*% b_t

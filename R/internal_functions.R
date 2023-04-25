@@ -1923,7 +1923,7 @@ bs_bbase <- function(x,
                      xl = min(x),
                      xr = max(x),
                      deg = 3,
-                     nseg = NULL,
+                     nseg,# = NULL,
                      #spline_nseg_t = NULL,
                      #spline_nseg_st = NULL,
                      data = data) {
@@ -1931,6 +1931,9 @@ bs_bbase <- function(x,
   # if (is.null(spline_nseg_t)) {
   #   nseg <- round(deg / (1 + deg / length(data$Age)))
   # }
+  #browser()
+  # nseg thinks its = 1
+  #if (is.null(nseg)|nseg == 1) {
   if (is.null(nseg)) {
     nseg <- round(deg / (1 + deg / length(data$Age)))
   }

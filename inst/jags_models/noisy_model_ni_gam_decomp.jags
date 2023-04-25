@@ -71,20 +71,11 @@ model {
       for (j in 1:n_sites) {
         intercept[j] ~ dnorm(h_value[j], h_sd_value[j]^-2)
       }
-      # # Prior on intercept for prediction grid?
-      # for (j in 1:n_sites_pred) {
-      #   intercept[j] ~ dnorm(h_value[j], h_sd_value[j]^-2)
-      # }
 
       # Linear Local component
       for (j in 1:n_sites) {
         b_g[j] ~ dnorm(linear_rate[j], linear_rate_err[j]^-2)
       }
-
-      # # Linear Local component on Prediction grid
-      # for (j in 1:n_sites_pred) {
-      #   b_g_pred[j] ~ dnorm(linear_rate_pred[j], linear_rate_err_pred[j]^-2)
-      # }
 
     # Total for the prediction grid
     for(i in 1: n_pred){
