@@ -17,6 +17,8 @@
 #' @param igp_smooth Informs prior for the smoothness (correlation) parameter if model = "igp" is chosen. Choose a value between 0 and 1. Closer to 1 will increase smoothness.
 #' @param n_cp Number of change points 1,2 or 3
 #' @param CI Size of the credible interval required by the user. The default is 95% and the user can choose from "50%", "95%" and "99%".
+#' @param spline_nseg_t Number of segments required in a spline in time which is used the basis functions
+#' @param spline_nseg_st Number of segments required in a spline in space time which is used the basis functions
 #'
 #' @return A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export
@@ -33,9 +35,9 @@ reslr_mcmc <- function(input_data,
                        n_burnin = 1000,
                        n_thin = 4,
                        n_chains = 3,
-                       CI = "95%"#,
-                       #spline_nseg_t = NULL,
-                       #spline_nseg_st = NULL
+                       CI = "95%",
+                       spline_nseg_t = NULL,
+                       spline_nseg_st = NULL
                        ) {
   UseMethod("reslr_mcmc")
 }
@@ -49,7 +51,9 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    n_burnin = 1000,
                                    n_thin = 4,
                                    n_chains = 3,
-                                   CI = "95%") {
+                                   CI = "95%",
+                                   spline_nseg_t = 1,#Null,
+                                   spline_nseg_st = NULL) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
   # Input Data -------------
@@ -390,12 +394,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       "sigma_t",
       "sigmasq_all"
     )
-
     # Basis functions in time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
       data_grid = data_grid,
-      model_type = model_type
+      model_type = model_type,
+      nseg = spline_nseg_t
     )
 
     # JAGS data----------------------
@@ -424,7 +428,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       model_run = model_run,
       model_type = model_type,
-      jags_data = jags_data
+      jags_data = jags_data,
+      nseg = spline_nseg_t
     )
     # Include Noise-----------------------
     # noisy_jags_file <- "inst/jags_models/noisy_model_ni_spline_t.jags"
@@ -505,7 +510,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
       data_grid = data_grid,
-      model_type = model_type
+      model_type = model_type,
+      nseg = spline_nseg_st
     )
 
     # JAGS data
@@ -546,7 +552,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     data <- add_noisy_input(
       data = data,
       model_run = model_run,
-      model_type = model_type
+      model_type = model_type,
+      nseg = spline_nseg_st
     )
 
     #----NI JAGS model-----
@@ -624,7 +631,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
       data_grid = data_grid,
-      model_type = model_type
+      model_type = model_type,
+      nseg = spline_nseg_t# CHANGE
     )
 
     # JAGS data
@@ -696,7 +704,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     data <- add_noisy_input(
       data = data,
       model_run = model_run,
-      model_type = model_type
+      model_type = model_type,
+      nseg = spline_nseg_t#CHANGE
     )
 
     #----NI JAGS model-----
