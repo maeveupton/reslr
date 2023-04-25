@@ -151,16 +151,17 @@ reslr_load <- function(data,
     cat("Tide Gauge data & linear_rate included \n")
   }
 
-  if(detrend_GIA == TRUE){
-    # linear rate??
-    if(is.null(data$linear_rate) & is.null(core_col_year)){
-      stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate= TRUE")
-      stop("Error: Must provide the year the core was collected")
-    }
-    else{
-      data$SL <- (core_col_year/1000 - Age)*data$linear_rate + data$RSL
-    }
-  }
+  # Detrending the data using GIA rates which is known as linear rate in my input dataframe
+  # if(detrend_GIA == TRUE){
+  #   # linear rate??
+  #   if(is.null(data$linear_rate) & is.null(core_col_year)){
+  #     stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate= TRUE")
+  #     stop("Error: Must provide the year the core was collected")
+  #   }
+  #   else{
+  #     data$SL <- (core_col_year/1000 - Age)*data$linear_rate + data$RSL
+  #   }
+  # }
   # Prediction dataframe-------------------------------------
   sites <- data %>%
     dplyr::select(

@@ -399,7 +399,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      nseg = spline_nseg_t
+      spline_nseg_st=NULL,
+      spline_nseg_t = spline_nseg_t
+      #nseg = spline_nseg_t
     )
 
     # JAGS data----------------------
@@ -429,7 +431,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       model_run = model_run,
       model_type = model_type,
       jags_data = jags_data,
-      nseg = spline_nseg_t
+      spline_nseg_st = NULL,
+      spline_nseg_t = spline_nseg_t
+      #nseg = spline_nseg_t
     )
     # Include Noise-----------------------
     # noisy_jags_file <- "inst/jags_models/noisy_model_ni_spline_t.jags"
@@ -511,6 +515,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
+      #spline_nseg_st=spline_nseg_st,
+      #spline_nseg_t = NULL
       nseg = spline_nseg_st
     )
 
@@ -553,7 +559,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       model_run = model_run,
       model_type = model_type,
-      nseg = spline_nseg_st
+      #nseg = spline_nseg_st,
+      spline_nseg_st=spline_nseg_st,
+      spline_nseg_t = NULL
     )
 
     #----NI JAGS model-----
@@ -631,8 +639,10 @@ reslr_mcmc.reslr_input <- function(input_data,
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
       data_grid = data_grid,
-      model_type = model_type,
-      nseg = spline_nseg_t# CHANGE
+      model_type = model_type#,
+      #nseg
+      #spline_nseg_t = spline_nseg_t,
+      #spline_nseg_st = spline_nseg_st# CHANGE
     )
 
     # JAGS data
@@ -704,8 +714,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     data <- add_noisy_input(
       data = data,
       model_run = model_run,
-      model_type = model_type,
-      nseg = spline_nseg_t#CHANGE
+      model_type = model_type#,
+      #nseg = spline_nseg_t#CHANGE
     )
 
     #----NI JAGS model-----
