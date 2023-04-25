@@ -19,18 +19,18 @@ model {
     }
 
     # Regional term
-    #r <- B_t %*% b_t
-    #for (j in 1:n_knots_t) {
-      #b_t[j] ~ dnorm(0, sigma_t^-2)
+    r <- B_t %*% b_t
+    for (j in 1:n_knots_t) {
+      b_t[j] ~ dnorm(0, sigma_t^-2)
       #b_t[j] ~ dnorm(0, tau_t)
-    #}
-      # Spline in time penalised
-      r <- B_t %*% b_t
-      b_t[1] ~ dnorm(0,1)
-      for (j in 2:n_knots_t) {
+    }
+      ## Spline in time penalised
+      #r <- B_t %*% b_t
+      #b_t[1] ~ dnorm(0,1)
+      #for (j in 2:n_knots_t) {
        # #b_t[j] ~ dnorm(b_t[j-1], tau_t)
-        b_t[j] ~ dnorm(b_t[j-1], sigma_t^-2)
-      }
+      #  b_t[j] ~ dnorm(b_t[j-1], sigma_t^-2)
+      #}
 
 
     # Prior on intercept
