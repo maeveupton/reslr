@@ -13,7 +13,9 @@ reslr_mcmc(
   n_burnin = 1000,
   n_thin = 4,
   n_chains = 3,
-  CI = "95\%"
+  CI = "95\%",
+  spline_nseg_t = NULL,
+  spline_nseg_st = NULL
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ reslr_mcmc(
 \item{n_chains}{Number of chains. The number of times the model will be run.}
 
 \item{CI}{Size of the credible interval required by the user. The default is 95\% and the user can choose from "50\%", "95\%" and "99\%".}
+
+\item{spline_nseg_t}{Number of segments required in a spline in time which is used the basis functions}
+
+\item{spline_nseg_st}{Number of segments required in a spline in space time which is used the basis functions}
 }
 \value{
 A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
