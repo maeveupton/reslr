@@ -24,12 +24,12 @@ model {
       b_t[j] ~ dnorm(0, sigma_t^-2)
       #b_t[j] ~ dnorm(0, tau_t)
     }
-      ## Spline in time penalised
+      # Spline in time penalised
       #r <- B_t %*% b_t
       #b_t[1] ~ dnorm(0,1)
       #for (j in 2:n_knots_t) {
        # #b_t[j] ~ dnorm(b_t[j-1], tau_t)
-      #  b_t[j] ~ dnorm(b_t[j-1], sigma_t^-2)
+       # b_t[j] ~ dnorm(b_t[j-1], sigma_t^-2)
       #}
 
 
