@@ -554,7 +554,6 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       model_run = model_run,
       model_type = model_type,
-      #nseg = spline_nseg_st,
       spline_nseg_st=spline_nseg_st,
       spline_nseg_t = NULL
     )
@@ -708,8 +707,9 @@ reslr_mcmc.reslr_input <- function(input_data,
     data <- add_noisy_input(
       data = data,
       model_run = model_run,
-      model_type = model_type#,
-      #nseg = spline_nseg_t#CHANGE
+      model_type = model_type,
+      spline_nseg_st=spline_nseg_st,
+      spline_nseg_t = spline_nseg_t
     )
 
     #----NI JAGS model-----
