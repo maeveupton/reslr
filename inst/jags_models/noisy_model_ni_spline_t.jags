@@ -8,6 +8,9 @@ model {
           # Mean structure
           mu_y[i] <- r[i]
           #r[i] <- inprod(B_t[i,], b_t)
+
+          # Pulling out residuals of model
+          residuals[i] <- y[i] - mu[i]
         }
 
       ## No penalty Regional term

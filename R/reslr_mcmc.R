@@ -398,7 +398,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       "b_t",
       "r",
       "sigma_t",
-      "sigmasq_all"
+      "sigmasq_all",
+      "residuals"
     )
 
     # Basis functions in time -----------------------------
@@ -461,7 +462,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       "sigma_t",
       "sigmasq_all",
       "r_pred",
-      "tau_t"
+      "tau_t",
+      "residuals"
     )
 
     # JAGS data for second model run-----------
