@@ -38,8 +38,8 @@ reslr_mcmc <- function(input_data,
                        CI = "95%",
                        spline_nseg_t = NULL,
                        spline_nseg_st = NULL,
-                       xl,
-                       xr
+                       xl = NULL,
+                       xr = NULL
                        ) {
   UseMethod("reslr_mcmc")
 }
@@ -396,6 +396,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       "sigma_t",
       "sigmasq_all"
     )
+    print(xr)
+    browser()
     # Basis functions in time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
