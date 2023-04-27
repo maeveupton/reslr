@@ -19,7 +19,9 @@
 #' @param CI Size of the credible interval required by the user. The default is 95% and the user can choose from "50%", "95%" and "99%".
 #' @param spline_nseg_t Number of segments required in a spline in time which is used the basis functions
 #' @param spline_nseg_st Number of segments required in a spline in space time which is used the basis functions
-#'
+#' @param xr Range of data from cv
+#' @param xl range of data for cv
+
 #' @return A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export
 #'
@@ -38,8 +40,8 @@ reslr_mcmc <- function(input_data,
                        CI = "95%",
                        spline_nseg_t = NULL,
                        spline_nseg_st = NULL,
-                       xl = NULL,
-                       xr = NULL
+                       xl,
+                       xr
                        ) {
   UseMethod("reslr_mcmc")
 }
@@ -55,7 +57,9 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    n_chains = 3,
                                    CI = "95%",
                                    spline_nseg_t = NULL,
-                                   spline_nseg_st = NULL) {
+                                   spline_nseg_st = NULL,
+                                   xr,
+                                   xl) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
   # Input Data -------------
@@ -396,8 +400,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "sigma_t",
       "sigmasq_all"
     )
-    print(xr)
-    browser()
+
     # Basis functions in time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
