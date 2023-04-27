@@ -1171,7 +1171,9 @@ create_output_df <- function(noisy_model_run_output,
 add_noisy_input <- function(model_run, jags_data, model_type,
                             data,
                             spline_nseg_t,
-                            spline_nseg_st) {
+                            spline_nseg_st,
+                            xr,
+                            xl) {
   if (model_type == "ni_spline_t") {
     #-----Get posterior samples for SL-----
     b_t_post <- model_run$BUGSoutput$sims.list$b_t
@@ -1181,8 +1183,10 @@ add_noisy_input <- function(model_run, jags_data, model_type,
       #B_deriv_t <- predict(B_t, t_new)
 
       B_deriv_t <- bs_bbase_t(t_new,
-        xl = min(data$Age),
-        xr = max(data$Age),
+                              xl = xl,
+                              xr=xr,
+        #xl = min(data$Age),
+        #xr = max(data$Age),
         data = data,
         spline_nseg_t = spline_nseg_t)
 
