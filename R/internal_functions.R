@@ -1341,15 +1341,19 @@ spline_basis_fun <- function(data,
                              data_grid,
                              model_type,
                              spline_nseg_st,
-                             spline_nseg_t) {
+                             spline_nseg_t,
+                             xl,
+                             xr) {
   Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
 
   if (model_type == "ni_spline_t") {
     t <- data$Age
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase_t(t,
-                    xl = min(t),
-                    xr = max(t),
+                    #xl = min(t),
+                    xl = xl,
+                    #xr = max(t),
+                    xr = xr,
                     data = data,
                     spline_nseg_t = spline_nseg_t)
     # Finding derivative  of basis functions using first principals-----------
@@ -1375,8 +1379,10 @@ spline_basis_fun <- function(data,
 
     B_t_pred <-
       bs_bbase_t(t_pred,
-      xl = min(t),
-      xr = max(t),
+                 xl=xl,
+                 xr=xr,
+      #xl = min(t),
+      #xr = max(t),
       data = data,
       spline_nseg_t = spline_nseg_t
     )

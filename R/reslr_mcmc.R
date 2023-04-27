@@ -37,7 +37,9 @@ reslr_mcmc <- function(input_data,
                        n_chains = 3,
                        CI = "95%",
                        spline_nseg_t = NULL,
-                       spline_nseg_st = NULL
+                       spline_nseg_st = NULL,
+                       xl,
+                       xr
                        ) {
   UseMethod("reslr_mcmc")
 }
@@ -399,7 +401,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg_t = spline_nseg_t
+      spline_nseg_t = spline_nseg_t,
+      xl = xl,
+      xr = xr
     )
 
     # JAGS data----------------------
@@ -430,7 +434,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       model_type = model_type,
       jags_data = jags_data,
       spline_nseg_st = NULL,
-      spline_nseg_t = spline_nseg_t
+      spline_nseg_t = spline_nseg_t,
+      xr=xr,
+      xl=xl
     )
     # Include Noise-----------------------
     # noisy_jags_file <- "inst/jags_models/noisy_model_ni_spline_t.jags"
