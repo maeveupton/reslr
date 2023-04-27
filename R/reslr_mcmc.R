@@ -20,7 +20,7 @@
 #' @param spline_nseg_t Number of segments required in a spline in time which is used the basis functions
 #' @param spline_nseg_st Number of segments required in a spline in space time which is used the basis functions
 #' @param xr Range of data from cv
-#' @param xl range of data for cv
+#' @param xl Range of data for cv
 
 #' @return A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export
