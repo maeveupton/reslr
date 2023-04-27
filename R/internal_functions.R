@@ -1334,7 +1334,6 @@ igp_data <- function(data, data_grid) {
 #' @param model_type Type of model
 #' @param spline_nseg_t Number of segments for the creation of the basis functions for spline in time
 #' @param spline_nseg_st Number of segments for the creation of the basis functions for spline in space time
-#' @param  description
 #' @noRd
 
 
@@ -1347,7 +1346,6 @@ spline_basis_fun <- function(data,
 
   if (model_type == "ni_spline_t") {
     t <- data$Age
-    #t_in <- sp_interval$Age
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase_t(t,
                     xl = min(t),
