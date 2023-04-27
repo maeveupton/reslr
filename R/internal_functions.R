@@ -1169,23 +1169,21 @@ create_output_df <- function(noisy_model_run_output,
 #' @param spline_nseg_st Number of segments used to create basis functions for spline in space time
 #' @noRd
 add_noisy_input <- function(model_run, jags_data, model_type,
-                            data){
-                            #nseg,
-                            #spline_nseg_t,spline_nseg_st) {
+                            data,
+                            spline_nseg_t,
+                            spline_nseg_st) {
   if (model_type == "ni_spline_t") {
     #-----Get posterior samples for SL-----
     b_t_post <- model_run$BUGSoutput$sims.list$b_t
 
     pred_mean_calc <- function(t_new) {
-      # Create the regional basis functions
+      # Create the basis functions
       #B_deriv_t <- predict(B_t, t_new)
 
-      B_deriv_t <- bs_bbase(t_new,
+      B_deriv_t <- bs_bbase_t(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
-        #nseg = nseg,
-        spline_nseg_st = 0,
         spline_nseg_t = spline_nseg_t)
 
       #----Deriv----
@@ -1201,29 +1199,22 @@ add_noisy_input <- function(model_run, jags_data, model_type,
     b_st_post <- model_run$BUGSoutput$sims.list$b_st
 
     pred_mean_calc <- function(t_new) {
-      B_time <- bs_bbase(t_new,
+      B_time <- bs_bbase_st(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
-        #nseg = nseg
-        spline_nseg_st = spline_nseg_st,
-        spline_nseg_t = 0
+        spline_nseg_st = spline_nseg_st
       )
-      B_space_1 <- bs_bbase(data$Latitude,
+      B_space_1 <- bs_bbase_st(data$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude),
         data = data,
-        spline_nseg_st = spline_nseg_st,
-        spline_nseg_t = 0
-        #nseg = nseg
+        spline_nseg_st = spline_nseg_st
       )
-      B_space_2 <- bs_bbase(data$Longitude,
+      B_space_2 <- bs_bbase_st(data$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude),
-        data = data,
-        spline_nseg_st = spline_nseg_st,
-        spline_nseg_t = 0
-        #nseg = nseg
+        data = data
       )
       B_l_deriv_full <- matrix(NA,
         ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
@@ -1261,12 +1252,10 @@ add_noisy_input <- function(model_run, jags_data, model_type,
 
     pred_mean_calc <- function(t_new) {
       # Create the regional basis functions
-      B_t <- bs_bbase(t_new,
+      B_t <- bs_bbase_t(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
-        nseg = 10,
-        #spline_nseg_st = 0,
-        #spline_nseg_t = spline_nseg_t,
+        spline_nseg_t = spline_nseg_t,
         data = data
       )
       #----Deriv----
@@ -1343,60 +1332,55 @@ igp_data <- function(data, data_grid) {
 #' @param data Input data
 #' @param data_grid Prediction data
 #' @param model_type Type of model
-#' @param nseg Number of segments for the creation of the basis functions
+#' @param spline_nseg_t Number of segments for the creation of the basis functions for spline in time
+#' @param spline_nseg_st Number of segments for the creation of the basis functions for spline in space time
 #' @param  description
 #' @noRd
 
 
 spline_basis_fun <- function(data,
                              data_grid,
-                             model_type#,
-                             #nseg
-                             ){
-                             #spline_nseg_st,
-                             #spline_nseg_t ) {
+                             model_type,
+                             spline_nseg_st,
+                             spline_nseg_t) {
   Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
 
   if (model_type == "ni_spline_t") {
     t <- data$Age
     #t_in <- sp_interval$Age
     # Basis functions in time for data-----------------------
-    B_t <- bs_bbase(t,
+    B_t <- bs_bbase_t(t,
                     xl = min(t),
                     xr = max(t),
                     data = data,
-                    nseg = nseg)
+                    spline_nseg_t = spline_nseg_t)
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
-      # Create the regional basis functions
-      B_t_deriv <- bs_bbase(t_new,
+      # Create the basis functions
+      B_t_deriv <- bs_bbase_t(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
-        nseg = nseg)
+        spline_nseg_t = spline_nseg_t)
 
-      #B_t_deriv <- predict(object = B_t, newx = t_new)
       return(B_t_deriv)
     }
     # Now create derivatives----------------------
     h <- 0.001
-    #h <- 0.000001
     first_deriv_step1 <- first_deriv_calc(t + h)
     first_deriv_step2 <- first_deriv_calc(t - h)
     B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
     #B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (h)
 
     # Basis functions in time using prediction data frame-----------------------
-    #t_pred <- sort(data_grid$Age)
     t_pred <- data_grid$Age
-    #B_t_pred <- predict(B_t, t_pred)
 
     B_t_pred <-
-      bs_bbase(t_pred,
+      bs_bbase_t(t_pred,
       xl = min(t),
       xr = max(t),
       data = data,
-      nseg = nseg
+      spline_nseg_t = spline_nseg_t
     )
 
     # Now create derivatives----------------------
@@ -1418,23 +1402,23 @@ spline_basis_fun <- function(data,
   if (model_type == "ni_spline_st") {
     t <- data$Age
     # Basis functions in space time for data-----------------------
-    B_time <- bs_bbase(t,
+    B_time <- bs_bbase_st(t,
       xl = min(t),
       xr = max(t),
       data = data,
-      nseg = nseg
+      spline_nseg_st = spline_nseg_st
     )
-    B_space_1 <- bs_bbase(data$Latitude,
+    B_space_1 <- bs_bbase_st(data$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude),
       data = data,
-      nseg = nseg
+      spline_nseg_st = spline_nseg_st
     )
-    B_space_2 <- bs_bbase(data$Longitude,
+    B_space_2 <- bs_bbase_st(data$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude),
       data = data,
-      nseg = nseg
+      spline_nseg_st = spline_nseg_st
     )
 
     B_st_full <- matrix(NA,
@@ -1466,17 +1450,23 @@ spline_basis_fun <- function(data,
     first_deriv_calc <- function(t_new) {
       # B_st_deriv <- predict(object = B_st,newx = t_new)#,x_train = t_old)t_old
       # Now the local basis functions
-      B_time <- bs_bbase(t_new,
+      B_time <- bs_bbase_st(t_new,
         xl = min(data$Age),
-        xr = max(data$Age), data = data
+        xr = max(data$Age),
+        data = data,
+        spline_nseg_st = spline_nseg_st
       )
-      B_space_1 <- bs_bbase(data$Latitude,
+      B_space_1 <- bs_bbase_st(data$Latitude,
         xl = min(data$Latitude),
-        xr = max(data$Latitude), data = data
+        xr = max(data$Latitude),
+        data = data,
+        spline_nseg_st = spline_nseg_st
       )
-      B_space_2 <- bs_bbase(data$Longitude,
+      B_space_2 <- bs_bbase_st(data$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude), data = data
+        xr = max(data$Longitude),
+        data = data,
+        spline_nseg_st = spline_nseg_st
       )
 
       B_st_full <- matrix(NA,
@@ -1508,23 +1498,23 @@ spline_basis_fun <- function(data,
 
 
     # Basis functions in space time using prediction data frame-----------------------
-    B_pred_time <- bs_bbase(data_grid$Age,
+    B_pred_time <- bs_bbase_st(data_grid$Age,
       xl = min(data$Age),
       xr = max(data$Age),
       data = data,
-      nseg = nseg
+      spline_nseg_st = spline_nseg_st
     )
-    B_space_1 <- bs_bbase(data_grid$Latitude,
+    B_space_1 <- bs_bbase_st(data_grid$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude),
       data = data,
-      nseg = nseg
+      spline_nseg_st = spline_nseg_st
     )
-    B_space_2 <- bs_bbase(data_grid$Longitude,
+    B_space_2 <- bs_bbase_st(data_grid$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude),
       data = data,
-      nseg = nseg
+      spline_nseg_st = spline_nseg_st
     )
 
     suppressWarnings({
@@ -1552,23 +1542,23 @@ spline_basis_fun <- function(data,
     # Now create derivatives for prediciton
     first_deriv_calc <- function(t_new) {
       # Now the local basis functions
-      B_time <- bs_bbase(t_new,
+      B_time <- bs_bbase_st(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
-        nseg = nseg
+        spline_nseg_st = spline_nseg_st
       )
-      B_space_1 <- bs_bbase(data_grid$Latitude,
+      B_space_1 <- bs_bbase_st(data_grid$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude),
         data = data,
-        nseg = nseg
+        spline_nseg_st = spline_nseg_st
       )
-      B_space_2 <- bs_bbase(data_grid$Longitude,
+      B_space_2 <- bs_bbase_st(data_grid$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude),
         data = data,
-        nseg = nseg
+        spline_nseg_st = spline_nseg_st
       )
 
       B_st_full <- matrix(NA,
@@ -1611,21 +1601,20 @@ spline_basis_fun <- function(data,
 
   if (model_type == "ni_gam_decomp") {
     # Basis functions in time for data-----------------------
-    B_t <- bs_bbase(data$Age,
+    B_t <- bs_bbase_t(data$Age,
       xl = min(data$Age),
       xr = max(data$Age),
-      nseg = 10, # nseg = 3
-      data = data#,
+      spline_nseg_t = spline_nseg_t,
+      data = data
     )
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
       # Create the regional basis functions
-      B_t <- bs_bbase(t_new,
+      B_t <- bs_bbase_t(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
-        nseg = 10, #
+        spline_nseg_t = spline_nseg_t,
         data = data
-        # nseg = 3
       )
       return(B_t)
     }
@@ -1637,10 +1626,10 @@ spline_basis_fun <- function(data,
     B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
 
     # Basis functions in time using prediction data frame-----------------------
-    B_t_pred <- bs_bbase(data_grid$Age,
+    B_t_pred <- bs_bbase_t(data_grid$Age,
       xl = min(data$Age),
       xr = max(data$Age),
-      nseg = 10, # nseg = 3
+      spline_nseg_t = spline_nseg_t,
       data = data
     )
     # Now create derivatives----------------------
@@ -1652,20 +1641,23 @@ spline_basis_fun <- function(data,
 
 
     # Basis functions in space time for data-----------------------
-    B_time <- bs_bbase(data$Age,
+    B_time <- bs_bbase_st(data$Age,
       xl = min(data$Age),
       xr = max(data$Age),
-      data = data # ,deg = 2, nseg = 6
+      spline_nseg_st = spline_nseg_st,
+      data = data
     )
-    B_space_1 <- bs_bbase(data$Latitude,
+    B_space_1 <- bs_bbase_st(data$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude),
-      data = data # ,deg = 2, nseg = 6
+      spline_nseg_st = spline_nseg_st,
+      data = data
     )
-    B_space_2 <- bs_bbase(data$Longitude,
+    B_space_2 <- bs_bbase_st(data$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude),
-      data = data # ,deg = 2, nseg = 6
+      spline_nseg_st = spline_nseg_st,
+      data = data
     )
 
     B_st_full <- matrix(NA,
@@ -1694,23 +1686,26 @@ spline_basis_fun <- function(data,
 
     first_deriv_calc <- function(t_new) {
       # Now the local basis functions
-      B_time <- bs_bbase(t_new,
+      B_time <- bs_bbase_st(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
-        data = data # ,deg = 2, nseg = 6
-        # deg = 2
+        spline_nseg_st = spline_nseg_st,
+        data = data
+        # deg = 3
       )
-      B_space_1 <- bs_bbase(data$Latitude,
+      B_space_1 <- bs_bbase_st(data$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude),
-        data = data # ,deg = 2, nseg = 6
-        # deg = 2
+        spline_nseg_st = spline_nseg_st,
+        data = data # ,deg = 3, nseg = 6
+        # deg = 3
       )
-      B_space_2 <- bs_bbase(data$Longitude,
+      B_space_2 <- bs_bbase_st(data$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude),
-        data = data # ,deg = 2, nseg = 6
-        # deg = 2
+        spline_nseg_st = spline_nseg_st,
+        data = data # ,deg = 3, nseg = 6
+        # deg = 3
       )
 
       B_st_full <- matrix(NA,
@@ -1743,23 +1738,26 @@ spline_basis_fun <- function(data,
 
 
     # Basis functions in space time using prediction data frame-----------------------
-    B_pred_time <- bs_bbase(data_grid$Age,
+    B_pred_time <- bs_bbase_st(data_grid$Age,
       xl = min(data$Age),
       xr = max(data$Age),
-      data = data # ,deg = 2, nseg = 6
-      # deg = 2
+      spline_nseg_st = spline_nseg_st,
+      data = data # ,deg = 3, nseg = 6
+      # deg = 3
     )
-    B_space_1 <- bs_bbase(data_grid$Latitude,
+    B_space_1 <- bs_bbase_st(data_grid$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude),
-      data = data # ,deg = 2, nseg = 6
-      # deg = 2
+      spline_nseg_st = spline_nseg_st,
+      data = data # ,deg = 3, nseg = 6
+      # deg = 3
     )
-    B_space_2 <- bs_bbase(data_grid$Longitude,
+    B_space_2 <- bs_bbase_st(data_grid$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude),
-      data = data # ,deg = 2, nseg = 6
-      # deg = 2
+      spline_nseg_st = spline_nseg_st,
+      data = data # ,deg = 3, nseg = 6
+      # deg = 3
     )
 
     suppressWarnings({
@@ -1787,23 +1785,26 @@ spline_basis_fun <- function(data,
     #-------Now create derivatives for prediciton----
     first_deriv_calc <- function(t_new) {
       # Now the local basis functions
-      B_time <- bs_bbase(t_new,
+      B_time <- bs_bbase_st(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
-        data = data # ,deg = 2, nseg = 6
-        # deg = 2
+        spline_nseg_st = spline_nseg_st,
+        data = data
+        # deg = 3
       )
-      B_space_1 <- bs_bbase(data_grid$Latitude,
+      B_space_1 <- bs_bbase_st(data_grid$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude),
-        data = data # ,deg = 2, nseg = 6
-        # deg = 2
+        spline_nseg_st = spline_nseg_st,
+        data = data # ,deg = 3, nseg = 6
+        # deg = 3
       )
-      B_space_2 <- bs_bbase(data_grid$Longitude,
+      B_space_2 <- bs_bbase_st(data_grid$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude),
-        data = data # ,deg = 2, nseg = 6
-        # deg = 2
+        spline_nseg_st = spline_nseg_st,
+        data = data # ,deg = 3, nseg = 6
+        # deg = 3
       )
 
       B_st_full <- matrix(NA,
@@ -1837,31 +1838,35 @@ spline_basis_fun <- function(data,
     # Derivative of Basis function for the total model fit-----------------
     first_deriv_calc <- function(t_new) {
       # Create the regional basis functions
-      B_t <- bs_bbase(t_new,
+      B_t <- bs_bbase_t(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
-        nseg = 10,
+        spline_nseg_t = spline_nseg_t,
         data = data
       ) # nseg = 10)
       colnames(B_t) <- c(paste("B_t", 1:ncol(B_t), sep = ""))
 
       # Now the local basis functions
-      B_time <- bs_bbase(t_new,
+      B_time <- bs_bbase_st(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
-        data = data # , deg = 2,nseg = 6
-        # deg = 2
+        spline_nseg_st = spline_nseg_st,
+        data = data # , deg = 3,nseg = 6
+        # deg = 3
       )
-      B_space_1 <- bs_bbase(data$Latitude,
+      B_space_1 <- bs_bbase_st(data$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude),
-        data = data # , deg = 2,nseg = 6
-        # deg = 2
+        spline_nseg_st = spline_nseg_st,
+        data = data # , deg = 3,nseg = 6
+        # deg = 3
       )
-      B_space_2 <- bs_bbase(data$Longitude,
+      B_space_2 <- bs_bbase_st(data$Longitude,
         xl = min(data$Longitude),
-        xr = max(data$Longitude), data = data # ,deg = 2, nseg = 6
-        # deg = 2
+        xr = max(data$Longitude),
+        spline_nseg_st = spline_nseg_st,
+        data = data # ,deg = 3, nseg = 6
+        # deg = 3
       )
 
       B_st_full <- matrix(NA,
@@ -1939,46 +1944,36 @@ spline_basis_fun <- function(data,
   return(spline_basis_fun_list)
 }
 
-#' Creating spline basis functions
+#' Creating spline basis functions for spline in time
 #'
 #' @param x Age in years CE
 #' @param xl minimum Age
 #' @param xr maximum Age
-#' @param nseg number of sections
+#' @param spline_nseg_t number of sections
 #' @param deg Degree of polynomial
 #' @param data Input data
 #' @noRd
 # Basis function approach
-bs_bbase <- function(x,
+bs_bbase_t <- function(x,
                      xl = min(x),
                      xr = max(x),
                      deg = 3,
-                     nseg = NULL,
-                     #spline_nseg_t,# = NULL,
-                     #spline_nseg_st,# = NULL,
+                     spline_nseg_t = NULL,
                      data = data) {
   # Create basis functions------------------------------------------------------
-  # if (is.null(spline_nseg_t) & is.null(spline_nseg_st)) {
-  #   nseg <- round(deg / (1 + deg / length(data$Age)))
-  # }
-  # if (is.null(spline_nseg_t)) {
-  #    nseg <- round(deg / (1 + deg / length(data$Age)))
-  #  }
-  # if (is.null(spline_nseg_st)) {
-  #   nseg <- round(deg / (1 + deg / length(data$Age)))
-  # }
+   if (is.null(spline_nseg_t)) {
+     spline_nseg_t <- round(deg / (1 + deg / length(data$Age)))
+    }
 
-  if (is.null(nseg)) {
-   nseg <- round(deg / (1 + deg / length(data$Age)))
-  }
   # Compute the length of the partitions
-  dx <- (xr - xl) / nseg
+  dx <- (xr - xl) / spline_nseg_t
   # Create equally spaced knots
   knots <- seq(xl - deg * dx,
     xr + deg * dx,
     by = dx
   )
   print(length(knots))
+
   # Use bs() function to generate the B-spline basis
   get_bs_matrix <- matrix(
     splines::bs(x,
@@ -1993,3 +1988,72 @@ bs_bbase <- function(x,
   bs_matrix <-get_bs_matrix
   return(bs_matrix)
 }
+
+#' Creating spline basis functions for spline in space time
+#'
+#' @param x Age in years CE
+#' @param xl minimum Age
+#' @param xr maximum Age
+#' @param spline_nseg_st number of sections
+#' @param deg Degree of polynomial
+#' @param data Input data
+#' @noRd
+# Basis function approach
+bs_bbase_st <- function(x,
+                       xl = min(x),
+                       xr = max(x),
+                       deg = 3,
+                       spline_nseg_st = NULL,
+                       data = data) {
+  # Create basis functions------------------------------------------------------
+  if (is.null(spline_nseg_st)) {
+    spline_nseg_st <- round(deg / (1 + deg / length(data$Age)))
+  }
+
+  # Compute the length of the partitions
+  dx <- (xr - xl) / spline_nseg_st
+  # Create equally spaced knots
+  knots <- seq(xl - deg * dx,
+               xr + deg * dx,
+               by = dx
+  )
+  print(length(knots))
+
+  # Use bs() function to generate the B-spline basis
+  get_bs_matrix <- matrix(
+    splines::bs(x,
+                degree = deg,
+                knots = knots,
+                Boundary.knots = c(knots[1], knots[length(knots)])
+    ),
+    nrow = length(x)
+  )
+  # Remove columns that contain zero only
+  #bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  bs_matrix <-get_bs_matrix
+  return(bs_matrix)
+}
+
+# Think about using this one?
+# These functions create the B-spline basis functions
+# They are taken from the Eilers and Marx 'Craft of smoothing' course
+# http://statweb.lsu.edu/faculty/marx/
+# tpower <- function(x, t, p) {
+#   # Truncated p-th power function
+#   return((x - t)^p * (x > t))
+# }
+# bs_bbase <- function(x, xl = min(x), xr = max(x),
+#                      nseg = NULL,#30,
+#                      deg = 3,data) {
+#     if (is.null(nseg)) {
+#      nseg <- round(deg / (1 + deg / length(data$Age)))
+#     }
+#   # Construct B-spline basis
+#   dx <- (xr - xl) / nseg
+#   knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)
+#   P <- outer(x, knots, tpower, deg)
+#   n <- dim(P)[2]
+#   D <- diff(diag(n), diff = deg + 1) / (gamma(deg + 1) * dx^deg)
+#   B <- (-1)^(deg + 1) * P %*% t(D)
+#   return(B)
+# }
