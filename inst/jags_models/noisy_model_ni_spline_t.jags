@@ -10,7 +10,7 @@ model {
           #r[i] <- inprod(B_t[i,], b_t)
 
           # Pulling out residuals of model
-          residuals[i] <- y[i] - mu[i]
+          residuals[i] <- y[i] - mu_y[i]
         }
 
       ## No penalty Regional term
