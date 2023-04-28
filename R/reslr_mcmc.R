@@ -537,8 +537,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       n_sites = length(unique(data$SiteName)),
       n_obs = nrow(data),
       B_st = spline_basis_fun_list$B_st,
-      n_knots_st = ncol(spline_basis_fun_list$B_st),
-      nu = 2
+      n_knots_st = ncol(spline_basis_fun_list$B_st)
     )
 
     # Parameters to save in JAGs
