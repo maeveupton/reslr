@@ -22,7 +22,7 @@
 #' @param TG_minimum_dist_proxy The package finds the tide gauge closest to the proxy site
 #' @param all_TG_1deg The package finds all tide gauges within 1 degree of the proxy site
 #' @param rolling_window_average A rolling window that averages tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.
-#' @param detrend_GIA Detrend the data using the GIA rate provided
+#' @param detrend_data Detrend the data using the linear rate provided
 #' @param core_col_year The year the core was collected
 #'
 #' @return A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.
@@ -40,7 +40,7 @@ reslr_load <- function(data,
                        all_TG_1deg = FALSE,
                        input_Age_type = "CE",
                        rolling_window_average = 10,
-                       detrend_GIA = FALSE,
+                       detrend_data = FALSE,
                        core_col_year = NULL) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
 
@@ -152,7 +152,7 @@ reslr_load <- function(data,
   }
 
   # Detrending the data using GIA rates which is known as linear rate in my input dataframe
-  # if(detrend_GIA == TRUE){
+  # if(detrend_data == TRUE){
   #   # linear rate??
   #   if(is.null(data$linear_rate) & is.null(core_col_year)){
   #     stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate= TRUE")
@@ -162,6 +162,7 @@ reslr_load <- function(data,
   #     data$SL <- (core_col_year/1000 - Age)*data$linear_rate + data$RSL
   #   }
   # }
+
   # Prediction dataframe-------------------------------------
   sites <- data %>%
     dplyr::select(
@@ -195,7 +196,7 @@ reslr_load <- function(data,
   data_age_boundary <- data %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(
-      max_Age = max(Age)+Age_err[1],#*2?
+      max_Age = max(Age)+Age_err[1],
       min_Age = min(Age)-Age_err[length(Age_err)]
     ) %>%
     unique()

@@ -1,6 +1,6 @@
 ---
 title: "reslr: Statistical Models for examining Relative Sea Level Change in R"
-author: "Maeve Upton"
+author: "Maeve Upton, Andrew Parnell & Niamh Cahill"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
