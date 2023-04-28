@@ -7,6 +7,7 @@ model {
 
     # Mean structure
       mu_y[i] <- r[i] + g_z_x[i] + h_z_x[i]
+      #mu_y[i] <-  g_z_x[i] + h_z_x[i]
 
     # Site specific vertical offset
       h_z_x[i] <- intercept[site[i]]
@@ -19,22 +20,24 @@ model {
     }
 
     # Regional term
-    #r <- B_t %*% b_t
-    #for (j in 1:n_knots_t) {
-    #  b_t[j] ~ dnorm(0, sigma_t^-2)
-    #  #b_t[j] ~ dnorm(0, tau_t)
-    #}
+    r <- B_t %*% b_t
+    for (j in 1:n_knots_t) {
+      b_t[j] ~ dnorm(0, sigma_t^-2)
+      #b_t[j] ~ dnorm(0, tau_t)
+    }
 
     # Spline in time penalised
-    r <- B_t %*% b_t
-    b_t[1] ~ dnorm(0,1)
+    #r <- B_t %*% b_t
+    #b_t[1] ~ dnorm(0,1)
     #b_t[1] ~ dnorm(0,0.00001)
-    for (j in 2:n_knots_t) {
+    #for (j in 2:(n_knots_t-1)) {
+    #for (j in 1:(n_knots_t-1)) {
       # #b_t[j] ~ dnorm(b_t[j-1], tau_t)
-       b_t[j] ~ dnorm(b_t[j-1], sigma_t^-2)
-    }
+       #b_t[j] ~ dnorm(b_t[j-1], sigma_t^-2)
+     #  b_t[j] ~ dnorm(b_t[j-1], sigma_t^-2)
+    #}
     #---Sum to 0 constraint on the final knot---
-    b_t[n_knots_t] <- -sum(b_t[1:(n_knots_t-1)])
+    #b_t[n_knots_t] <- -sum(b_t[1:(n_knots_t-1)])
 
     # Prior on intercept
     for (j in 1:n_sites) {
