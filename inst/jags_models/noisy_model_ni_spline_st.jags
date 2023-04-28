@@ -10,18 +10,19 @@ model {
         }
 
       # Non-linear local component
-       l <- B_st %*% b_st
-       for (j in 1:n_knots_st) {
-         b_st[j] ~ dnorm(0, sigma_st^-2)
-       }
+       #l <- B_st %*% b_st
+       #for (j in 1:n_knots_st) {
+      #   b_st[j] ~ dnorm(0, sigma_st^-2)
+      # }
 
       # Non-linear local component
-      #l <- B_st %*% b_st
+      l <- B_st %*% b_st
       #b_st[1] ~ dnorm(0,0.1)
-      #for (j in 2:n_knots_st) {
-      #  #b_st[j] ~ dnorm(b_st[j-1], sigma_st^-2)
+      b_st[1] ~ dnorm(0,1)
+      for (j in 2:n_knots_st) {
+        b_st[j] ~ dnorm(b_st[j-1], sigma_st^-2)
       #  b_st[j] ~ dnorm(b_st[j-1], tau_st)
-      #}
+      }
 
       # Predictions
       l_pred <- B_st_pred %*% b_st
