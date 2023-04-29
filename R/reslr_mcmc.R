@@ -39,9 +39,9 @@ reslr_mcmc <- function(input_data,
                        n_chains = 3,
                        CI = "95%",
                        spline_nseg_t = NULL,
-                       spline_nseg_st = NULL,
-                       xl,
-                       xr
+                       spline_nseg_st = NULL#,
+                      # xl,
+                       #xr
                        ) {
   UseMethod("reslr_mcmc")
 }
@@ -57,9 +57,10 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    n_chains = 3,
                                    CI = "95%",
                                    spline_nseg_t = NULL,
-                                   spline_nseg_st = NULL,
-                                   xr,
-                                   xl) {
+                                   spline_nseg_st = NULL#,
+                                   #xr = min(input_data$data$Age),
+                                   #xl
+                                   ) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
   # Input Data -------------
@@ -407,9 +408,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg_t = spline_nseg_t,
-      xl = xl,
-      xr = xr
+      spline_nseg_t = spline_nseg_t#,
+      #xl = xl,
+      #xr = xr
     )
 
     # JAGS data----------------------
@@ -419,8 +420,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       t = data$Age,
       n_obs = nrow(data),
       B_t = spline_basis_fun_list$B_t,
-      n_knots_t = ncol(spline_basis_fun_list$B_t),
-      nu = 2
+      n_knots_t = ncol(spline_basis_fun_list$B_t)#,
+      #nu = 2
     )
 
     # Run JAGS------------------------
@@ -440,9 +441,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       model_type = model_type,
       jags_data = jags_data,
       spline_nseg_st = NULL,
-      spline_nseg_t = spline_nseg_t,
-      xr=xr,
-      xl=xl
+      spline_nseg_t = spline_nseg_t#,
+      #xr=xr,
+      #xl=xl
     )
     # Include Noise-----------------------
     # noisy_jags_file <- "inst/jags_models/noisy_model_ni_spline_t.jags"
@@ -479,8 +480,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_t_deriv = spline_basis_fun_list$B_t_deriv,
       B_t_pred = spline_basis_fun_list$B_t_pred,
       n_knots_t = ncol(spline_basis_fun_list$B_t),
-      B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv,
-      nu = 2
+      B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv#,
+      #nu = 2
     )
     # Run JAGS--------------
     noisy_model_run_output <-
@@ -586,8 +587,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_st_deriv = spline_basis_fun_list$B_st_deriv,
       B_st_pred = spline_basis_fun_list$B_st_pred,
       B_st_deriv_pred = spline_basis_fun_list$B_st_deriv_pred,
-      n_knots_st = ncol(spline_basis_fun_list$B_st),
-      nu = 2
+      n_knots_st = ncol(spline_basis_fun_list$B_st)#,
+      #nu = 2
     )
 
     # Parameters to save in JAGs
@@ -684,8 +685,8 @@ reslr_mcmc.reslr_input <- function(input_data,
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
-        dplyr::pull(),
-        nu = 2
+        dplyr::pull()#,
+        #nu = 2
     )
 
     # Parameters to save in JAGs
@@ -774,8 +775,8 @@ reslr_mcmc.reslr_input <- function(input_data,
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
-        dplyr::pull(),
-        nu = 2
+        dplyr::pull()#,
+        #nu = 2
     )
 
     # Parameters to save in JAGs
