@@ -56,6 +56,7 @@ summary.reslr_output <- function(object,#jags_output,#
   # EIV cp 1------
   if (inherits(jags_output, "eiv_cp1_t") == TRUE) {
     # Multiply by 1000
+    browser()
     jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
     par_summary <- posterior::summarise_draws(sample_draws) %>%
@@ -70,7 +71,10 @@ summary.reslr_output <- function(object,#jags_output,#
         q5 = q5, #* mod$scale_factor_y,
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
-      )
+      ) %>%
+      mutate(variable = ifelse(variable == "cp","Change Point",variable)) %>%
+      mutate(mean = ifelse(variable == "Change Point", round(mean*1000), mean))
+
   }
 
   # EIV cp 2
@@ -93,19 +97,10 @@ summary.reslr_output <- function(object,#jags_output,#
         q5 = q5, #* mod$scale_factor_y,
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
-      )
-    # par_summary
-    # # }
-    # # if ("diagnostics" %in% type) {
-    # # Check convergence
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-    #   cat("No convergence issues detected. \n")
-    # }
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-    #   cat("Convergence issues detected. \n")
-    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    # }
-    # # }
+      )%>%
+      mutate(variable = ifelse(variable == "cp","Change Point",variable)) %>%
+      mutate(mean = ifelse(variable == "Change Point", round(mean*1000), mean))
+
   }
 
   # EIV cp 3
@@ -128,19 +123,9 @@ summary.reslr_output <- function(object,#jags_output,#
         q5 = q5, #* mod$scale_factor_y,
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
-      )
-    # par_summary
-    # # }
-    # # if ("diagnostics" %in% type) {
-    # # Check convergence
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-    #   cat("No convergence issues detected. \n")
-    # }
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-    #   cat("Convergence issues detected. \n")
-    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    # }
-    # # }
+      )%>%
+      mutate(variable = ifelse(variable == "cp","Change Point",variable)) %>%
+      mutate(mean = ifelse(variable == "Change Point", round(mean*1000), mean))
   }
 
   # EIV IGP t
