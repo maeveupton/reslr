@@ -55,8 +55,6 @@ summary.reslr_output <- function(object,#jags_output,#
   }
   # EIV cp 1------
   if (inherits(jags_output, "eiv_cp1_t") == TRUE) {
-    # Multiply by 1000
-    browser()
     jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
     par_summary <- posterior::summarise_draws(sample_draws) %>%
@@ -72,8 +70,8 @@ summary.reslr_output <- function(object,#jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       ) %>%
-      mutate(variable = ifelse(variable == "cp","Change Point",variable)) %>%
-      mutate(mean = ifelse(variable == "Change Point", round(mean*1000), mean))
+      mutate(variable = ifelse(variable == "cp","Change Point:",variable)) %>%
+      mutate(mean = ifelse(variable == "Change Point:", round(mean*1000), mean))
 
   }
 
@@ -98,8 +96,10 @@ summary.reslr_output <- function(object,#jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )%>%
-      mutate(variable = ifelse(variable == "cp","Change Point",variable)) %>%
-      mutate(mean = ifelse(variable == "Change Point", round(mean*1000), mean))
+      mutate(variable = ifelse(variable == "cp[1]","Change Point 1:",variable)) %>%
+      mutate(variable = ifelse(variable == "cp[2]","Change Point 2:",variable)) %>%
+      mutate(mean = ifelse(variable == "Change Point 1:", round(mean*1000), mean),
+             mean = ifelse(variable == "Change Point 2:", round(mean*1000), mean))
 
   }
 
@@ -124,8 +124,12 @@ summary.reslr_output <- function(object,#jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )%>%
-      mutate(variable = ifelse(variable == "cp","Change Point",variable)) %>%
-      mutate(mean = ifelse(variable == "Change Point", round(mean*1000), mean))
+      mutate(variable = ifelse(variable == "cp[1]","Change Point 1:",variable)) %>%
+      mutate(variable = ifelse(variable == "cp[2]","Change Point 2:",variable)) %>%
+      mutate(variable = ifelse(variable == "cp[3]","Change Point 3:",variable)) %>%
+      mutate(mean = ifelse(variable == "Change Point 1:", round(mean*1000), mean),
+             mean = ifelse(variable == "Change Point 2:", round(mean*1000), mean),
+             mean = ifelse(variable == "Change Point 3:", round(mean*1000), mean),)
   }
 
   # EIV IGP t
