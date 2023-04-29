@@ -431,7 +431,7 @@ res.eiv_cp1_t <- reslr_mcmc(
   n_chains = 3 # Number of Markov chains
   )
 ```
-For the eiv_cp_t model, the parameters of interest are the intercept (alpha), the slopes before the change point (beta[1]) and after the change point (beta[2]), the year of the change point(cp) and sigma_res the variance of the model.
+For the eiv_cp_t model, the parameters of interest are the intercept (alpha), the slopes before the change point (beta[1]) and after the change point (beta[2]), the year of the change point(Change Point) and sigma_res the variance of the model.
 
 **Step 5:** The results from the EIV Change Point model can be illustrated using:
 ```{r, plotcpres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
