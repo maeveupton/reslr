@@ -1982,7 +1982,7 @@ bs_bbase_t <- function(x,
     xr + deg * dx,
     by = dx
   )
-  print(length(knots))
+  #print(length(knots))
 
   # Use bs() function to generate the B-spline basis
   get_bs_matrix <- matrix(
