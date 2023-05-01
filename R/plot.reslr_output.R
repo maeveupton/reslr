@@ -10,6 +10,10 @@
 #' @param plot_tide_gauges Plotting the tide gauge data as well as proxy data
 #' @param plot_type The user can select the type of output plot they require from the following: "rate_plot","model_fit_plot","regional_plot","regional_rate_plot","linear_local_plot","non_linear_local_plot","non_linear_local_rate_plot","nigam_component_plot"
 #' @param plot_caption Plotting an informed caption with the number of tide gauges and proxy sites.
+#' @param xlab Labeling the x-axis
+#' @param ylab Labeling the y-axis
+#' @param title Plotting a title on the output plots
+#' @param y_rate_lab Labeling the y-axis for rate of change plots
 #' @param ...  Not used
 #'
 #' @return Plot of model fit and the rate of change depending on the statistical model in question.
@@ -22,8 +26,12 @@
 #' plot(x = jags_output)
 plot.reslr_output <- function(x,
                               plot_tide_gauges = FALSE,
+                              title = "",
                               plot_type = c("model_fit_plot"),
                               plot_caption = TRUE,
+                              xlab = "Year (CE)",
+                              ylab = "Relative Sea Level (m)",
+                              y_rate_lab = "Rate of change (mm/year)",
                               ...) {
   Age <- RSL <- Age_err <- ID <- RSL_err <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
   jags_output <- x
@@ -52,7 +60,9 @@ plot.reslr_output <- function(x,
           # plot_caption = plot_caption,
           model_caption = paste0(
             "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
+            "\n No. tide gauge sites:", n_sites - n_proxy,
+            xlab = xlab,
+            ylab = ylab
           )
         )
       } else {
@@ -61,7 +71,9 @@ plot.reslr_output <- function(x,
           output_dataframes = output_dataframes,
           data = data,
           # plot_caption = plot_caption,
-          model_caption = NULL
+          model_caption = NULL,
+          xlab = xlab,
+          ylab = ylab
         )
       }
     } else {
@@ -78,6 +90,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -88,6 +102,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
       }
@@ -120,6 +136,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Errors in Variables 1 Change Point Model \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -130,6 +148,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
       }
@@ -148,6 +168,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Errors in Variables 1 Change Point Model \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -158,6 +180,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
       }
@@ -191,6 +215,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Errors in Variables 2 Change Point Model \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -201,6 +227,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
       }
@@ -218,6 +246,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Errors in Variables 2 Change Point Model \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -228,6 +258,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
       }
@@ -259,6 +291,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Errors in Variables 3 Change Point Model \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -269,6 +303,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
       }
@@ -287,6 +323,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Errors in Variables 3 Change Point Model \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -297,6 +335,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
       }
@@ -329,6 +369,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Errors in Variables Integrated Gaussian Process \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -345,8 +387,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          ggplot2::ylab(y_rate_lab)+
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),
@@ -393,7 +437,9 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
-          model_caption = NULL
+          model_caption = NULL,
+          xlab = xlab,
+          ylab = ylab
         )
         # Plotting Rate of Change for Total component----------
         plot_rate <-
@@ -406,8 +452,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::ylab(y_rate_lab)+
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),
@@ -463,6 +511,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Errors in Variables Integrated Gaussian Process \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -479,8 +529,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          ggplot2::ylab(y_rate_lab)+
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),
@@ -527,6 +579,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
         # Plotting Rate of Change for Total component----------
@@ -540,8 +594,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          ggplot2::ylab(y_rate_lab)+
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),
@@ -608,6 +664,8 @@ plot.reslr_output <- function(x,
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data,
+        xlab = xlab,
+        ylab = ylab,
         model_caption = paste0(
           "Model type: Noisy Input Spline in Time \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -625,8 +683,10 @@ plot.reslr_output <- function(x,
           data = output_dataframes,
           ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
-        ggplot2::xlab("Year (CE)") +
-        ggplot2::ylab("Rate of Change (mm/year)") +
+        ggplot2::xlab(xlab)+
+        ggplot2::ylab(y_rate_lab)+
+        #ggplot2::xlab("Year (CE)") +
+        #ggplot2::ylab("Rate of Change (mm/year)") +
         ggplot2::theme_bw() +
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 15),
@@ -674,6 +734,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
 
@@ -688,8 +750,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          ggplot2::ylab(y_rate_lab)+
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),
@@ -744,6 +808,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Noisy Input Spline in Time \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -761,8 +827,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          ggplot2::ylab(y_lab_rate)+
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),
@@ -810,6 +878,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
 
@@ -824,8 +894,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          ggplot2::ylab(y_lab_rate)+
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),
@@ -897,6 +969,8 @@ plot.reslr_output <- function(x,
       plot_result <- create_model_fit_plot(
         output_dataframes = output_dataframes,
         data = data,
+        xlab = xlab,
+        ylab = ylab,
         model_caption = paste0(
           "Model type: Noisy Input Spline in Space Time \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -914,8 +988,10 @@ plot.reslr_output <- function(x,
           data = output_dataframes,
           ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
-        ggplot2::xlab("Year (CE)") +
-        ggplot2::ylab("Rate of Change (mm/year)") +
+        ggplot2::xlab(xlab)+
+        ggplot2::ylab(y_rate_lab)+
+        #ggplot2::xlab("Year (CE)") +
+        #ggplot2::ylab("Rate of Change (mm/year)") +
         ggplot2::theme_bw() +
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 15),
@@ -965,6 +1041,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
 
@@ -979,8 +1057,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          ggplot2::ylab(y_rate_lab)+
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),
@@ -1036,6 +1116,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = paste0(
             "Model type: Noisy Input Spline in Space Time \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
@@ -1053,8 +1135,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          ggplot2::ylab(y_rate_lab)+
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),
@@ -1104,6 +1188,8 @@ plot.reslr_output <- function(x,
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
+          xlab = xlab,
+          ylab = ylab,
           model_caption = NULL
         )
 
@@ -1118,8 +1204,10 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Year (CE)") +
-          ggplot2::ylab("Rate of Change (mm/year)") +
+          ggplot2::xlab(xlab)+
+          ggplot2::ylab(y_rate_lab)+
+          #ggplot2::xlab("Year (CE)") +
+          #ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
             plot.title = ggplot2::element_text(size = 15),

@@ -4,13 +4,17 @@
 #' @param data This is the input dataset stored in a list created in the \code{reslr_mcmc} function.
 #' @param plot_tide_gauges If plotting tide gauges add them onto the end of the proxy record
 #' @param caption Caption of the title depending on the model type
+#' @param xlab Labeling the x-axis
+#' @param ylab Labeling the y-axis
 #'
 #' @return The plot of the model fit
 #' @noRd
 create_model_fit_plot <- function(output_dataframes,
                                   data,
                                   plot_tide_gauges = FALSE,
-                                  model_caption) {
+                                  model_caption,
+                                  xlab,
+                                  ylab) {
   data_type_id <- pred <- lwr <- upr <- Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- NULL
   if (plot_tide_gauges == FALSE) {
     # Plot
@@ -36,8 +40,10 @@ create_model_fit_plot <- function(output_dataframes,
       #   data = output_dataframes,
       #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
-      ggplot2::xlab("Year (CE)") +
-      ggplot2::ylab("Relative Sea Level (m)") +
+      #ggplot2::xlab("Year (CE)") +
+      ggplot2::xlab(xlab) +
+      #ggplot2::ylab("Relative Sea Level (m)") +
+      ggplot2::ylab(ylab) +
       ggplot2::theme_bw() +
       ggplot2::theme(
         plot.title = ggplot2::element_text(size = 15),
@@ -107,8 +113,9 @@ create_model_fit_plot <- function(output_dataframes,
       #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
 
-      ggplot2::xlab("Year (CE)") +
-      ggplot2::ylab("Relative Sea Level (m)") +
+      #ggplot2::xlab("Year (CE)") +
+      ggplot2::xlab(xlab) +
+      ggplot2::ylab(ylab) +
       ggplot2::theme_bw() +
       ggplot2::theme(
         plot.title = ggplot2::element_text(size = 15),

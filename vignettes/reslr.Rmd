@@ -276,7 +276,7 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 plot(
   x = CedarIslandNC_input,
   title = "Plot of the raw data",
-  xlab = "Age (CE)",
+  xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = FALSE,
   plot_caption = TRUE
@@ -384,7 +384,7 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 plot(
   x =  CedarIslandNC_input,
   title = "Plot of the raw data",
-  xlab = "Age (CE)",
+  xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = FALSE
 )
@@ -494,7 +494,7 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 plot(
   x =  CedarIslandNC_input,
   title = "Plot of the raw data",
-  xlab = "Age (CE)",
+  xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = FALSE
 )
@@ -602,7 +602,7 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 plot(
   x =  CedarIslandNC_input,
   title = "Plot of the raw data",
-  xlab = "Age (CE)",
+  xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = FALSE
 )
@@ -711,7 +711,7 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 plot(
   x =  multi_site_input,
   title = "Plot of the raw data",
-  xlab = "Age (CE)",
+  xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = FALSE
 )
@@ -751,7 +751,8 @@ For the parameter estimates, we can present the standard deviation associated wi
 
 **Step 5:** the results from the ni_spline_st model can be illustrated using:
 ```{r,plotspstres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
-plot(res.ni_spline_st, plot_type = "model_fit_plot")
+plot(res.ni_spline_st, 
+     plot_type = "model_fit_plot")
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. In order to view the rate of change plot, the following setting should be used:
 
@@ -828,7 +829,7 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 plot(
   x =  multi_8_sites_input,
   title = "Plot of the raw data",
-  xlab = "Age (CE)",
+  xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = TRUE
 )
@@ -975,7 +976,7 @@ Here is how to plot this example:
 plot(
   x =  multi_site,
   title = "Plot of the raw data",
-  xlab = "Age (CE)",
+  xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = TRUE,
   plot_caption = TRUE
@@ -998,7 +999,7 @@ Here is how to plot this example:
 plot(
   x =  multi_site,
   title = "Plot of the raw data",
-  xlab = "Age (CE)",
+  xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = TRUE,
   plot_caption = TRUE
