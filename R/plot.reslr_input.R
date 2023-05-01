@@ -21,7 +21,7 @@
 #' plot(full_dataset)
 plot.reslr_input <- function(x,
                              title = "Plot of the raw data",
-                             xlab = "Age (CE)",
+                             xlab = "Year (CE)",
                              ylab = "Relative Sea Level (m)",
                              plot_tide_gauges = FALSE,
                              plot_caption = TRUE,

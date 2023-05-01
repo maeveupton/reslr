@@ -345,7 +345,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -406,7 +406,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -479,7 +479,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -540,7 +540,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -625,7 +625,7 @@ plot.reslr_output <- function(x,
           data = output_dataframes,
           ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::ylab("Rate of Change (mm/year)") +
         ggplot2::theme_bw() +
         ggplot2::theme(
@@ -688,7 +688,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -761,7 +761,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -824,7 +824,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -914,7 +914,7 @@ plot.reslr_output <- function(x,
           data = output_dataframes,
           ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::ylab("Rate of Change (mm/year)") +
         ggplot2::theme_bw() +
         ggplot2::theme(
@@ -979,7 +979,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -1053,7 +1053,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -1118,7 +1118,7 @@ plot.reslr_output <- function(x,
             data = output_dataframes,
             ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Rate of Change (mm/year)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -1210,7 +1210,7 @@ plot.reslr_output <- function(x,
           data = total_model_fit_df,
           ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::ylab("Relative Sea Level (m)") +
         ggplot2::theme_bw() +
         ggplot2::theme(
@@ -1285,7 +1285,7 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::geom_hline(yintercept = 0) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(colour = "") +
         ggplot2::scale_fill_manual("",
@@ -1358,7 +1358,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::ylab("Sea Level (m)") +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -1406,7 +1406,7 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::ylab("Rate of Change (mm/yr)") +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -1461,7 +1461,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(colour = "") +
         ggplot2::labs(caption = paste0(
@@ -1515,7 +1515,7 @@ plot.reslr_output <- function(x,
           )
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -1565,7 +1565,7 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -1642,7 +1642,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
@@ -1674,7 +1674,7 @@ plot.reslr_output <- function(x,
             data = total_model_fit_df,
             ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Relative Sea Level (m)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -1745,7 +1745,7 @@ plot.reslr_output <- function(x,
             strip.background = ggplot2::element_rect(fill = c("white"))
           ) +
           ggplot2::geom_hline(yintercept = 0) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "") +
           ggplot2::scale_fill_manual("",
@@ -1814,7 +1814,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::ylab("Sea Level (m)") +
-          ggplot2::xlab("Age (CE)")
+          ggplot2::xlab("Year (CE)")
 
         cat("Regional Component plotted \n")
 
@@ -1858,7 +1858,7 @@ plot.reslr_output <- function(x,
             strip.background = ggplot2::element_rect(fill = c("white"))
           ) +
           ggplot2::ylab("Rate of Change (mm/yr)") +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
@@ -1909,7 +1909,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::ylab("Sea Level (m)") +
           ggplot2::facet_wrap(~SiteName) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
@@ -1959,7 +1959,7 @@ plot.reslr_output <- function(x,
                                      )
           ) +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-          ggplot2::xlab("Age (CE)")
+          ggplot2::xlab("Year (CE)")
         cat("Non-Linear Local Component Plot \n")
 
         # Non-Linear Local Component: Rate of change for Spline in Space Time --------------
@@ -2005,7 +2005,7 @@ plot.reslr_output <- function(x,
             strip.background = ggplot2::element_rect(fill = c("white"))
           ) +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-          ggplot2::xlab("Age (CE)")
+          ggplot2::xlab("Year (CE)")
 
         cat("Rate of change of Non-Linear Local Component Plot \n")
 
@@ -2078,7 +2078,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::ylab("Sea Level (m)") +
           ggplot2::facet_wrap(~SiteName) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom")
 
       }
@@ -2114,7 +2114,7 @@ plot.reslr_output <- function(x,
           data = total_model_fit_df,
           ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
         ) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::ylab("Relative Sea Level (m)") +
         ggplot2::theme_bw() +
         ggplot2::theme(
@@ -2185,7 +2185,7 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::geom_hline(yintercept = 0) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(colour = "") +
         ggplot2::scale_fill_manual("",
@@ -2252,7 +2252,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::ylab("Sea Level (m)") +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -2297,7 +2297,7 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::ylab("Rate of Change (mm/yr)") +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -2350,7 +2350,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(colour = "") +
         ggplot2::labs(caption = paste0(
@@ -2402,7 +2402,7 @@ plot.reslr_output <- function(x,
           )
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -2450,7 +2450,7 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
@@ -2527,7 +2527,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
-        ggplot2::xlab("Age (CE)") +
+        ggplot2::xlab("Year (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
@@ -2557,7 +2557,7 @@ plot.reslr_output <- function(x,
             data = total_model_fit_df,
             ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
           ) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Relative Sea Level (m)") +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -2624,7 +2624,7 @@ plot.reslr_output <- function(x,
             strip.background = ggplot2::element_rect(fill = c("white"))
           ) +
           ggplot2::geom_hline(yintercept = 0) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "") +
           ggplot2::scale_fill_manual("",
@@ -2687,7 +2687,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::ylab("Sea Level (m)") +
-          ggplot2::xlab("Age (CE)")
+          ggplot2::xlab("Year (CE)")
 
         cat("Regional Component plotted \n")
 
@@ -2728,7 +2728,7 @@ plot.reslr_output <- function(x,
             strip.background = ggplot2::element_rect(fill = c("white"))
           ) +
           ggplot2::ylab("Rate of Change (mm/yr)") +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
@@ -2777,7 +2777,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::ylab("Sea Level (m)") +
           ggplot2::facet_wrap(~SiteName) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
@@ -2825,7 +2825,7 @@ plot.reslr_output <- function(x,
                                      )
           ) +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-          ggplot2::xlab("Age (CE)")
+          ggplot2::xlab("Year (CE)")
         cat("Non-Linear Local Component Plot \n")
 
         # Non-Linear Local Component: Rate of change for Spline in Space Time --------------
@@ -2869,7 +2869,7 @@ plot.reslr_output <- function(x,
             strip.background = ggplot2::element_rect(fill = c("white"))
           ) +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-          ggplot2::xlab("Age (CE)")
+          ggplot2::xlab("Year (CE)")
 
         cat("Rate of change of Non-Linear Local Component Plot \n")
 
@@ -2942,7 +2942,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::ylab("Sea Level (m)") +
           ggplot2::facet_wrap(~SiteName) +
-          ggplot2::xlab("Age (CE)") +
+          ggplot2::xlab("Year (CE)") +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom")
 
       }

@@ -36,7 +36,7 @@ create_model_fit_plot <- function(output_dataframes,
       #   data = output_dataframes,
       #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
-      ggplot2::xlab("Age (CE)") +
+      ggplot2::xlab("Year (CE)") +
       ggplot2::ylab("Relative Sea Level (m)") +
       ggplot2::theme_bw() +
       ggplot2::theme(
@@ -107,7 +107,7 @@ create_model_fit_plot <- function(output_dataframes,
       #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
       # ) +
 
-      ggplot2::xlab("Age (CE)") +
+      ggplot2::xlab("Year (CE)") +
       ggplot2::ylab("Relative Sea Level (m)") +
       ggplot2::theme_bw() +
       ggplot2::theme(
