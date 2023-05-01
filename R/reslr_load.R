@@ -57,11 +57,11 @@ reslr_load <- function(data,
     cat("User must provide a site name and a region name. \n")
   }
   if (input_Age_type == "BCE") {
-    cat("\n The inputed age value will be converted to units of Common Era. \n")
+    cat("The inputed age value will be converted to units of Common Era. \n")
     data <- data %>%
       dplyr::mutate(Age = 1950 - Age)
   } else {
-    cat("\n The inputed age value is units of Common Era. \n")
+    cat("The inputed age value is units of Common Era. \n")
     data <- data
   }
   # Including no TG or linear rates
