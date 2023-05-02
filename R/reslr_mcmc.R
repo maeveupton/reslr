@@ -328,7 +328,6 @@ reslr_mcmc.reslr_input <- function(input_data,
   if (model_type == "eiv_igp_t") {
     # JAGS file
     jags_file <- system.file("jags_models", "model_eiv_igp_t.jags", package = "reslr")
-
     # JAGS parameters to save
     jags_pars <- c(
       "phi",
@@ -338,7 +337,57 @@ reslr_mcmc.reslr_input <- function(input_data,
       "alpha",
       "beta"
     )
+    # Detrended data---
+    if(inherits(input_data, "detrend_data") == TRUE ){
+      # JAGS data
+      # FINISH
+      igp_dat_list <- igp_detrend_data(data,data_grid)
 
+      jags_data <- list(
+        y = data$SL,
+        y_err = data$RSL_err,
+        t = data$Age,
+        n_pred = nrow(data_grid),
+        t_pred = data_grid$Age,
+        t_err = data$Age_err,
+        t_min = min(data$Age),
+        t_max = max(data$Age),
+        n_obs = nrow(data),
+        al = igp_smooth * 10 / (1 - igp_smooth)
+      )
+      jags_data <- c(igp_dat_list, jags_data)
+
+      # Run JAGS------------------------
+      model_run <- suppressWarnings(R2jags::jags(
+        data = jags_data,
+        parameters.to.save = jags_pars,
+        model.file = jags_file,
+        n.iter = n_iterations,
+        n.burnin = n_burnin,
+        n.thin = n_thin,
+        n.chains = n_chains
+      ))
+
+      # Output dataframe for plots
+      output_dataframes <- create_igp_output_df(model_run=model_run,
+                                                jags_data=jags_data,
+                                                data_grid = data_grid,
+                                                CI = CI)
+      # Output with everything-------------
+      jags_output <- list(
+        noisy_model_run_output = model_run, # Watch this
+        jags_data = jags_data,
+        data = data,
+        data_grid = data_grid,
+        output_dataframes = output_dataframes
+      )
+      # Classing the JAGS output for eiv_igp_t--------------
+      class(jags_output) <- c("reslr_output", "eiv_igp_t","detrend_data")
+      message("JAGS model run finished for the eiv_igp_t using detrended data")
+
+    }
+    # No detrended data
+    else{
     # JAGS data
     igp_dat_list <- igp_data(data,data_grid)
     jags_data <- list(
@@ -382,8 +431,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Classing the JAGS output for eiv_igp_t--------------
     class(jags_output) <- c("reslr_output", "eiv_igp_t")
     message("JAGS model run finished for the eiv_igp_t")
+    }
   }
-
 
 
   # Noisy Input GAM in Time-----------------------------------

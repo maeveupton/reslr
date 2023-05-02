@@ -1288,7 +1288,8 @@ add_noisy_input <- function(model_run, jags_data, model_type,
 
 #' Correcting data from EIV-IGP model
 #'
-#' @param data Input data
+#' @param data Input raw data
+#' @param data_grid Input data grid
 #' @noRd
 
 igp_data <- function(data, data_grid) {
@@ -1304,6 +1305,58 @@ igp_data <- function(data, data_grid) {
 
   Dist <- fields::rdist(tstar) ### Distance matrix required for the model
   D <- cbind(t, data$RSL) ### Combine the x,y data for the model
+
+  ######## Initialize quadrature for the integration########
+  N <- nrow(data)
+  L <- 30 ## this sets the precision of the integration quadrature (higher is better but more computationally expensive)
+  index <- 1:L
+  cosfunc <- cos(((2 * index - 1) * pi) / (2 * L))
+
+  quad1 <- array(dim = c(nrow = N, ncol = Ngrid, L))
+  quad2 <- array(dim = c(nrow = N, ncol = Ngrid, L))
+
+  for (j in 1:Ngrid)
+  {
+    for (k in 1:N)
+    {
+      quad1[k, j, ] <- abs((t[k] * cosfunc / 2) + (t[k] / 2) - tstar[j])^1.99
+      quad2[k, j, ] <- ((t[k] / 2) * (pi / L)) * (sqrt(1 - cosfunc^2))
+    }
+  }
+
+
+  return(list(
+    tstar = tstar,
+    N = N,
+    Ngrid = Ngrid,
+    Dist = Dist,
+    quad1 = quad1,
+    quad2 = quad2,
+    cosfunc = cosfunc,
+    ppi = pi,
+    L = L
+  ))
+}
+
+#' Correcting detrended data from EIV-IGP model
+#'
+#' @param data Input raw data
+#' @param data_grid Input data grid
+#' @noRd
+
+igp_detrend_data <- function(data, data_grid) {
+  Age <- SL <- Longitude <- Latitude <- SiteName <- NULL
+  ############# Set up the grid for the GP ###################
+  tgrid <- data_grid$Age
+  Ngrid <- length(tgrid)
+
+  ### Change data to lower zero for integration
+  min_t <- min(data$Age)
+  t <- data$Age - min_t
+  tstar <- tgrid - min_t
+
+  Dist <- fields::rdist(tstar) ### Distance matrix required for the model
+  D <- cbind(t, data$SL) ### Combine the x,y data for the model
 
   ######## Initialize quadrature for the integration########
   N <- nrow(data)
