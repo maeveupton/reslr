@@ -216,19 +216,6 @@ summary.reslr_output <- function(object,#jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
-    # par_summary
-    # # }
-    #
-    # # if ("diagnostics" %in% type) {
-    # # Check convergence
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-    #   cat("No convergence issues detected. \n")
-    # }
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-    #   cat("Convergence issues detected. \n")
-    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    # }
-    # # }
   }
   # NI GAM decomposition
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {

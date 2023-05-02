@@ -29,7 +29,12 @@ print.reslr_output <-
       cat("The model used was the Errors-in-Variables change point model with 3 change point.\n")
     }
     if (inherits(jags_output, "eiv_igp_t") == TRUE) {
+      if(inherits(jags_output,"detrend_data")==TRUE){
+        cat("The model used was the Errors-in-Variables integrated gaussian process model in time for detrended data.\n")
+      }
+      else{
       cat("The model used was the Errors-in-Variables integrated gaussian process model in time.\n")
+      }
     }
     if (inherits(jags_output, "ni_spline_t") == TRUE) {
       cat("The model used was the Noisy Input spline in time model.\n")
