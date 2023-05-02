@@ -180,7 +180,7 @@ clean_tidal_gauge_data <- function(data,
   Age_epoch_id <- LongLat <- rolling_avg <- median <- nearest_proxy_site <- RSL_annual <- TG_min_dist1 <- minimum_dist <- nearest_TG <- rows_site <- site <- min_dist1 <- stationflag <- name <- sd <- sd_TG <- n_obs_by_site <- RSL_offset <- data_type_id <- decade <- decade_meanRSL <- Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- id <- NULL
   # Using data from PSMSL website for annual tide gauge data----------------------------------
   # Set up the URL for downloading the data
-  url <- "https://psmsl.org/data/obtaining/rlr.annual.data/rlr_annual.zip"
+  url <- "https://raw.psmsl.org/data/obtaining/rlr.annual.data/rlr_annual.zip"
 
   # Create a temporary file
   temp_file <- tempfile()
