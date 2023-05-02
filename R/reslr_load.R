@@ -152,16 +152,28 @@ reslr_load <- function(data,
   }
 
   # Detrending the data using GIA rates which is known as linear rate in my input dataframe
-  # if(detrend_data == TRUE){
-  #   # linear rate??
-  #   if(is.null(data$linear_rate) & is.null(core_col_year)){
-  #     stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate= TRUE")
-  #     stop("Error: Must provide the year the core was collected")
-  #   }
-  #   else{
-  #     data$SL <- (core_col_year/1000 - Age)*data$linear_rate + data$RSL
-  #   }
-  # }
+  if(detrend_data == TRUE){
+     if(is.null(data$linear_rate) & is.null(core_col_year)){
+       stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate = TRUE. Must provide the year the core was collected \n")
+     }
+    # Detrending the data and updating RSL to SL
+    data <- data %>%
+      group_by(SiteName) %>%
+      mutate(SL = (core_col_year/1000 - Age)*linear_rate + RSL)
+
+    # Detrending the uncertainties
+    # y_1_lwr = ifelse(GIA == FALSE, y - RSLError,(((yocc/1000)-x_upr/1000)*rate.gia)+y_lwr)
+    # y_2_lwr = ifelse(GIA == FALSE, y - RSLError,(((yocc/1000)-x_lwr/1000)*rate.gia)+y_lwr)
+    # y_3_upr = ifelse(GIA == FALSE, y + RSLError,(((yocc/1000)-x_lwr/1000)*rate.gia)+y_upr)
+    # y_4_upr = ifelse(GIA == FALSE, y + RSLError,(((yocc/1000)-x_upr/1000)*rate.gia)+y_upr)
+    data <- data %>%
+      group_by(SiteName) %>%
+      mutate(x_lwr_box = Age - Age_err,
+             x_upr_box = Age + Age_err,
+             y_lwr_box = ((core_col_year/1000 - (Age - Age_err))*linear_rate) + (RSL - RSL_err),
+             y_upr_box = ((core_col_year/1000 - (Age + Age_err))*linear_rate) + (RSL + RSL_err))
+
+   }
 
   # Prediction dataframe-------------------------------------
   sites <- data %>%
@@ -230,6 +242,10 @@ reslr_load <- function(data,
     data_grid = data_grid,
     prediction_interval = prediction_interval
   )
-  class(input_data) <- "reslr_input"
+  if(detrend_data == TRUE){
+    class(input_data) <- c("reslr_input","detrend_data")}
+  else{
+    class(input_data) <- "reslr_input"
+  }
   return(input_data)
 }
