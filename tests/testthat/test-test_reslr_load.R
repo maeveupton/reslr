@@ -1,4 +1,4 @@
-#testthat::context("reslr_load")
+# testthat::context("reslr_load")
 # library(reslr)
 #
 # Full dataset test
@@ -7,14 +7,15 @@ testthat::test_that("Full data set example", {
   data_testsite <- NAACproxydata
   # Load in with reslr_load
   reslr_1 <-
-    reslr_load(data = data_testsite,
-               prediction_interval = 100,
-               include_tide_gauge = FALSE,
-               include_linear_rate = FALSE,
-               list_preferred_TGs = NULL,
-               TG_minimum_dist_proxy = FALSE,
-               all_TG_1deg = FALSE,
-               input_Age_type = "CE"
+    reslr_load(
+      data = data_testsite,
+      prediction_interval = 100,
+      include_tide_gauge = FALSE,
+      include_linear_rate = FALSE,
+      list_preferred_TGs = NULL,
+      TG_minimum_dist_proxy = FALSE,
+      all_TG_1deg = FALSE,
+      input_Age_type = "CE"
     )
   testthat::expect_s3_class(reslr_1, "reslr_input")
   testthat::expect_true(is.data.frame(reslr_1$data))

@@ -7,8 +7,12 @@
 \method{plot}{reslr_output}(
   x,
   plot_tide_gauges = FALSE,
+  title = "",
   plot_type = c("model_fit_plot"),
   plot_caption = TRUE,
+  xlab = "Year (CE)",
+  ylab = "Relative Sea Level (m)",
+  y_rate_lab = "Rate of change (mm/year)",
   ...
 )
 }
@@ -17,9 +21,17 @@
 
 \item{plot_tide_gauges}{Plotting the tide gauge data as well as proxy data}
 
+\item{title}{Plotting a title on the output plots}
+
 \item{plot_type}{The user can select the type of output plot they require from the following: "rate_plot","model_fit_plot","regional_plot","regional_rate_plot","linear_local_plot","non_linear_local_plot","non_linear_local_rate_plot","nigam_component_plot"}
 
 \item{plot_caption}{Plotting an informed caption with the number of tide gauges and proxy sites.}
+
+\item{xlab}{Labeling the x-axis}
+
+\item{ylab}{Labeling the y-axis}
+
+\item{y_rate_lab}{Labeling the y-axis for rate of change plots}
 
 \item{...}{Not used}
 }

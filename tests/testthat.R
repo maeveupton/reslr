@@ -12,5 +12,5 @@ library(vdiffr)
 
 co <- function(expr) capture.output(expr, file = "NUL")
 
-#testthat::test_check("reslr")
+# testthat::test_check("reslr")
 test_check("reslr")

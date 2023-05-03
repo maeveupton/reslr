@@ -22,7 +22,7 @@
 plot.reslr_input <- function(x,
                              title = "Plot of the raw data",
                              xlab = "Year (CE)",
-                             ylab = "Y axis",#"Relative Sea Level (m)",
+                             ylab = "Y axis", # "Relative Sea Level (m)",
                              plot_tide_gauges = FALSE,
                              plot_caption = TRUE,
                              ...) {
@@ -40,53 +40,6 @@ plot.reslr_input <- function(x,
 
   # Plotting both tide gauge and proxy record
   if (plot_tide_gauges == TRUE) {
-    # If plotting informed caption
-    if (plot_caption == TRUE) {
-      p <- ggplot2::ggplot() +
-        ggplot2::geom_rect(
-          data = data,
-          ggplot2::aes(
-            xmin = Age * 1000 - Age_err * 1000,
-            xmax = Age * 1000 + Age_err * 1000,
-            ymin = RSL - RSL_err, ymax = RSL + RSL_err,
-            fill = "gray",
-          ), alpha = 0.7
-        ) +
-        ggplot2::geom_point(
-          data = data,
-          ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.3
-        ) +
-        ggplot2::labs(x = xlab, y = ylab, title = title) +
-        ggplot2::theme_bw() +
-        ggplot2::labs(colour = "") +
-        ggplot2::theme(
-          strip.text.x = ggplot2::element_text(size = 7),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::scale_fill_manual("",
-          values = "grey",
-          labels = expression(paste("1-sigma Error")),
-          guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-        ) +
-        ggplot2::scale_colour_manual(
-          values = c("black"),
-          labels = c("Data")
-        ) +
-        ggplot2::facet_wrap(~SiteName) +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-        ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 18, face = "bold"),
-          axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          legend.text = ggplot2::element_text(size = 10)
-        ) +
-        ggplot2::labs(caption = paste0(
-          "No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ))
-    }
-    # If plotting informed caption
-    else {
       p <- ggplot2::ggplot() +
         ggplot2::geom_rect(
           data = data,
@@ -125,13 +78,24 @@ plot.reslr_input <- function(x,
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
           legend.text = ggplot2::element_text(size = 10)
         )
+      # Plotting informed caption
+      if(plot_caption == TRUE){
+        p <- p +
+        ggplot2::labs(caption = paste0(
+          "No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
+      }
+    # No caption
+    else {
+      p <- p
     }
-  } else {
+  }
+  else {
     # Plotting only Proxy Record
     data <- data %>%
       dplyr::filter(data_type_id == "ProxyRecord")
-    # If plotting informed caption
-    if (plot_caption == TRUE) {
+    # Plot
       p <- ggplot2::ggplot() +
         ggplot2::geom_rect(data = data, ggplot2::aes(
           xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
@@ -165,94 +129,18 @@ plot.reslr_input <- function(x,
           plot.title = ggplot2::element_text(size = 18, face = "bold"),
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
           legend.text = ggplot2::element_text(size = 10)
-        ) +
-        ggplot2::labs(caption = paste0(
+        )
+      if (plot_caption == TRUE) {
+        p <- p + ggplot2::labs(caption = paste0(
           "No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
         ))
-    } else {
-      p <- ggplot2::ggplot() +
-        ggplot2::geom_rect(data = data, ggplot2::aes(
-          xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
-          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
-          fill = "gray",
-        ), alpha = 0.7) +
-        ggplot2::geom_point(
-          data = data,
-          ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.3
-        ) +
-        ggplot2::labs(x = xlab, y = ylab, title = title) +
-        ggplot2::theme_bw() +
-        ggplot2::labs(colour = "") +
-        ggplot2::theme(
-          strip.text.x = ggplot2::element_text(size = 7),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::scale_fill_manual("",
-          values = "grey",
-          labels = expression(paste("1-sigma Error")),
-          guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-        ) +
-        ggplot2::scale_colour_manual(
-          values = c("black"),
-          labels = c("Data")
-        ) +
-        ggplot2::facet_wrap(~SiteName) +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-        ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 18, face = "bold"),
-          axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          legend.text = ggplot2::element_text(size = 10)
-        )
     }
+      else {
+        p <-p
+      }
   }
   if (inherits(x, "detrend_data") == TRUE) {
-    # If plotting informed caption
-    if (plot_caption == TRUE) {
-      p <- ggplot2::ggplot() +
-        ggplot2::geom_rect(data = data, ggplot2::aes(
-          xmin = Age * 1000 - Age_err * 1000,
-          xmax = Age * 1000 + Age_err * 1000,
-          ymin = y_lwr_box,
-          ymax = y_upr_box,
-          fill = "gray",
-        ), alpha = 0.7) +
-        ggplot2::geom_point(
-          data = data,
-          ggplot2::aes(y = SL, x = Age * 1000, colour = "black"), size = 0.3
-        ) +
-        ggplot2::labs(x = xlab, y = ylab, title = title) +
-        ggplot2::theme_bw() +
-        ggplot2::labs(colour = "") +
-        ggplot2::theme(
-          strip.text.x = ggplot2::element_text(size = 7),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::scale_fill_manual("",
-                                   values = "grey",
-                                   labels = expression(paste("1-sigma Error")),
-                                   guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-        ) +
-        ggplot2::scale_colour_manual(
-          values = c("black"),
-          labels = c("Data")
-        ) +
-        ggplot2::facet_wrap(~SiteName) +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-        ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 18, face = "bold"),
-          axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          legend.text = ggplot2::element_text(size = 10)
-        )
-      ggplot2::labs(caption = paste0(
-        "No. proxy sites:", n_proxy#,
-        #"\n No. tide gauge sites:", n_sites - n_proxy
-      ))
-
-    }
-    else{
     p <- ggplot2::ggplot() +
       ggplot2::geom_rect(data = data, ggplot2::aes(
         xmin = Age * 1000 - Age_err * 1000,
@@ -289,6 +177,15 @@ plot.reslr_input <- function(x,
         axis.title = ggplot2::element_text(size = 12, face = "bold"),
         legend.text = ggplot2::element_text(size = 10)
       )
+
+    # If plotting informed caption
+    if (plot_caption == TRUE) {
+      p <- p + ggplot2::labs(caption = paste0(
+        "No. proxy sites:", n_proxy # ,
+        # "\n No. tide gauge sites:", n_sites - n_proxy
+      ))
+    } else {
+      p <- p
     }
   }
 

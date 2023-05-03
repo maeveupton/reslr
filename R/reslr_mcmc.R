@@ -39,10 +39,10 @@ reslr_mcmc <- function(input_data,
                        n_chains = 3,
                        CI = "95%",
                        spline_nseg_t = NULL,
-                       spline_nseg_st = NULL#,
-                      # xl,
-                       #xr
-                       ) {
+                       spline_nseg_st = NULL # ,
+                       # xl,
+                       # xr
+) {
   UseMethod("reslr_mcmc")
 }
 
@@ -57,10 +57,10 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    n_chains = 3,
                                    CI = "95%",
                                    spline_nseg_t = NULL,
-                                   spline_nseg_st = NULL#,
-                                   #xr = min(input_data$data$Age),
-                                   #xl
-                                   ) {
+                                   spline_nseg_st = NULL # ,
+                                   # xr = min(input_data$data$Age),
+                                   # xl
+) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
   # Input Data -------------
@@ -105,11 +105,13 @@ reslr_mcmc.reslr_input <- function(input_data,
     # )
 
     # Output from mcmc & dataframes for plots
-    output_dataframes <- create_output_df(noisy_model_run_output = model_run,
-                                          data_grid,
-                                          rate_grid = FALSE,
-                                          decomposition = FALSE,
-                                          CI = CI)
+    output_dataframes <- create_output_df(
+      noisy_model_run_output = model_run,
+      data_grid,
+      rate_grid = FALSE,
+      decomposition = FALSE,
+      CI = CI
+    )
 
     # Output with everything-------------
     jags_output <- list(
@@ -163,11 +165,13 @@ reslr_mcmc.reslr_input <- function(input_data,
       n.chains = n_chains
     ))
     # Output from mcmc & dataframes for plots
-    output_dataframes <- create_output_df(noisy_model_run_output = model_run,
-                                          data_grid,
-                                          rate_grid = FALSE,
-                                          decomposition = FALSE,
-                                          CI = CI)
+    output_dataframes <- create_output_df(
+      noisy_model_run_output = model_run,
+      data_grid,
+      rate_grid = FALSE,
+      decomposition = FALSE,
+      CI = CI
+    )
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
@@ -234,11 +238,13 @@ reslr_mcmc.reslr_input <- function(input_data,
     ))
 
     # Output from mcmc & dataframes for plots
-    output_dataframes <- create_output_df(noisy_model_run_output = model_run,
-                                          data_grid,
-                                          rate_grid = FALSE,
-                                          decomposition = FALSE,
-                                          CI = CI)
+    output_dataframes <- create_output_df(
+      noisy_model_run_output = model_run,
+      data_grid,
+      rate_grid = FALSE,
+      decomposition = FALSE,
+      CI = CI
+    )
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
@@ -304,11 +310,13 @@ reslr_mcmc.reslr_input <- function(input_data,
     ))
 
     # Output from mcmc & dataframes for plots
-    output_dataframes <- create_output_df(noisy_model_run_output = model_run,
-                                          data_grid,
-                                          rate_grid = FALSE,
-                                          decomposition = FALSE,
-                                          CI = CI)
+    output_dataframes <- create_output_df(
+      noisy_model_run_output = model_run,
+      data_grid,
+      rate_grid = FALSE,
+      decomposition = FALSE,
+      CI = CI
+    )
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run, # Watch this
@@ -338,10 +346,10 @@ reslr_mcmc.reslr_input <- function(input_data,
       "beta"
     )
     # Detrended data---
-    if(inherits(input_data, "detrend_data") == TRUE ){
+    if (inherits(input_data, "detrend_data") == TRUE) {
       # JAGS data
       # FINISH
-      igp_dat_list <- igp_detrend_data(data,data_grid)
+      igp_dat_list <- igp_detrend_data(data, data_grid)
 
       jags_data <- list(
         y = data$SL,
@@ -369,10 +377,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       ))
 
       # Output dataframe for plots
-      output_dataframes <- create_igp_output_df(model_run=model_run,
-                                                jags_data=jags_data,
-                                                data_grid = data_grid,
-                                                CI = CI)
+      output_dataframes <- create_igp_output_df(
+        model_run = model_run,
+        jags_data = jags_data,
+        data_grid = data_grid,
+        CI = CI
+      )
       # Output with everything-------------
       jags_output <- list(
         noisy_model_run_output = model_run, # Watch this
@@ -382,55 +392,56 @@ reslr_mcmc.reslr_input <- function(input_data,
         output_dataframes = output_dataframes
       )
       # Classing the JAGS output for eiv_igp_t--------------
-      class(jags_output) <- c("reslr_output", "eiv_igp_t","detrend_data")
+      class(jags_output) <- c("reslr_output", "eiv_igp_t", "detrend_data")
       message("JAGS model run finished for the eiv_igp_t using detrended data")
-
     }
     # No detrended data
-    else{
-    # JAGS data
-    igp_dat_list <- igp_data(data,data_grid)
-    jags_data <- list(
-      y = data$RSL,
-      y_err = data$RSL_err,
-      t = data$Age,
-      n_pred = nrow(data_grid),
-      t_pred = data_grid$Age,
-      t_err = data$Age_err,
-      t_min = min(data$Age),
-      t_max = max(data$Age),
-      n_obs = nrow(data),
-      al = igp_smooth * 10 / (1 - igp_smooth)
-    )
-    jags_data <- c(igp_dat_list, jags_data)
+    else {
+      # JAGS data
+      igp_dat_list <- igp_data(data, data_grid)
+      jags_data <- list(
+        y = data$RSL,
+        y_err = data$RSL_err,
+        t = data$Age,
+        n_pred = nrow(data_grid),
+        t_pred = data_grid$Age,
+        t_err = data$Age_err,
+        t_min = min(data$Age),
+        t_max = max(data$Age),
+        n_obs = nrow(data),
+        al = igp_smooth * 10 / (1 - igp_smooth)
+      )
+      jags_data <- c(igp_dat_list, jags_data)
 
-    # Run JAGS------------------------
-    model_run <- suppressWarnings(R2jags::jags(
-      data = jags_data,
-      parameters.to.save = jags_pars,
-      model.file = jags_file,
-      n.iter = n_iterations,
-      n.burnin = n_burnin,
-      n.thin = n_thin,
-      n.chains = n_chains
-    ))
+      # Run JAGS------------------------
+      model_run <- suppressWarnings(R2jags::jags(
+        data = jags_data,
+        parameters.to.save = jags_pars,
+        model.file = jags_file,
+        n.iter = n_iterations,
+        n.burnin = n_burnin,
+        n.thin = n_thin,
+        n.chains = n_chains
+      ))
 
-    # Output dataframe for plots
-    output_dataframes <- create_igp_output_df(model_run=model_run,
-                                              jags_data=jags_data,
-                                              data_grid = data_grid,
-                                              CI = CI)
-    # Output with everything-------------
-    jags_output <- list(
-      noisy_model_run_output = model_run, # Watch this
-      jags_data = jags_data,
-      data = data,
-      data_grid = data_grid,
-      output_dataframes = output_dataframes
-    )
-    # Classing the JAGS output for eiv_igp_t--------------
-    class(jags_output) <- c("reslr_output", "eiv_igp_t")
-    message("JAGS model run finished for the eiv_igp_t")
+      # Output dataframe for plots
+      output_dataframes <- create_igp_output_df(
+        model_run = model_run,
+        jags_data = jags_data,
+        data_grid = data_grid,
+        CI = CI
+      )
+      # Output with everything-------------
+      jags_output <- list(
+        noisy_model_run_output = model_run, # Watch this
+        jags_data = jags_data,
+        data = data,
+        data_grid = data_grid,
+        output_dataframes = output_dataframes
+      )
+      # Classing the JAGS output for eiv_igp_t--------------
+      class(jags_output) <- c("reslr_output", "eiv_igp_t")
+      message("JAGS model run finished for the eiv_igp_t")
     }
   }
 
@@ -457,9 +468,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg_t = spline_nseg_t#,
-      #xl = xl,
-      #xr = xr
+      spline_nseg_t = spline_nseg_t # ,
+      # xl = xl,
+      # xr = xr
     )
 
     # JAGS data----------------------
@@ -469,8 +480,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       t = data$Age,
       n_obs = nrow(data),
       B_t = spline_basis_fun_list$B_t,
-      n_knots_t = ncol(spline_basis_fun_list$B_t)#,
-      #nu = 2
+      n_knots_t = ncol(spline_basis_fun_list$B_t) # ,
+      # nu = 2
     )
 
     # Run JAGS------------------------
@@ -490,9 +501,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       model_type = model_type,
       jags_data = jags_data,
       spline_nseg_st = NULL,
-      spline_nseg_t = spline_nseg_t#,
-      #xr=xr,
-      #xl=xl
+      spline_nseg_t = spline_nseg_t # ,
+      # xr=xr,
+      # xl=xl
     )
     # Include Noise-----------------------
     # noisy_jags_file <- "inst/jags_models/noisy_model_ni_spline_t.jags"
@@ -529,8 +540,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_t_deriv = spline_basis_fun_list$B_t_deriv,
       B_t_pred = spline_basis_fun_list$B_t_pred,
       n_knots_t = ncol(spline_basis_fun_list$B_t),
-      B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv#,
-      #nu = 2
+      B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv # ,
+      # nu = 2
     )
     # Run JAGS--------------
     noisy_model_run_output <-
@@ -546,10 +557,11 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid = data_grid,
-                                          rate_grid = TRUE,
-                                          decomposition = FALSE,
-                                          CI = CI)
+      data_grid = data_grid,
+      rate_grid = TRUE,
+      decomposition = FALSE,
+      CI = CI
+    )
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
@@ -616,13 +628,15 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       model_run = model_run,
       model_type = model_type,
-      spline_nseg_st=spline_nseg_st,
+      spline_nseg_st = spline_nseg_st,
       spline_nseg_t = NULL
     )
 
     #----NI JAGS model-----
     noisy_jags_file <- system.file("jags_models",
-                                   "noisy_model_ni_spline_st.jags", package = "reslr")
+      "noisy_model_ni_spline_st.jags",
+      package = "reslr"
+    )
 
     # JAGS input data
     jags_data <- list(
@@ -636,8 +650,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_st_deriv = spline_basis_fun_list$B_st_deriv,
       B_st_pred = spline_basis_fun_list$B_st_pred,
       B_st_deriv_pred = spline_basis_fun_list$B_st_deriv_pred,
-      n_knots_st = ncol(spline_basis_fun_list$B_st)#,
-      #nu = 2
+      n_knots_st = ncol(spline_basis_fun_list$B_st) # ,
+      # nu = 2
     )
 
     # Parameters to save in JAGs
@@ -668,10 +682,11 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid = data_grid,
-                                          rate_grid = TRUE,
-                                          decomposition = FALSE,
-                                          CI = CI)
+      data_grid = data_grid,
+      rate_grid = TRUE,
+      decomposition = FALSE,
+      CI = CI
+    )
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output, # Watch this
@@ -734,8 +749,8 @@ reslr_mcmc.reslr_input <- function(input_data,
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
-        dplyr::pull()#,
-        #nu = 2
+        dplyr::pull() # ,
+      # nu = 2
     )
 
     # Parameters to save in JAGs
@@ -770,13 +785,15 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       model_run = model_run,
       model_type = model_type,
-      spline_nseg_st=spline_nseg_st,
+      spline_nseg_st = spline_nseg_st,
       spline_nseg_t = spline_nseg_t
     )
 
     #----NI JAGS model-----
     noisy_jags_file <- system.file("jags_models",
-                                   "noisy_model_ni_gam_decomp.jags", package = "reslr")
+      "noisy_model_ni_gam_decomp.jags",
+      package = "reslr"
+    )
 
     # JAGS input data
     jags_data <- list(
@@ -824,8 +841,8 @@ reslr_mcmc.reslr_input <- function(input_data,
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
-        dplyr::pull()#,
-        #nu = 2
+        dplyr::pull() # ,
+      # nu = 2
     )
 
     # Parameters to save in JAGs
@@ -874,10 +891,11 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
-                                          data_grid = data_grid,
-                                          rate_grid = TRUE,
-                                          decomposition = TRUE,
-                                          CI = CI)
+      data_grid = data_grid,
+      rate_grid = TRUE,
+      decomposition = TRUE,
+      CI = CI
+    )
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,

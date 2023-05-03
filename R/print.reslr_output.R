@@ -29,11 +29,10 @@ print.reslr_output <-
       cat("The model used was the Errors-in-Variables change point model with 3 change point.\n")
     }
     if (inherits(jags_output, "eiv_igp_t") == TRUE) {
-      if(inherits(jags_output,"detrend_data")==TRUE){
+      if (inherits(jags_output, "detrend_data") == TRUE) {
         cat("The model used was the Errors-in-Variables integrated gaussian process model in time for detrended data.\n")
-      }
-      else{
-      cat("The model used was the Errors-in-Variables integrated gaussian process model in time.\n")
+      } else {
+        cat("The model used was the Errors-in-Variables integrated gaussian process model in time.\n")
       }
     }
     if (inherits(jags_output, "ni_spline_t") == TRUE) {
@@ -47,7 +46,9 @@ print.reslr_output <-
     }
 
     cat("The input data has been run via reslr_mcmc and has produced ")
-    cat(nrow(jags_output$noisy_model_run_output$BUGSoutput$sims.matrix),
-        "iterations over", jags_output$noisy_model_run_output$BUGSoutput$n.chains, "MCMC chains.")
+    cat(
+      nrow(jags_output$noisy_model_run_output$BUGSoutput$sims.matrix),
+      "iterations over", jags_output$noisy_model_run_output$BUGSoutput$n.chains, "MCMC chains."
+    )
     cat("\n\n")
   }

@@ -7,8 +7,8 @@
 \method{plot}{reslr_input}(
   x,
   title = "Plot of the raw data",
-  xlab = "Age (CE)",
-  ylab = "Relative Sea Level (m)",
+  xlab = "Year (CE)",
+  ylab = "Y axis",
   plot_tide_gauges = FALSE,
   plot_caption = TRUE,
   ...

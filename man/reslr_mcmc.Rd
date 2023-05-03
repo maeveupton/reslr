@@ -15,9 +15,7 @@ reslr_mcmc(
   n_chains = 3,
   CI = "95\%",
   spline_nseg_t = NULL,
-  spline_nseg_st = NULL,
-  xl = NULL,
-  xr = NULL
+  spline_nseg_st = NULL
 )
 }
 \arguments{
@@ -42,6 +40,10 @@ reslr_mcmc(
 \item{spline_nseg_t}{Number of segments required in a spline in time which is used the basis functions}
 
 \item{spline_nseg_st}{Number of segments required in a spline in space time which is used the basis functions}
+
+\item{xr}{Range of data from cross validation}
+
+\item{xl}{Range of data for cross validation}
 }
 \value{
 A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.

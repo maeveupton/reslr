@@ -13,13 +13,13 @@
 #' input_data <- reslr_load(data = data)
 #' jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 #' summary(object = jags_output)
-summary.reslr_output <- function(object,#jags_output,#
+summary.reslr_output <- function(object, # jags_output,#
                                  # type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",#' @param type User decides which type of summary they require
                                  ...) {
   mu_pred <- sd <- mad <- rhat <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
-   jags_output <- object
-   jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-   sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+  jags_output <- object
+  jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+  sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
 
   # EIV slr t -------
   # if("parameter_estimates" %in% type){
@@ -40,7 +40,7 @@ summary.reslr_output <- function(object,#jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
-    #return(par_summary)
+    # return(par_summary)
     # }
     # if ("diagnostics" %in% type) {
     # Check convergence
@@ -70,9 +70,8 @@ summary.reslr_output <- function(object,#jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       ) %>%
-      mutate(variable = ifelse(variable == "cp","Change Point:",variable)) %>%
-      mutate(mean = ifelse(variable == "Change Point:", round(mean*1000), mean))
-
+      mutate(variable = ifelse(variable == "cp", "Change Point:", variable)) %>%
+      mutate(mean = ifelse(variable == "Change Point:", round(mean * 1000), mean))
   }
 
   # EIV cp 2
@@ -95,12 +94,13 @@ summary.reslr_output <- function(object,#jags_output,#
         q5 = q5, #* mod$scale_factor_y,
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
-      )%>%
-      mutate(variable = ifelse(variable == "cp[1]","Change Point 1:",variable)) %>%
-      mutate(variable = ifelse(variable == "cp[2]","Change Point 2:",variable)) %>%
-      mutate(mean = ifelse(variable == "Change Point 1:", round(mean*1000), mean),
-             mean = ifelse(variable == "Change Point 2:", round(mean*1000), mean))
-
+      ) %>%
+      mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
+      mutate(variable = ifelse(variable == "cp[2]", "Change Point 2:", variable)) %>%
+      mutate(
+        mean = ifelse(variable == "Change Point 1:", round(mean * 1000), mean),
+        mean = ifelse(variable == "Change Point 2:", round(mean * 1000), mean)
+      )
   }
 
   # EIV cp 3
@@ -123,13 +123,15 @@ summary.reslr_output <- function(object,#jags_output,#
         q5 = q5, #* mod$scale_factor_y,
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
-      )%>%
-      mutate(variable = ifelse(variable == "cp[1]","Change Point 1:",variable)) %>%
-      mutate(variable = ifelse(variable == "cp[2]","Change Point 2:",variable)) %>%
-      mutate(variable = ifelse(variable == "cp[3]","Change Point 3:",variable)) %>%
-      mutate(mean = ifelse(variable == "Change Point 1:", round(mean*1000), mean),
-             mean = ifelse(variable == "Change Point 2:", round(mean*1000), mean),
-             mean = ifelse(variable == "Change Point 3:", round(mean*1000), mean),)
+      ) %>%
+      mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
+      mutate(variable = ifelse(variable == "cp[2]", "Change Point 2:", variable)) %>%
+      mutate(variable = ifelse(variable == "cp[3]", "Change Point 3:", variable)) %>%
+      mutate(
+        mean = ifelse(variable == "Change Point 1:", round(mean * 1000), mean),
+        mean = ifelse(variable == "Change Point 2:", round(mean * 1000), mean),
+        mean = ifelse(variable == "Change Point 3:", round(mean * 1000), mean),
+      )
   }
 
   # EIV IGP t
@@ -223,7 +225,8 @@ summary.reslr_output <- function(object,#jags_output,#
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
     # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
-      dplyr::filter(variable %in% c("sigma_st",
+      dplyr::filter(variable %in% c(
+        "sigma_st",
         "sigma_t[1]", "sigma_res"
       )) %>%
       dplyr::select(
@@ -259,6 +262,6 @@ summary.reslr_output <- function(object,#jags_output,#
     cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
   }
   # }
- return(par_summary)
+  return(par_summary)
   # }
 }
