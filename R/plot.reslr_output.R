@@ -7,6 +7,7 @@
 #' If tide gauges are used in the model, the user has the ability plot the output with or without the inclusion of the tide gauges.
 #'
 #' @param x An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}
+#' @param plot_proxy_records Plotting the proxy records on their own and this is the default
 #' @param plot_tide_gauges Plotting the tide gauge data as well as proxy data
 #' @param plot_type The user can select the type of output plot they require from the following: "rate_plot","model_fit_plot","regional_plot","regional_rate_plot","linear_local_plot","non_linear_local_plot","non_linear_local_rate_plot","nigam_component_plot"
 #' @param plot_caption Plotting an informed caption with the number of tide gauges and proxy sites.
@@ -25,6 +26,7 @@
 #' jags_output <- reslr_mcmc(x, model_type = "eiv_slr_t")
 #' plot(x = jags_output)
 plot.reslr_output <- function(x,
+                              plot_proxy_records = TRUE,
                               plot_tide_gauges = FALSE,
                               title = "",
                               plot_type = c("model_fit_plot"),
@@ -35,337 +37,231 @@ plot.reslr_output <- function(x,
                               ...) {
   Age <- RSL <- Age_err <- ID <- RSL_err <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
   jags_output <- x
+
   # EIV slr------------
   if (inherits(jags_output, "eiv_slr_t") == TRUE) {
-    if (plot_tide_gauges == FALSE) {
-      output_dataframes <- jags_output$output_dataframes %>%
-        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+    output_dataframes <- jags_output$output_dataframes
+    data <- jags_output$data
+    n_sites <- length(data$SiteName %>% unique())
+    n_proxy <- data %>%
+      dplyr::filter(data_type_id == "ProxyRecord") %>%
+      dplyr::select(SiteName, data_type_id) %>%
+      unique() %>%
+      nrow()
+    n_tide_gauges <- n_sites - n_proxy
+    # Plotting proxy only
+    if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
+      output_dataframes <- output_dataframes %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      data <- jags_output$data
-      n_sites <- length(data$SiteName %>% unique())
-      n_proxy <- data %>%
-        dplyr::filter(data_type_id == "ProxyRecord") %>%
-        dplyr::select(SiteName, data_type_id) %>%
-        unique() %>%
-        nrow()
-      data <- jags_output$data %>%
-        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+      data <- data %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-
-      # Plot result with informed caption
-      if (plot_caption == TRUE) {
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          # plot_caption = plot_caption,
-          model_caption = paste0(
-            "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy,
-            xlab, #= xlab,
-            ylab, #= ylab,
-            title #= title
-          )
-        )
-      } else {
-        # Remove informed caption from plots
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          # plot_caption = plot_caption,
-          model_caption = NULL,
-          xlab = xlab,
-          ylab = ylab,
-          title = title
-        )
-      }
-    } else {
-      output_dataframes <- jags_output$output_dataframes
-      data <- jags_output$data
-      n_sites <- length(data$SiteName %>% unique())
-      n_proxy <- data %>%
-        dplyr::filter(data_type_id == "ProxyRecord") %>%
-        dplyr::select(SiteName, data_type_id) %>%
-        unique() %>%
-        nrow()
-      # Plot result with informed caption
-      if (plot_caption == TRUE) {
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = paste0(
-            "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
-          )
-        )
-      } else {
-        # Remove informed caption from plots
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = NULL
-        )
-      }
+    }
+    # Plotting tide gauge only
+    if (plot_proxy_records == FALSE & plot_tide_gauges == TRUE) {
+      output_dataframes <- output_dataframes %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
+      data <- data %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
     }
 
-    #cat("Plotted EIV Simple linear regression. \n")
-
+    # Using caption or not
+    if (plot_caption == TRUE) {
+      plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title,
+        model_caption = paste0(
+          "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_tide_gauges
+        )
+      )
+    } else {
+      plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title,
+        model_caption = NULL
+      )
+    }
+    if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
+      plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
+    }
     output_plots <- list(plot_result = plot_result)
   }
 
-  # EIV CP 1
+  # EIV CP 1-------------
   if (inherits(jags_output, "eiv_cp1_t")) {
-    if (plot_tide_gauges == FALSE) {
-      output_dataframes <- jags_output$output_dataframes %>%
-        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+    output_dataframes <- jags_output$output_dataframes
+    data <- jags_output$data
+    n_sites <- length(data$SiteName %>% unique())
+    n_proxy <- data %>%
+      dplyr::filter(data_type_id == "ProxyRecord") %>%
+      dplyr::select(SiteName, data_type_id) %>%
+      unique() %>%
+      nrow()
+    n_tide_gauges <- n_sites - n_proxy
+    # Plotting proxy only
+    if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
+      output_dataframes <- output_dataframes %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      data <- jags_output$data
-      n_sites <- length(data$SiteName %>% unique())
-      n_proxy <- data %>%
-        dplyr::filter(data_type_id == "ProxyRecord") %>%
-        dplyr::select(SiteName, data_type_id) %>%
-        unique() %>%
-        nrow()
-      data <- jags_output$data %>%
-        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+      data <- data %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-
-      # Plot result with informed caption
-      if (plot_caption == TRUE) {
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = paste0(
-            "Model type: Errors in Variables 1 Change Point Model \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
-          )
-        )
-      } else {
-        # Remove informed caption from plots
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = NULL
-        )
-      }
-    } else {
-      output_dataframes <- jags_output$output_dataframes
-      data <- jags_output$data
-      n_sites <- length(data$SiteName %>% unique())
-      n_proxy <- data %>%
-        dplyr::filter(data_type_id == "ProxyRecord") %>%
-        dplyr::select(SiteName, data_type_id) %>%
-        unique() %>%
-        nrow()
-
-      # Plot result with informed caption
-      if (plot_caption == TRUE) {
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = paste0(
-            "Model type: Errors in Variables 1 Change Point Model \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
-          )
-        )
-      } else {
-        # Remove informed caption from plots
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = NULL
-        )
-      }
+    }
+    # Plotting tide gauge only
+    if (plot_proxy_records == FALSE & plot_tide_gauges == TRUE) {
+      output_dataframes <- output_dataframes %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
+      data <- data %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
     }
 
-
-    #cat("Plotted EIV 1 Change Point model. \n")
-
+    # Using caption or not
+    if (plot_caption == TRUE) {
+      plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title,
+        model_caption = paste0(
+          "Model type: Errors in Variables 1 Change Point Model \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        )
+      )
+    } else {
+      plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title,
+        model_caption = NULL
+      )
+    }
+    if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
+      plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
+    }
     output_plots <- list(plot_result = plot_result)
   }
 
 
-  # EIV CP2
+  # EIV CP2------------
   if (inherits(jags_output, "eiv_cp2_t")) {
-    if (plot_tide_gauges == FALSE) {
-      output_dataframes <- jags_output$output_dataframes %>%
-        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+    output_dataframes <- jags_output$output_dataframes
+    data <- jags_output$data
+    n_sites <- length(data$SiteName %>% unique())
+    n_proxy <- data %>%
+      dplyr::filter(data_type_id == "ProxyRecord") %>%
+      dplyr::select(SiteName, data_type_id) %>%
+      unique() %>%
+      nrow()
+    n_tide_gauges <- n_sites - n_proxy
+    # Plotting proxy only
+    if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
+      output_dataframes <- output_dataframes %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      data <- jags_output$data
-      n_sites <- length(data$SiteName %>% unique())
-      n_proxy <- data %>%
-        dplyr::filter(data_type_id == "ProxyRecord") %>%
-        dplyr::select(SiteName, data_type_id) %>%
-        unique() %>%
-        nrow()
-      data <- jags_output$data %>%
-        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+      data <- data %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      # Plot result with informed caption
-      if (plot_caption == TRUE) {
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = paste0(
-            "Model type: Errors in Variables 2 Change Point Model \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
-          )
-        )
-      } else {
-        # Remove informed caption from plots
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = NULL
-        )
-      }
-    } else {
-      output_dataframes <- jags_output$output_dataframes
-      data <- jags_output$data
-      n_sites <- length(data$SiteName %>% unique())
-      n_proxy <- data %>%
-        dplyr::filter(data_type_id == "ProxyRecord") %>%
-        dplyr::select(SiteName, data_type_id) %>%
-        unique() %>%
-        nrow()
-      # Plot result with informed caption
-      if (plot_caption == TRUE) {
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = paste0(
-            "Model type: Errors in Variables 2 Change Point Model \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
-          )
-        )
-      } else {
-        # Remove informed caption from plots
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = NULL
-        )
-      }
     }
-    #cat("Plotted EIV 2 Change Point Model \n")
+    # Plotting tide gauge only
+    if (plot_proxy_records == FALSE & plot_tide_gauges == TRUE) {
+      output_dataframes <- output_dataframes %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
+      data <- data %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
+    }
 
+    # Using caption or not
+    if (plot_caption == TRUE) {
+      plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title,
+        model_caption = paste0(
+          "Model type: Errors in Variables 2 Change Point Model \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        )
+      )
+    } else {
+      plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title,
+        model_caption = NULL
+      )
+    }
+    if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
+      plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
+    }
     output_plots <- list(plot_result = plot_result)
   }
 
   # EIV CP 3
   if (inherits(jags_output, "eiv_cp3_t")) {
-    if (plot_tide_gauges == FALSE) {
-      output_dataframes <- jags_output$output_dataframes %>%
-        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+    output_dataframes <- jags_output$output_dataframes
+    data <- jags_output$data
+    n_sites <- length(data$SiteName %>% unique())
+    n_proxy <- data %>%
+      dplyr::filter(data_type_id == "ProxyRecord") %>%
+      dplyr::select(SiteName, data_type_id) %>%
+      unique() %>%
+      nrow()
+    n_tide_gauges <- n_sites - n_proxy
+    # Plotting proxy only
+    if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
+      output_dataframes <- output_dataframes %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      data <- jags_output$data
-      n_sites <- length(data$SiteName %>% unique())
-      n_proxy <- data %>%
-        dplyr::filter(data_type_id == "ProxyRecord") %>%
-        dplyr::select(SiteName, data_type_id) %>%
-        unique() %>%
-        nrow()
-      data <- jags_output$data %>%
-        dplyr::mutate(data_type_id = as.factor(data_type_id)) %>%
+      data <- data %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-
-      # Plot result with informed caption
-      if (plot_caption == TRUE) {
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = paste0(
-            "Model type: Errors in Variables 3 Change Point Model \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
-          )
-        )
-      } else {
-        # Remove informed caption from plots
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = NULL
-        )
-      }
-    } else {
-      output_dataframes <- jags_output$output_dataframes
-      data <- jags_output$data
-      n_sites <- length(data$SiteName %>% unique())
-      n_proxy <- data %>%
-        dplyr::filter(data_type_id == "ProxyRecord") %>%
-        dplyr::select(SiteName, data_type_id) %>%
-        unique() %>%
-        nrow()
-
-      # Plot result with informed caption
-      if (plot_caption == TRUE) {
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = paste0(
-            "Model type: Errors in Variables 3 Change Point Model \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
-          )
-        )
-      } else {
-        # Remove informed caption from plots
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = NULL
-        )
-      }
+    }
+    # Plotting tide gauge only
+    if (plot_proxy_records == FALSE & plot_tide_gauges == TRUE) {
+      output_dataframes <- output_dataframes %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
+      data <- data %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
     }
 
-    #cat("Plotted model fit for EIV 3 Change Point \n")
-
+    # Using caption or not
+    if (plot_caption == TRUE) {
+      plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title,
+        model_caption = paste0(
+          "Model type: Errors in Variables 3 Change Point Model \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        )
+      )
+    } else {
+      plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title,
+        model_caption = NULL
+      )
+    }
+    if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
+      plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
+    }
     output_plots <- list(plot_result = plot_result)
   }
-  # EIV IGP
+
+  # EIV IGP-------------
   if (inherits(jags_output, "eiv_igp_t")) {
-    browser()
-    # Not working
+    # Not working yet
     if (inherits(jags_output, "data_detrend") == TRUE) {
       # Plot result with informed caption
       if (plot_caption == TRUE) {
@@ -373,23 +269,23 @@ plot.reslr_output <- function(x,
         plot <-
           ggplot2::ggplot() +
           ggplot2::geom_rect(data = data, ggplot2::aes(
-            xmin = Age * 1000 - Age_err * 1000,
-            xmax = Age * 1000 + Age_err * 1000,
+            xmin = Age - Age_err,
+            xmax = Age + Age_err,
             ymin = y_lwr_box,
             ymax = y_upr_box,
             fill = "Uncertainty",
           ), alpha = 0.7) +
           ggplot2::geom_point(
             data = data,
-            ggplot2::aes(y = SL, x = Age * 1000, colour = "black"), size = 0.3
+            ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
           ) +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           # ggplot2::labs(x = xlab, y = ylab, title = title) #+
           ggplot2::labs(x = "Time (CE)", y = "Sea Level (m)", title = "", colour = "") +
@@ -440,11 +336,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           # ggplot2::labs(x = xlab, y = y_rate_lab, title = title,colour = "") +
           ggplot2::labs(x = "Time (CE)", y = "Sea Level (m)", title = "", colour = "") +
@@ -494,23 +390,23 @@ plot.reslr_output <- function(x,
         plot <-
           ggplot2::ggplot() +
           ggplot2::geom_rect(data = data, ggplot2::aes(
-            xmin = Age * 1000 - Age_err * 1000,
-            xmax = Age * 1000 + Age_err * 1000,
+            xmin = Age - Age_err,
+            xmax = Age + Age_err,
             ymin = y_lwr_box,
             ymax = y_upr_box,
             fill = "gray",
           ), alpha = 0.7) +
           ggplot2::geom_point(
             data = data,
-            ggplot2::aes(y = SL, x = Age * 1000, colour = "black"), size = 0.3
+            ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
           ) +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = ylab, title = title) +
           ggplot2::theme_bw() +
@@ -558,11 +454,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
           ggplot2::theme_bw() +
@@ -638,11 +534,11 @@ plot.reslr_output <- function(x,
             ggplot2::ggplot() +
             ggplot2::geom_line(
               data = output_dataframes,
-              ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+              ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
             ) +
             ggplot2::geom_ribbon(
               data = output_dataframes,
-              ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+              ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
             ) +
             ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
             ggplot2::theme_bw() +
@@ -701,11 +597,11 @@ plot.reslr_output <- function(x,
             ggplot2::ggplot() +
             ggplot2::geom_line(
               data = output_dataframes,
-              ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+              ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
             ) +
             ggplot2::geom_ribbon(
               data = output_dataframes,
-              ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+              ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
             ) +
             ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
             ggplot2::theme_bw() +
@@ -776,11 +672,11 @@ plot.reslr_output <- function(x,
             ggplot2::ggplot() +
             ggplot2::geom_line(
               data = output_dataframes,
-              ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+              ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
             ) +
             ggplot2::geom_ribbon(
               data = output_dataframes,
-              ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+              ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
             ) +
             ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
             ggplot2::theme_bw() +
@@ -839,11 +735,11 @@ plot.reslr_output <- function(x,
             ggplot2::ggplot() +
             ggplot2::geom_line(
               data = output_dataframes,
-              ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+              ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
             ) +
             ggplot2::geom_ribbon(
               data = output_dataframes,
-              ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+              ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
             ) +
             ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
             ggplot2::theme_bw() +
@@ -887,7 +783,7 @@ plot.reslr_output <- function(x,
         }
       }
     }
-    #cat("Plotted EIV-IGP model & rate \n")
+    # cat("Plotted EIV-IGP model & rate \n")
     output_plots <- list(plot_result = plot_result, plot_rate = plot_rate)
   }
 
@@ -927,11 +823,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
           ggplot2::theme_bw() +
@@ -991,11 +887,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
           ggplot2::theme_bw() +
@@ -1066,11 +962,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
           ggplot2::theme_bw() +
@@ -1130,11 +1026,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
           ggplot2::theme_bw() +
@@ -1179,7 +1075,7 @@ plot.reslr_output <- function(x,
     }
 
 
-    #cat("NI spline in time plotted and rate of change. \n")
+    # cat("NI spline in time plotted and rate of change. \n")
     output_plots <- list(
       plot_result = plot_result,
       plot_rate = plot_rate
@@ -1222,11 +1118,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
           ggplot2::theme_bw() +
@@ -1288,11 +1184,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
           ggplot2::theme_bw() +
@@ -1364,11 +1260,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
           ggplot2::theme_bw() +
@@ -1430,11 +1326,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = output_dataframes,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
           ggplot2::theme_bw() +
@@ -1479,7 +1375,7 @@ plot.reslr_output <- function(x,
           ggplot2::facet_wrap(~SiteName)
       }
     }
-    #cat("NI spline in space time plotted and rate of change. \n")
+    # cat("NI spline in space time plotted and rate of change. \n")
 
     output_plots <- list(
       plot_result = plot_result,
@@ -1512,20 +1408,20 @@ plot.reslr_output <- function(x,
         plot_result <-
           ggplot2::ggplot() +
           ggplot2::geom_rect(data = data, ggplot2::aes(
-            xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+            xmin = Age - Age_err, xmax = Age + Age_err,
             ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
           ), alpha = 0.4) +
           ggplot2::geom_point(
             data = data,
-            ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+            ggplot2::aes(y = RSL, x = Age, colour = "black"), size = 0.5
           ) +
           ggplot2::geom_line(
             data = total_model_fit_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = total_model_fit_df,
-            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Relative Sea Level (m)") +
@@ -1571,7 +1467,7 @@ plot.reslr_output <- function(x,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
 
-        #cat("Plotted the total model fit for the NIGAM decomposition \n")
+        # cat("Plotted the total model fit for the NIGAM decomposition \n")
 
         # Plotting Rate of Change for Total component
         total_model_rate_df <- output_dataframes$total_model_rate_df %>%
@@ -1582,11 +1478,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = total_model_rate_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = total_model_rate_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::facet_wrap(~SiteName) +
@@ -1632,7 +1528,7 @@ plot.reslr_output <- function(x,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
 
-        #cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
+        # cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
 
 
         # Regional Component Plot---------------------------
@@ -1644,11 +1540,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = regional_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = regional_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           # ggplot2::geom_ribbon(data=regional_component_df,
           #                      ggplot2::aes(ymin=lwr_50,ymax=upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
@@ -1681,7 +1577,7 @@ plot.reslr_output <- function(x,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
 
-        #cat("Regional Component plotted \n")
+        # cat("Regional Component plotted \n")
 
         # Derivative of Predicted Regional Component Plot---------------------------
         regional_rate_component_df <- output_dataframes$regional_rate_component_df %>%
@@ -1692,11 +1588,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = regional_rate_component_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = regional_rate_component_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::geom_hline(yintercept = 0) +
@@ -1731,7 +1627,7 @@ plot.reslr_output <- function(x,
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
-        #cat("Regional Rate Component plotted \n")
+        # cat("Regional Rate Component plotted \n")
 
 
         # Linear Local + Site specific vertical offset ---------------------
@@ -1742,12 +1638,12 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = lin_loc_component_df,
             ggplot2::aes(
-              ymin = lwr, ymax = upr, x = Age * 1000,
+              ymin = lwr, ymax = upr, x = Age,
               fill = "CI"
             ), alpha = 0.3
           ) +
@@ -1786,7 +1682,7 @@ plot.reslr_output <- function(x,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
 
-        #cat("Linear Local Component plotted \n")
+        # cat("Linear Local Component plotted \n")
 
         # Non-Linear Local Component: Spline in Space Time ----------------
         non_lin_loc_component_df <- output_dataframes$non_lin_loc_component_df %>%
@@ -1797,11 +1693,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = non_lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::geom_hline(yintercept = 0) +
           ggplot2::theme_bw() +
@@ -1837,7 +1733,7 @@ plot.reslr_output <- function(x,
             "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
-        #cat("Non-Linear Local Component Plot \n")
+        # cat("Non-Linear Local Component Plot \n")
 
         # Non-Linear Local Component: Rate of change for Spline in Space Time --------------
         non_lin_loc_rate_component_df <- output_dataframes$non_lin_loc_rate_component_df %>%
@@ -1847,11 +1743,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = non_lin_loc_rate_component_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_rate_component_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::geom_hline(yintercept = 0) +
@@ -1888,49 +1784,49 @@ plot.reslr_output <- function(x,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
 
-        #cat("Rate of change of Non-Linear Local Component Plot \n")
+        # cat("Rate of change of Non-Linear Local Component Plot \n")
 
         # Separate Components on one plot with CI --------
         all_components_CI_plot <- ggplot2::ggplot() +
           # Linear Local Component + site specific vertical offset
           ggplot2::geom_line(
             data = lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Site Specific vertical offset + \n Linear Local Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Site Specific vertical offset + \n Linear Local Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Site Specific vertical offset + \n Linear Local Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Site Specific vertical offset + \n Linear Local Component"), # ID),
             alpha = 0.3
           ) +
 
           # Non linear Local
           ggplot2::geom_line(
             data = non_lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Non Linear Local Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Non Linear Local Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Non Linear Local Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Non Linear Local Component"), # ID),
             alpha = 0.3
           ) +
           # Regional Component
           ggplot2::geom_line(
             data = regional_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Regional Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Regional Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = regional_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Regional Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Regional Component"), # ID),
             alpha = 0.3
           ) +
           # Total Model
           ggplot2::geom_line(
             data = total_model_fit_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Total Posterior Model") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Total Posterior Model") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = total_model_fit_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Total Posterior Model"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Total Posterior Model"), # ID),
             alpha = 0.3
           ) +
           ggplot2::theme_bw() +
@@ -1975,20 +1871,20 @@ plot.reslr_output <- function(x,
         plot_result <-
           ggplot2::ggplot() +
           ggplot2::geom_rect(data = data, ggplot2::aes(
-            xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+            xmin = Age - Age_err, xmax = Age + Age_err,
             ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
           ), alpha = 0.4) +
           ggplot2::geom_point(
             data = data,
-            ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+            ggplot2::aes(y = RSL, x = Age, colour = "black"), size = 0.5
           ) +
           ggplot2::geom_line(
             data = total_model_fit_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = total_model_fit_df,
-            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Relative Sea Level (m)") +
@@ -2030,7 +1926,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::facet_wrap(~SiteName)
 
-        #cat("Plotted the total model fit for the NIGAM decomposition \n")
+        # cat("Plotted the total model fit for the NIGAM decomposition \n")
 
         # Plotting Rate of Change for Total component
         total_model_rate_df <- output_dataframes$total_model_rate_df %>%
@@ -2041,11 +1937,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = total_model_rate_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = total_model_rate_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::facet_wrap(~SiteName) +
@@ -2087,7 +1983,7 @@ plot.reslr_output <- function(x,
             ))
           )
 
-        #cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
+        # cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
 
 
         # Regional Component Plot---------------------------
@@ -2099,11 +1995,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = regional_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = regional_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           # ggplot2::geom_ribbon(data=regional_component_df,
           #                      ggplot2::aes(ymin=lwr_50,ymax=upr_50,x=Age*1000),fill="#3b47ad",alpha=0.3)+
@@ -2132,7 +2028,7 @@ plot.reslr_output <- function(x,
           ggplot2::ylab("Sea Level (m)") +
           ggplot2::xlab("Year (CE)")
 
-        #cat("Regional Component plotted \n")
+        # cat("Regional Component plotted \n")
 
         # Derivative of Predicted Regional Component Plot---------------------------
         regional_rate_component_df <- output_dataframes$regional_rate_component_df %>%
@@ -2143,11 +2039,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = regional_rate_component_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = regional_rate_component_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::geom_hline(yintercept = 0) +
@@ -2178,7 +2074,7 @@ plot.reslr_output <- function(x,
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
-        #cat("Regional Rate Component plotted \n")
+        # cat("Regional Rate Component plotted \n")
 
 
         # Linear Local + Site specific vertical offset ---------------------
@@ -2189,12 +2085,12 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = lin_loc_component_df,
             ggplot2::aes(
-              ymin = lwr, ymax = upr, x = Age * 1000,
+              ymin = lwr, ymax = upr, x = Age,
               fill = "CI"
             ), alpha = 0.3
           ) +
@@ -2229,7 +2125,7 @@ plot.reslr_output <- function(x,
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
-        #cat("Linear Local Component plotted \n")
+        # cat("Linear Local Component plotted \n")
 
         # Non-Linear Local Component: Spline in Space Time ----------------
         non_lin_loc_component_df <- output_dataframes$non_lin_loc_component_df %>%
@@ -2240,11 +2136,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = non_lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::geom_hline(yintercept = 0) +
           ggplot2::theme_bw() +
@@ -2276,7 +2172,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::xlab("Year (CE)")
-        #cat("Non-Linear Local Component Plot \n")
+        # cat("Non-Linear Local Component Plot \n")
 
         # Non-Linear Local Component: Rate of change for Spline in Space Time --------------
         non_lin_loc_rate_component_df <- output_dataframes$non_lin_loc_rate_component_df %>%
@@ -2286,11 +2182,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = non_lin_loc_rate_component_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_rate_component_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::geom_hline(yintercept = 0) +
@@ -2323,49 +2219,49 @@ plot.reslr_output <- function(x,
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::xlab("Year (CE)")
 
-        #cat("Rate of change of Non-Linear Local Component Plot \n")
+        # cat("Rate of change of Non-Linear Local Component Plot \n")
 
         # Separate Components on one plot with CI --------
         all_components_CI_plot <- ggplot2::ggplot() +
           # Linear Local Component + site specific vertical offset
           ggplot2::geom_line(
             data = lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Site Specific vertical offset + \n Linear Local Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Site Specific vertical offset + \n Linear Local Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Site Specific vertical offset + \n Linear Local Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Site Specific vertical offset + \n Linear Local Component"), # ID),
             alpha = 0.3
           ) +
 
           # Non linear Local
           ggplot2::geom_line(
             data = non_lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Non Linear Local Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Non Linear Local Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Non Linear Local Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Non Linear Local Component"), # ID),
             alpha = 0.3
           ) +
           # Regional Component
           ggplot2::geom_line(
             data = regional_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Regional Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Regional Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = regional_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Regional Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Regional Component"), # ID),
             alpha = 0.3
           ) +
           # Total Model
           ggplot2::geom_line(
             data = total_model_fit_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Total Posterior Model") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Total Posterior Model") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = total_model_fit_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Total Posterior Model"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Total Posterior Model"), # ID),
             alpha = 0.3
           ) +
           ggplot2::theme_bw() +
@@ -2414,20 +2310,20 @@ plot.reslr_output <- function(x,
         plot_result <-
           ggplot2::ggplot() +
           ggplot2::geom_rect(data = data, ggplot2::aes(
-            xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+            xmin = Age - Age_err, xmax = Age + Age_err,
             ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
           ), alpha = 0.4) +
           ggplot2::geom_point(
             data = data,
-            ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+            ggplot2::aes(y = RSL, x = Age, colour = "black"), size = 0.5
           ) +
           ggplot2::geom_line(
             data = total_model_fit_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = total_model_fit_df,
-            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Relative Sea Level (m)") +
@@ -2472,7 +2368,7 @@ plot.reslr_output <- function(x,
             "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
-        #cat("Plotted the total model fit for the NIGAM decomposition \n")
+        # cat("Plotted the total model fit for the NIGAM decomposition \n")
 
         # Plotting Rate of Change for Total component
         total_model_rate_df <- output_dataframes$total_model_rate_df
@@ -2480,11 +2376,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = total_model_rate_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = total_model_rate_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::facet_wrap(~SiteName) +
@@ -2529,7 +2425,7 @@ plot.reslr_output <- function(x,
             "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
-        #cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
+        # cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
 
 
         # Regional Component Plot---------------------------
@@ -2538,11 +2434,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = regional_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = regional_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -2573,7 +2469,7 @@ plot.reslr_output <- function(x,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
 
-        #cat("Regional Component plotted \n")
+        # cat("Regional Component plotted \n")
 
         # Derivative of Predicted Regional Component Plot---------------------------
         regional_rate_component_df <- output_dataframes$regional_rate_component_df
@@ -2581,11 +2477,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = regional_rate_component_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = regional_rate_component_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::geom_hline(yintercept = 0) +
@@ -2620,7 +2516,7 @@ plot.reslr_output <- function(x,
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
-        #cat("Regional Rate Component plotted \n")
+        # cat("Regional Rate Component plotted \n")
 
 
         # Linear Local + Site specific vertical offset ---------------------
@@ -2629,12 +2525,12 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = lin_loc_component_df,
             ggplot2::aes(
-              ymin = lwr, ymax = upr, x = Age * 1000,
+              ymin = lwr, ymax = upr, x = Age,
               fill = "CI"
             ), alpha = 0.3
           ) +
@@ -2673,7 +2569,7 @@ plot.reslr_output <- function(x,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
 
-        #cat("Linear Local Component plotted \n")
+        # cat("Linear Local Component plotted \n")
 
         # Non-Linear Local Component: Spline in Space Time ----------------
         non_lin_loc_component_df <- output_dataframes$non_lin_loc_component_df
@@ -2682,11 +2578,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = non_lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::geom_hline(yintercept = 0) +
           ggplot2::theme_bw() +
@@ -2722,7 +2618,7 @@ plot.reslr_output <- function(x,
             "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
-        #cat("Non-Linear Local Component Plot \n")
+        # cat("Non-Linear Local Component Plot \n")
 
         # Non-Linear Local Component: Rate of change for Spline in Space Time --------------
         non_lin_loc_rate_component_df <- output_dataframes$non_lin_loc_rate_component_df
@@ -2730,11 +2626,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = non_lin_loc_rate_component_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_rate_component_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::geom_hline(yintercept = 0) +
@@ -2771,49 +2667,49 @@ plot.reslr_output <- function(x,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
 
-        #cat("Rate of change of Non-Linear Local Component Plot \n")
+        # cat("Rate of change of Non-Linear Local Component Plot \n")
 
         # Separate Components on one plot with CI --------
         all_components_CI_plot <- ggplot2::ggplot() +
           # Linear Local Component + site specific vertical offset
           ggplot2::geom_line(
             data = lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Site Specific vertical offset + \n Linear Local Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Site Specific vertical offset + \n Linear Local Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Site Specific vertical offset + \n Linear Local Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Site Specific vertical offset + \n Linear Local Component"), # ID),
             alpha = 0.3
           ) +
 
           # Non linear Local
           ggplot2::geom_line(
             data = non_lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Non Linear Local Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Non Linear Local Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Non Linear Local Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Non Linear Local Component"), # ID),
             alpha = 0.3
           ) +
           # Regional Component
           ggplot2::geom_line(
             data = regional_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Regional Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Regional Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = regional_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Regional Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Regional Component"), # ID),
             alpha = 0.3
           ) +
           # Total Model
           ggplot2::geom_line(
             data = total_model_fit_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Total Posterior Model") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Total Posterior Model") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = total_model_fit_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Total Posterior Model"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Total Posterior Model"), # ID),
             alpha = 0.3
           ) +
           ggplot2::theme_bw() +
@@ -2856,20 +2752,20 @@ plot.reslr_output <- function(x,
         plot_result <-
           ggplot2::ggplot() +
           ggplot2::geom_rect(data = data, ggplot2::aes(
-            xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+            xmin = Age - Age_err, xmax = Age + Age_err,
             ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
           ), alpha = 0.4) +
           ggplot2::geom_point(
             data = data,
-            ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+            ggplot2::aes(y = RSL, x = Age, colour = "black"), size = 0.5
           ) +
           ggplot2::geom_line(
             data = total_model_fit_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = total_model_fit_df,
-            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::xlab("Year (CE)") +
           ggplot2::ylab("Relative Sea Level (m)") +
@@ -2910,7 +2806,7 @@ plot.reslr_output <- function(x,
             ))
           ) +
           ggplot2::facet_wrap(~SiteName)
-        #cat("Plotted the total model fit for the NIGAM decomposition \n")
+        # cat("Plotted the total model fit for the NIGAM decomposition \n")
 
         # Plotting Rate of Change for Total component
         total_model_rate_df <- output_dataframes$total_model_rate_df
@@ -2918,11 +2814,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = total_model_rate_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = total_model_rate_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::facet_wrap(~SiteName) +
@@ -2963,7 +2859,7 @@ plot.reslr_output <- function(x,
               size = 2
             ))
           )
-        #cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
+        # cat("Plotted the rate of change for the total model fit for the NIGAM decomposition \n")
 
 
         # Regional Component Plot---------------------------
@@ -2972,11 +2868,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = regional_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = regional_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -3003,7 +2899,7 @@ plot.reslr_output <- function(x,
           ggplot2::ylab("Sea Level (m)") +
           ggplot2::xlab("Year (CE)")
 
-        #cat("Regional Component plotted \n")
+        # cat("Regional Component plotted \n")
 
         # Derivative of Predicted Regional Component Plot---------------------------
         regional_rate_component_df <- output_dataframes$regional_rate_component_df
@@ -3011,11 +2907,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = regional_rate_component_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = regional_rate_component_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::geom_hline(yintercept = 0) +
@@ -3046,7 +2942,7 @@ plot.reslr_output <- function(x,
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
-        #cat("Regional Rate Component plotted \n")
+        # cat("Regional Rate Component plotted \n")
 
 
         # Linear Local + Site specific vertical offset ---------------------
@@ -3055,12 +2951,12 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = lin_loc_component_df,
             ggplot2::aes(
-              ymin = lwr, ymax = upr, x = Age * 1000,
+              ymin = lwr, ymax = upr, x = Age,
               fill = "CI"
             ), alpha = 0.3
           ) +
@@ -3095,7 +2991,7 @@ plot.reslr_output <- function(x,
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::labs(colour = "")
 
-        #cat("Linear Local Component plotted \n")
+        # cat("Linear Local Component plotted \n")
 
         # Non-Linear Local Component: Spline in Space Time ----------------
         non_lin_loc_component_df <- output_dataframes$non_lin_loc_component_df
@@ -3104,11 +3000,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = non_lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+            ggplot2::aes(x = Age, y = pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::geom_hline(yintercept = 0) +
           ggplot2::theme_bw() +
@@ -3140,7 +3036,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::xlab("Year (CE)")
-        #cat("Non-Linear Local Component Plot \n")
+        # cat("Non-Linear Local Component Plot \n")
 
         # Non-Linear Local Component: Rate of change for Spline in Space Time --------------
         non_lin_loc_rate_component_df <- output_dataframes$non_lin_loc_rate_component_df
@@ -3148,11 +3044,11 @@ plot.reslr_output <- function(x,
           ggplot2::ggplot() +
           ggplot2::geom_line(
             data = non_lin_loc_rate_component_df,
-            ggplot2::aes(x = Age * 1000, y = rate_pred, colour = "mean")
+            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_rate_component_df,
-            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+            ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
           ) +
           ggplot2::theme_bw() +
           ggplot2::geom_hline(yintercept = 0) +
@@ -3185,49 +3081,49 @@ plot.reslr_output <- function(x,
           ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
           ggplot2::xlab("Year (CE)")
 
-        ###cat("Rate of change of Non-Linear Local Component Plot \n")
+        ### cat("Rate of change of Non-Linear Local Component Plot \n")
 
         # Separate Components on one plot with CI --------
         all_components_CI_plot <- ggplot2::ggplot() +
           # Linear Local Component + site specific vertical offset
           ggplot2::geom_line(
             data = lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Site Specific vertical offset + \n Linear Local Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Site Specific vertical offset + \n Linear Local Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Site Specific vertical offset + \n Linear Local Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Site Specific vertical offset + \n Linear Local Component"), # ID),
             alpha = 0.3
           ) +
 
           # Non linear Local
           ggplot2::geom_line(
             data = non_lin_loc_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Non Linear Local Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Non Linear Local Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = non_lin_loc_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Non Linear Local Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Non Linear Local Component"), # ID),
             alpha = 0.3
           ) +
           # Regional Component
           ggplot2::geom_line(
             data = regional_component_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Regional Component") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Regional Component") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = regional_component_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Regional Component"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Regional Component"), # ID),
             alpha = 0.3
           ) +
           # Total Model
           ggplot2::geom_line(
             data = total_model_fit_df,
-            ggplot2::aes(x = Age * 1000, y = pred, colour = "Total Posterior Model") # ID)
+            ggplot2::aes(x = Age, y = pred, colour = "Total Posterior Model") # ID)
           ) +
           ggplot2::geom_ribbon(
             data = total_model_fit_df,
-            ggplot2::aes(ymin = lwr, ymax = upr, x = Age * 1000, fill = "Total Posterior Model"), # ID),
+            ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Total Posterior Model"), # ID),
             alpha = 0.3
           ) +
           ggplot2::theme_bw() +
@@ -3271,4 +3167,36 @@ plot.reslr_output <- function(x,
       all_components_CI_plot = all_components_CI_plot
     )
   }
- }
+  if ("model_fit_plot" %in% plot_type) {
+    # message("Print plot of the model fit\n")
+    return(output_plots$plot_result)
+  }
+  if ("rate_plot" %in% plot_type) {
+    # message("Print plot of the rate of change \n")
+    return(output_plots$plot_rate)
+  }
+  if ("regional_plot" %in% plot_type) {
+    # message("Print plot of the regional component \n")
+    return(output_plots$regional_plot)
+  }
+  if ("regional_rate_plot" %in% plot_type) {
+    # message("Print plot of the rate of change for the regional component \n")
+    return(output_plots$regional_rate_plot)
+  }
+  if ("linear_local_plot" %in% plot_type) {
+    # message("Print plot of the linear local component \n")
+    return(output_plots$lin_loc_plot)
+  }
+  if ("non_linear_local_plot" %in% plot_type) {
+    # message("Print plot of the non-linear local component \n")
+    return(output_plots$non_lin_loc_plot)
+  }
+  if ("non_linear_local_rate_plot" %in% plot_type) {
+    # message("Print plot of the rate of change of the non-linear local component \n")
+    return(output_plots$non_lin_loc_rate_plot)
+  }
+  if ("nigam_component_plot" %in% plot_type) {
+    # message("Print plot of all the components of the NI GAM decomposition \n")
+    return(output_plots$all_components_CI_plot)
+  }
+}

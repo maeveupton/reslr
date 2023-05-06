@@ -16,9 +16,10 @@
 #' @param n_chains Number of chains. The number of times the model will be run.
 #' @param igp_smooth Informs prior for the smoothness (correlation) parameter if model = "igp" is chosen. Choose a value between 0 and 1. Closer to 1 will increase smoothness.
 #' @param n_cp Number of change points 1,2 or 3
-#' @param CI Size of the credible interval required by the user. The default is 95% and the user can choose from "50%", "95%" and "99%".
-#' @param spline_nseg_t Number of segments required in a spline in time which is used the basis functions
-#' @param spline_nseg_st Number of segments required in a spline in space time which is used the basis functions
+#' @param CI Size of the credible interval required by the user. The default is 0.95 corresponding to 95%.
+#' @param spline_nseg Number of segments used to create basis functions
+#' @param spline_nseg_t Number of segments used to create basis functions for NIGAM temporal component
+#' @param spline_nseg_st Number of segments used to create basis functions for NIGAM spatial temporal component
 #' @param xr Range of data from cross validation
 #' @param xl Range of data for cross validation
 
@@ -37,7 +38,8 @@ reslr_mcmc <- function(input_data,
                        n_burnin = 1000,
                        n_thin = 4,
                        n_chains = 3,
-                       CI = "95%",
+                       CI = 0.95,
+                       spline_nseg = NULL,
                        spline_nseg_t = NULL,
                        spline_nseg_st = NULL # ,
                        # xl,
@@ -55,7 +57,8 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    n_burnin = 1000,
                                    n_thin = 4,
                                    n_chains = 3,
-                                   CI = "95%",
+                                   CI = 0.95,
+                                   spline_nseg = NULL,
                                    spline_nseg_t = NULL,
                                    spline_nseg_st = NULL # ,
                                    # xr = min(input_data$data$Age),
@@ -64,8 +67,10 @@ reslr_mcmc.reslr_input <- function(input_data,
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
   # Input Data -------------
-  data <- input_data$data
-  data_grid <- input_data$data_grid
+  data <- input_data$data %>%
+    dplyr::mutate(Age = Age/1000, Age_err = Age_err/1000)
+  data_grid <- input_data$data_grid %>%
+    dplyr::mutate(Age = Age/1000)
 
   # Simple Linear Regression ----------------
   if (model_type == "eiv_slr_t") {
@@ -102,7 +107,11 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.thin = n_thin,
         n.chains = n_chains
       )
-    # )
+    # Convert back to 1000
+    data <- data %>%
+      dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+    data_grid <- data_grid %>%
+      dplyr::mutate(Age = Age*1000)
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(
@@ -164,6 +173,11 @@ reslr_mcmc.reslr_input <- function(input_data,
       n.thin = n_thin,
       n.chains = n_chains
     ))
+    # Convert back to 1000
+    data <- data %>%
+      dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+    data_grid <- data_grid %>%
+      dplyr::mutate(Age = Age*1000)
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(
       noisy_model_run_output = model_run,
@@ -236,6 +250,11 @@ reslr_mcmc.reslr_input <- function(input_data,
       n.chains = n_chains,
       inits = myinitial
     ))
+    # Convert back to 1000
+    data <- data %>%
+      dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+    data_grid <- data_grid %>%
+      dplyr::mutate(Age = Age*1000)
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(
@@ -308,6 +327,11 @@ reslr_mcmc.reslr_input <- function(input_data,
       n.chains = n_chains,
       inits = myinitial
     ))
+    # Convert back to 1000-------
+    data <- data %>%
+      dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+    data_grid <- data_grid %>%
+      dplyr::mutate(Age = Age*1000)
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(
@@ -375,6 +399,11 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.thin = n_thin,
         n.chains = n_chains
       ))
+      # Convert back to 1000
+      data <- data %>%
+        dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+      data_grid <- data_grid %>%
+        dplyr::mutate(Age = Age*1000)
 
       # Output dataframe for plots
       output_dataframes <- create_igp_output_df(
@@ -431,6 +460,12 @@ reslr_mcmc.reslr_input <- function(input_data,
         data_grid = data_grid,
         CI = CI
       )
+      # Convert back to 1000
+      data <- data %>%
+        dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+      data_grid <- data_grid %>%
+        dplyr::mutate(Age = Age*1000)
+
       # Output with everything-------------
       jags_output <- list(
         noisy_model_run_output = model_run, # Watch this
@@ -458,7 +493,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "sigma_res",
       "b_t",
       "r",
-      "sigma_t",
+      "sigma_beta_t",#update jags
       "sigmasq_all",
       "residuals"
     )
@@ -468,7 +503,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg_t = spline_nseg_t # ,
+      spline_nseg = spline_nseg # ,
       # xl = xl,
       # xr = xr
     )
@@ -500,8 +535,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       model_run = model_run,
       model_type = model_type,
       jags_data = jags_data,
-      spline_nseg_st = NULL,
-      spline_nseg_t = spline_nseg_t # ,
+      spline_nseg = spline_nseg,
       # xr=xr,
       # xl=xl
     )
@@ -520,7 +554,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "b_t",
       "r",
       "r_deriv",
-      "sigma_t",
+      "sigma_beta_t",
       "sigmasq_all",
       "r_pred",
       "tau_t",
@@ -540,8 +574,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_t_deriv = spline_basis_fun_list$B_t_deriv,
       B_t_pred = spline_basis_fun_list$B_t_pred,
       n_knots_t = ncol(spline_basis_fun_list$B_t),
-      B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv # ,
-      # nu = 2
+      B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv
     )
     # Run JAGS--------------
     noisy_model_run_output <-
@@ -554,6 +587,11 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.thin = n_thin,
         n.chains = n_chains
       ))
+    # Convert back to 1000
+    data <- data %>%
+      dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+    data_grid <- data_grid %>%
+      dplyr::mutate(Age = Age*1000)
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
@@ -587,7 +625,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg_st = spline_nseg_st
+      spline_nseg = spline_nseg
     )
 
     # JAGS data
@@ -628,8 +666,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       model_run = model_run,
       model_type = model_type,
-      spline_nseg_st = spline_nseg_st,
-      spline_nseg_t = NULL
+      spline_nseg = spline_nseg
     )
 
     #----NI JAGS model-----
@@ -679,6 +716,12 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.thin = n_thin,
         n.chains = n_chains
       ))
+
+    # Convert back to 1000
+    data <- data %>%
+      dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+    data_grid <- data_grid %>%
+      dplyr::mutate(Age = Age*1000)
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
@@ -841,8 +884,7 @@ reslr_mcmc.reslr_input <- function(input_data,
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
-        dplyr::pull() # ,
-      # nu = 2
+        dplyr::pull()
     )
 
     # Parameters to save in JAGs
@@ -888,6 +930,11 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.thin = n_thin,
         n.chains = n_chains
       ))
+    # Convert back to 1000
+    data <- data %>%
+      dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+    data_grid <- data_grid %>%
+      dplyr::mutate(Age = Age*1000)
 
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,

@@ -13,7 +13,7 @@ reslr_mcmc(
   n_burnin = 1000,
   n_thin = 4,
   n_chains = 3,
-  CI = "95\%",
+  CI = 0.95,
   spline_nseg_t = NULL,
   spline_nseg_st = NULL
 )
@@ -35,7 +35,7 @@ reslr_mcmc(
 
 \item{n_chains}{Number of chains. The number of times the model will be run.}
 
-\item{CI}{Size of the credible interval required by the user. The default is 95\% and the user can choose from "50\%", "95\%" and "99\%".}
+\item{CI}{Size of the credible interval required by the user. The default is 0.95 corresponding to 95\%.}
 
 \item{spline_nseg_t}{Number of segments required in a spline in time which is used the basis functions}
 

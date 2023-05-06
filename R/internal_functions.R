@@ -2,47 +2,45 @@
 #'
 #' @param output_dataframes These are dataframes created for plotting and are outputs from the \code{reslr_mcmc} function.
 #' @param data This is the input dataset stored in a list created in the \code{reslr_mcmc} function.
-#' @param plot_tide_gauges If plotting tide gauges add them onto the end of the proxy record
-#' @param caption Caption of the title depending on the model type
-#' @param xlab Labeling the x-axis
-#' @param ylab Labeling the y-axis
-#' @param title Plotting a title
+#' @param plot_tide_gauges If plotting tide gauges add them onto the end of the proxy record.
+#' @param plot_proxy_records Plotting the proxy records on their own and this is the default
+#' @param model_caption Caption depending on the model type and number of proxy and tide gauge sites.
+#' @param xlab Labeling the x-axis.
+#' @param ylab Labeling the y-axis.
+#' @param title Plotting a title.
 #'
 #' @return The plot of the model fit
 #' @noRd
 create_model_fit_plot <- function(output_dataframes,
                                   data,
-                                  plot_tide_gauges = FALSE,
+                                  #plot_tide_gauges,
+                                  #plot_proxy_records,
                                   model_caption,
                                   xlab,
                                   ylab,
                                   title) {
   data_type_id <- pred <- lwr <- upr <- Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- NULL
-  if (plot_tide_gauges == FALSE) {
+  #if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
     # Plot
-    plot <-
+    plot_result <-
       ggplot2::ggplot() +
       ggplot2::geom_rect(data = data, ggplot2::aes(
-        xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+        xmin = Age - Age_err, xmax = Age  + Age_err ,
         ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
       ), alpha = 0.4) +
       ggplot2::geom_point(
         data = data,
-        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+        ggplot2::aes(y = RSL, x = Age , colour = "black"), size = 0.5
       ) +
       ggplot2::geom_line(
         data = output_dataframes,
-        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+        ggplot2::aes(x = Age , y = pred, colour = "mean")
       ) +
       ggplot2::geom_ribbon(
         data = output_dataframes,
-        ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+        ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age , fill = "CI"), alpha = 0.3
       ) +
-      # ggplot2::geom_ribbon(
-      #   data = output_dataframes,
-      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-      # ) +
-      ggplot2::labs(x = xlab, y = ylab, title = title) +
+      ggplot2::labs(x = xlab, y = ylab, title = title,colour = "") +
       ggplot2::theme_bw() +
       ggplot2::theme(
         plot.title = ggplot2::element_text(size = 15),
@@ -55,18 +53,14 @@ create_model_fit_plot <- function(output_dataframes,
         strip.background = ggplot2::element_rect(fill = c("white"))
       ) +
       ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      ggplot2::labs(colour = "") +
       ggplot2::scale_fill_manual("",
         values = c(
           "Uncertainty" = ggplot2::alpha("grey", 0.3),
-          "CI" = ggplot2::alpha("purple3", 0.2) #
-          # "50" = ggplot2::alpha("purple3", 0.3)
+          "CI" = ggplot2::alpha("purple3", 0.2)
         ),
         labels = c(
           CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-          # "95% Credible Interval",
           expression(paste("1-sigma Error"))
-          # , "50% Credible Interval"
         )
       ) +
       ggplot2::scale_colour_manual("",
@@ -75,7 +69,7 @@ create_model_fit_plot <- function(output_dataframes,
       ) +
       ggplot2::guides(
         fill = ggplot2::guide_legend(override.aes = list(
-          alpha = c(0.4, 0.2), # , 0.4),
+          alpha = c(0.3, 0.2), # , 0.4),
           size = 1
         )),
         colour = ggplot2::guide_legend(override.aes = list(
@@ -86,78 +80,69 @@ create_model_fit_plot <- function(output_dataframes,
       ) +
       ggplot2::facet_wrap(~SiteName) +
       ggplot2::labs(caption = model_caption)
-  } else {
-    # Plot
-    plot <-
-      ggplot2::ggplot() +
-      ggplot2::geom_rect(data = data, ggplot2::aes(
-        xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
-        ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
-      ), alpha = 0.4) +
-      # ggplot2::ggtitle(paste0("Proxy data & Tide gauge data from:",unique(as.factor(data$SiteName))))+
-      ggplot2::geom_point(
-        data = data,
-        ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
-      ) + # , shape = data_type_id
-      ggplot2::geom_line(
-        data = output_dataframes,
-        ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
-      ) +
-      ggplot2::geom_ribbon(
-        data = output_dataframes,
-        ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
-      ) +
-      # ggplot2::geom_ribbon(
-      #   data = output_dataframes,
-      #   ggplot2::aes(y = pred, ymin = lwr_50, ymax = upr_50, x = Age * 1000, fill = "50"), alpha = 0.3
-      # ) +
-
-      ggplot2::labs(x = xlab, y = ylab, title = title) +
-      ggplot2::theme_bw() +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 15),
-        axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        axis.text = ggplot2::element_text(size = 12),
-        legend.text = ggplot2::element_text(size = 10)
-      ) +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 10),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      ggplot2::labs(colour = "") +
-      ggplot2::scale_fill_manual("",
-        values = c(
-          "Uncertainty" = ggplot2::alpha("grey", 0.3),
-          CI = ggplot2::alpha("purple3", 0.2) #
-          # "50" = ggplot2::alpha("purple3", 0.3)
-        ),
-        labels = c(
-          # "95% Credible Interval",
-          CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-          "Uncertainty" = expression(paste("1-sigma Error"))
-          # , "50% Credible Interval"
-        )
-      ) +
-      ggplot2::scale_colour_manual("",
-        values = c("black" = "black", "mean" = "purple3"),
-        labels = c("Data", "Posterior Fit")
-      ) +
-      ggplot2::guides(
-        fill = ggplot2::guide_legend(override.aes = list(
-          # alpha = c(0.4, 0.2), # , 0.4),
-          size = 1
-        )),
-        colour = ggplot2::guide_legend(override.aes = list(
-          linetype = c(0, 1),
-          shape = c(16, NA),
-          size = 2
-        ))
-      ) +
-      ggplot2::facet_wrap(~SiteName) +
-      ggplot2::labs(caption = model_caption)
-  }
-  return(plot)
+ # } else {
+  #   # Plot
+  #   plot <-
+  #     ggplot2::ggplot() +
+  #     ggplot2::geom_rect(data = data, ggplot2::aes(
+  #       xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
+  #       ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
+  #     ), alpha = 0.4) +
+  #     # ggplot2::ggtitle(paste0("Proxy data & Tide gauge data from:",unique(as.factor(data$SiteName))))+
+  #     ggplot2::geom_point(
+  #       data = data,
+  #       ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
+  #     ) + # , shape = data_type_id
+  #     ggplot2::geom_line(
+  #       data = output_dataframes,
+  #       ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
+  #     ) +
+  #     ggplot2::geom_ribbon(
+  #       data = output_dataframes,
+  #       ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
+  #     ) +
+  #     ggplot2::labs(x = xlab, y = ylab, title = title) +
+  #     ggplot2::theme_bw() +
+  #     ggplot2::theme(
+  #       plot.title = ggplot2::element_text(size = 15),
+  #       axis.title = ggplot2::element_text(size = 12, face = "bold"),
+  #       axis.text = ggplot2::element_text(size = 12),
+  #       legend.text = ggplot2::element_text(size = 10)
+  #     ) +
+  #     ggplot2::theme(
+  #       strip.text.x = ggplot2::element_text(size = 10),
+  #       strip.background = ggplot2::element_rect(fill = c("white"))
+  #     ) +
+  #     ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+  #     ggplot2::labs(colour = "") +
+  #     ggplot2::scale_fill_manual("",
+  #       values = c(
+  #         "Uncertainty" = ggplot2::alpha("grey", 0.3),
+  #         CI = ggplot2::alpha("purple3", 0.2)
+  #       ),
+  #       labels = c(
+  #         CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+  #         "Uncertainty" = expression(paste("1-sigma Error"))
+  #       )
+  #     ) +
+  #     ggplot2::scale_colour_manual("",
+  #       values = c("black" = "black", "mean" = "purple3"),
+  #       labels = c("Data", "Posterior Fit")
+  #     ) +
+  #     ggplot2::guides(
+  #       fill = ggplot2::guide_legend(override.aes = list(
+  #         size = 1
+  #       )),
+  #       colour = ggplot2::guide_legend(override.aes = list(
+  #         linetype = c(0, 1),
+  #         shape = c(16, NA),
+  #         size = 2
+  #       ))
+  #     ) +
+  #     ggplot2::facet_wrap(~SiteName) +
+  #     ggplot2::labs(caption = model_caption)
+  # }
+  return(plot_result)
 }
 
 #' In this function, tide gauge data from the Permanent Service for Mean Sea Level online database is accessed in a temporary path.
@@ -176,7 +161,7 @@ clean_tidal_gauge_data <- function(data,
                                    list_preferred_TGs = NULL,
                                    TG_minimum_dist_proxy = FALSE,
                                    all_TG_1deg = FALSE,
-                                   rolling_window_average = 10) {
+                                   rolling_window_average) {
   Age_epoch_id <- LongLat <- rolling_avg <- median <- nearest_proxy_site <- RSL_annual <- TG_min_dist1 <- minimum_dist <- nearest_TG <- rows_site <- site <- min_dist1 <- stationflag <- name <- sd <- sd_TG <- n_obs_by_site <- RSL_offset <- data_type_id <- decade <- decade_meanRSL <- Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- id <- NULL
   # Using data from PSMSL website for annual tide gauge data----------------------------------
   # Set up the URL for downloading the data
@@ -270,57 +255,37 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(data_type_id = "TideGaugeData")
 
 
-  # # Set the window size for the moving average (in this case, 10 years)
+  # Set the window size for the moving average (in this case, 10 years)
   window_size <- rolling_window_average
 
-  # Create a new column with the rolling average
+  # Version A: Create a new column for the decade based on the midpoint of the rolling window
   annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
     width = window_size,
     FUN = mean,
-    align = "right", # "right",
+    align = "right",
     fill = NA
   )
-
-  # create a new column for the decade based on the midpoint of the rolling window
-  # # annual_tidal_gauge_data_df$decade <- as.integer(floor((annual_tidal_gauge_data_df$Age - (window_size/2))/10)*10)
-  # annual_tidal_gauge_data_df$decade <- zoo::rollapply(annual_tidal_gauge_data_df$Age,
-  #   width = window_size,
-  #   FUN = stats::median,
-  #   align = "right", # "right",
-  #   fill = NA
-  # )
-  #
-  # calculate the decadal averages based on the rolling average
+  # Calculate the decadal averages based on the rolling average
   decadal_averages_TG <- annual_tidal_gauge_data_df %>% tidyr::drop_na()
-  # annual_tidal_gauge_data_df %>%
-  # dplyr::group_by(decade, SiteName) %>%
-  # dplyr::summarise(
-  #   #decade_meanRSL = mean(rolling_avg, na.rm = TRUE),
-  #   decade_meanRSL = mean(rolling_avg, na.rm = TRUE),
-  #   Age = max(Age),
-  #   rows_site = dplyr::n()
-  # )
-  # plot(decadal_averages_TG$decade,decadal_averages_TG$rolling_avg)
 
-
-  # Decadal Averages------ I don't know if this is too simple to calculate the decadal averages
-  # #offset works better with this
+  # Version B: Decadal Averages using simple method------
   # decadal_averages_TG <-
   #   annual_tidal_gauge_data_df %>%
-  #   dplyr::mutate(decade = (Age - 1) %/% 10) %>%
+  #   dplyr::mutate(decade = (Age - 1) %/% window_size) %>%
   #   dplyr::group_by(decade, SiteName) %>%
   #   dplyr::summarise(
-  #     #decade_meanRSL = mean(RSL),
-  #     rolling_avg = mean(RSL),
-  #     Age = max(Age),
-  #     rows_site = dplyr::n()
+  #     decade_meanRSL = mean(RSL),
+  #     rolling_avg = mean(RSL)#,
+  #     #Age = max(Age),
+  #     #rows_site = dplyr::n()
   #   ) # Age=min(Age)
 
   #---Using standard deviation of RSL over the decade as uncertainty----
-  decadal_averages_TG <- decadal_averages_TG %>%
-    dplyr::group_by(SiteName) %>%
+  # too big
+  #decadal_averages_TG <- decadal_averages_TG %>%
+    #dplyr::group_by(SiteName) %>%
     # dplyr::mutate(sd_TG = sd(decade_meanRSL))
-    dplyr::mutate(sd_TG = sd(rolling_avg))
+    #dplyr::mutate(sd_TG = sd(rolling_avg))
 
   #----- New df with decadal averages for tide gauges-----
   tidal_gauge_average_10_df <- merge(decadal_averages_TG, annual_tidal_gauge_data_df)
@@ -328,20 +293,26 @@ clean_tidal_gauge_data <- function(data,
   #---Rsl & Age error for tidal gauge data----
   tidal_gauge_full_df <- tidal_gauge_average_10_df %>%
     dplyr::mutate(
-      Age_err = 5, # years --> half a year/half a decade
+      #Age_err = 5, # years --> half a year/half a decade
+      Age_err = 1, # years --> half a year/half a decade
     ) %>%
-    dplyr::mutate(sd_TG = ifelse(is.na(sd_TG), 0.001, sd_TG)) %>%
+    #dplyr::mutate(sd_TG = ifelse(is.na(sd_TG), 0.001, sd_TG)) %>%
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(
-      RSL_err = sd_TG
+      RSL_err = 0.001#sd_TG
     )
 
   tidal_gauge_full_df <- tidal_gauge_full_df %>%
     dplyr::mutate(Age = Age / 1000) %>%
     dplyr::mutate(Age_err = Age_err / 1000) %>%
     dplyr::mutate(RSL_annual = RSL) %>%
+    # Change for Version A
     dplyr::mutate(RSL = rolling_avg) %>%
-    dplyr::select(!c(decade, Age_epoch_id, rolling_avg, RSL_annual, RSL_offset))
+    #Change for Version B
+    #dplyr::mutate(RSL = decade_meanRSL) %>%
+    dplyr::select(!c(decade, Age_epoch_id,
+                     rolling_avg,
+                     RSL_annual, RSL_offset))
 
   # No user option here -> this is a must: Removing sites with only 2 points (20 years of data)-----
   decadal_TG_df <-
@@ -752,7 +723,7 @@ linear_reg_rates <- function(data) {
 #' @param model_run_output  The JAGS output
 #' @param jags_data Data associated with IGP data
 #' @param data_grid Input data grid
-#' @param CI Size of the credible interval, default is 95% and the user can use "50%","95%" or "99%"
+#' @param CI Size of the credible interval, default is 0.95 corresponding to 95%
 #' @noRd
 create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
   m <- model_run$BUGSoutput$sims.matrix
@@ -810,30 +781,31 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
   } # End i loop
   # pred_full <- pred_full * mod$scale_factor_y
   # w.ms <- (w.ms * mod$scale_factor_y) / mod$scale_factor_x
+
   upr <- apply(pred_full, 2, stats::quantile, probs = 1 - CI/2)
   lwr <- apply(pred_full, 2, stats::quantile, probs = CI/2)
   rate_lwr <- apply(w.ms, 2, stats::quantile, probs = CI/2)
   rate_upr <- apply(w.ms, 2, stats::quantile, probs = 1 - CI/2)
 
-  if (CI == "99%") {
-    upr <- apply(pred_full, 2, stats::quantile, probs = 0.005)
-    lwr <- apply(pred_full, 2, stats::quantile, probs = 0.995)
-    rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 0.005)
-    rate_upr <- apply(w.ms, 2, stats::quantile, probs = 0.995)
-  }
-
-  if (CI == "95%") {
-    upr <- apply(pred_full, 2, stats::quantile, probs = 0.025)
-    lwr <- apply(pred_full, 2, stats::quantile, probs = 0.975)
-    rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 0.025)
-    rate_upr <- apply(w.ms, 2, stats::quantile, probs = 0.975)
-  }
-  if (CI == "50%") {
-    upr <- apply(pred_full, 2, stats::quantile, probs = 0.25)
-    lwr <- apply(pred_full, 2, stats::quantile, probs = 0.75)
-    rate_upr <- apply(w.ms, 2, stats::quantile, probs = 0.25)
-    rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 0.75)
-  }
+  # if (CI == "99%") {
+  #   upr <- apply(pred_full, 2, stats::quantile, probs = 0.005)
+  #   lwr <- apply(pred_full, 2, stats::quantile, probs = 0.995)
+  #   rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 0.005)
+  #   rate_upr <- apply(w.ms, 2, stats::quantile, probs = 0.995)
+  # }
+  #
+  # if (CI == "95%") {
+  #   upr <- apply(pred_full, 2, stats::quantile, probs = 0.025)
+  #   lwr <- apply(pred_full, 2, stats::quantile, probs = 0.975)
+  #   rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 0.025)
+  #   rate_upr <- apply(w.ms, 2, stats::quantile, probs = 0.975)
+  # }
+  # if (CI == "50%") {
+  #   upr <- apply(pred_full, 2, stats::quantile, probs = 0.25)
+  #   lwr <- apply(pred_full, 2, stats::quantile, probs = 0.75)
+  #   rate_upr <- apply(w.ms, 2, stats::quantile, probs = 0.25)
+  #   rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 0.75)
+  # }
 
   # Output dataframes for plots
   output_dataframes <- dplyr::tibble(
@@ -841,19 +813,15 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
     pred = apply(pred_full, 2, mean),
     upr = upr,
     lwr = lwr,
-    # lwr_95 = apply(pred_full, 2, stats::quantile, probs = 0.025),
-    # upr_95 = apply(pred_full, 2, stats::quantile, probs = 0.975),
-    # upr_50 = apply(pred_full, 2, stats::quantile, probs = 0.25),
-    # lwr_50 = apply(pred_full, 2, stats::quantile, probs = 0.75),
     rate_pred = apply(w.ms, 2, mean),
     rate_upr = rate_upr,
     rate_lwr = rate_lwr,
-    CI = CI
-    # rate_lwr_95 = apply(w.ms, 2, stats::quantile, probs = 0.025),
-    # rate_upr_95 = apply(w.ms, 2, stats::quantile, probs = 0.975),
-    # rate_upr_50 = apply(w.ms, 2, stats::quantile, probs = 0.25),
-    # rate_lwr_50 = apply(w.ms, 2, stats::quantile, probs = 0.75)
+    #CI = CI
+    CI = paste0(CI*100,"%")
   )
+  output_dataframes <- output_dataframes %>%
+    dplyr::mutate(Age= Age*1000,
+                  Age_err = Age_err*1000)
   return(output_dataframes)
 }
 
@@ -877,24 +845,29 @@ create_output_df <- function(noisy_model_run_output,
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
     # mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
 
-    if (CI == "99%") {
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.005)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.995)
-      rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.005)
-      rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.995)
-    }
-    if (CI == "95%") {
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.025)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.975)
-      rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025)
-      rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975)
-    }
-    if (CI == "50%") {
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.25)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
-      rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25)
-      rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
-    }
+    # if (CI == "99%") {
+    #   upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.005)
+    #   lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.995)
+    #   rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.005)
+    #   rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.995)
+    # }
+    # if (CI == "95%") {
+    #   upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.025)
+    #   lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.975)
+    #   rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025)
+    #   rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975)
+    # }
+    # if (CI == "50%") {
+    #   upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.25)
+    #   lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+    #   rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25)
+    #   rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+    # }
+
+    upr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - CI/2)
+    lwr <- apply(mu_post_pred, 2, stats::quantile, probs = CI/2)
+    rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = CI/2)
+    rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 1 - CI/2)
 
     output_dataframes <- data.frame(
       data_grid,
@@ -904,249 +877,230 @@ create_output_df <- function(noisy_model_run_output,
       rate_pred = apply(mu_pred_deriv_post, 2, mean),
       rate_upr = rate_upr,
       rate_lwr = rate_lwr,
-      CI = CI
-      # upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      # lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      # upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      # lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+      CI = paste0(CI*100,"%")
     )
+    # output_dataframes <- output_dataframes %>%
+    #   dplyr::mutate(Age = Age*1000,
+    #                 Age_err = Age_err*1000)
 
-    # output_dataframes <- data.frame(
-    #   output_dataframes,
-    #   rate_pred =  apply(mu_pred_deriv_post, 2, mean),
-    #   rate_upr = rate_upr,
-    #   rate_lwr = rate_lwr
-    #   #rate_upr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-    #   #rate_lwr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-    #   #rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-    #   #rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
-    # )
   } else {
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    if (CI == "99%") {
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.005)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.995)
-    }
-    if (CI == "95%") {
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.025)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.975)
-    }
-    if (CI == "50%") {
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.25)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
-    }
+    # if (CI == "99%") {
+    #   upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.005)
+    #   lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.995)
+    # }
+    # if (CI == "95%") {
+    #   upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.025)
+    #   lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.975)
+    # }
+    # if (CI == "50%") {
+    #   upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.25)
+    #   lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+    # }
+    upr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - CI/2)
+    lwr <- apply(mu_post_pred, 2, stats::quantile, probs = CI/2)
+
     output_dataframes <- data.frame(
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
       upr = upr,
       lwr = lwr,
-      CI = CI
-      # upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      # lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      # upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      # lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+      CI = paste0(CI*100,"%")
     )
-    output_dataframes <- output_dataframes
+    # output_dataframes <- output_dataframes %>%
+    #   dplyr::mutate(Age = Age*1000)
+
   }
 
   if (decomposition == TRUE & rate_grid == TRUE) {
     # Total Component from JAGS output
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     # mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
-    if (CI == "99%") {
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.005)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.995)
-    }
+    # if (CI == "99%") {
+    #   upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.005)
+    #   lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.995)
+    # }
+    #
+    # if (CI == "95%") {
+    #   upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.025)
+    #   lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.975)
+    # }
+    # if (CI == "50%") {
+    #   upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.25)
+    #   lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
+    # }
+    upr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - CI/2)
+    lwr <- apply(mu_post_pred, 2, stats::quantile, probs = CI/2)
+    rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = CI/2)
+    rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 1 - CI/2)
 
-    if (CI == "95%") {
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.025)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.975)
-    }
-    if (CI == "50%") {
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.25)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 0.75)
-    }
+
     total_model_fit_df <- data.frame(
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
       upr = upr,
       lwr = lwr,
-      # upr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.025),
-      # lwr_95 = apply(mu_post_pred, 2, stats::quantile, probs = 0.975),
-      # upr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.25),
-      # lwr_50 = apply(mu_post_pred, 2, stats::quantile, probs = 0.75),
       ID = "Total Posterior Model",
-      CI = CI
+      CI = paste0(CI*100,"%")
     )
 
     # Total model fit rate
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
     # mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
-    if (CI == "99%") {
-      rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.005)
-      rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.995)
-    }
-    if (CI == "95%") {
-      rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025)
-      rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975)
-    }
-    if (CI == "50%") {
-      rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25)
-      rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
-    }
+    # if (CI == "99%") {
+    #   rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.005)
+    #   rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.995)
+    # }
+    # if (CI == "95%") {
+    #   rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025)
+    #   rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975)
+    # }
+    # if (CI == "50%") {
+    #   rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25)
+    #   rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+    # }
     total_model_rate_df <-
       data.frame(
         data_grid,
         rate_pred = apply(mu_pred_deriv_post, 2, mean),
         rate_upr = rate_upr,
         rate_lwr = rate_lwr,
-        # rate_upr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-        # rate_lwr_95 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-        # rate_upr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-        # rate_lwr_50 = apply(mu_pred_deriv_post, 2, stats::quantile, probs = 0.75),
         ID = "Total Rate of Change for Posterior Model",
-        CI = CI
+        CI = paste0(CI*100,"%")
       )
 
     # Regional component
     time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred
     # time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r
-    if (CI == "99%") {
-      upr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.005)
-      lwr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.995)
-    }
-    if (CI == "95%") {
-      upr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.025)
-      lwr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.975)
-    }
-    if (CI == "50%") {
-      upr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.25)
-      lwr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.75)
-    }
+    # if (CI == "99%") {
+    #   upr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.005)
+    #   lwr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.995)
+    # }
+    # if (CI == "95%") {
+    #   upr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.025)
+    #   lwr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.975)
+    # }
+    # if (CI == "50%") {
+    #   upr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.25)
+    #   lwr <- apply(time_component_pred_post, 2, stats::quantile, probs = 0.75)
+    # }
+    upr <- apply(time_component_pred_post, 2, stats::quantile, probs = 1 - CI/2)
+    lwr <- apply(time_component_pred_post, 2, stats::quantile, probs = CI/2)
+    rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = CI/2)
+    rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 1 - CI/2)
+
     regional_component_df <- data.frame(
       data_grid,
       pred = apply(time_component_pred_post, 2, mean),
       upr = upr,
       lwr = lwr,
-      # upr_95 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.025),
-      # lwr_95 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.975),
-      # upr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.25),
-      # lwr_50 = apply(time_component_pred_post, 2, stats::quantile, probs = 0.75),
       ID = "Regional Component",
-      CI = CI
+      CI = paste0(CI*100,"%")
     )
 
     time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred_deriv
     # time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_deriv
-    if (CI == "99%") {
-      rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.005)
-      rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.995)
-    }
-    if (CI == "95%") {
-      rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025)
-      rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975)
-    }
-    if (CI == "50%") {
-      rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25)
-      rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75)
-    }
+    # if (CI == "99%") {
+    #   rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.005)
+    #   rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.995)
+    # }
+    # if (CI == "95%") {
+    #   rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025)
+    #   rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975)
+    # }
+    # if (CI == "50%") {
+    #   rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25)
+    #   rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+    # }
     regional_rate_component_df <-
       data.frame(
         data_grid,
         rate_pred = apply(time_component_pred_deriv_post, 2, mean),
         rate_upr = rate_upr,
         rate_lwr = rate_lwr,
-        # rate_upr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-        # rate_lwr_95 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-        # rate_upr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-        # rate_lwr_50 = apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
         ID = "Rate of Change for Regional Component",
-        CI = CI
+        CI = paste0(CI*100,"%")
       )
 
     # Vertical Offset & Linear Local Component
     g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x_pred
     # g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x
-    if (CI == "99%") {
-      upr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.005)
-      lwr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.995)
-    }
-    if (CI == "95%") {
-      upr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.025)
-      lwr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.975)
-    }
-    if (CI == "50%") {
-      upr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.25)
-      lwr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.75)
-    }
+    upr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 1 - CI/2)
+    lwr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = CI/2)
+
+    # if (CI == "99%") {
+    #   upr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.005)
+    #   lwr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.995)
+    # }
+    # if (CI == "95%") {
+    #   upr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.025)
+    #   lwr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.975)
+    # }
+    # if (CI == "50%") {
+    #   upr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.25)
+    #   lwr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.75)
+    # }
     lin_loc_component_df <-
       data.frame(
         data_grid,
         pred = apply(g_h_component_pred_post, 2, mean),
         upr = upr,
         lwr = lwr,
-        # upr_95 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.025),
-        # lwr_95 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.975),
-        # upr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.25),
-        # lwr_50 = apply(g_h_component_pred_post, 2, stats::quantile, probs = 0.75),
         ID = "Site Specific vertical offset + \n Linear Local Component",
-        CI = CI
+        CI = paste0(CI*100,"%")
       )
 
     # Non linear local component
     space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred
     # space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l
-    if (CI == "99%") {
-      upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.005)
-      lwr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.995)
-    }
-    if (CI == "95%") {
-      upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.025)
-      lwr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.975)
-    }
-    if (CI == "50%") {
-      upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.25)
-      lwr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.75)
-    }
+    upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 1 - CI/2)
+    lwr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = CI/2)
+    rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = CI/2)
+    rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 1 - CI/2)
+
+    # if (CI == "99%") {
+    #   upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.005)
+    #   lwr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.995)
+    # }
+    # if (CI == "95%") {
+    #   upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.025)
+    #   lwr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.975)
+    # }
+    # if (CI == "50%") {
+    #   upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.25)
+    #   lwr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.75)
+    # }
     non_lin_loc_component_df <-
       data.frame(
         data_grid,
         pred = apply(space_time_component_pred_post, 2, mean),
         upr = upr,
         lwr = lwr,
-        # upr_95 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.025),
-        # lwr_95 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.975),
-        # upr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.25),
-        # lwr_50 = apply(space_time_component_pred_post, 2, stats::quantile, probs = 0.75),
         ID = "Non Linear Local Component",
-        CI = CI
+        CI = paste0(CI*100,"%")
       )
     space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred_deriv
     # space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_deriv
-    if (CI == "99%") {
-      rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.005)
-      rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.995)
-    }
-    if (CI == "95%") {
-      rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025)
-      rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975)
-    }
-    if (CI == "50%") {
-      rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25)
-      rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75)
-    }
+    # if (CI == "99%") {
+    #   rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.005)
+    #   rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.995)
+    # }
+    # if (CI == "95%") {
+    #   rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025)
+    #   rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975)
+    # }
+    # if (CI == "50%") {
+    #   rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25)
+    #   rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75)
+    # }
     non_lin_loc_rate_component_df <-
       data.frame(
         data_grid,
         rate_pred = apply(space_time_component_pred_deriv_post, 2, mean),
         rate_upr = rate_upr,
         rate_lwr = rate_lwr,
-        # rate_upr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.025),
-        # rate_lwr_95 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.975),
-        # rate_upr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.25),
-        # rate_lwr_50 = apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 0.75),
         ID = "Rate of Change for Non Linear Local Component",
-        CI = CI
+        CI = paste0(CI*100,"%")
       )
 
 
@@ -1187,13 +1141,13 @@ add_noisy_input <- function(model_run, jags_data, model_type,
       # Create the basis functions
       # B_deriv_t <- predict(B_t, t_new)
 
-      B_deriv_t <- bs_bbase_t(t_new,
+      B_deriv_t <- bs_bbase(t_new,
         # xl = xl,
         # xr=xr,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
-        spline_nseg_t = spline_nseg_t
+        spline_nseg = spline_nseg
       )
 
       #----Deriv----
@@ -1209,19 +1163,19 @@ add_noisy_input <- function(model_run, jags_data, model_type,
     b_st_post <- model_run$BUGSoutput$sims.list$b_st
 
     pred_mean_calc <- function(t_new) {
-      B_time <- bs_bbase_st(t_new,
+      B_time <- bs_bbase(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
         spline_nseg_st = spline_nseg_st
       )
-      B_space_1 <- bs_bbase_st(data$Latitude,
+      B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude),
         data = data,
         spline_nseg_st = spline_nseg_st
       )
-      B_space_2 <- bs_bbase_st(data$Longitude,
+      B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude),
         data = data
@@ -1395,14 +1349,16 @@ igp_detrend_data <- function(data, data_grid) {
 #' @param data Input data
 #' @param data_grid Prediction data
 #' @param model_type Type of model
-#' @param spline_nseg_t Number of segments for the creation of the basis functions for spline in time
-#' @param spline_nseg_st Number of segments for the creation of the basis functions for spline in space time
+#' @param spline_nseg_t Number of segments for the creation of the basis functions
+#' @param spline_nseg_t Number of segments for the creation of the basis functions for NIGAM temporal component
+#' @param spline_nseg_st Number of segments for the creation of the basis functions for NIGAM spatial temporal component
 #' @noRd
 
 
 spline_basis_fun <- function(data,
                              data_grid,
                              model_type,
+                             spline_nseg,
                              spline_nseg_st,
                              spline_nseg_t # ,
                              # xl,
@@ -1413,22 +1369,22 @@ spline_basis_fun <- function(data,
   if (model_type == "ni_spline_t") {
     t <- data$Age
     # Basis functions in time for data-----------------------
-    B_t <- bs_bbase_t(t,
+    B_t <- bs_bbase(t,
       xl = min(t),
       # xl = xl,
       xr = max(t),
       # xr = xr,
       data = data,
-      spline_nseg_t = spline_nseg_t
+      spline_nseg = spline_nseg
     )
     # Finding derivative  of basis functions using first principals-----------
     first_deriv_calc <- function(t_new) {
       # Create the basis functions
-      B_t_deriv <- bs_bbase_t(t_new,
+      B_t_deriv <- bs_bbase(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
-        spline_nseg_t = spline_nseg_t
+        spline_nseg = spline_nseg
       )
 
       return(B_t_deriv)
@@ -1450,7 +1406,7 @@ spline_basis_fun <- function(data,
         xl = min(t),
         xr = max(t),
         data = data,
-        spline_nseg_t = spline_nseg_t
+        spline_nseg = spline_nseg
       )
 
     # Now create derivatives----------------------
@@ -1472,23 +1428,23 @@ spline_basis_fun <- function(data,
   if (model_type == "ni_spline_st") {
     t <- data$Age
     # Basis functions in space time for data-----------------------
-    B_time <- bs_bbase_st(t,
+    B_time <- bs_bbase(t,
       xl = min(t),
       xr = max(t),
       data = data,
-      spline_nseg_st = spline_nseg_st
+      spline_nseg = spline_nseg_
     )
-    B_space_1 <- bs_bbase_st(data$Latitude,
+    B_space_1 <- bs_bbase(data$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude),
       data = data,
-      spline_nseg_st = spline_nseg_st
+      spline_nseg = spline_nseg
     )
-    B_space_2 <- bs_bbase_st(data$Longitude,
+    B_space_2 <- bs_bbase(data$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude),
       data = data,
-      spline_nseg_st = spline_nseg_st
+      spline_nseg = spline_nseg
     )
 
     B_st_full <- matrix(NA,
@@ -1520,23 +1476,23 @@ spline_basis_fun <- function(data,
     first_deriv_calc <- function(t_new) {
       # B_st_deriv <- predict(object = B_st,newx = t_new)#,x_train = t_old)t_old
       # Now the local basis functions
-      B_time <- bs_bbase_st(t_new,
+      B_time <- bs_bbase(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
-        spline_nseg_st = spline_nseg_st
+        spline_nseg = spline_nseg
       )
-      B_space_1 <- bs_bbase_st(data$Latitude,
+      B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude),
         data = data,
-        spline_nseg_st = spline_nseg_st
+        spline_nseg = spline_nseg
       )
-      B_space_2 <- bs_bbase_st(data$Longitude,
+      B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude),
         data = data,
-        spline_nseg_st = spline_nseg_st
+        spline_nseg = spline_nseg
       )
 
       B_st_full <- matrix(NA,
@@ -1568,23 +1524,23 @@ spline_basis_fun <- function(data,
 
 
     # Basis functions in space time using prediction data frame-----------------------
-    B_pred_time <- bs_bbase_st(data_grid$Age,
+    B_pred_time <- bs_bbase(data_grid$Age,
       xl = min(data$Age),
       xr = max(data$Age),
       data = data,
-      spline_nseg_st = spline_nseg_st
+      spline_nseg = spline_nseg
     )
-    B_space_1 <- bs_bbase_st(data_grid$Latitude,
+    B_space_1 <- bs_bbase(data_grid$Latitude,
       xl = min(data$Latitude),
       xr = max(data$Latitude),
       data = data,
-      spline_nseg_st = spline_nseg_st
+      spline_nseg = spline_nseg
     )
-    B_space_2 <- bs_bbase_st(data_grid$Longitude,
+    B_space_2 <- bs_bbase(data_grid$Longitude,
       xl = min(data$Longitude),
       xr = max(data$Longitude),
       data = data,
-      spline_nseg_st = spline_nseg_st
+      spline_nseg = spline_nseg
     )
 
     suppressWarnings({
@@ -1612,23 +1568,23 @@ spline_basis_fun <- function(data,
     # Now create derivatives for prediciton
     first_deriv_calc <- function(t_new) {
       # Now the local basis functions
-      B_time <- bs_bbase_st(t_new,
+      B_time <- bs_bbase(t_new,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
-        spline_nseg_st = spline_nseg_st
+        spline_nseg = spline_nseg
       )
-      B_space_1 <- bs_bbase_st(data_grid$Latitude,
+      B_space_1 <- bs_bbase(data_grid$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude),
         data = data,
-        spline_nseg_st = spline_nseg_st
+        spline_nseg = spline_nseg
       )
-      B_space_2 <- bs_bbase_st(data_grid$Longitude,
+      B_space_2 <- bs_bbase(data_grid$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude),
         data = data,
-        spline_nseg_st = spline_nseg_st
+        spline_nseg = spline_nseg
       )
 
       B_st_full <- matrix(NA,
@@ -2014,7 +1970,53 @@ spline_basis_fun <- function(data,
   return(spline_basis_fun_list)
 }
 
-#' Creating spline basis functions for spline in time
+#' Creating spline basis functions for spline in time & spline in space tie
+#'
+#' @param x Age in years CE
+#' @param xl minimum Age
+#' @param xr maximum Age
+#' @param spline_nseg_t number of sections
+#' @param deg Degree of polynomial
+#' @param data Input data
+#' @noRd
+# Basis function approach
+bs_bbase <- function(x,
+                       xl = min(x),
+                       xr = max(x),
+                       deg = 3,
+                       spline_nseg = NULL,
+                       data = data) {
+  # Create basis functions------------------------------------------------------
+  if (is.null(spline_nseg)) {
+    spline_nseg <- round(deg / (1 + deg / length(data$Age)))
+  }
+
+  # Compute the length of the partitions
+  dx <- (xr - xl) / spline_nseg
+  # Create equally spaced knots
+  knots <- seq(xl - deg * dx,
+               xr + deg * dx,
+               by = dx
+  )
+  # print(length(knots))
+
+  # Use bs() function to generate the B-spline basis
+  get_bs_matrix <- matrix(
+    splines::bs(x,
+                degree = deg,
+                knots = knots,
+                Boundary.knots = c(knots[1], knots[length(knots)])
+    ),
+    nrow = length(x)
+  )
+  # Remove columns that contain zero only
+  # bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
+  bs_matrix <- get_bs_matrix
+  return(bs_matrix)
+}
+
+
+#' Creating spline basis functions for NIGAM for the temporal component
 #'
 #' @param x Age in years CE
 #' @param xl minimum Age
@@ -2059,7 +2061,7 @@ bs_bbase_t <- function(x,
   return(bs_matrix)
 }
 
-#' Creating spline basis functions for spline in space time
+#' Creating spline basis functions for NIGAM spatial temporal component
 #'
 #' @param x Age in years CE
 #' @param xl minimum Age

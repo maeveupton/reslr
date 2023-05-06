@@ -23,7 +23,7 @@
 #' @param all_TG_1deg The package finds all tide gauges within 1 degree of the proxy site
 #' @param rolling_window_average A rolling window that averages tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.
 #' @param detrend_data Detrend the data using the linear rate provided
-#' @param core_col_year The year the core was collected
+#' @param core_col_year The year the core was collected.
 #'
 #' @return A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.
 #' @export
@@ -54,21 +54,22 @@ reslr_load <- function(data,
     data <- data %>%
       dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
   } else {
-    cat("User must provide a site name and a region name. \n")
+    cat("Error: User must provide a column with site names and a column with region name. \n")
+    stop()
   }
   if (input_Age_type == "BCE") {
-    cat("The inputed age value will be converted to units of Common Era. \n")
+    #cat("The inputed age value will be converted to units of Common Era. \n")
     data <- data %>%
       dplyr::mutate(Age = 1950 - Age)
   } else {
-    cat("The inputed age value is units of Common Era. \n")
+    #cat("The inputed age value is units of Common Era. \n")
     data <- data
   }
   # Including no TG or linear rates
   if (include_tide_gauge == FALSE & include_linear_rate == FALSE) {
     data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
-    cat("No decadally averaged Tide gauge data or linear_rate included.\n")
-    cat("Note: Both are required for the ni_gam_decomp model \n")
+    #cat("No decadally averaged Tide gauge data or linear_rate included.\n")
+    #cat("Note: Both are required for the ni_gam_decomp model \n")
   }
 
   # Including TG & no linear rates but forget to include TG method
@@ -88,10 +89,11 @@ reslr_load <- function(data,
       data = data,
       list_preferred_TGs = list_preferred_TGs,
       TG_minimum_dist_proxy = TG_minimum_dist_proxy,
-      all_TG_1deg = all_TG_1deg
+      all_TG_1deg = all_TG_1deg,
+      rolling_window_average = rolling_window_average
     )
-    cat("Decadally averaged tide gauge data included by the package. \n")
-    cat("Note: No linear rate included. It is required for the ni_gam_decomp model \n")
+    #cat("Note: No linear rate included. It is required for the ni_gam_decomp model \n")
+    ##cat("Decadally averaged tide gauge data included by the package. \n")
   }
 
 
@@ -109,11 +111,11 @@ reslr_load <- function(data,
       data <- data
       cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
       data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
-      cat("Note: No Tide gauge data included. It is required for the ni_gam_decomp model\n")
+     # cat("Note: No Tide gauge data included. It is required for the ni_gam_decomp model\n")
     }
   }
 
-  # Including TG & no linear rates but forget to include TG method
+  # Including TG & linear rates but forget to include TG method
   if (include_tide_gauge == TRUE &
     include_linear_rate == TRUE &
     is.null(list_preferred_TGs) == TRUE &
@@ -140,9 +142,10 @@ reslr_load <- function(data,
       data = data,
       list_preferred_TGs = list_preferred_TGs,
       TG_minimum_dist_proxy = TG_minimum_dist_proxy,
-      all_TG_1deg = all_TG_1deg
+      all_TG_1deg = all_TG_1deg,
+      rolling_window_average = rolling_window_average
     )
-    cat("Decadally averaged tide gauge data included by the package. \n")
+    #cat("Decadally averaged tide gauge data included by the package. \n")
     #---Adding linear rates from ICE5G for TG-----
     data <- add_linear_rate(data = data)
     data <- data %>%
@@ -150,7 +153,7 @@ reslr_load <- function(data,
         linear_rate = ifelse(data_type_id == "TideGaugeData", ICE5_GIA_slope, linear_rate),
         linear_rate_err = ifelse(data_type_id == "TideGaugeData", 0.3, linear_rate_err)
       )
-    cat("Tide Gauge data & linear_rate included \n")
+    #cat("Tide Gauge data & linear_rate included \n")
   }
 
   # Detrending the data using GIA rates which is known as linear rate in my input dataframe
@@ -159,23 +162,27 @@ reslr_load <- function(data,
       stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate = TRUE. Must provide the year the core was collected \n")
     }
     # Detrending the data and updating RSL to SL
+    detrend_rate_val <- data %>%
+      dplyr::filter(data_type_id == "ProxyRecord") %>%
+      dplyr::select(linear_rate) %>% unique()
+    detrend_rate <- rep(detrend_rate_val$linear_rate,nrow(data))
+
     data <- data %>%
-      group_by(SiteName) %>%
-      mutate(SL = (core_col_year / 1000 - Age) * linear_rate + RSL)
+      # Use the same rate for proxy and then for TGs
+      #dplyr::group_by(SiteName) %>%
+      dplyr::mutate(
+        SL = (core_col_year / 1000 - Age) * detrend_rate + RSL,
+        x_lwr_box = Age - Age_err,
+        x_upr_box = Age + Age_err,
+        y_lwr_box = ((core_col_year / 1000 - (Age - Age_err)) * detrend_rate) + (RSL - RSL_err),
+        y_upr_box = ((core_col_year / 1000 - (Age + Age_err)) * detrend_rate) + (RSL + RSL_err)
+        )
 
     # Detrending the uncertainties
     # y_1_lwr = ifelse(GIA == FALSE, y - RSLError,(((yocc/1000)-x_upr/1000)*rate.gia)+y_lwr)
     # y_2_lwr = ifelse(GIA == FALSE, y - RSLError,(((yocc/1000)-x_lwr/1000)*rate.gia)+y_lwr)
     # y_3_upr = ifelse(GIA == FALSE, y + RSLError,(((yocc/1000)-x_lwr/1000)*rate.gia)+y_upr)
     # y_4_upr = ifelse(GIA == FALSE, y + RSLError,(((yocc/1000)-x_upr/1000)*rate.gia)+y_upr)
-    data <- data %>%
-      group_by(SiteName) %>%
-      mutate(
-        x_lwr_box = Age - Age_err,
-        x_upr_box = Age + Age_err,
-        y_lwr_box = ((core_col_year / 1000 - (Age - Age_err)) * linear_rate) + (RSL - RSL_err),
-        y_upr_box = ((core_col_year / 1000 - (Age + Age_err)) * linear_rate) + (RSL + RSL_err)
-      )
   }
 
   # Prediction dataframe-------------------------------------
@@ -199,13 +206,7 @@ reslr_load <- function(data,
   ), ]
   data_grid_full <- dplyr::tibble(
     sites,
-    Age = times # ,
-    # Longitude = sites$Longitude,
-    # Latitude = sites$Latitude,
-    # SiteName = sites$SiteName,
-    # linear_rate = sites$linear_rate,
-    # linear_rate_err = sites$linear_rate_err,
-    # data_type_id = sites$data_type_id
+    Age = times
   )
   # Problem here for time models
   data_age_boundary <- data %>%
@@ -239,6 +240,11 @@ reslr_load <- function(data,
     ) %>%
     dplyr::select(!c(max_Age, min_Age)) %>%
     dplyr::arrange(Age)
+  # Multiply by 1000 just keep it in right units
+  data <- data %>%
+    dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+  data_grid <- data_grid %>%
+    dplyr::mutate(Age = Age*1000)
 
   input_data <- base::list(
     data = data,

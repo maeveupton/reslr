@@ -23,10 +23,28 @@ print.reslr_input <- function(x,
     dplyr::select(SiteName, data_type_id) %>%
     unique() %>%
     nrow()
+  n_tide_gauge <- n_sites - n_proxy
 
   cat("This is a valid reslr input object with ")
   cat(paste(n_obs, "observations "))
   cat("and ", paste(n_sites), "sites.\n")
   cat("There are ", paste(n_proxy), " proxy sites ")
-  cat("and ", paste(n_sites - n_proxy), " tide gauge sites.\n")
+  cat("and ", paste(n_tide_gauge), " tide gauge sites.\n")
+  cat("The inputed age value is units of Common Era. \n")
+
+  if(n_tide_gauge == 0){
+    cat("No decadally averaged Tide gauge data included. It is required for the ni_gam_decomp model \n")
+  }
+  else{
+    cat("Decadally averaged tide gauge data included by the package. \n")
+  }
+  if("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data)){
+    cat("The linear_rate and linear_rate_err included. \n")
+  }
+  else{
+    cat("No linear_rate or linear_rate_err included. It is required for the ni_gam_decomp model \n")
+  }
+  if(inherits(x,"detrend_data")){
+    cat("Data has been detrended.\n")
+  }
 }

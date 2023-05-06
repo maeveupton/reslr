@@ -16,6 +16,23 @@
 print.reslr_output <-
   function(x, ...) {
     jags_output <- x
+    data <- jags_output$data
+    n_obs <- nrow(data)
+    n_sites <- length(data$SiteName %>% unique())
+    n_proxy <- data %>%
+      dplyr::filter(data_type_id == "ProxyRecord") %>%
+      dplyr::select(SiteName, data_type_id) %>%
+      unique() %>%
+      nrow()
+    n_tide_gauge <- n_sites - n_proxy
+
+    cat("This is a valid reslr input object with ")
+    cat(paste(n_obs, "observations "))
+    cat("and ", paste(n_sites), "sites.\n")
+    cat("There are ", paste(n_proxy), " proxy sites ")
+    cat("and ", paste(n_tide_gauge), " tide gauge sites.\n")
+    cat("The inputed age value is units of Common Era. \n")
+    # Models
     if (inherits(jags_output, "eiv_slr_t") == TRUE) {
       cat("The model used was the Errors-in-Variables simple linear regression model.\n")
     }
@@ -48,7 +65,10 @@ print.reslr_output <-
     cat("The input data has been run via reslr_mcmc and has produced ")
     cat(
       nrow(jags_output$noisy_model_run_output$BUGSoutput$sims.matrix),
-      "iterations over", jags_output$noisy_model_run_output$BUGSoutput$n.chains, "MCMC chains."
+      "iterations over", jags_output$noisy_model_run_output$BUGSoutput$n.chains, "MCMC chains.\n"
     )
-    cat("\n\n")
+    if(inherits(jags_output,"detrend_data") == TRUE){
+      cat("Model has used detrended data.\n")
+    }
+    #cat("\n")
   }

@@ -286,10 +286,10 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 res_eiv_slr_t <- reslr_mcmc(
   input_data = CedarIslandNC_input,
   model_type = "eiv_slr_t",
-  CI = "95%"
+  CI = 0.95
 )
 ```
-This command takes the input data and the user specifies the statistical model, i.e. a simple linear regression using the EIV uncertainty method ("eiv_slr_t"). The `CI` setting allows the user to set the credible intervals from a list of the following 50\%, 95\% or 99\%, the current default is ` CI = "95%"`. The function tells `reslr` to store the output of the model run in an object called `res_eiv_slr_t`.
+This command takes the input data and the user specifies the statistical model, i.e. a simple linear regression using the EIV uncertainty method ("eiv_slr_t"). The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`. The function tells `reslr` to store the output of the model run in an object called `res_eiv_slr_t`.
 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
@@ -394,7 +394,7 @@ res_eiv_cp1_t <- reslr_mcmc(
   input_data = CedarIslandNC_input,
   model_type = "eiv_cp_t",
   n_cp = 1,
-  CI = "95%"
+  CI = 0.95
 )
 ```
 If the user is interested in running 2 change points use method:
@@ -403,10 +403,10 @@ res_eiv_cp2_t <- reslr_mcmc(
   input_data = CedarIslandNC_input,
   model_type = "eiv_cp_t",
   n_cp = 2, # Updating the default setting to include an additional change point.
-  CI = "95%"
+  CI = 0.95
 )
 ```
-The `CI` setting allows the user to set the credible intervals from a list of the following 50\%, 95\% or 99\%, the current default is ` CI = "95%"`. Similar to the earlier model, the output object `res_eiv_cp1_t` stores the JAGS model run and should take a second to run.
+The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`. Similar to the earlier model, the output object `res_eiv_cp1_t` stores the JAGS model run and should take a second to run.
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printcpout, eval=TRUE}
@@ -504,10 +504,10 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 res_eiv_igp_t <- reslr_mcmc(
   input_data = CedarIslandNC_input,
   model_type = "eiv_igp_t",
-  CI = "95%"
+  CI = 0.95
 )
 ```
-This command takes the input data and the user specifies the statistical model, i.e. an integrated Gaussian process using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `res_eiv_igp_t`. The `CI` setting allows the user to set the credible intervals from a list of the following 50\%, 95\% or 99\%, the current default is ` CI = "95%"`. The computational run time for this model is approximately 14 minutes.
+This command takes the input data and the user specifies the statistical model, i.e. an integrated Gaussian process using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `res_eiv_igp_t`. The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`. The computational run time for this model is approximately 14 minutes.
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printigpout, eval=TRUE}
@@ -620,10 +620,10 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 res_ni_spline_t <- reslr_mcmc(
   input_data = CedarIslandNC_input,
   model_type = "ni_spline_t",
-  CI = "95%"
+  CI = 0.95
 )
 ```
-The output object `res_ni_spline_t` stores the JAGS model run. The `CI` setting allows the user to set the credible intervals from a list of the following 50\%, 95\% or 99\%, the current default is ` CI = "95%"`. Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
+The output object `res_ni_spline_t` stores the JAGS model run. The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`. Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printresspt, eval=TRUE}
@@ -733,10 +733,10 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 res_ni_spline_st <- reslr_mcmc(
   input_data = multi_site_input,
   model_type = "ni_spline_st",
-  CI = "95%"
+  CI = 0.95
 )
 ```
-The output object `jags_output.ni_spline_st` stores the JAGS model run. The `CI` setting allows the user to set the credible intervals from a list of the following 50\%, 95\% or 99\%, the current default is ` CI = "95%"`. Note that additional computational run time is required for this model compared with the ni_spline_t. 
+The output object `jags_output.ni_spline_st` stores the JAGS model run. The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`. Note that additional computational run time is required for this model compared with the ni_spline_t. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printspstout,eval=TRUE}
@@ -801,19 +801,19 @@ This model needs an adequate number of proxy sites to perform the decomposition 
 
 As an example, we will filter the example dataset `NAACproxydata` to select eight random sites to demonstrate the process:
 ```{r,data2sitesmore, eval = TRUE}
-# For 8 site
-multi_8_sites <- example_data_set %>%
+# For 9 site
+multi_9_sites <- example_data_set %>%
   dplyr::filter(Site %in% c(
     "Cedar Island", "Nassau", "Snipe Key",
-    "Placentia", "Cape May Courthouse",
-    "Saint Simeon", "Leeds Point", "Wood Island"
+    "Placentia", "Cape May Courthouse", "East River Marsh",
+    "Fox Hill Marsh", "Swan Key", "Big River Marsh"
   ))
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r,loadnigam, eval = TRUE}
-multi_8_sites_input <- reslr_load(
-  data = multi_8_sites,
+multi_9_sites_input <- reslr_load(
+  data = multi_9_sites,
   include_tide_gauge = TRUE,
   include_linear_rate = TRUE,
   TG_minimum_dist_proxy = FALSE,
@@ -830,22 +830,22 @@ Note that for this model, we recommend using the default settings as demonstrate
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
 - The `data` dataframe is the inputted data with additional columns for the linear_rate, linear_rate_err and data_type_id which will contain two options, "ProxyRecord" or "TideGaugeData". It can be accessed by:
 ```{r,datanigam,eval=TRUE}
-data <- multi_8_sites_input$data
+data <- multi_9_sites_input$data
 ```
 - The `data_grid` is a dataframe that is evenly spaced in time based on the `prediction_grid_res` value chosen by the user and is used to create the plots and is accessed by
 ```{r,datagridnigam, eval = TRUE}
-data_grid <- multi_8_sites_input$data_grid
+data_grid <- multi_9_sites_input$data_grid
 ```
 
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
 ```{r,printnigam, eval=TRUE}
-print(multi_8_sites_input)
+print(multi_9_sites_input)
 ```
 
 **Step 2:** Plotting the data the raw data with:
 ```{r, plotnigam,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
-  x = multi_8_sites_input,
+  x = multi_9_sites_input,
   title = "Plot of the raw data",
   xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
@@ -857,12 +857,12 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 **Step 3:** Run the model
 ```{r,runnigam,eval = TRUE}
 res_ni_gam_decomp <- reslr_mcmc(
-  input_data = multi_8_sites_input,
+  input_data = multi_9_sites_input,
   model_type = "ni_gam_decomp",
-  CI = "95%"
+  CI = 0.95
 )
 ```
-The output object `res_ni_gam_decomp` stores the JAGS model run. The `CI` setting allows the user to set the credible intervals from a list of the following 50\%, 95\% or 99\%, the current default is `CI = "95%"`. Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
+The output object `res_ni_gam_decomp` stores the JAGS model run. The `CI` setting allows the user to set the credible intervals, the current default is `CI = 0.95`. Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
 ```{r,printnigamout, eval=TRUE}
@@ -876,7 +876,7 @@ summary(res_ni_gam_decomp)
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
 ```{r, runnigammore,eval = FALSE}
 res_ni_gam_decomp <- reslr_mcmc(
-  input_data = multi_8_sites_input,
+  input_data = multi_9_sites_input,
   model_type = "ni_gam_decomp",
   # Update these values
   n_iterations = 6000, # Number of iterations

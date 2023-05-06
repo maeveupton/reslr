@@ -26,7 +26,7 @@ model {
       b_t[1] ~ dnorm(0,1)
       for (j in 2:n_knots_t) {
         #b_t[j] ~ dnorm(b_t[j-1], tau_t)
-        b_t[j] ~ dnorm(0, sigma_t^-2)
+        b_t[j] ~ dnorm(0, sigma_beta_t^-2)
       }
 
        # 1st order difference on b_t for Regional term
@@ -64,7 +64,7 @@ model {
       #delta ~ dgamma(1,0.0001)
 
       #sigma_t <- tau_t^-0.5
-      sigma_t~ dt(0, 1^-2, 1)T(0,)
+      sigma_beta_t~ dt(0, 1^-2, 1)T(0,)
 
       sigma_res ~ dt(0, 1^-2, 1)T(0,)#1
 }
