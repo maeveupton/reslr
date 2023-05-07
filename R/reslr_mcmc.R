@@ -363,7 +363,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # JAGS parameters to save
     jags_pars <- c(
       "phi",
-      "sigma_g",
+      "sigma_igp",
       "sigma_res",
       "w.m",
       "alpha",
@@ -484,7 +484,6 @@ reslr_mcmc.reslr_input <- function(input_data,
   # Noisy Input GAM in Time-----------------------------------
   if (model_type == "ni_spline_t") {
     # No Noise
-    # jags_file <- "inst/jags_models/model_ni_spline_t.jags"
     jags_file <- system.file("jags_models", "model_ni_spline_t.jags", package = "reslr")
 
     # Parameters to save in JAGs-----------------
@@ -493,7 +492,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "sigma_res",
       "b_t",
       "r",
-      "sigma_beta_t",#update jags
+      "sigma_beta",
       "sigmasq_all",
       "residuals"
     )
@@ -548,7 +547,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "b_t",
       "r",
       "r_deriv",
-      "sigma_beta_t",
+      "sigma_beta",
       "sigmasq_all",
       "r_pred",
       "tau_t",
@@ -640,7 +639,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "sigma_res",
       "b_st",
       "l",
-      "sigma_st",
+      "sigma_beta",
       "sigmasq_all"
     )
 
@@ -695,7 +694,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "b_st",
       "l",
       "l_pred",
-      "sigma_st",
+      "sigma_beta",
       "sigmasq_all"
     )
 
@@ -800,9 +799,10 @@ reslr_mcmc.reslr_input <- function(input_data,
       "g_z_x",
       "r",
       "intercept",
-      "sigma_t",
+      "sigma_beta_h",
+      "sigma_beta_r",
+      "sigma_beta_l",
       "b_g",
-      "sigma_h",
       "sigmasq_all"
     )
 
@@ -888,9 +888,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "mu_pred_deriv",
       "sigma_res",
-      "sigma_h", # ?
-      "sigma_t", # ?
-      "sigma_st",
+      "sigma_beta_h",
+      "sigma_beta_r",
+      "sigma_beta_l",
       "sigmasq_all",
       "b_t",
       "b_st",

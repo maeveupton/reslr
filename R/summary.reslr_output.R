@@ -142,7 +142,7 @@ summary.reslr_output <- function(object, # jags_output,#
     # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
-        "phi", "sigma_g", "sigma_res"
+        "phi", "sigma_igp", "sigma_res"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -153,18 +153,7 @@ summary.reslr_output <- function(object, # jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
-    # par_summary
-    # # }
-    # # if ("diagnostics" %in% type) {
-    # # Check convergence
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-    #   cat("No convergence issues detected. \n")
-    # }
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-    #   cat("Convergence issues detected. \n")
-    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    # }
-    # # }
+
   }
 
 
@@ -172,10 +161,10 @@ summary.reslr_output <- function(object, # jags_output,#
   if (inherits(jags_output, "ni_spline_t") == TRUE) {
     jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-    # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
-        "b_t", "sigma_t", "sigma_res"
+        "sigma_beta",
+        "sigma_res"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -186,18 +175,6 @@ summary.reslr_output <- function(object, # jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )
-    # par_summary
-    # # }
-    # # if ("diagnostics" %in% type) {
-    # # Check convergence
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-    #   cat("No convergence issues detected. \n")
-    # }
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-    #   cat("Convergence issues detected. \n")
-    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    # }
-    # # }
   }
 
   # NI Spline st
@@ -207,7 +184,8 @@ summary.reslr_output <- function(object, # jags_output,#
     # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
-        "b_st", "sigma_st", "sigma_res"
+        "sigma_beta",
+        "sigma_res"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -223,11 +201,12 @@ summary.reslr_output <- function(object, # jags_output,#
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
     jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-    # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
-        "sigma_st",
-        "sigma_t[1]", "sigma_res"
+        "sigma_beta_l",
+        "sigma_beta_r[1]",
+        "sigma_beta_h[1]",
+        "sigma_res"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -237,21 +216,11 @@ summary.reslr_output <- function(object, # jags_output,#
         q5 = q5, #* mod$scale_factor_y,
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
-      )
-    # par_summary
-    # # }
-    # # if ("diagnostics" %in% type) {
-    # # Check convergence
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-    #   cat("No convergence issues detected. \n")
-    # }
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-    #   cat("Convergence issues detected. \n")
-    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    # }
-    # # }
+      )%>%
+      mutate(variable = ifelse(variable == "sigma_beta_r[1]", "sigma_beta_r", variable),
+             variable = ifelse(variable == "sigma_beta_h[1]", "sigma_beta_h", variable))
   }
-  # }
+
 
   # Check convergence
   if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {

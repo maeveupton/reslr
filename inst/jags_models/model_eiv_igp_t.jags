@@ -31,7 +31,7 @@ model{
 
         w.tilde.m<-K.gw %*% K.w.inv %*% w.m
       # Priors
-      sigma_g ~ dt(0,2^-2,1)T(0,)
+      sigma_igp ~ dt(0,2^-2,1)T(0,)
       phi ~ dbeta(al,10)
       sigma_res ~ dt(0,2^-2,1)T(0,)
       alpha ~ dnorm(0,2^-2)

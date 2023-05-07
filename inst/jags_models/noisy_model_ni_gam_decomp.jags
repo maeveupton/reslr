@@ -45,7 +45,7 @@ model {
       # Non-linear local component
       l <- B_st %*% b_st
       for (j in 1:n_knots_st) {
-        b_st[j] ~ dnorm(0, sigma_st^-2)
+        b_st[j] ~ dnorm(0, sigma_beta_l^-2)
       #  #b_st[j] ~ dnorm(0, tau_st)
       }
 
@@ -102,8 +102,9 @@ model {
     #tau_st ~ dgamma(0.5*nu,0.5*delta*nu)
     #delta ~ dgamma(0.0001,0.0001)
     #sigma_st <- tau_st^-0.5
-    sigma_st ~ dt(0, 1^-2, 1)T(0,)
+    sigma_beta_l ~ dt(0, 1^-2, 1)T(0,)
     sigma_res ~ dt(0, 1^-2, 1)T(0,)
-    sigma_t <- b_t_sd_value
+    sigma_beta_r <- b_t_sd_value
+    sigma_beta_h <- h_sd_value
 
   }
