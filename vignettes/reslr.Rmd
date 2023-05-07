@@ -797,7 +797,7 @@ In the case of RSL, there are different drivers influence the changing RSL signa
 There are a number of settings within the package that are important when using this model type. For the local linear component, GIA rate and associated uncertainty of the GIA rate must be provided prior to running. If the GIA rate is not provided for each location, then the `reslr` package will calculate it using the data and if this is not possible, the package will print an error message.
 Also, we recommend using tide gauge data averaged over a decade to match the accumulation rates of the proxy records, which is an additional argument in the function. 
 
-This model needs an adequate number of proxy sites to perform the decomposition and the minimum sites required will depend on the signal of the data. We found that in general we need a minimum of 5 proxy sites and at least 5 associated tide gauge sites. Also, we strongly recommend using tide gauge data for this model to obtain insight into recent changes in RSL. 
+This model needs an adequate number of proxy sites to perform the decomposition and the minimum sites required will depend on the signal of the data. We found that in general we need a minimum of five proxy sites and at least five associated tide gauge sites. Also, we strongly recommend using tide gauge data for this model to obtain insight into recent changes in RSL. 
 
 As an example, we will filter the example dataset `NAACproxydata` to select eight random sites to demonstrate the process:
 ```{r,data2sitesmore, eval = TRUE}
