@@ -503,9 +503,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg = spline_nseg # ,
-      # xl = xl,
-      # xr = xr
+      spline_nseg = spline_nseg
     )
 
     # JAGS data----------------------
@@ -515,8 +513,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       t = data$Age,
       n_obs = nrow(data),
       B_t = spline_basis_fun_list$B_t,
-      n_knots_t = ncol(spline_basis_fun_list$B_t) # ,
-      # nu = 2
+      n_knots_t = ncol(spline_basis_fun_list$B_t)
     )
 
     # Run JAGS------------------------
@@ -535,12 +532,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       model_run = model_run,
       model_type = model_type,
       jags_data = jags_data,
-      spline_nseg = spline_nseg,
-      # xr=xr,
-      # xl=xl
+      spline_nseg = spline_nseg
     )
     # Include Noise-----------------------
-    # noisy_jags_file <- "inst/jags_models/noisy_model_ni_spline_t.jags"
     noisy_jags_file <- system.file("jags_models", "noisy_model_ni_spline_t.jags", package = "reslr")
 
     # Parameters to save in JAGs-----------------
@@ -732,7 +726,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     )
     # Output with everything-------------
     jags_output <- list(
-      noisy_model_run_output = noisy_model_run_output, # Watch this
+      noisy_model_run_output = noisy_model_run_output,
       jags_data = jags_data,
       data = data,
       data_grid = data_grid,

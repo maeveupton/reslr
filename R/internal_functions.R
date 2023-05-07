@@ -1007,7 +1007,9 @@ create_output_df <- function(noisy_model_run_output,
 #' @param spline_nseg_t Number of segments used to create basis functions for NIGAM temporal component
 #' @param spline_nseg_st Number of segments used to create basis functions for NIGMA spatial temporal component
 #' @noRd
-add_noisy_input <- function(model_run, jags_data, model_type,
+add_noisy_input <- function(model_run,
+                            jags_data,
+                            model_type,
                             data,
                             spline_nseg_t,
                             spline_nseg_st ,
