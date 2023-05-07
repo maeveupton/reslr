@@ -831,7 +831,7 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
 #' @param noisy_model_run_output The JAGS output
 #' @param rate_grid If rate of change is included in the dataframe
 #' @param decomposition Is the full model decomposition included in dataframe
-#' @param CI Size of the credible intervals. The default in "95%" and the user can decide "50%", "95%" or "90%"
+#' @param CI Size of the credible intervals. The default in 0.95.
 #' @noRd
 create_output_df <- function(noisy_model_run_output,
                              data_grid, # jags_output,
