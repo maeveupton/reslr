@@ -28,8 +28,19 @@ print.reslr_input <- function(x,
   cat("This is a valid reslr input object with ")
   cat(paste(n_obs, "observations "))
   cat("and ", paste(n_sites), "sites.\n")
-  cat("There are ", paste(n_proxy), " proxy sites ")
-  cat("and ", paste(n_tide_gauge), " tide gauge sites.\n")
+  if(n_proxy > 1){
+    cat("There are ", paste(n_proxy), " proxy sites ")
+  }
+  else{
+    cat("There is ", paste(n_proxy), " proxy site ")
+  }
+  if(n_tide_gauge > 1 ){
+    cat("and ", paste(n_tide_gauge), " tide gauge sites.\n")
+  }
+  else{
+    cat("and ", paste(n_tide_gauge), " tide gauge site.\n")
+  }
+
   cat("The inputed age value is units of Common Era. \n")
 
   if(n_tide_gauge == 0){
