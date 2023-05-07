@@ -2,8 +2,6 @@
 #'
 #' @param output_dataframes These are dataframes created for plotting and are outputs from the \code{reslr_mcmc} function.
 #' @param data This is the input dataset stored in a list created in the \code{reslr_mcmc} function.
-#' @param plot_tide_gauges If plotting tide gauges add them onto the end of the proxy record.
-#' @param plot_proxy_records Plotting the proxy records on their own and this is the default
 #' @param model_caption Caption depending on the model type and number of proxy and tide gauge sites.
 #' @param xlab Labeling the x-axis.
 #' @param ylab Labeling the y-axis.
@@ -13,14 +11,11 @@
 #' @noRd
 create_model_fit_plot <- function(output_dataframes,
                                   data,
-                                  #plot_tide_gauges,
-                                  #plot_proxy_records,
                                   model_caption,
                                   xlab,
                                   ylab,
                                   title) {
   data_type_id <- pred <- lwr <- upr <- Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- NULL
-  #if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
     # Plot
     plot_result <-
       ggplot2::ggplot() +
@@ -80,69 +75,7 @@ create_model_fit_plot <- function(output_dataframes,
       ) +
       ggplot2::facet_wrap(~SiteName) +
       ggplot2::labs(caption = model_caption)
- # } else {
-  #   # Plot
-  #   plot <-
-  #     ggplot2::ggplot() +
-  #     ggplot2::geom_rect(data = data, ggplot2::aes(
-  #       xmin = Age * 1000 - Age_err * 1000, xmax = Age * 1000 + Age_err * 1000,
-  #       ymin = RSL - RSL_err, ymax = RSL + RSL_err, fill = "Uncertainty",
-  #     ), alpha = 0.4) +
-  #     # ggplot2::ggtitle(paste0("Proxy data & Tide gauge data from:",unique(as.factor(data$SiteName))))+
-  #     ggplot2::geom_point(
-  #       data = data,
-  #       ggplot2::aes(y = RSL, x = Age * 1000, colour = "black"), size = 0.5
-  #     ) + # , shape = data_type_id
-  #     ggplot2::geom_line(
-  #       data = output_dataframes,
-  #       ggplot2::aes(x = Age * 1000, y = pred, colour = "mean")
-  #     ) +
-  #     ggplot2::geom_ribbon(
-  #       data = output_dataframes,
-  #       ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age * 1000, fill = "CI"), alpha = 0.2
-  #     ) +
-  #     ggplot2::labs(x = xlab, y = ylab, title = title) +
-  #     ggplot2::theme_bw() +
-  #     ggplot2::theme(
-  #       plot.title = ggplot2::element_text(size = 15),
-  #       axis.title = ggplot2::element_text(size = 12, face = "bold"),
-  #       axis.text = ggplot2::element_text(size = 12),
-  #       legend.text = ggplot2::element_text(size = 10)
-  #     ) +
-  #     ggplot2::theme(
-  #       strip.text.x = ggplot2::element_text(size = 10),
-  #       strip.background = ggplot2::element_rect(fill = c("white"))
-  #     ) +
-  #     ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-  #     ggplot2::labs(colour = "") +
-  #     ggplot2::scale_fill_manual("",
-  #       values = c(
-  #         "Uncertainty" = ggplot2::alpha("grey", 0.3),
-  #         CI = ggplot2::alpha("purple3", 0.2)
-  #       ),
-  #       labels = c(
-  #         CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-  #         "Uncertainty" = expression(paste("1-sigma Error"))
-  #       )
-  #     ) +
-  #     ggplot2::scale_colour_manual("",
-  #       values = c("black" = "black", "mean" = "purple3"),
-  #       labels = c("Data", "Posterior Fit")
-  #     ) +
-  #     ggplot2::guides(
-  #       fill = ggplot2::guide_legend(override.aes = list(
-  #         size = 1
-  #       )),
-  #       colour = ggplot2::guide_legend(override.aes = list(
-  #         linetype = c(0, 1),
-  #         shape = c(16, NA),
-  #         size = 2
-  #       ))
-  #     ) +
-  #     ggplot2::facet_wrap(~SiteName) +
-  #     ggplot2::labs(caption = model_caption)
-  # }
-  return(plot_result)
+   return(plot_result)
 }
 
 #' In this function, tide gauge data from the Permanent Service for Mean Sea Level online database is accessed in a temporary path.
