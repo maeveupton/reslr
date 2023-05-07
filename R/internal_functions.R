@@ -1051,18 +1051,19 @@ add_noisy_input <- function(model_run,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
-        spline_nseg_st = spline_nseg_st
+        spline_nseg = spline_nseg
       )
       B_space_1 <- bs_bbase(data$Latitude,
         xl = min(data$Latitude),
         xr = max(data$Latitude),
         data = data,
-        spline_nseg_st = spline_nseg_st
+        spline_nseg = spline_nseg
       )
       B_space_2 <- bs_bbase(data$Longitude,
         xl = min(data$Longitude),
         xr = max(data$Longitude),
-        data = data
+        data = data,
+        spline_nseg = spline_nseg
       )
       B_l_deriv_full <- matrix(NA,
         ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
@@ -1316,7 +1317,7 @@ spline_basis_fun <- function(data,
       xl = min(t),
       xr = max(t),
       data = data,
-      spline_nseg = spline_nseg_
+      spline_nseg = spline_nseg
     )
     B_space_1 <- bs_bbase(data$Latitude,
       xl = min(data$Latitude),
