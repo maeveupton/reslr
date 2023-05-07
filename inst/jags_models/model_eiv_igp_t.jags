@@ -10,7 +10,7 @@ model{
 
         ###Derivative process
         w.m~dmnorm(mu.w,K.inv)
-        K.inv <- inverse((sigma_g^2)*K)
+        K.inv <- inverse((sigma_igp^2)*K)
         K.w.inv<-inverse(K)
 
         for(i in 1:Ngrid){
