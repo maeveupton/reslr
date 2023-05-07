@@ -133,7 +133,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in NIGAM time--------------
     class(jags_output) <- c("reslr_output", "eiv_slr_t")
-    message("JAGS model run finished for the EIV Simple Linear Regression")
+    #message("JAGS model run finished for the EIV Simple Linear Regression")
   }
 
   # 1 Change Point Model-------------------
@@ -197,7 +197,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in 1 Change Point--------------
     class(jags_output) <- c("reslr_output", "eiv_cp1_t")
-    message("JAGS model run finished for the EIV 1 Change Point model")
+    #message("JAGS model run finished for the EIV 1 Change Point model")
   }
 
 
@@ -276,7 +276,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in 2 Change Point--------------
     class(jags_output) <- c("reslr_output", "eiv_cp2_t")
-    message("JAGS model run finished for the EIV 2 Change Point model")
+    #message("JAGS model run finished for the EIV 2 Change Point model")
   }
 
   # 3 Change Point Model----------------------
@@ -353,7 +353,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in 3 Change Point--------------
     class(jags_output) <- c("reslr_output", "eiv_cp3_t")
-    message("JAGS model run finished for the EIV 3 Change Point model")
+    #message("JAGS model run finished for the EIV 3 Change Point model")
   }
 
   # Errors-in-Variables Integrated Gaussian Process------------------
@@ -422,7 +422,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       )
       # Classing the JAGS output for eiv_igp_t--------------
       class(jags_output) <- c("reslr_output", "eiv_igp_t", "detrend_data")
-      message("JAGS model run finished for the eiv_igp_t using detrended data")
+      #message("JAGS model run finished for the eiv_igp_t using detrended data")
     }
     # No detrended data
     else {
@@ -476,7 +476,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       )
       # Classing the JAGS output for eiv_igp_t--------------
       class(jags_output) <- c("reslr_output", "eiv_igp_t")
-      message("JAGS model run finished for the eiv_igp_t")
+      #message("JAGS model run finished for the eiv_igp_t")
     }
   }
 
@@ -608,7 +608,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Classing the JAGS output in NIGAM time--------------
     class(jags_output) <- c("reslr_output", "ni_spline_t")
 
-    message("JAGS model run finished for the NI spline in time")
+    #message("JAGS model run finished for the NI spline in time")
   }
 
   # Noisy Input GAM in Space Time-------------------------------------------
@@ -735,7 +735,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in NIGAM space time--------------
     class(jags_output) <- c("reslr_output", "ni_spline_st")
-    message("JAGS model run finished for the NI spline in space time")
+    #message("JAGS model run finished for the NI spline in space time")
   }
 
   # Noisy Input GAM for decomposition of RSL signal-------------------------------------------
@@ -948,7 +948,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in NIGAM for RSL decomposition--------------
     class(jags_output) <- c("reslr_output", "ni_gam_decomp")
-    message("JAGS model run finished for the NI GAM Decomposition")
+    #message("JAGS model run finished for the NI GAM Decomposition")
   }
   return(jags_output)
 }
