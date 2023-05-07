@@ -29,7 +29,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
   }
 </style>
 
-## Introduction
+# Introduction
 
 <!-- badges: start -->
 <img src="https://raw.github.com/maeveupton/reslr_extra/blob/main/reslr_badge/reslr_badge.png" width="240" height="276" align="right" />
@@ -49,9 +49,9 @@ There are a number of modelling options available to the user:
 | Noisy Input spline in space and time | A non-linear fit for a set of sites across a region using the method of Upton et al (2023). | **"ni_spline_st"**|
 | Noisy Input Generalised Additive model for the decomposition of the RSL signal | A non-linear fit for a set of sites across a region and provides a decomposition of the signal into regional, local-linear (commonly GIA) and local non-linear components. Again this full model is as described in Upton et al (2023). | **"ni_gam_decomp"** |
 
-For all of the above models the user is able to quantify and visualise changes of RSL and rates of change with associated uncertainties. Indeed a full posterior distribution ensemble of values is available in the output of the functions. For the decomposed full model, **"ni_gam_decomp"** , the user is able to access the posterior probability distributions of the individual components. 
+For all of the above models the user is able to quantify and visualise changes of RSL and rates of change with associated uncertainties. Indeed a full posterior distribution ensemble of values is available in the output of the functions. For the decomposed full model, **"ni_gam_decomp"**, the user is able to access the posterior probability distributions of the individual components. 
 
-## Installation of the `reslr` package
+# Installation of the `reslr` package
 
 The `reslr` package uses the JAGS (Just Another Gibbs Sampler) software to run the models. Before installing `reslr`, visit the [JAGS](https://sourceforge.net/projects/mcmc-jags/) website and download and install JAGS for your operating system. 
 
@@ -76,18 +76,18 @@ library(reslr)
 
 This will load the `reslr` package and all the associated packages. You’ll need to type the `library(reslr)` command every time you start R. If you have problems, visit the [Issues](https://github.com/maeveupton/reslr/issues) page and leave a message to tell us what went wrong. 
 
-## Considerations before running reslr
+# Considerations before running reslr
 
 Prior to running the `reslr` package, there are a few points to consider.
 
-### Installating JAGS software
+## Installating JAGS software
 
 In this package, the models are written using Just Another Gibbs Sample (JAGS) which uses Gibbs sampling and Markov Chain Monte Carlo (MCMC) algorithm to draw samples from the posterior distribution of the unknown parameters. To download the JAGS package use this [link](https://sourceforge.net/projects/mcmc-jags/). 
 
-### Working with scripts
+## Working with scripts
 The best way to use the `reslr` package is by creating scripts. A script can be created in Rstudio by clicking `File > New File > Rscript`. This opens a text window which allows commands to be typed in order and saved. The command can be sent to the command prompt (which Rstudio calls the Console) by highlighting the command and clicking Run (or going to Code > Run Lines). There are also keyboard shortcuts to speed up the process. We strongly recommend you learn to run R via scripts.
 
-### Inputting User's data
+## Inputting User's data
 `reslr` can handle three different types of data structure. It is important to note that varying the number of data sites will require different statistical modelling strategy:
 
 - A single site. This may occur when you have data for only one individual data site. In the case of a single site, we recommend using a temporal model, for example EIV Integrated Gaussian Process or NI spline in time.
@@ -127,7 +127,7 @@ The user must ensure that the input data is a dataframe. For a single site or mu
 
 - **Optional** linear_rate_err is a column that contains associated uncertainty for the linear rate in mm per year. *This is not a requirement*. For the NI GAM decomposition model, the user has the option of using their value, otherwise the package will calculate it using the data. It is important to note that if the linear_rate_err is provided without the linear_rate column this will lead to issues, i.e. both columns need to be provided.
 
-### Tide Gauge Data
+## Tide Gauge Data
 There is an option in the `reslr` package to include tide gauge data as an additional source of data which we recommend when using the `model_type = "ni_gam_decomp"`. The package will extract tide gauge data from the [PSMSL website](https://psmsl.org/data/obtaining/complete.php). The data is downloaded from this website and stored in a temporary directory.
 The tide gauges undergo a cleaning process within the package. Firstly, certain tide gauges have been flagged by the PSMSL website and we remove these locations. As collection of proxy reconstructions began in approximately 2000 CE, the tide gauge records are given in meters relative to the average over a time window, 2000 - 2018 CE, which corresponds to the variability of 19-year astronomical tides (Pugh and Woodworth 2014). Next, the tide gauge data is averaged using a rolling window over a decade to make it comparable with sedimentation rates associated proxy records sedimentation rates. The user can alter the size of the rolling window average if required when accumulation rates for the sediment in the proxy record is estimated to have a higher or lower accumulation rate, e.g. longer sediment accumulation rate result in a bigger rolling window average of 20 years.
 
@@ -142,7 +142,7 @@ Within the `reslr_load` function, the user has three options to choose from:
 The user can select a combination of option 1 and option 2 or option 1 and option 3 which allows for additional tide gauge data to be included. The final output is a data frame which contains an additional column, called `data_type_id`, identifying the data source "ProxyRecord" or "TideGaugeData" depending on the observation in question.
 
 
-### Glacial Isostatic Adjustment (GIA) 
+## Glacial Isostatic Adjustment (GIA) 
 For the NI GAM decomposition, the statistical model requires an estimate for the local linear rate arising from processes such as GIA and associated uncertainty for this rate each site.  According to Whitehouse (2018), GIA represents the Earth's reaction to the growth or melting of ice sheets, including the gravitational field and ocean. GIA can be approximated as a linear contribution over a short timescale, but with variable effects along the coast (Engelhart et al., 2009). Earth-ice models, which incorporate the physical structure of the Earth to predict GIA changes due to ice loading and unloading, can provide estimates of GIA rates. There are a range of Earth-ice models with one such example being the ICE5G VM2-90 (Peltier, 2004). It should be noted that other processes, such as tectonic vertical land motion, can mimic the linear trend of GIA. Therefore, the linear local component within the NI GAM decomposition may account for contributions from processes other than GIA that drive changes in relative sea level. These are included as additional columns, `linear_rate` and `linear_rate_err`, in the input dataframe provided by the user.
 
 If the GIA rate for the proxy site is not provided then package will automatically calculate these rates using the data provided and we do not estimates the rates from any Earth-ice physical model. 
@@ -150,7 +150,7 @@ The user can source their own rate estimates as previously mentioned. Two exampl
 
 Important to note, the tide gauge data require values for the `linear_rate` and `linear_rate_err` columns. This is calculated using [Peltier's  Earth ice model: ICE5G](https://www.atmosp.physics.utoronto.ca/~peltier/data.php) with an uncertainty value of 0.3 mm/year from [Englehart et al 2009](https://eartharxiv.org/repository/view/1157/).
 
-### Example Data Set
+## Example Data Set
 The `reslr` package possesses a large dataset used as an example called `NAACproxydata`. This dataset contains proxy records from the Atlantic coast of North America as used in Upton et al 2023 along with tide gauge data which will be discussed below. The 21 different proxy data sites and the references for each data source can be found in the following table:
 
 | Site Name | Reference |
@@ -201,7 +201,7 @@ data_multisite <- reslr::NAACproxydata %>% dplyr::filter(Site %in% c(
 ```
 
 
-## How to run reslr
+# How to run reslr
 
 The general structure for running `reslr` is as follows:
 
@@ -224,7 +224,7 @@ The `input_Age_type` argument is associated with the type of input Age where the
 **Step 5.** Visualise the results with `plot` and access the dataframes used to create the plots. The `plot_type` option allows users to print individual plots, for example the model fits ("model_fit_plot") and the rates ("rate_plot") separately. The captions (`plot_captions`) can be included on the plots which provides a summary of the model type, the number of proxy sites and tide gauge sites. The user can select to include the tide gauge (`plot_tide_gauges`) in the output plots. 
 
 
-## Errors-in-Variables Simple Linear Regression (**"eiv_slr_t"**)
+# Errors-in-Variables Simple Linear Regression (**"eiv_slr_t"**)
 
 The simplest model the `reslr` package can fit is a simple linear regression using the Errors-in-Variables method to account for the uncertainty associated with the proxy records, i.e. uncertainty associated with input (age) and the output (RSL). We would not recommend any model simpler than this (e.g. `lm`) as it will ignore some of the key uncertainties in the data. 
 
@@ -332,7 +332,7 @@ head(output_dataframes)
 ```
 
 
-## Errors-in-Variable Change Point Model (**"eiv_cp_t"**)
+# Errors-in-Variable Change Point Model (**"eiv_cp_t"**)
 The Errors-in-Variable Change Point model is an extension of the linear regression and allows the user to specify the number of change points required. 
 
 This technique focuses on 1 site and the maximum number of change points available to the user is 3. We do not recommended for multiple proxy sites together. Tide gauge data can be included to gain insight into recent changes in RSL, however, the user must investigate which tide gauge is most suitable. It is important to note that certain data sites will not work with 2 or 3 change points as there is no distinct changing points in the data. In this case, we recommend testing different number of change points and reviewing the resulting plots to confirm the correct number of change points is selected.
@@ -447,7 +447,7 @@ head(output_dataframes)
 ```
 
 
-## Errors-in-Variable Integrated Gaussian Process Model (**"eiv_igp_t"**)
+# Errors-in-Variable Integrated Gaussian Process Model (**"eiv_igp_t"**)
 The EIV Integrated Gaussian Process model provides the underlying rate of the process directly from the model. Further reading on this modeling approach can be found [here](https://projecteuclid.org/journals/annals-of-applied-statistics/volume-9/issue-2/Modeling-sea-level-change-using-errors-in-variables-integrated-Gaussian/10.1214/15-AOAS824.full). 
 
 This technique focuses on 1 site and we do not recommended for multiple proxy sites together. Tide gauge data can be included to gain insight into recent changes in RSL, however, the user must investigate which tide gauge is suitable. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
@@ -561,7 +561,7 @@ head(output_dataframes)
 
 
 
-## Noisy Input Generalised Additive Model in time (**"ni_spline_t"**)
+# Noisy Input Generalised Additive Model in time (**"ni_spline_t"**)
 An alternative method to examine how the response variable varies in time is using the temporal Noisy Input Generalised Additive Model (ni_spline_t). 
 It model can obtain results in more efficient computational run times when compared with the eiv_igp_t model.
 
@@ -674,7 +674,7 @@ head(output_dataframes)
 ```
 
 
-## Noisy input spline in space time (**"ni_spline_st"**)
+# Noisy input spline in space time (**"ni_spline_st"**)
 The Noisy Input spline in space time examines changes in response over multiple locations and throughout time. 
 For this model, a minimum of 2 proxy sites should be used and tide gauge data provides insight into recent changes in RSL if the user is requires_ As an example, we will filter the example dataset `NAACproxydata` to select two sites to demonstrate the process:
 ```{r,data2sites, eval = TRUE}
@@ -789,7 +789,7 @@ head(output_dataframes)
 
 
 
-## Noisy Input Generalised Additive Model for decomposition of response signal (**"ni_gam_decomp"**)
+# Noisy Input Generalised Additive Model for decomposition of response signal (**"ni_gam_decomp"**)
 
 The Noisy Input Generalised Additive Model for the decomposition of the response signal (RSL). 
 In the case of RSL, there are different drivers influence the changing RSL signal and these drivers vary in time and space. .The three main components of RSL change being examined using this model type at a regional, local linear component and non-linear local component. A detailed description of this model can be found [here](https://arxiv.org/abs/2301.09556).
@@ -975,9 +975,9 @@ plot(res_ni_gam_decomp, plot_type = "nigam_component_plot")
 ```
 Each component is plotted with an 95\% credible interval and this plot gives insight into the variability of the different components through time and at the different locations in question. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 
-## Advanced 
+# Advanced 
 
-### Including Tide Gauge data
+## Including Tide Gauge data
 In this package, we have described three ways to select a tide gauge and in the example we showed how to include the closest tide gauge to the proxy site. Here we are demonstrating the other options available to the user.
 
 If the user has a list of chosen tide gauges from PSMSL website, include them in a list in the `reslr_load` function as demonstrated: 
@@ -1035,7 +1035,7 @@ plot(
 )
 ```
 
-### Plotting techniques
+## Plotting techniques
 In the package, all plot labels for results, i.e. x and y labels and titles, can be updated in the following manner:
 ```{r, eval = FALSE}
 # Example
@@ -1047,7 +1047,7 @@ final_plots$plot_result + ggplot2::xlab("New x axis label Added as Example")
 final_plots$plot_result + ggplot2::ylab("New y axis label Added as Example")
 ```
 
-### Accessing the posterior samples
+## Accessing the posterior samples
 In the package the user has the ability access all the posterior sample for each unknown parameter in the following way:
 ```{r, eval = FALSE}
 # Example
@@ -1055,7 +1055,7 @@ res_eiv_slr_t <- reslr_mcmc(x = CedarIslandNC, model_type = "eiv_slr_t")
 res_eiv_slr_t$noisy_model_run_output$BUGSoutput$sims.list$beta
 ```
 
-## Appendix - suggested reading
+# Appendix - suggested reading
 For an introduction into statistical modelling for relative sea level change:
 
 Upton, Maeve, Cahill, Niamh and Parnell, Andrew C. (2023), 'Statistical Modelling for Relative Sea-Level Data', Reference Module in Earth Systems and Environmental Sciences, Elsevier
