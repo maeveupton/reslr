@@ -39,7 +39,7 @@ reslr_load(
 
 \item{detrend_data}{Detrend the data using the linear rate provided}
 
-\item{core_col_year}{The year the core was collected}
+\item{core_col_year}{The year the core was collected.}
 }
 \value{
 A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.

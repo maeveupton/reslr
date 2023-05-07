@@ -6,6 +6,7 @@
 \usage{
 \method{plot}{reslr_output}(
   x,
+  plot_proxy_records = TRUE,
   plot_tide_gauges = FALSE,
   title = "",
   plot_type = c("model_fit_plot"),
@@ -18,6 +19,8 @@
 }
 \arguments{
 \item{x}{An object of class \code{reslr_output} and \code{model_type} created via \code{\link{reslr_mcmc}}}
+
+\item{plot_proxy_records}{Plotting the proxy records on their own and this is the default}
 
 \item{plot_tide_gauges}{Plotting the tide gauge data as well as proxy data}
 

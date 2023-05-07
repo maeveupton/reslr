@@ -1,3 +1,78 @@
+#' A function that will create a plot of the rate of change for the output of the function \code{reslr_mcmc}.
+#'
+#' @param output_dataframes These are dataframes created for plotting and are outputs from the \code{reslr_mcmc} function.
+#' @param data This is the input dataset stored in a list created in the \code{reslr_mcmc} function.
+#' @param model_caption Caption depending on the model type and number of proxy and tide gauge sites.
+#' @param xlab Labeling the x-axis.
+#' @param ylab Labeling the y-axis.
+#' @param title Plotting a title.
+#'
+#' @return The plot of the model fit
+#' @noRd
+create_rate_of_change_plot <- function(output_dataframes,
+                                  data,
+                                  model_caption,
+                                  xlab,
+                                  y_rate_lab,
+                                  title,
+                                  plot_colour = "purple3") {
+  data_type_id <- pred <- lwr <- upr <- Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- NULL
+
+  # Plotting Rate of Change for Total component----------
+  plot_rate <-
+    ggplot2::ggplot() +
+    ggplot2::geom_line(
+      data = output_dataframes,
+      ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
+    ) +
+    ggplot2::geom_ribbon(
+      data = output_dataframes,
+      ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
+    ) +
+    ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(
+      plot.title = ggplot2::element_text(size = 15),
+      axis.title = ggplot2::element_text(size = 12, face = "bold"),
+      axis.text = ggplot2::element_text(size = 12),
+      legend.text = ggplot2::element_text(size = 10)
+    ) +
+    ggplot2::theme(
+      strip.text.x = ggplot2::element_text(size = 10),
+      strip.background = ggplot2::element_rect(fill = c("white"))
+    ) +
+    ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+    ggplot2::labs(colour = "") +
+    ggplot2::scale_fill_manual("",
+                               values = c(
+                                 #"CI" = ggplot2::alpha("purple3", 0.2)
+                                 "CI" = ggplot2::alpha(plot_colour, 0.2)
+                               ),
+                               labels = c(
+                                 CI = paste0(unique(output_dataframes$CI), " Credible Interval")
+                               )
+    ) +
+    ggplot2::scale_colour_manual("",
+                                 #values = c("mean" = "purple3"),
+                                 values = c("mean" = plot_colour),
+                                 labels = c("Posterior Fit")
+    ) +
+    ggplot2::geom_hline(yintercept = 0) +
+    ggplot2::guides(
+      fill = ggplot2::guide_legend(override.aes = list(
+        alpha = c(0.4), # , 0.4),
+        size = 1
+      )),
+      colour = ggplot2::guide_legend(override.aes = list(
+        linetype = c(1),
+        shape = c(NA),
+        size = 2
+      ))
+    ) +
+    ggplot2::facet_wrap(~SiteName)
+
+  return(plot_rate)
+}
 #' A function that will create a plot of model fits for the output of the function \code{reslr_mcmc}.
 #'
 #' @param output_dataframes These are dataframes created for plotting and are outputs from the \code{reslr_mcmc} function.
@@ -14,7 +89,8 @@ create_model_fit_plot <- function(output_dataframes,
                                   model_caption,
                                   xlab,
                                   ylab,
-                                  title) {
+                                  title,
+                                  plot_colour = "purple3") {
   data_type_id <- pred <- lwr <- upr <- Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- NULL
     # Plot
     plot_result <-
@@ -51,7 +127,8 @@ create_model_fit_plot <- function(output_dataframes,
       ggplot2::scale_fill_manual("",
         values = c(
           "Uncertainty" = ggplot2::alpha("grey", 0.3),
-          "CI" = ggplot2::alpha("purple3", 0.2)
+          #"CI" = ggplot2::alpha("purple3", 0.2)
+          "CI" = ggplot2::alpha(plot_colour, 0.2)
         ),
         labels = c(
           CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
@@ -59,7 +136,9 @@ create_model_fit_plot <- function(output_dataframes,
         )
       ) +
       ggplot2::scale_colour_manual("",
-        values = c("black" = "black", "mean" = "purple3"),
+        values = c("black" = "black",
+                   "mean" = plot_colour),
+                   #"mean" = "purple3"),
         labels = c("Data", "Posterior Fit")
       ) +
       ggplot2::guides(
@@ -732,8 +811,8 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
     #CI = CI
     CI = paste0(CI*100,"%")
   )
-  # output_dataframes <- output_dataframes %>%
-  #   dplyr::mutate(Age = Age*1000)
+  output_dataframes <- output_dataframes %>%
+    dplyr::mutate(Age = Age*1000)
   return(output_dataframes)
 }
 

@@ -14,6 +14,7 @@ reslr_mcmc(
   n_thin = 4,
   n_chains = 3,
   CI = 0.95,
+  spline_nseg = NULL,
   spline_nseg_t = NULL,
   spline_nseg_st = NULL
 )
@@ -37,9 +38,11 @@ reslr_mcmc(
 
 \item{CI}{Size of the credible interval required by the user. The default is 0.95 corresponding to 95\%.}
 
-\item{spline_nseg_t}{Number of segments required in a spline in time which is used the basis functions}
+\item{spline_nseg}{Number of segments used to create basis functions}
 
-\item{spline_nseg_st}{Number of segments required in a spline in space time which is used the basis functions}
+\item{spline_nseg_t}{Number of segments used to create basis functions for NIGAM temporal component}
+
+\item{spline_nseg_st}{Number of segments used to create basis functions for NIGAM spatial temporal component}
 
 \item{xr}{Range of data from cross validation}
 

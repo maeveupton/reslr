@@ -314,7 +314,7 @@ res_eiv_slr_t <- reslr_mcmc(
 )
 ```
 
-The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept (alpha), the slope (beta) and the residual standard deviation of the model (sigma_res). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. beta. 
+The output of this function allows to user to examine the parameter estimates. For the eiv_slr_t model, the parameters of interest are the intercept ("alpha"), the slope ("beta") and the residual standard deviation of the model ("sigma_res"). When using the eiv_slr_t model, an estimate of the of the rate of sea-level change can be obtained by examining the value of the slope, i.e. "beta". 
 
 **Step 5:** The results from the eiv_slr_t model can be visualised using the following function:
 ```{r, plotslrres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -429,7 +429,7 @@ res_eiv_cp1_t <- reslr_mcmc(
   n_chains = 3 # Number of Markov chains
 )
 ```
-For the eiv_cp_t model, the parameters of interest are the intercept (alpha), the slopes before the change point (beta[1]) and after the change point (beta[2]), the year of the change point(Change Point) and sigma_res the variance of the model.
+For the eiv_cp_t model, the parameters of interest are the intercept (alpha), the slopes before the change point ("beta[1]") and after the change point ("beta[2]"), the year of the change point (Change Point) and "sigma_res" the variance of the model.
 
 **Step 5:** The results from the EIV Change Point model can be illustrated using:
 ```{r, plotcpres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -531,7 +531,7 @@ res_eiv_igp_t <- reslr_mcmc(
 )
 ```
 
-For the parameter estimates, the length scale parameter, "phi" determines the distance over which two input points can influence each other. More specifically, it determines the rate at which the correlation between the input data points decays as the distance between those points increases.
+For the parameter estimates, the length scale parameter, "phi" determines the distance over which two input points can influence each other. More specifically, it determines the rate at which the correlation between the input data points decays as the distance between those points increases. "sigma_res" is the variation of the model. 
 
 **Step 5:** The results from the EIV IGP model can be illustrated using:
 ```{r,plotigpres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -646,7 +646,7 @@ res_ni_spline_t <- reslr_mcmc(
   n_chains = 3 # Number of Markov chains
 )
 ```
-For the parameter estimates, we can present the standard deviation associated with the NI spline time model. Where "sigma_r" highlights the variation associated with the spline coefficient for the spline in time and "sigma_res" presenting the overall variation of the model.
+For the parameter estimates, we can present the standard deviation associated with the NI spline time model. Where "sigma_beta" highlights the variation associated with the spline coefficient for the spline in time and "sigma_res" presenting the overall variation of the model.
 
 **Step 5:** the results from the ni_spline_t model can be illustrated using:
 ```{r, plotsptres,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -759,7 +759,7 @@ res_ni_spline_st <- reslr::reslr_mcmc(
   n_chains = 3 # Number of Markov chains
 )
 ```
-For the parameter estimates, we can present the standard deviation associated with the NI spline space time model. Where "sigma_l" highlights the variation associated with the spline coefficient of the spline in time and "sigma_res" presenting the overall variation.
+For the parameter estimates, we can present the standard deviation associated with the NI spline space time model. Where "sigma_beta" highlights the variation associated with the spline coefficient of the spline in time and "sigma_res" presenting the overall variation.
 
 **Step 5:** the results from the ni_spline_st model can be illustrated using:
 ```{r,plotspstres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}

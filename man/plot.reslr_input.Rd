@@ -8,9 +8,9 @@
   x,
   title = "Plot of the raw data",
   xlab = "Year (CE)",
-  ylab = "Y axis",
+  ylab = "Relative Sea Level (m)",
   plot_tide_gauges = FALSE,
-  plot_proxy_record = TRUE,
+  plot_proxy_records = TRUE,
   plot_caption = TRUE,
   ...
 )
@@ -26,7 +26,7 @@
 
 \item{plot_tide_gauges}{Plotting the tide gauge data with the proxy records}
 
-\item{plot_proxy_record}{Plotting the proxy records on their own and this is the default}
+\item{plot_proxy_records}{Plotting the proxy records on their own and this is the default}
 
 \item{plot_caption}{Plotting an informed caption with the number of tide gauges and proxy sites.}
 
