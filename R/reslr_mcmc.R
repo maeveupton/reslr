@@ -399,6 +399,7 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.thin = n_thin,
         n.chains = n_chains
       ))
+      browser()
       # Convert back to 1000
       data <- data %>%
         dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)

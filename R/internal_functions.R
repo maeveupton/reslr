@@ -787,26 +787,6 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
   rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 1-((1 - CI)/2))
   rate_upr <- apply(w.ms, 2, stats::quantile, probs = (1 - CI)/2)
 
-  # if (CI == "99%") {
-  #   upr <- apply(pred_full, 2, stats::quantile, probs = 0.005)
-  #   lwr <- apply(pred_full, 2, stats::quantile, probs = 0.995)
-  #   rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 0.005)
-  #   rate_upr <- apply(w.ms, 2, stats::quantile, probs = 0.995)
-  # }
-  #
-  # if (CI == "95%") {
-  #   upr <- apply(pred_full, 2, stats::quantile, probs = 0.025)
-  #   lwr <- apply(pred_full, 2, stats::quantile, probs = 0.975)
-  #   rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 0.025)
-  #   rate_upr <- apply(w.ms, 2, stats::quantile, probs = 0.975)
-  # }
-  # if (CI == "50%") {
-  #   upr <- apply(pred_full, 2, stats::quantile, probs = 0.25)
-  #   lwr <- apply(pred_full, 2, stats::quantile, probs = 0.75)
-  #   rate_upr <- apply(w.ms, 2, stats::quantile, probs = 0.25)
-  #   rate_lwr <- apply(w.ms, 2, stats::quantile, probs = 0.75)
-  # }
-
   # Output dataframes for plots
   output_dataframes <- dplyr::tibble(
     data_grid,
@@ -819,9 +799,8 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
     #CI = CI
     CI = paste0(CI*100,"%")
   )
-  output_dataframes <- output_dataframes %>%
-    dplyr::mutate(Age = Age*1000,
-                  Age_err = Age_err*1000)
+  # output_dataframes <- output_dataframes %>%
+  #   dplyr::mutate(Age = Age*1000)
   return(output_dataframes)
 }
 
