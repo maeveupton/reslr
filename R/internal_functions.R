@@ -782,10 +782,10 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
   # pred_full <- pred_full * mod$scale_factor_y
   # w.ms <- (w.ms * mod$scale_factor_y) / mod$scale_factor_x
 
-  upr <- apply(pred_full, 2, stats::quantile, probs = 1 - CI/2)
+  upr <- apply(pred_full, 2, stats::quantile, probs = (1 - CI)/2)
   lwr <- apply(pred_full, 2, stats::quantile, probs = CI/2)
   rate_lwr <- apply(w.ms, 2, stats::quantile, probs = CI/2)
-  rate_upr <- apply(w.ms, 2, stats::quantile, probs = 1 - CI/2)
+  rate_upr <- apply(w.ms, 2, stats::quantile, probs = (1 - CI)/2)
 
   # if (CI == "99%") {
   #   upr <- apply(pred_full, 2, stats::quantile, probs = 0.005)
@@ -845,10 +845,10 @@ create_output_df <- function(noisy_model_run_output,
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
     # mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_deriv
 
-    upr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - CI/2)
+    upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI)/2)
     lwr <- apply(mu_post_pred, 2, stats::quantile, probs = CI/2)
     rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = CI/2)
-    rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 1 - CI/2)
+    rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
 
     output_dataframes <- data.frame(
       data_grid,
@@ -866,7 +866,7 @@ create_output_df <- function(noisy_model_run_output,
 
   } else {
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    upr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - CI/2)
+    upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI)/2)
     lwr <- apply(mu_post_pred, 2, stats::quantile, probs = CI/2)
 
     output_dataframes <- data.frame(
@@ -884,10 +884,10 @@ create_output_df <- function(noisy_model_run_output,
   if (decomposition == TRUE & rate_grid == TRUE) {
     # Total Component from JAGS output
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-    upr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - CI/2)
+    upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI)/2)
     lwr <- apply(mu_post_pred, 2, stats::quantile, probs = CI/2)
     rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = CI/2)
-    rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 1 - CI/2)
+    rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
 
 
     total_model_fit_df <- data.frame(
@@ -913,7 +913,7 @@ create_output_df <- function(noisy_model_run_output,
 
     # Regional component
     time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred
-    upr <- apply(time_component_pred_post, 2, stats::quantile, probs = 1 - CI/2)
+    upr <- apply(time_component_pred_post, 2, stats::quantile, probs = (1 - CI)/2)
     lwr <- apply(time_component_pred_post, 2, stats::quantile, probs = CI/2)
 
     regional_component_df <- data.frame(
@@ -927,7 +927,7 @@ create_output_df <- function(noisy_model_run_output,
 
     time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred_deriv
     rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = CI/2)
-    rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 1 - CI/2)
+    rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
 
     regional_rate_component_df <-
       data.frame(
@@ -942,7 +942,7 @@ create_output_df <- function(noisy_model_run_output,
     # Vertical Offset & Linear Local Component
     g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x_pred
     # g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x
-    upr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = 1 - CI/2)
+    upr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = (1 - CI)/2)
     lwr <- apply(g_h_component_pred_post, 2, stats::quantile, probs = CI/2)
 
     lin_loc_component_df <-
@@ -958,7 +958,7 @@ create_output_df <- function(noisy_model_run_output,
     # Non linear local component
     space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred
     # space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l
-    upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 1 - CI/2)
+    upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = (1 - CI)/2)
     lwr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = CI/2)
 
     non_lin_loc_component_df <-
@@ -972,7 +972,7 @@ create_output_df <- function(noisy_model_run_output,
       )
     space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred_deriv
     rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = CI/2)
-    rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 1 - CI/2)
+    rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
 
     non_lin_loc_rate_component_df <-
       data.frame(
