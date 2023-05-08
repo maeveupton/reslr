@@ -27,7 +27,13 @@ print.reslr_input <- function(x,
 
   cat("This is a valid reslr input object with ")
   cat(paste(n_obs, "observations "))
+  if(n_sites > 1){
   cat("and ", paste(n_sites), "sites.\n")
+  }
+  else{
+    cat("and ", paste(n_sites), "site.\n")
+  }
+
   if(n_proxy > 1){
     cat("There are ", paste(n_proxy), " proxy sites ")
   }
@@ -41,10 +47,10 @@ print.reslr_input <- function(x,
     cat("and ", paste(n_tide_gauge), " tide gauge site.\n")
   }
 
-  cat("The inputed age value is units of Common Era. \n")
+  cat("The age units are; Common Era. \n")
 
   if(n_tide_gauge == 0){
-    cat("No decadally averaged Tide gauge data included. It is required for the ni_gam_decomp model \n")
+    cat("No decadally averaged yide gauge data included. It is recommended for the ni_gam_decomp model \n")
   }
   else{
     cat("Decadally averaged tide gauge data included by the package. \n")

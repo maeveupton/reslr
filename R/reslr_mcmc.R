@@ -424,6 +424,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       class(jags_output) <- c("reslr_output", "eiv_igp_t", "detrend_data")
       #message("JAGS model run finished for the eiv_igp_t using detrended data")
     }
+
     # No detrended data
     else {
       # JAGS data

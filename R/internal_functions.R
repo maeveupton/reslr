@@ -812,8 +812,8 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
     #CI = CI
     CI = paste0(CI*100,"%")
   )
-  output_dataframes <- output_dataframes %>%
-    dplyr::mutate(Age = Age*1000)
+  # output_dataframes <- output_dataframes %>%
+  #   dplyr::mutate(Age = Age*1000)
   return(output_dataframes)
 }
 

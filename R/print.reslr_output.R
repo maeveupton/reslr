@@ -29,10 +29,32 @@ print.reslr_output <-
 
     cat("This is a valid reslr input object with ")
     cat(paste(n_obs, "observations "))
-    cat("and ", paste(n_sites), "sites.\n")
-    cat("There are ", paste(n_proxy), " proxy sites ")
-    cat("and ", paste(n_tide_gauge), " tide gauge sites.\n")
-    cat("The inputed age value is units of Common Era. \n")
+    if(n_sites > 1){
+      cat("and ", paste(n_sites), "sites.\n")
+    }
+    else{
+      cat("and ", paste(n_sites), "site.\n")
+    }
+
+    if(n_proxy > 1){
+      cat("There are ", paste(n_proxy), " proxy sites ")
+    }
+    else{
+      cat("There is ", paste(n_proxy), " proxy site ")
+    }
+    if(n_tide_gauge > 1 ){
+      cat("and ", paste(n_tide_gauge), " tide gauge sites.\n")
+    }
+    else{
+      cat("and ", paste(n_tide_gauge), " tide gauge site.\n")
+    }
+
+    cat("The age units are; Common Era. \n")
+
+    if(inherits(jags_output,"detrend_data") == TRUE){
+      cat("Model has used detrended data.\n")
+    }
+
     # Models
     if (inherits(jags_output, "eiv_slr_t") == TRUE) {
       cat("The model used was the Errors-in-Variables simple linear regression model.\n")
@@ -68,8 +90,6 @@ print.reslr_output <-
       nrow(jags_output$noisy_model_run_output$BUGSoutput$sims.matrix),
       "iterations over", jags_output$noisy_model_run_output$BUGSoutput$n.chains, "MCMC chains.\n"
     )
-    if(inherits(jags_output,"detrend_data") == TRUE){
-      cat("Model has used detrended data.\n")
-    }
+
     #cat("\n")
   }
