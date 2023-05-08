@@ -323,8 +323,7 @@ plot.reslr_output <- function(x,
           ggplot2::scale_fill_manual("",
                                      values = c(
                                        "Uncertainty" = ggplot2::alpha("grey", 0.3),
-                                       #"CI" = ggplot2::alpha("purple3", 0.2)
-                                       "CI" = ggplot2::alpha(plot_colour, 0.2)
+                                       "CI" = ggplot2::alpha("purple3", 0.2)
                                      ),
                                      labels = c(
                                        CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
@@ -333,8 +332,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::scale_colour_manual("",
                                        values = c("black" = "black",
-                                                  "mean" = plot_colour),
-                                       #"mean" = "purple3"),
+                                       "mean" = "purple3"),
                                        labels = c("Data", "Posterior Fit")
           ) +
           ggplot2::guides(
@@ -389,19 +387,18 @@ plot.reslr_output <- function(x,
                                      )
           ) +
           ggplot2::scale_colour_manual("",
-                                       values = c("black" = "black",
-                                                  "mean" = plot_colour),
-                                       #"mean" = "purple3"),
-                                       labels = c("Data", "Posterior Fit")
+                                       values = c(
+                                       "mean" = "purple3"),
+                                       labels = c( "Posterior Fit")
           ) +
           ggplot2::guides(
             fill = ggplot2::guide_legend(override.aes = list(
-              alpha = c(0.3, 0.2), # , 0.4),
+              alpha = c(0.3), # , 0.4),
               size = 1
             )),
             colour = ggplot2::guide_legend(override.aes = list(
-              linetype = c(0, 1),
-              shape = c(16, NA),
+              linetype = c(1),
+              shape = c(NA),
               size = 2
             ))
           ) +
