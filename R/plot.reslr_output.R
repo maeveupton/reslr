@@ -429,7 +429,7 @@ plot.reslr_output <- function(x,
             xmax = Age + Age_err,
             ymin = y_lwr_box,
             ymax = y_upr_box,
-            fill = "gray",
+            fill = "Uncertainty",
           ), alpha = 0.7) +
           ggplot2::geom_point(
             data = data,
@@ -455,25 +455,25 @@ plot.reslr_output <- function(x,
             strip.background = ggplot2::element_rect(fill = c("white"))
           ) +
           ggplot2::scale_fill_manual("",
-            values = c(
-              "Uncertainty" = ggplot2::alpha("grey", 0.3),
-              "CI" = ggplot2::alpha("purple3", 0.2)
-            ),
-            labels = c(
-              CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-              expression(paste("1-sigma Error"))
-            )
+                                     values = c(
+                                       "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                       "CI" = ggplot2::alpha("purple3", 0.2)
+                                     ),
+                                     labels = c(
+                                       CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                       expression(paste("1-sigma Error"))
+                                     )
           ) +
           ggplot2::scale_colour_manual("",
-            values = c(
-              "black" = "black",
-              "mean" = "purple3"
-            ),
-            labels = c("Data", "Posterior Fit")
+                                       values = c(
+                                         "black" = "black",
+                                         "mean" = "purple3"
+                                       ),
+                                       labels = c("Data", "Posterior Fit")
           ) +
           ggplot2::guides(
             fill = ggplot2::guide_legend(override.aes = list(
-              alpha = c(0.3, 0.2), # , 0.4),
+              alpha = c(0.2 , 0.4),
               size = 1
             )),
             colour = ggplot2::guide_legend(override.aes = list(
@@ -547,7 +547,7 @@ plot.reslr_output <- function(x,
             axis.title = ggplot2::element_text(size = 12, face = "bold"),
             legend.text = ggplot2::element_text(size = 10)
           ) +
-          ggplot2::labs(caption = NULL)
+          ggplot2::labs(caption = "")
 
       }
       if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
