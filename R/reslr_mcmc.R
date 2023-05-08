@@ -20,8 +20,8 @@
 #' @param spline_nseg Number of segments used to create basis functions
 #' @param spline_nseg_t Number of segments used to create basis functions for NIGAM temporal component
 #' @param spline_nseg_st Number of segments used to create basis functions for NIGAM spatial temporal component
-#' @param xr Range of data from cross validation
-#' @param xl Range of data for cross validation
+# @param xr Range of data from cross validation
+# @param xl Range of data for cross validation
 
 #' @return A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export

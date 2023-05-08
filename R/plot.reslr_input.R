@@ -28,7 +28,7 @@ plot.reslr_input <- function(x,
                              plot_proxy_records = TRUE,
                              plot_caption = TRUE,
                              ...) {
-  Age <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <- NULL
+  Age <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <-y_lwr_box <- y_upr_box <- SL <-  NULL
   # Input data-------
   input_data <- x
   data <- input_data$data
@@ -40,19 +40,179 @@ plot.reslr_input <- function(x,
     unique() %>%
     nrow()
   # Plotting only Proxy Record
-  if(plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
+  if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
     data <- data %>%
       dplyr::filter(data_type_id == "ProxyRecord")
     # Plot
+    p <- ggplot2::ggplot() +
+      ggplot2::geom_rect(data = data, ggplot2::aes(
+        xmin = Age - Age_err, xmax = Age + Age_err,
+        ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+        fill = "gray",
+      ), alpha = 0.7) +
+      ggplot2::geom_point(
+        data = data,
+        ggplot2::aes(y = RSL, x = Age, colour = "black"), size = 0.3
+      ) +
+      ggplot2::labs(x = xlab, y = ylab, title = title) +
+      ggplot2::theme_bw() +
+      ggplot2::labs(colour = "") +
+      ggplot2::theme(
+        strip.text.x = ggplot2::element_text(size = 7),
+        strip.background = ggplot2::element_rect(fill = c("white"))
+      ) +
+      ggplot2::scale_fill_manual("",
+        values = "grey",
+        labels = expression(paste("1-sigma Error")),
+        guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
+      ) +
+      ggplot2::scale_colour_manual(
+        values = c("black"),
+        labels = c("Data")
+      ) +
+      ggplot2::facet_wrap(~SiteName) +
+      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+      ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+      ggplot2::theme(
+        plot.title = ggplot2::element_text(size = 18, face = "bold"),
+        axis.title = ggplot2::element_text(size = 12, face = "bold"),
+        legend.text = ggplot2::element_text(size = 10)
+      )
+    if (plot_caption == TRUE) {
+      p <- p + ggplot2::labs(caption = paste0(
+        "No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy
+      ))
+    } else {
+      p <- p
+    }
+  }
+
+
+  # Plotting tide gauge only
+  if (plot_tide_gauges == TRUE & plot_proxy_records == FALSE) {
+    data <- data %>%
+      dplyr::filter(data_type_id == "TideGaugeData")
+    p <- ggplot2::ggplot() +
+      ggplot2::geom_rect(
+        data = data,
+        ggplot2::aes(
+          xmin = Age - Age_err,
+          xmax = Age + Age_err,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          fill = "gray",
+        ), alpha = 0.7
+      ) +
+      ggplot2::geom_point(
+        data = data,
+        ggplot2::aes(y = RSL, x = Age, colour = "black"), size = 0.3
+      ) +
+      ggplot2::labs(x = xlab, y = ylab, title = title) +
+      ggplot2::theme_bw() +
+      ggplot2::labs(colour = "") +
+      ggplot2::theme(
+        strip.text.x = ggplot2::element_text(size = 7),
+        strip.background = ggplot2::element_rect(fill = c("white"))
+      ) +
+      ggplot2::scale_fill_manual("",
+        values = "grey",
+        labels = expression(paste("1-sigma Error")),
+        guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
+      ) +
+      ggplot2::scale_colour_manual(
+        values = c("black"),
+        labels = c("Data")
+      ) +
+      ggplot2::facet_wrap(~SiteName) +
+      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+      ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+      ggplot2::theme(
+        plot.title = ggplot2::element_text(size = 18, face = "bold"),
+        axis.title = ggplot2::element_text(size = 12, face = "bold"),
+        legend.text = ggplot2::element_text(size = 10)
+      )
+    # Plotting informed caption
+    if (plot_caption == TRUE) {
+      p <- p +
+        ggplot2::labs(caption = paste0(
+          "No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
+    }
+    # No caption
+    else {
+      p <- p
+    }
+  }
+
+  # Plotting both tide gauge and proxy record
+  if (plot_tide_gauges == TRUE & plot_proxy_records == TRUE) {
+    p <- ggplot2::ggplot() +
+      ggplot2::geom_rect(
+        data = data,
+        ggplot2::aes(
+          xmin = Age - Age_err,
+          xmax = Age + Age_err,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          fill = "gray",
+        ), alpha = 0.7
+      ) +
+      ggplot2::geom_point(
+        data = data,
+        ggplot2::aes(y = RSL, x = Age, colour = "black"), size = 0.3
+      ) +
+      ggplot2::labs(x = xlab, y = ylab, title = title) +
+      ggplot2::theme_bw() +
+      ggplot2::labs(colour = "") +
+      ggplot2::theme(
+        strip.text.x = ggplot2::element_text(size = 7),
+        strip.background = ggplot2::element_rect(fill = c("white"))
+      ) +
+      ggplot2::scale_fill_manual("",
+        values = "grey",
+        labels = expression(paste("1-sigma Error")),
+        guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
+      ) +
+      ggplot2::scale_colour_manual(
+        values = c("black"),
+        labels = c("Data")
+      ) +
+      ggplot2::facet_wrap(~SiteName, scales = "free") +
+      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+      ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+      ggplot2::theme(
+        plot.title = ggplot2::element_text(size = 18, face = "bold"),
+        axis.title = ggplot2::element_text(size = 12, face = "bold"),
+        legend.text = ggplot2::element_text(size = 10)
+      )
+    # Plotting informed caption
+    if (plot_caption == TRUE) {
+      p <- p +
+        ggplot2::labs(caption = paste0(
+          "No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
+    }
+    # No caption
+    else {
+      p <- p
+    }
+  }
+
+  # Plotting detrend data put into 1 site only ------------------
+  if (inherits(x, "detrend_data") == TRUE) {
+    if (plot_tide_gauges == TRUE & plot_proxy_records == TRUE) {
       p <- ggplot2::ggplot() +
         ggplot2::geom_rect(data = data, ggplot2::aes(
-          xmin = Age - Age_err, xmax = Age + Age_err,
-          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          xmin = Age - Age_err,
+          xmax = Age + Age_err,
+          ymin = y_lwr_box,
+          ymax = y_upr_box,
           fill = "gray",
         ), alpha = 0.7) +
         ggplot2::geom_point(
           data = data,
-          ggplot2::aes(y = RSL, x = Age, colour = "black"), size = 0.3
+          ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
         ) +
         ggplot2::labs(x = xlab, y = ylab, title = title) +
         ggplot2::theme_bw() +
@@ -70,7 +230,7 @@ plot.reslr_input <- function(x,
           values = c("black"),
           labels = c("Data")
         ) +
-        ggplot2::facet_wrap(~SiteName) +
+        # ggplot2::facet_wrap(~SiteName) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
         ggplot2::theme(
@@ -78,172 +238,13 @@ plot.reslr_input <- function(x,
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
           legend.text = ggplot2::element_text(size = 10)
         )
-      if (plot_caption == TRUE) {
-        p <- p + ggplot2::labs(caption = paste0(
-          "No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ))
     }
-      else {
-        p <-p
-      }
-  }
-
-
-  # Plotting tide gauge only
-  if (plot_tide_gauges == TRUE & plot_proxy_records == FALSE) {
-    data <- data %>%
-      dplyr::filter(data_type_id == "TideGaugeData")
-    p <- ggplot2::ggplot() +
-      ggplot2::geom_rect(
-        data = data,
-        ggplot2::aes(
-          xmin = Age- Age_err,
-          xmax = Age  + Age_err ,
-          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
-          fill = "gray",
-        ), alpha = 0.7
-      ) +
-      ggplot2::geom_point(
-        data = data,
-        ggplot2::aes(y = RSL, x = Age , colour = "black"), size = 0.3
-      ) +
-      ggplot2::labs(x = xlab, y = ylab, title = title) +
-      ggplot2::theme_bw() +
-      ggplot2::labs(colour = "") +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 7),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::scale_fill_manual("",
-                                 values = "grey",
-                                 labels = expression(paste("1-sigma Error")),
-                                 guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-      ) +
-      ggplot2::scale_colour_manual(
-        values = c("black"),
-        labels = c("Data")
-      ) +
-      ggplot2::facet_wrap(~SiteName) +
-      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 18, face = "bold"),
-        axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        legend.text = ggplot2::element_text(size = 10)
-      )
-    # Plotting informed caption
-    if(plot_caption == TRUE){
-      p <- p +
-        ggplot2::labs(caption = paste0(
-          "No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ))
-    }
-    # No caption
-    else {
-      p <- p
-    }
-  }
-
-  # Plotting both tide gauge and proxy record
-  if (plot_tide_gauges == TRUE & plot_proxy_records == TRUE) {
-    p<- ggplot2::ggplot() +
-      ggplot2::geom_rect(
-        data = data,
-        ggplot2::aes(
-          xmin = Age  - Age_err ,
-          xmax = Age  + Age_err,
-          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
-          fill = "gray",
-        ), alpha = 0.7
-      ) +
-      ggplot2::geom_point(
-        data = data,
-        ggplot2::aes(y = RSL, x = Age , colour = "black"), size = 0.3
-      ) +
-      ggplot2::labs(x = xlab, y = ylab, title = title) +
-      ggplot2::theme_bw() +
-      ggplot2::labs(colour = "") +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 7),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::scale_fill_manual("",
-                                 values = "grey",
-                                 labels = expression(paste("1-sigma Error")),
-                                 guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-      ) +
-      ggplot2::scale_colour_manual(
-        values = c("black"),
-        labels = c("Data")
-      ) +
-      ggplot2::facet_wrap(~SiteName,scales = "free") +
-      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 18, face = "bold"),
-        axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        legend.text = ggplot2::element_text(size = 10)
-      )
-    # Plotting informed caption
-    if(plot_caption == TRUE){
-      p <- p +
-        ggplot2::labs(caption = paste0(
-          "No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ))
-    }
-    # No caption
-    else {
-      p <- p
-    }
-  }
-
-# Plotting detrend data put into 1 site only ------------------
-  if (inherits(x, "detrend_data") == TRUE) {
-    p <- ggplot2::ggplot() +
-      ggplot2::geom_rect(data = data, ggplot2::aes(
-        xmin = Age  - Age_err ,
-        xmax = Age  + Age_err ,
-        ymin = y_lwr_box,
-        ymax = y_upr_box,
-        fill = "gray",
-      ), alpha = 0.7) +
-      ggplot2::geom_point(
-        data = data,
-        ggplot2::aes(y = SL, x = Age , colour = "black"), size = 0.3
-      ) +
-      ggplot2::labs(x = xlab, y = ylab, title = title) +
-      ggplot2::theme_bw() +
-      ggplot2::labs(colour = "") +
-      ggplot2::theme(
-        strip.text.x = ggplot2::element_text(size = 7),
-        strip.background = ggplot2::element_rect(fill = c("white"))
-      ) +
-      ggplot2::scale_fill_manual("",
-                                 values = "grey",
-                                 labels = expression(paste("1-sigma Error")),
-                                 guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-      ) +
-      ggplot2::scale_colour_manual(
-        values = c("black"),
-        labels = c("Data")
-      ) +
-      #ggplot2::facet_wrap(~SiteName) +
-      ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-      ggplot2::theme(
-        plot.title = ggplot2::element_text(size = 18, face = "bold"),
-        axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        legend.text = ggplot2::element_text(size = 10)
-      )
 
     # If plotting informed caption
     if (plot_caption == TRUE) {
       p <- p + ggplot2::labs(caption = paste0(
-        "No. proxy sites:", n_proxy  ,
-         "\n No. tide gauge sites:", n_sites - n_proxy
+        "No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy
       ))
     } else {
       p <- p

@@ -16,7 +16,7 @@ create_rate_of_change_plot <- function(output_dataframes,
                                   y_rate_lab,
                                   title,
                                   plot_colour = "purple3") {
-  data_type_id <- pred <- lwr <- upr <- Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- NULL
+  data_type_id <- rate_pred <- rate_lwr <- rate_upr <- Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- NULL
 
   # Plotting Rate of Change for Total component----------
   plot_rate <-
@@ -738,6 +738,7 @@ linear_reg_rates <- function(data) {
 #' @param CI Size of the credible interval, default is 0.95 corresponding to 95%
 #' @noRd
 create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
+  Age <- NULL
   m <- model_run$BUGSoutput$sims.matrix
   sample_draws <- tidybayes::tidy_draws(m)
   n_iter <- sample_draws$.iteration %>%
@@ -1276,7 +1277,7 @@ spline_basis_fun <- function(data,
     t_pred <- data_grid$Age
 
     B_t_pred <-
-      bs_bbase_t(t_pred,
+      bs_bbase(t_pred,
         # xl=xl,
         # xr=xr,
         xl = min(t),

@@ -43,10 +43,6 @@ reslr_mcmc(
 \item{spline_nseg_t}{Number of segments used to create basis functions for NIGAM temporal component}
 
 \item{spline_nseg_st}{Number of segments used to create basis functions for NIGAM spatial temporal component}
-
-\item{xr}{Range of data from cross validation}
-
-\item{xl}{Range of data for cross validation}
 }
 \value{
 A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.

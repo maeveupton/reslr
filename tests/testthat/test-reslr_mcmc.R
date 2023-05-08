@@ -4,7 +4,7 @@ testthat::test_that("Testing SLR", {
   data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
   reslr_input_1 <- reslr_load(
     data = data,
-    prediction_interval = 100,
+    prediction_grid_res = 100,
     include_tide_gauge = FALSE,
     include_linear_rate = FALSE,
     list_preferred_TGs = NULL,
@@ -33,7 +33,7 @@ testthat::test_that("Testing cp 1", {
   data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
   reslr_input_1 <- reslr_load(
     data = data,
-    prediction_interval = 100,
+    prediction_grid_res = 100,
     include_tide_gauge = FALSE,
     include_linear_rate = FALSE,
     list_preferred_TGs = NULL,
@@ -63,7 +63,7 @@ testthat::test_that("Testing cp 2", {
   data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
   reslr_input_1 <- reslr_load(
     data = data,
-    prediction_interval = 100,
+    prediction_grid_res = 100,
     include_tide_gauge = FALSE,
     include_linear_rate = FALSE,
     list_preferred_TGs = NULL,
@@ -93,7 +93,7 @@ testthat::test_that("Testing eiv igp in time", {
   data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
   reslr_input_1 <- reslr_load(
     data = data,
-    prediction_interval = 100,
+    prediction_grid_res = 100,
     include_tide_gauge = FALSE,
     include_linear_rate = FALSE,
     list_preferred_TGs = NULL,
@@ -122,7 +122,7 @@ testthat::test_that("Testing ni spline in time", {
   data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
   reslr_input_1 <- reslr_load(
     data = data,
-    prediction_interval = 100,
+    prediction_grid_res = 100,
     include_tide_gauge = FALSE,
     include_linear_rate = FALSE,
     list_preferred_TGs = NULL,
@@ -151,7 +151,7 @@ testthat::test_that("Testing ni spline in space time", {
   data <- NAACproxydata %>% dplyr::filter(Site %in% c("Cedar Island", "Nassau"))
   reslr_input_1 <- reslr_load(
     data = data,
-    prediction_interval = 100,
+    prediction_grid_res = 100,
     include_tide_gauge = FALSE,
     include_linear_rate = FALSE,
     list_preferred_TGs = NULL,
@@ -180,7 +180,7 @@ testthat::test_that("Testing ni GAM decomposition with closest tide gauge and li
   data <- NAACproxydata %>% dplyr::filter(Site %in% c("Cedar Island", "Nassau", "Placentia", "Barn Island"))
   reslr_input_1 <- reslr_load(
     data = data,
-    prediction_interval = 100,
+    prediction_grid_res = 100,
     include_tide_gauge = TRUE,
     include_linear_rate = TRUE,
     # list_preferred_TGs = c("ARGENTIA","MAYPORT", "JACKSONVILLE","LAKE WORTH PIER",

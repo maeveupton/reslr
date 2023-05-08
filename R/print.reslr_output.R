@@ -15,6 +15,7 @@
 #' print(x = jags_output)
 print.reslr_output <-
   function(x, ...) {
+    SiteName <- data_type_id <- NULL
     jags_output <- x
     data <- jags_output$data
     n_obs <- nrow(data)

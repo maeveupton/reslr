@@ -70,8 +70,8 @@ summary.reslr_output <- function(object, # jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       ) %>%
-      mutate(variable = ifelse(variable == "cp", "Change Point:", variable)) %>%
-      mutate(mean = ifelse(variable == "Change Point:", round(mean * 1000), mean))
+      dplyr::mutate(variable = ifelse(variable == "cp", "Change Point:", variable)) %>%
+      dplyr::mutate(mean = ifelse(variable == "Change Point:", round(mean * 1000), mean))
   }
 
   # EIV cp 2
@@ -95,9 +95,9 @@ summary.reslr_output <- function(object, # jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       ) %>%
-      mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
-      mutate(variable = ifelse(variable == "cp[2]", "Change Point 2:", variable)) %>%
-      mutate(
+      dplyr::mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
+      dplyr::mutate(variable = ifelse(variable == "cp[2]", "Change Point 2:", variable)) %>%
+      dplyr::mutate(
         mean = ifelse(variable == "Change Point 1:", round(mean * 1000), mean),
         mean = ifelse(variable == "Change Point 2:", round(mean * 1000), mean)
       )
@@ -124,10 +124,10 @@ summary.reslr_output <- function(object, # jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       ) %>%
-      mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
-      mutate(variable = ifelse(variable == "cp[2]", "Change Point 2:", variable)) %>%
-      mutate(variable = ifelse(variable == "cp[3]", "Change Point 3:", variable)) %>%
-      mutate(
+      dplyr::mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
+      dplyr::mutate(variable = ifelse(variable == "cp[2]", "Change Point 2:", variable)) %>%
+      dplyr::mutate(variable = ifelse(variable == "cp[3]", "Change Point 3:", variable)) %>%
+      dplyr::mutate(
         mean = ifelse(variable == "Change Point 1:", round(mean * 1000), mean),
         mean = ifelse(variable == "Change Point 2:", round(mean * 1000), mean),
         mean = ifelse(variable == "Change Point 3:", round(mean * 1000), mean),
@@ -217,7 +217,7 @@ summary.reslr_output <- function(object, # jags_output,#
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
       )%>%
-      mutate(variable = ifelse(variable == "sigma_beta_r[1]", "sigma_beta_r", variable),
+      dplyr::mutate(variable = ifelse(variable == "sigma_beta_r[1]", "sigma_beta_r", variable),
              variable = ifelse(variable == "sigma_beta_h[1]", "sigma_beta_h", variable))
   }
 

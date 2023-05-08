@@ -110,7 +110,7 @@ test_that("summary.reslr_output", {
 data2sites <- NAACproxydata %>% dplyr::filter(Site %in% c("Cedar Island", "Nassau"))
 reslr_input_3 <- reslr_load(
   data = data2sites,
-  prediction_interval = 100,
+  prediction_grid_res = 100,
   include_tide_gauge = TRUE,
   include_linear_rate = TRUE,
   list_preferred_TGs = NULL,
