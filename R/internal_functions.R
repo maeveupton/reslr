@@ -628,7 +628,8 @@ add_linear_rate <- function(data) {
   # Download the file and save it to the temporary file
   utils::download.file(url,
     destfile = temp_file, # "dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc",#temp_file,
-    method = "libcurl", mode = "wb",  extra = "--no-check-certificate"
+    #method = "libcurl",
+    mode = "wb",  extra = "--no-check-certificate"
   )
   # Unzip the data file to a temporary directory
   temp_dir <- tempfile()
