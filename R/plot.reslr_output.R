@@ -290,6 +290,44 @@ plot.reslr_output <- function(x,
       # Using caption or not
       if (plot_caption == TRUE) {
         # Plot model fit
+        plot_result <- ggplot2::ggplot() +
+          ggplot2::geom_rect(data = data, ggplot2::aes(
+            xmin = Age - Age_err,
+            xmax = Age + Age_err,
+            ymin = y_lwr_box,
+            ymax = y_upr_box,
+            fill = "gray",
+          ), alpha = 0.7) +
+          ggplot2::geom_point(
+            data = data,
+            ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
+          ) +
+          ggplot2::labs(x = xlab, y = ylab, title = title) +
+          ggplot2::theme_bw() +
+          ggplot2::labs(colour = "") +
+          ggplot2::theme(
+            strip.text.x = ggplot2::element_text(size = 7),
+            strip.background = ggplot2::element_rect(fill = c("white"))
+          ) +
+          ggplot2::scale_fill_manual("",
+                                     values = "grey",
+                                     labels = expression(paste("1-sigma Error")),
+                                     guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
+          ) +
+          ggplot2::scale_colour_manual(
+            values = c("black"),
+            labels = c("Data")
+          ) +
+          # ggplot2::facet_wrap(~SiteName) +
+          ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+          ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+          ggplot2::theme(
+            plot.title = ggplot2::element_text(size = 18, face = "bold"),
+            axis.title = ggplot2::element_text(size = 12, face = "bold"),
+            legend.text = ggplot2::element_text(size = 10)
+          )
+
+
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
@@ -1361,18 +1399,63 @@ plot.reslr_output <- function(x,
         ))
 
       # Plot Non linear local plot
-      non_lin_loc_plot <- create_model_fit_plot(
-        output_dataframes = non_lin_loc_component_df,
-        data = data,
-        xlab = xlab,
-        ylab = "Sea Level (m)",
-        title = title,
-        model_caption = paste0(
+      non_lin_loc_plot <-
+        ggplot2::ggplot() +
+        ggplot2::geom_line(
+          data = non_lin_loc_component_df,
+          ggplot2::aes(x = Age , y = pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = non_lin_loc_component_df,
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age , fill = "CI"), alpha = 0.3
+        ) +
+        ggplot2::labs(x = xlab,
+                      y = "Sea Level (m)",
+                      title = title,
+                      colour = "") +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 15),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          axis.text = ggplot2::element_text(size = 12),
+          legend.text = ggplot2::element_text(size = 10)
+        ) +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 10),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "CI" = ggplot2::alpha("#ad4c14", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                     expression(paste("1-sigma Error"))
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                       "mean" = "#ad4c14"),
+                                     labels = c("Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.2),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(1),
+            #shape = c(16, NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
-        ),
-        plot_colour = "#ad4c14"
-      )
+        ))
+
 
       # Plot rate for non linear local
       non_lin_loc_rate_plot <- create_rate_of_change_plot(
@@ -1476,7 +1559,7 @@ plot.reslr_output <- function(x,
 
       # Plot rate
       plot_rate <- create_rate_of_change_plot(
-        output_dataframes = total_rate_df,
+        output_dataframes = total_model_rate_df,
         data = data,
         model_caption = NULL,
         xlab = xlab,
@@ -1608,17 +1691,61 @@ plot.reslr_output <- function(x,
         ggplot2::labs(caption = "")
 
       # Plot Non linear local plot
-      non_lin_loc_plot <- create_model_fit_plot(
-        output_dataframes = non_lin_loc_component_df,
-        data = data,
-        xlab = xlab,
-        ylab = "Sea Level (m)",
-        title = title,
-        model_caption = NULL,
-        plot_colour = "#ad4c14"
-      )
+      non_lin_loc_plot <-
+        ggplot2::ggplot() +
+          ggplot2::geom_line(
+          data = non_lin_loc_component_df,
+          ggplot2::aes(x = Age , y = pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = non_lin_loc_component_df,
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age , fill = "CI"), alpha = 0.3
+        ) +
+        ggplot2::labs(x = xlab,
+                      y = "Sea Level (m)",
+                      title = title,
+                      colour = "") +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 15),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          axis.text = ggplot2::element_text(size = 12),
+          legend.text = ggplot2::element_text(size = 10)
+        ) +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 10),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "CI" = ggplot2::alpha("#ad4c14", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                     expression(paste("1-sigma Error"))
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                                "mean" = "#ad4c14"),
+                                     labels = c("Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c( 0.2),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(1),
+            #shape = c(16, NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::labs(caption = "")
 
-      # Plot rate for non linear local
+        # Plotting rate of non linear component
       non_lin_loc_rate_plot <- create_rate_of_change_plot(
         output_dataframes = non_lin_loc_rate_component_df,
         data = data,
@@ -1628,6 +1755,7 @@ plot.reslr_output <- function(x,
         title = title,
         plot_colour = "#ad4c14"
       )
+
       # Separate Components on one plot with CI --------
       all_components_CI_plot <- ggplot2::ggplot() +
         # Linear Local Component + site specific vertical offset
