@@ -82,7 +82,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "beta",
       "alpha",
-      "sigma_res"
+      "sigma_y"
     )
 
     # JAGS data----------------------
@@ -146,7 +146,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "beta",
       "alpha",
-      "sigma_res",
+      "sigma_y",
       "cp"
     )
 
@@ -222,7 +222,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "beta",
       "alpha",
-      "sigma_res",
+      "sigma_y",
       "cp"
     )
 
@@ -299,7 +299,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "beta",
       "alpha",
-      "sigma_res",
+      "sigma_y",
       "cp"
     )
 
@@ -364,7 +364,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     jags_pars <- c(
       "phi",
       "sigma_igp",
-      "sigma_res",
+      "sigma_y",
       "w.m",
       "alpha",
       "beta"
@@ -490,7 +490,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Parameters to save in JAGs-----------------
     jags_pars <- c(
       "mu_y",
-      "sigma_res",
+      "sigma_y",
       "b_t",
       "r",
       "sigma_beta",
@@ -544,7 +544,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "mu_pred_deriv",
       "r_pred_deriv",
-      "sigma_res",
+      "sigma_y",
       "b_t",
       "r",
       "r_deriv",
@@ -637,7 +637,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Parameters to save in JAGs
     jags_pars <- c(
       "mu_y",
-      "sigma_res",
+      "sigma_y",
       "b_st",
       "l",
       "sigma_beta",
@@ -691,7 +691,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_pred",
       "mu_deriv",
       "mu_pred_deriv",
-      "sigma_res",
+      "sigma_y",
       "b_st",
       "l",
       "l_pred",
@@ -793,7 +793,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Parameters to save in JAGs
     jags_pars <- c(
       "mu_y",
-      "sigma_res",
+      "sigma_y",
       "b_t",
       "h_z_x",
       "g_h_z_x",
@@ -888,7 +888,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       "mu_deriv",
       "mu_pred",
       "mu_pred_deriv",
-      "sigma_res",
+      "sigma_y",
       "sigma_beta_h",
       "sigma_beta_r",
       "sigma_beta_l",
@@ -941,6 +941,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
+      model_run_output = model_run,
       jags_data = jags_data,
       data = data,
       data_grid = data_grid,

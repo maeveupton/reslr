@@ -29,7 +29,7 @@ summary.reslr_output <- function(object, # jags_output,#
     # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
-        "alpha", "beta", "sigma_res"
+        "alpha", "beta", "sigma_y"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -59,7 +59,7 @@ summary.reslr_output <- function(object, # jags_output,#
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
-        "alpha", "beta[1]", "beta[2]", "cp", "sigma_res"
+        "alpha", "beta[1]", "beta[2]", "cp", "sigma_y"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -84,7 +84,7 @@ summary.reslr_output <- function(object, # jags_output,#
         "alpha[1]", "alpha[2]",
         "beta[1]", "beta[2]",
         "beta[3]", "cp[1]",
-        "cp[2]", "sigma_res"
+        "cp[2]", "sigma_y"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -113,7 +113,7 @@ summary.reslr_output <- function(object, # jags_output,#
         "alpha[1]", "alpha[2]",
         "alpha[3]", "beta[1]", "beta[2]",
         "beta[3]", "beta[4]", "cp[1]",
-        "cp[2]", "cp[3]", "sigma_res"
+        "cp[2]", "cp[3]", "sigma_y"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -142,7 +142,7 @@ summary.reslr_output <- function(object, # jags_output,#
     # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
-        "phi", "sigma_igp", "sigma_res"
+        "phi", "sigma_igp", "sigma_y"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -164,7 +164,7 @@ summary.reslr_output <- function(object, # jags_output,#
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
         "sigma_beta",
-        "sigma_res"
+        "sigma_y"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -185,7 +185,7 @@ summary.reslr_output <- function(object, # jags_output,#
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
         "sigma_beta",
-        "sigma_res"
+        "sigma_y"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -199,26 +199,44 @@ summary.reslr_output <- function(object, # jags_output,#
   }
   # NI GAM decomposition
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
-    jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
-    sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-    par_summary <- posterior::summarise_draws(sample_draws) %>%
+    # No noise model output
+    jags_output_model_run_no_noise <- jags_output$model_run_output$BUGSoutput$sims.matrix
+    sample_draws_no_noise <- tidybayes::tidy_draws(jags_output_model_run_no_noise)
+    par_summary_beta_r <-
+      posterior::summarise_draws(sample_draws_no_noise) %>%
       dplyr::filter(variable %in% c(
-        "sigma_beta_l",
-        "sigma_beta_r[1]",
-        "sigma_beta_h[1]",
-        "sigma_res"
+        "sigma_beta_h",
+        "sigma_beta_r"
       )) %>%
       dplyr::select(
         variable = variable,
         mean = mean, #* mod$scale_factor_y,
         sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y, # WHAT this one?
+        mad = mad, #* mod$scale_factor_y,
         q5 = q5, #* mod$scale_factor_y,
         q95 = q95, # * mod$scale_factor_y
         rhat = rhat
-      )%>%
-      dplyr::mutate(variable = ifelse(variable == "sigma_beta_r[1]", "sigma_beta_r", variable),
-             variable = ifelse(variable == "sigma_beta_h[1]", "sigma_beta_h", variable))
+      )
+    # Noisy model output
+    jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
+    sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
+    par_summary_noise <- posterior::summarise_draws(sample_draws) %>%
+      dplyr::filter(variable %in% c(
+        "sigma_beta_l",
+        "sigma_beta_r[1]",
+        "sigma_y"
+      )) %>%
+      dplyr::select(
+        variable = variable,
+        mean = mean, #* mod$scale_factor_y,
+        sd = sd, #* mod$scale_factor_y,
+        mad = mad, #* mod$scale_factor_y,
+        q5 = q5, #* mod$scale_factor_y,
+        q95 = q95, # * mod$scale_factor_y
+        rhat = rhat
+      )
+    par_summary <- merge(par_summary_beta_r,par_summary_noise)
+
   }
 
 

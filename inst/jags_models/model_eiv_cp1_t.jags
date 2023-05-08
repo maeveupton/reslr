@@ -9,7 +9,7 @@ model{
       C[j] <- 1+step(mu_t[j]-cp)
       mu_t[j] ~ dnorm(0,0.5^-2)
       mu_y[j] <- alpha + beta[C[j]]*(mu_t[j]-cp)
-      tau[j] <- (y_err[j]^2 + sigma_res^2)^-1
+      tau[j] <- (y_err[j]^2 + sigma_y^2)^-1
 
   }
 
@@ -19,7 +19,7 @@ model{
   beta[1]~dnorm(0.0,0.01)
   beta[2]~dnorm(0.0,0.01)
 
-  sigma_res ~ dt(0,4^-2,1)T(0,)
+  sigma_y ~ dt(0,4^-2,1)T(0,)
 
   cp ~ dunif(t_min,t_max)
 

@@ -57,29 +57,29 @@ print.reslr_output <-
 
     # Models
     if (inherits(jags_output, "eiv_slr_t") == TRUE) {
-      cat("The model used was the Errors-in-Variables simple linear regression model.\n")
+      cat("The model used was the Errors-in-Variables Simple Linear Regression model.\n")
     }
     if (inherits(jags_output, "eiv_cp1_t") == TRUE) {
-      cat("The model used was the Errors-in-Variables change point model with 1 change point.\n")
+      cat("The model used was the Errors-in-Variables Change Point model with 1 change point.\n")
     }
     if (inherits(jags_output, "eiv_cp2_t") == TRUE) {
-      cat("The model used was the Errors-in-Variables change point model with 2 change points.\n")
+      cat("The model used was the Errors-in-Variables Change Point model with 2 change points.\n")
     }
     if (inherits(jags_output, "eiv_cp3_t") == TRUE) {
-      cat("The model used was the Errors-in-Variables change point model with 3 change point.\n")
+      cat("The model used was the Errors-in-Variables Change Point model with 3 change points.\n")
     }
     if (inherits(jags_output, "eiv_igp_t") == TRUE) {
       if (inherits(jags_output, "detrend_data") == TRUE) {
-        cat("The model used was the Errors-in-Variables integrated gaussian process model in time for detrended data.\n")
+        cat("The model used was the Errors-in-Variables Integrated Gaussian Process model in time for detrended data.\n")
       } else {
-        cat("The model used was the Errors-in-Variables integrated gaussian process model in time.\n")
+        cat("The model used was the Errors-in-Variables Integrated Gaussian Process model in time.\n")
       }
     }
     if (inherits(jags_output, "ni_spline_t") == TRUE) {
-      cat("The model used was the Noisy Input spline in time model.\n")
+      cat("The model used was the Noisy Input Spline in time model.\n")
     }
     if (inherits(jags_output, "ni_spline_st") == TRUE) {
-      cat("The model used was the Noisy Input spline in space time model.\n")
+      cat("The model used was the Noisy Input Spline in space time model.\n")
     }
     if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
       cat("The model used was the Noisy Input Generalised Additive Model for decomposition of the RSL signal.\n")

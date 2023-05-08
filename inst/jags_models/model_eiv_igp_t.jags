@@ -5,7 +5,7 @@ model{
           t[i] ~ dnorm(mu_t[i],t_err[i]^-2)
           mu_t[i] ~ dnorm(0,0.5^-2)
           noisy_terr[i] <- sqrt((beta^2)*(t_err[i]^2))
-          tau[i] <- (y_err[i]^2 + sigma_res^2 + noisy_terr[i]^2)^-1
+          tau[i] <- (y_err[i]^2 + sigma_y^2 + noisy_terr[i]^2)^-1
         }
 
         ###Derivative process
@@ -33,7 +33,7 @@ model{
       # Priors
       sigma_igp ~ dt(0,2^-2,1)T(0,)
       phi ~ dbeta(al,10)
-      sigma_res ~ dt(0,2^-2,1)T(0,)
+      sigma_y ~ dt(0,2^-2,1)T(0,)
       alpha ~ dnorm(0,2^-2)
       beta ~ dnorm(0,2^-2)
   }
