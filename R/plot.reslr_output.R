@@ -270,79 +270,154 @@ plot.reslr_output <- function(x,
       unique() %>%
       nrow()
     n_tide_gauges <- n_sites - n_proxy
-    # Plotting proxy only
-    if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
-      output_dataframes <- output_dataframes %>%
-        dplyr::filter(data_type_id == "ProxyRecord")
-      data <- data %>%
-        dplyr::filter(data_type_id == "ProxyRecord")
-    }
-    # Plotting tide gauge only
-    if (plot_proxy_records == FALSE & plot_tide_gauges == TRUE) {
-      output_dataframes <- output_dataframes %>%
-        dplyr::filter(data_type_id == "TideGaugeData")
-      data <- data %>%
-        dplyr::filter(data_type_id == "TideGaugeData")
-    }
 
-    # Using caption or not
-    if (plot_caption == TRUE) {
-      # Plot model fit
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = paste0(
-          "Model type: Errors in Variables Integrated Gaussian Process Model \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
+    # Plotting the detrended data:
+    if (inherits(jags_output, "data_detrend") == TRUE) {
+      # Plotting proxy only
+      if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
+        output_dataframes <- output_dataframes %>%
+          dplyr::filter(data_type_id == "ProxyRecord")
+        data <- data %>%
+          dplyr::filter(data_type_id == "ProxyRecord")
+      }
+      # Plotting tide gauge only
+      if (plot_proxy_records == FALSE & plot_tide_gauges == TRUE) {
+        output_dataframes <- output_dataframes %>%
+          dplyr::filter(data_type_id == "TideGaugeData")
+        data <- data %>%
+          dplyr::filter(data_type_id == "TideGaugeData")
+      }
+      # Using caption or not
+      if (plot_caption == TRUE) {
+        # Plot model fit
+        plot_result <- create_model_fit_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          xlab = xlab,
+          ylab = ylab,
+          title = title,
+          model_caption = paste0(
+            "Model type: Errors in Variables Integrated Gaussian Process Model \n No. proxy sites:", n_proxy,
+            "\n No. tide gauge sites:", n_sites - n_proxy
+          )
         )
-      )
 
-      # Plot rate
-      plot_rate <- create_rate_of_change_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        model_caption = paste0(
-          "Model type: Errors in Variables Integrated Gaussian Process Model \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ),
-        xlab = xlab,
-        y_rate_lab = y_rate_lab,
-        title = title
-      )
+        # Plot rate
+        plot_rate <- create_rate_of_change_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          model_caption = paste0(
+            "Model type: Errors in Variables Integrated Gaussian Process Model \n No. proxy sites:", n_proxy,
+            "\n No. tide gauge sites:", n_sites - n_proxy
+          ),
+          xlab = xlab,
+          y_rate_lab = y_rate_lab,
+          title = title
+        )
+      } else {
+        # Plot model fit
+        plot_result <- create_model_fit_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          xlab = xlab,
+          ylab = ylab,
+          title = title,
+          model_caption = NULL
+        )
+
+        # Plot rate
+        plot_rate <- create_rate_of_change_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          model_caption = NULL,
+          xlab = xlab,
+          y_rate_lab = y_rate_lab,
+          title = title
+        )
+      }
+      if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
+        plot_result <- plot_result +
+          ggplot2::facet_wrap(~SiteName, scales = "free")
+        plot_rate <- plot_rate +
+          ggplot2::facet_wrap(~SiteName, scales = "free")
+      }
 
 
-    } else {
-      # Plot model fit
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = NULL
-      )
-
-      # Plot rate
-      plot_rate <- create_rate_of_change_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        model_caption = NULL,
-        xlab = xlab,
-        y_rate_lab = y_rate_lab,
-        title = title
-      )
     }
-    if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
-      plot_result <- plot_result +
-        ggplot2::facet_wrap(~SiteName, scales = "free")
-      plot_rate <- plot_rate +
-        ggplot2::facet_wrap(~SiteName, scales = "free")
+
+
+    # Plot the normal data:
+    else {
+      # Plotting proxy only
+      if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
+        output_dataframes <- output_dataframes %>%
+          dplyr::filter(data_type_id == "ProxyRecord")
+        data <- data %>%
+          dplyr::filter(data_type_id == "ProxyRecord")
+      }
+      # Plotting tide gauge only
+      if (plot_proxy_records == FALSE & plot_tide_gauges == TRUE) {
+        output_dataframes <- output_dataframes %>%
+          dplyr::filter(data_type_id == "TideGaugeData")
+        data <- data %>%
+          dplyr::filter(data_type_id == "TideGaugeData")
+      }
+
+      # Using caption or not
+      if (plot_caption == TRUE) {
+        # Plot model fit
+        plot_result <- create_model_fit_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          xlab = xlab,
+          ylab = ylab,
+          title = title,
+          model_caption = paste0(
+            "Model type: Errors in Variables Integrated Gaussian Process Model \n No. proxy sites:", n_proxy,
+            "\n No. tide gauge sites:", n_sites - n_proxy
+          )
+        )
+
+        # Plot rate
+        plot_rate <- create_rate_of_change_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          model_caption = paste0(
+            "Model type: Errors in Variables Integrated Gaussian Process Model \n No. proxy sites:", n_proxy,
+            "\n No. tide gauge sites:", n_sites - n_proxy
+          ),
+          xlab = xlab,
+          y_rate_lab = y_rate_lab,
+          title = title
+        )
+      } else {
+        # Plot model fit
+        plot_result <- create_model_fit_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          xlab = xlab,
+          ylab = ylab,
+          title = title,
+          model_caption = NULL
+        )
+
+        # Plot rate
+        plot_rate <- create_rate_of_change_plot(
+          output_dataframes = output_dataframes,
+          data = data,
+          model_caption = NULL,
+          xlab = xlab,
+          y_rate_lab = y_rate_lab,
+          title = title
+        )
+      }
+      if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
+        plot_result <- plot_result +
+          ggplot2::facet_wrap(~SiteName, scales = "free")
+        plot_rate <- plot_rate +
+          ggplot2::facet_wrap(~SiteName, scales = "free")
+      }
     }
-
-
 
     # # Not working yet
     # if (inherits(jags_output, "data_detrend") == TRUE) {
@@ -933,8 +1008,6 @@ plot.reslr_output <- function(x,
         y_rate_lab = y_rate_lab,
         title = title
       )
-
-
     } else {
       # Plot model fit
       plot_result <- create_model_fit_plot(
@@ -962,7 +1035,7 @@ plot.reslr_output <- function(x,
       plot_rate <- plot_rate +
         ggplot2::facet_wrap(~SiteName, scales = "free")
     }
-   output_plots <- list(
+    output_plots <- list(
       plot_result = plot_result,
       plot_rate = plot_rate
     )
@@ -1021,8 +1094,6 @@ plot.reslr_output <- function(x,
         y_rate_lab = y_rate_lab,
         title = title
       )
-
-
     } else {
       # Plot model fit
       plot_result <- create_model_fit_plot(
@@ -1059,7 +1130,6 @@ plot.reslr_output <- function(x,
 
   # NIGAM decomposition----------
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
-
     output_dataframes <- jags_output$output_dataframes
     data <- jags_output$data
     n_sites <- length(data$SiteName %>% unique())
@@ -1095,10 +1165,10 @@ plot.reslr_output <- function(x,
       total_model_rate_df <- total_model_rate_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
 
-      regional_component_df <- regional_component_df# %>%
-        #dplyr::filter(data_type_id == "ProxyRecord")
-      regional_rate_component_df <- regional_rate_component_df #%>%
-       # dplyr::filter(data_type_id == "ProxyRecord")
+      regional_component_df <- regional_component_df # %>%
+      # dplyr::filter(data_type_id == "ProxyRecord")
+      regional_rate_component_df <- regional_rate_component_df # %>%
+      # dplyr::filter(data_type_id == "ProxyRecord")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
@@ -1106,7 +1176,6 @@ plot.reslr_output <- function(x,
         dplyr::filter(data_type_id == "ProxyRecord")
       non_lin_loc_rate_component_df <- non_lin_loc_rate_component_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-
     }
     # Plotting tide gauge only
     if (plot_proxy_records == FALSE & plot_tide_gauges == TRUE) {
@@ -1117,10 +1186,10 @@ plot.reslr_output <- function(x,
       total_model_rate_df <- total_model_rate_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")
 
-      regional_component_df <- regional_component_df #%>%
-        #dplyr::filter(data_type_id == "TideGaugeData")
-      regional_rate_component_df <- regional_rate_component_df #%>%
-       # dplyr::filter(data_type_id == "TideGaugeData")
+      regional_component_df <- regional_component_df # %>%
+      # dplyr::filter(data_type_id == "TideGaugeData")
+      regional_rate_component_df <- regional_rate_component_df # %>%
+      # dplyr::filter(data_type_id == "TideGaugeData")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")
@@ -1177,18 +1246,18 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 12)
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(regional_component_df$CI), " Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#3b47ad", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(regional_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#3b47ad"
-                                     ),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#3b47ad"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::ylab("Sea Level (m)") +
@@ -1212,18 +1281,18 @@ plot.reslr_output <- function(x,
         ggplot2::theme_bw() +
         ggplot2::geom_hline(yintercept = 0) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#3b47ad", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#3b47ad"
-                                     ),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#3b47ad"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 15),
@@ -1268,18 +1337,18 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#5bac06"
-                                     ),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#5bac06"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#5bac06", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(lin_loc_component_df$CI), " Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#5bac06", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(lin_loc_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
@@ -1300,7 +1369,8 @@ plot.reslr_output <- function(x,
         title = title,
         model_caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy),
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ),
         plot_colour = "#ad4c14"
       )
 
@@ -1310,7 +1380,8 @@ plot.reslr_output <- function(x,
         data = data,
         model_caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy),
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ),
         xlab = xlab,
         y_rate_lab = y_rate_lab,
         title = title,
@@ -1392,9 +1463,6 @@ plot.reslr_output <- function(x,
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
         ))
-
-
-
     } else {
       # Plot model fit
       plot_result <- create_model_fit_plot(
@@ -1434,18 +1502,18 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 12)
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(regional_component_df$CI), " Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#3b47ad", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(regional_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#3b47ad"
-                                     ),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#3b47ad"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::ylab("Sea Level (m)") +
@@ -1466,18 +1534,18 @@ plot.reslr_output <- function(x,
         ggplot2::theme_bw() +
         ggplot2::geom_hline(yintercept = 0) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#3b47ad", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#3b47ad"
-                                     ),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#3b47ad"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 15),
@@ -1519,18 +1587,18 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c(
-                                       "mean" = "#5bac06"
-                                     ),
-                                     labels = c("Posterior Fit")
+          values = c(
+            "mean" = "#5bac06"
+          ),
+          labels = c("Posterior Fit")
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "CI" = ggplot2::alpha("#5bac06", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(lin_loc_component_df$CI), " Credible Interval")
-                                   )
+          values = c(
+            "CI" = ggplot2::alpha("#5bac06", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(lin_loc_component_df$CI), " Credible Interval")
+          )
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
@@ -1632,8 +1700,6 @@ plot.reslr_output <- function(x,
         ggplot2::xlab("Year (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::labs(caption = "")
-
-
     }
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result +
@@ -1648,9 +1714,8 @@ plot.reslr_output <- function(x,
         ggplot2::facet_wrap(~SiteName, scales = "free")
       non_lin_loc_rate_plot <- non_lin_loc_rate_plot +
         ggplot2::facet_wrap(~SiteName, scales = "free")
-      all_components_CI_plot <- all_components_CI_plot+
+      all_components_CI_plot <- all_components_CI_plot +
         ggplot2::facet_wrap(~SiteName, scales = "free")
-
     }
 
     output_plots <- list(
