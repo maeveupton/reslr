@@ -1057,8 +1057,18 @@ plot.reslr_output <- function(x,
     )
   }
 
-  # NIGAM decomposition
+  # NIGAM decomposition----------
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
+    # output_dataframes <- jags_output$output_dataframes
+    # data <- jags_output$data
+    # n_sites <- length(data$SiteName %>% unique())
+    # n_proxy <- data %>%
+    #   dplyr::filter(data_type_id == "ProxyRecord") %>%
+    #   dplyr::select(SiteName, data_type_id) %>%
+    #   unique() %>%
+    #   nrow()
+    # n_tide_gauges <- n_sites - n_proxy
+
     if (plot_tide_gauges == FALSE) {
       output_dataframes <- jags_output$output_dataframes
       data <- jags_output$data
