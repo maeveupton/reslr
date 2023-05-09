@@ -16,7 +16,7 @@
 summary.reslr_output <- function(object, # jags_output,#
                                  # type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",#' @param type User decides which type of summary they require
                                  ...) {
-  mu_pred <- sd <- mad <- rhat <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- phi <- sigma <- NULL
+  mu_pred <- sd <- mad <- rhat <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- rho <- sigma <- NULL
   jags_output <- object
   jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
   sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
@@ -142,7 +142,7 @@ summary.reslr_output <- function(object, # jags_output,#
     # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
-        "phi", "sigma_igp", "sigma_y"
+        "rho", "nu", "sigma_y"
       )) %>%
       dplyr::select(
         variable = variable,
@@ -223,7 +223,6 @@ summary.reslr_output <- function(object, # jags_output,#
     par_summary_noise <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
         "sigma_beta_l",
-        "sigma_beta_r[1]",
         "sigma_y"
       )) %>%
       dplyr::select(

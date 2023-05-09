@@ -10,7 +10,7 @@ model{
 
         ###Derivative process
         w.m~dmnorm(mu.w,K.inv)
-        K.inv <- inverse((sigma_igp^2)*K)
+        K.inv <- inverse((nu^2)*K)
         K.w.inv<-inverse(K)
 
         for(i in 1:Ngrid){
@@ -18,21 +18,21 @@ model{
           K[i,i]<-1+0.00001
         ######Exponential covariance for the derivative process
           for(j in (i+1):Ngrid){
-              K[i,j]<-(pow(phi,pow(Dist[i,j],1.99)))
+              K[i,j]<-(pow(rho,pow(Dist[i,j],1.99)))
               K[j,i]<-K[i,j]
             }
           }
         ###Expected value of the integrated Gaussian Process
         for(i in 1:Ngrid) {
           for(j in 1:n_obs) {
-            K.gw[j,i]<-sum(pow(phi,quad1[j,i,])*quad2[j,i,])  #### Quadrature function
+            K.gw[j,i]<-sum(pow(rho,quad1[j,i,])*quad2[j,i,])  #### Quadrature function
           } #End j loop
         } #End i loop
 
         w.tilde.m<-K.gw %*% K.w.inv %*% w.m
       # Priors
-      sigma_igp ~ dt(0,2^-2,1)T(0,)
-      phi ~ dbeta(al,10)
+      nu ~ dt(0,2^-2,1)T(0,)
+      rho ~ dbeta(al,10)
       sigma_y ~ dt(0,2^-2,1)T(0,)
       alpha ~ dnorm(0,2^-2)
       beta ~ dnorm(0,2^-2)

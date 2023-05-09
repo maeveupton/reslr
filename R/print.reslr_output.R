@@ -27,7 +27,7 @@ print.reslr_output <-
       nrow()
     n_tide_gauge <- n_sites - n_proxy
 
-    cat("This is a valid reslr input object with ")
+    cat("This is a valid reslr output object with ")
     cat(paste(n_obs, "observations "))
     if(n_sites > 1){
       cat("and ", paste(n_sites), "sites.\n")

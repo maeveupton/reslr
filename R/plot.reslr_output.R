@@ -312,7 +312,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::labs(
             x = xlab,
-            y = ylab,
+            y = "Sea Level (m)",#ylab,
             title = title
           ) +
           ggplot2::theme_bw() +
@@ -344,8 +344,8 @@ plot.reslr_output <- function(x,
               size = 1
             )),
             colour = ggplot2::guide_legend(override.aes = list(
-              linetype = c(0, 1),
-              shape = c(16, NA),
+              linetype = c(1, 1),
+              shape = c(16, 16),
               size = 2
             ))
           ) +
@@ -635,7 +635,7 @@ plot.reslr_output <- function(x,
     output_plots <- list(plot_result = plot_result, plot_rate = plot_rate)
   }
 
-  # NI spline time
+  # NI spline time---------------
   if (inherits(jags_output, "ni_spline_t") == TRUE) {
     output_dataframes <- jags_output$output_dataframes
     data <- jags_output$data

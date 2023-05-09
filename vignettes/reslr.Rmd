@@ -531,7 +531,7 @@ res_eiv_igp_t <- reslr_mcmc(
 )
 ```
 
-For the parameter estimates, the length scale parameter, "phi" determines the distance over which two input points can influence each other. More specifically, it determines the rate at which the correlation between the input data points decays as the distance between those points increases. "sigma_y" is the variation of the model. 
+For the parameter estimates, the length scale parameter, "rho" is the correlation parameter and "nu" is the standard deviation of the rate process. "sigma_y" is the variation of the model. 
 
 **Step 5:** The results from the EIV IGP model can be illustrated using:
 ```{r,plotigpres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -1088,11 +1088,11 @@ Model and GRACE’, Annual Review of Earth and Planetary Sciences 32, 111–149
 
 For the background to tide gauge data:
 
-Pugh, David, and Philip Woodworth. 2014. “Tidal Forces: Sea-Level Science: Understanding Tides,
+Pugh, David, and rholip Woodworth. 2014. “Tidal Forces: Sea-Level Science: Understanding Tides,
 Surges, Tsunamis and Mean Sea-Level Changes.” In Sea-Level Science: Understanding Tides, Surges,
 Tsunamis and Mean Sea-Level Changes, 36–59. Cambridge University Press. 
 
-Holgate, Simon J., Andrew Matthews, Philip L. Woodworth, Lesley J. Rickards, Mark E. Tamisiea,
+Holgate, Simon J., Andrew Matthews, rholip L. Woodworth, Lesley J. Rickards, Mark E. Tamisiea,
 Elizabeth Bradshaw, Peter R. Foden, Kathleen M. Gordon, Svetlana Jevrejeva, and Jeff Pugh. 2013.
 “New Data Systems and Products at the Permanent Service for Mean Sea Level.” Journal of Coastal
 Research 29 (3): 493–504. 

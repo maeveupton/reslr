@@ -362,8 +362,8 @@ reslr_mcmc.reslr_input <- function(input_data,
     jags_file <- system.file("jags_models", "model_eiv_igp_t.jags", package = "reslr")
     # JAGS parameters to save
     jags_pars <- c(
-      "phi",
-      "sigma_igp",
+      "rho",
+      "nu",
       "sigma_y",
       "w.m",
       "alpha",
@@ -454,6 +454,12 @@ reslr_mcmc.reslr_input <- function(input_data,
         n.chains = n_chains
       ))
 
+      # Convert back to 1000
+      data <- data %>%
+        dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
+      data_grid <- data_grid %>%
+        dplyr::mutate(Age = Age*1000)
+
       # Output dataframe for plots
       output_dataframes <- create_igp_output_df(
         model_run = model_run,
@@ -461,11 +467,6 @@ reslr_mcmc.reslr_input <- function(input_data,
         data_grid = data_grid,
         CI = CI
       )
-      # Convert back to 1000
-      data <- data %>%
-        dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
-      data_grid <- data_grid %>%
-        dplyr::mutate(Age = Age*1000)
 
       # Output with everything-------------
       jags_output <- list(
@@ -681,8 +682,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_st_deriv = spline_basis_fun_list$B_st_deriv,
       B_st_pred = spline_basis_fun_list$B_st_pred,
       B_st_deriv_pred = spline_basis_fun_list$B_st_deriv_pred,
-      n_knots_st = ncol(spline_basis_fun_list$B_st) # ,
-      # nu = 2
+      n_knots_st = ncol(spline_basis_fun_list$B_st)
     )
 
     # Parameters to save in JAGs
@@ -786,9 +786,8 @@ reslr_mcmc.reslr_input <- function(input_data,
         dplyr::group_by(SiteName) %>%
         dplyr::slice(1) %>%
         dplyr::select(linear_rate_err) %>%
-        dplyr::pull() # ,
-      # nu = 2
-    )
+        dplyr::pull()
+      )
 
     # Parameters to save in JAGs
     jags_pars <- c(

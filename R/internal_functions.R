@@ -785,11 +785,11 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
   for (i in 1:n_iter) {
     for (k in 1:Ngrid) {
       for (j in 1:Ngrid) {
-        K.gw[i, j, k] <- sum((sample_draws$phi[i]^quad1[j, k, ]) * quad2[j, k, ]) #### Quadrature function
+        K.gw[i, j, k] <- sum((sample_draws$rho[i]^quad1[j, k, ]) * quad2[j, k, ]) #### Quadrature function
       } # End j loop
     } # End k loop
 
-    K[i, , ] <- sample_draws$phi[i]^(Dist^1.99)
+    K[i, , ] <- sample_draws$rho[i]^(Dist^1.99)
     K.w.inv[i, , ] <- solve(K[i, , ])
     pred_full[i, ] <- sample_draws$alpha[i] + K.gw[i, , ] %*% K.w.inv[i, , ] %*% w.ms[i, ]
   } # End i loop

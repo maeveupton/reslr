@@ -201,6 +201,7 @@ plot.reslr_input <- function(x,
 
   # Plotting detrend data put into 1 site only ------------------
   if (inherits(x, "detrend_data") == TRUE) {
+    # Plotting tide gauges & proxy records together
     if (plot_tide_gauges == TRUE & plot_proxy_records == TRUE) {
       p <- ggplot2::ggplot() +
         ggplot2::geom_rect(data = data, ggplot2::aes(
@@ -214,7 +215,7 @@ plot.reslr_input <- function(x,
           data = data,
           ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
         ) +
-        ggplot2::labs(x = xlab, y = ylab, title = title) +
+        ggplot2::labs(x = xlab, y = "Sea Level (m)", title = title) +
         ggplot2::theme_bw() +
         ggplot2::labs(colour = "") +
         ggplot2::theme(
@@ -225,6 +226,89 @@ plot.reslr_input <- function(x,
           values = "grey",
           labels = expression(paste("1-sigma Error")),
           guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
+        ) +
+        ggplot2::scale_colour_manual(
+          values = c("black"),
+          labels = c("Data")
+        ) +
+        # ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        )
+    }
+    # Plotting tide gauges only
+    if (plot_tide_gauges == TRUE & plot_proxy_records == FALSE) {
+      data <- data %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
+      p <- ggplot2::ggplot() +
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age - Age_err,
+          xmax = Age + Age_err,
+          ymin = y_lwr_box,
+          ymax = y_upr_box,
+          fill = "gray",
+        ), alpha = 0.7) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
+        ) +
+        ggplot2::labs(x = xlab, y = "Sea Level (m)", title = title) +
+        ggplot2::theme_bw() +
+        ggplot2::labs(colour = "") +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = "grey",
+                                   labels = expression(paste("1-sigma Error")),
+                                   guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
+        ) +
+        ggplot2::scale_colour_manual(
+          values = c("black"),
+          labels = c("Data")
+        ) +
+        # ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        )
+    }
+
+    # Plotting proxy records only
+    if (plot_tide_gauges == FALSE & plot_proxy_records == TRUE) {
+      data <- data %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+      p <- ggplot2::ggplot() +
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age - Age_err,
+          xmax = Age + Age_err,
+          ymin = y_lwr_box,
+          ymax = y_upr_box,
+          fill = "gray",
+        ), alpha = 0.7) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
+        ) +
+        ggplot2::labs(x = xlab, y = "Sea Level (m)", title = title) +
+        ggplot2::theme_bw() +
+        ggplot2::labs(colour = "") +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = "grey",
+                                   labels = expression(paste("1-sigma Error")),
+                                   guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
         ) +
         ggplot2::scale_colour_manual(
           values = c("black"),
