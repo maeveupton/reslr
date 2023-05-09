@@ -373,13 +373,7 @@ plot.reslr_output <- function(x,
             ggplot2::aes(y = rate_pred,
                          ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.3
           ) +
-          ggplot2::labs(
-            x = xlab,
-            y = y_rate_lab,
-            title = title
-          ) +
           ggplot2::theme_bw() +
-          ggplot2::labs(colour = "") +
           ggplot2::theme(
             strip.text.x = ggplot2::element_text(size = 7),
             strip.background = ggplot2::element_rect(fill = c("white"))
@@ -417,11 +411,17 @@ plot.reslr_output <- function(x,
             axis.title = ggplot2::element_text(size = 12, face = "bold"),
             legend.text = ggplot2::element_text(size = 10)
           ) +
-          ggplot2::labs(caption = paste0(
+          ggplot2::labs(
+            x = xlab,
+            y = y_rate_lab,
+            title = title,
+            colour = "",
+            caption = paste0(
             "Model type: Errors in Variables Integrated Gaussian Process Model using detrended data \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
           ))
-      } else {
+      }
+      else {
         # Plot model fit
         plot_result <- ggplot2::ggplot() +
           ggplot2::geom_rect(data = data, ggplot2::aes(

@@ -29,7 +29,6 @@ create_rate_of_change_plot <- function(output_dataframes,
       data = output_dataframes,
       ggplot2::aes(y = rate_pred, ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
     ) +
-    ggplot2::labs(x = xlab, y = y_rate_lab, title = title) +
     ggplot2::theme_bw() +
     ggplot2::theme(
       plot.title = ggplot2::element_text(size = 15),
@@ -42,7 +41,6 @@ create_rate_of_change_plot <- function(output_dataframes,
       strip.background = ggplot2::element_rect(fill = c("white"))
     ) +
     ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-    ggplot2::labs(colour = "") +
     ggplot2::scale_fill_manual("",
                                values = c(
                                  #"CI" = ggplot2::alpha("purple3", 0.2)
@@ -69,7 +67,12 @@ create_rate_of_change_plot <- function(output_dataframes,
         size = 2
       ))
     ) +
-    ggplot2::facet_wrap(~SiteName)
+    ggplot2::facet_wrap(~SiteName)+
+    ggplot2::labs(colour = "",
+                  x = xlab,
+                  y = y_rate_lab,
+                  title = title,
+                  caption = model_caption)
 
   return(plot_rate)
 }
