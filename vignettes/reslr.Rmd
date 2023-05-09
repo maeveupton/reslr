@@ -340,7 +340,7 @@ This technique focuses on 1 site and the maximum number of change points availab
 As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledata1, eval = TRUE}
 # For 1 site
-CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
+CedarIslandNC <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
@@ -453,7 +453,7 @@ The EIV Integrated Gaussian Process model provides the underlying rate of the pr
 This technique focuses on 1 site and we do not recommended for multiple proxy sites together. Tide gauge data can be included to gain insight into recent changes in RSL, however, the user must investigate which tide gauge is suitable. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledataset2 ,eval = TRUE}
 # For 1 site
-CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
+CedarIslandNC <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
@@ -568,7 +568,7 @@ It model can obtain results in more efficient computational run times when compa
 This technique focuses on 1 site and we do not recommended for multiple proxy sites together. Tide gauge data can be used to gain insight into recent RSL changes. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r, dataexample3,eval = TRUE}
 # For 1 site
-CedarIslandNC <- example_data_set %>% dplyr::filter(Site == "Cedar Island")
+CedarIslandNC <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
@@ -679,7 +679,7 @@ The Noisy Input spline in space time examines changes in response over multiple 
 For this model, a minimum of 2 proxy sites should be used and tide gauge data provides insight into recent changes in RSL if the user is requires_ As an example, we will filter the example dataset `NAACproxydata` to select two sites to demonstrate the process:
 ```{r,data2sites, eval = TRUE}
 # For 2 site
-multi_site <- example_data_set %>%
+multi_site <- reslr::NAACproxydata %>%
   dplyr::filter(Site %in% c("Cedar Island", "Nassau"))
 ```
 
@@ -802,7 +802,7 @@ This model needs an adequate number of proxy sites to perform the decomposition 
 As an example, we will filter the example dataset `NAACproxydata` to select eight random sites to demonstrate the process:
 ```{r,data2sitesmore, eval = TRUE}
 # For 9 site
-multi_9_sites <- example_data_set %>%
+multi_9_sites <- reslr::NAACproxydata %>%
   dplyr::filter(Site %in% c(
     "Cedar Island", "Nassau", "Snipe Key",
     "Placentia", "Cape May Courthouse", "East River Marsh",

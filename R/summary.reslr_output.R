@@ -33,11 +33,11 @@ summary.reslr_output <- function(object, # jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        mean = mean, #* mod$scale_factor_y,
-        sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        q5 = q5, #* mod$scale_factor_y,
-        q95 = q95, # * mod$scale_factor_y
+        mean = mean,
+        sd = sd,
+        mad = mad,
+        q5 = q5,
+        q95 = q95,
         rhat = rhat
       )
     # return(par_summary)
@@ -63,11 +63,11 @@ summary.reslr_output <- function(object, # jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        mean = mean, #* mod$scale_factor_y,
-        sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        q5 = q5, #* mod$scale_factor_y,
-        q95 = q95, # * mod$scale_factor_y
+        mean = mean,
+        sd = sd,
+        mad = mad,
+        q5 = q5,
+        q95 = q95,
         rhat = rhat
       ) %>%
       dplyr::mutate(variable = ifelse(variable == "cp", "Change Point:", variable)) %>%
@@ -88,11 +88,11 @@ summary.reslr_output <- function(object, # jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        mean = mean, #* mod$scale_factor_y,
-        sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        q5 = q5, #* mod$scale_factor_y,
-        q95 = q95, # * mod$scale_factor_y
+        mean = mean,
+        sd = sd,
+        mad = mad,
+        q5 = q5,
+        q95 = q95,
         rhat = rhat
       ) %>%
       dplyr::mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
@@ -117,11 +117,11 @@ summary.reslr_output <- function(object, # jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        mean = mean, #* mod$scale_factor_y,
-        sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        q5 = q5, #* mod$scale_factor_y,
-        q95 = q95, # * mod$scale_factor_y
+        mean = mean,
+        sd = sd,
+        mad = mad,
+        q5 = q5,
+        q95 = q95,
         rhat = rhat
       ) %>%
       dplyr::mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
@@ -146,11 +146,11 @@ summary.reslr_output <- function(object, # jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        mean = mean, #* mod$scale_factor_y,
-        sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        q5 = q5, #* mod$scale_factor_y,
-        q95 = q95, # * mod$scale_factor_y
+        mean = mean,
+        sd = sd,
+        mad = mad,
+        q5 = q5,
+        q95 = q95,
         rhat = rhat
       )
 
@@ -168,11 +168,11 @@ summary.reslr_output <- function(object, # jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        mean = mean, #* mod$scale_factor_y,
-        sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        q5 = q5, #* mod$scale_factor_y,
-        q95 = q95, # * mod$scale_factor_y
+        mean = mean,
+        sd = sd,
+        mad = mad,
+        q5 = q5,
+        q95 = q95,
         rhat = rhat
       )
   }
@@ -189,11 +189,11 @@ summary.reslr_output <- function(object, # jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        mean = mean, #* mod$scale_factor_y,
-        sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y, # WHAT this one?
-        q5 = q5, #* mod$scale_factor_y,
-        q95 = q95, # * mod$scale_factor_y
+        mean = mean,
+        sd = sd,
+        mad = mad,
+        q5 = q5,
+        q95 = q95,
         rhat = rhat
       )
   }
@@ -210,11 +210,11 @@ summary.reslr_output <- function(object, # jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        mean = mean, #* mod$scale_factor_y,
-        sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y,
-        q5 = q5, #* mod$scale_factor_y,
-        q95 = q95, # * mod$scale_factor_y
+        mean = mean,
+        sd = sd,
+        mad = mad,
+        q5 = q5,
+        q95 = q95,
         rhat = rhat
       )
     # Noisy model output
@@ -227,11 +227,11 @@ summary.reslr_output <- function(object, # jags_output,#
       )) %>%
       dplyr::select(
         variable = variable,
-        mean = mean, #* mod$scale_factor_y,
-        sd = sd, #* mod$scale_factor_y,
-        mad = mad, #* mod$scale_factor_y,
-        q5 = q5, #* mod$scale_factor_y,
-        q95 = q95, # * mod$scale_factor_y
+        mean = mean,
+        sd = sd,
+        mad = mad,
+        q5 = q5,
+        q95 = q95,
         rhat = rhat
       )
     par_summary <- merge(par_summary_beta_r,par_summary_noise)
@@ -247,7 +247,5 @@ summary.reslr_output <- function(object, # jags_output,#
     cat("Convergence issues detected. \n")
     cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
   }
-  # }
   return(par_summary)
-  # }
 }

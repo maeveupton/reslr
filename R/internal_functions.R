@@ -7,7 +7,7 @@
 #' @param ylab Labeling the y-axis.
 #' @param title Plotting a title.
 #'
-#' @return The plot of the model fit
+#' @return The plot of the rate of change of the model fit
 #' @noRd
 create_rate_of_change_plot <- function(output_dataframes,
                                   data,
