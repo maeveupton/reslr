@@ -199,6 +199,7 @@ summary.reslr_output <- function(object, # jags_output,#
   }
   # NI GAM decomposition
   if (inherits(jags_output, "ni_gam_decomp") == TRUE) {
+    browser()
     # No noise model output
     jags_output_model_run_no_noise <- jags_output$model_run_output$BUGSoutput$sims.matrix
     sample_draws_no_noise <- tidybayes::tidy_draws(jags_output_model_run_no_noise)
@@ -234,7 +235,7 @@ summary.reslr_output <- function(object, # jags_output,#
         q95 = q95,
         rhat = rhat
       )
-    par_summary <- merge(par_summary_beta_r,par_summary_noise)
+    par_summary <- rbind(par_summary_beta_r,par_summary_noise)
 
   }
 
