@@ -40,8 +40,8 @@ reslr_mcmc <- function(input_data,
                        n_chains = 3,
                        CI = 0.95,
                        spline_nseg = NULL,
-                       spline_nseg_t = 9,
-                       spline_nseg_st = 5 # ,
+                       spline_nseg_t = 8,
+                       spline_nseg_st = 4 # ,
                        # xl,
                        # xr
 ) {
