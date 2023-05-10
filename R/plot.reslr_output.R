@@ -35,7 +35,7 @@ plot.reslr_output <- function(x,
                               ylab = "Relative Sea Level (m)",
                               y_rate_lab = "Rate of change (mm per year)",
                               ...) {
-  Age <- RSL <- Age_err <- ID <- RSL_err <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
+  Age <- RSL <- SL <- y_lwr_box <- y_upr_box <- Age_err <- ID <- RSL_err <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
   jags_output <- x
 
   # EIV slr------------

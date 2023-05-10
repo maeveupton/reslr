@@ -13,7 +13,7 @@ reslr_load(
   TG_minimum_dist_proxy = FALSE,
   all_TG_1deg = FALSE,
   input_Age_type = "CE",
-  sedimentation_average_TG = 10,
+  sediment_average_TG = 10,
   detrend_data = FALSE,
   core_col_year = NULL
 )
@@ -35,7 +35,7 @@ reslr_load(
 
 \item{input_Age_type}{The inputted age in years "CE" or year "BCE"}
 
-\item{sedimentation_average_TG}{Average the tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.}
+\item{sediment_average_TG}{Average the tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.}
 
 \item{detrend_data}{Detrend the data using the linear rate provided}
 

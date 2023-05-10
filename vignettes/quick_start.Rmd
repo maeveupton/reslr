@@ -6,7 +6,7 @@ output:
   rmarkdown::html_vignette:
        toc: true
 vignette: >
-  %\VignetteIndexEntry{quick_start}
+  %\VignetteIndexEntry{reslr: quick start guide}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -36,7 +36,7 @@ Some proxy record data is included with this package. Find where it is with:
 
 
 ## Step 3: load the data into `reslr`
-```{r, loadslr, eval = TRUE}
+```{r, loadslr, eval = FALSE}
 CedarIslandNC_input <- reslr_load(
   data = CedarIslandNC,
   include_tide_gauge = FALSE,
@@ -46,13 +46,13 @@ CedarIslandNC_input <- reslr_load(
   all_TG_1deg = FALSE,
   prediction_grid_res = 50,
   input_Age_type = "CE",
-  rolling_window_average = 10
+  sediment_average_TG = 10
 )
 ```
 
 ## Step 4: plot the data
 
-```{r, plotdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r, plotdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(
   x = CedarIslandNC_input,
   title = "Plot of the raw data",
@@ -78,7 +78,7 @@ There are a number of modelling options available to the user:
 
 ## Step 6: Run your model and check convergence
 
-```{r, runslr,eval = TRUE}
+```{r, runslr,eval = FALSE}
 res_eiv_slr_t <- reslr_mcmc(
   input_data = CedarIslandNC_input,
   model_type = "eiv_slr_t",
@@ -87,20 +87,20 @@ res_eiv_slr_t <- reslr_mcmc(
 ```
 
 The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r, summaryslr, eval = TRUE}
+```{r, summaryslr, eval = FALSE}
 summary(res_eiv_slr_t)
 ```
 
 ## Step 7: Plot the results
 The results from the eiv_slr_t model can be visualised using the following function:
-```{r, plotslrres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r, plotslrres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_eiv_slr_t,
   xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)"
 )
 ```
 To examine the data creating these plots the user types the following:
-```{r, dataframeslrres, eval = TRUE}
+```{r, dataframeslrres, eval = FALSE}
 output_dataframes <- res_eiv_slr_t$output_dataframes
 head(output_dataframes)
 ```
