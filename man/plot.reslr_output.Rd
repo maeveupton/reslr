@@ -13,7 +13,7 @@
   plot_caption = TRUE,
   xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
-  y_rate_lab = "Rate of change (mm/year)",
+  y_rate_lab = "Rate of change (mm per year)",
   ...
 )
 }

@@ -21,9 +21,9 @@
 #' @param list_preferred_TGs The user can supply the name or names of the preferred tide gauges
 #' @param TG_minimum_dist_proxy The package finds the tide gauge closest to the proxy site
 #' @param all_TG_1deg The package finds all tide gauges within 1 degree of the proxy site
-#' @param rolling_window_average A rolling window that averages tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.
+#' @param sediment_average_TG Average the tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.
 #' @param detrend_data Detrend the data using the linear rate provided
-#' @param core_col_year The year the core was collected.
+#' @param core_col_year The year the sediment core was collected.
 #'
 #' @return A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.
 #' @export
@@ -39,7 +39,7 @@ reslr_load <- function(data,
                        TG_minimum_dist_proxy = FALSE,
                        all_TG_1deg = FALSE,
                        input_Age_type = "CE",
-                       rolling_window_average = 10,
+                       sediment_average_TG = 10,
                        detrend_data = FALSE,
                        core_col_year = NULL) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
@@ -60,7 +60,7 @@ reslr_load <- function(data,
   if (input_Age_type == "BCE") {
     #cat("The inputed age value will be converted to units of Common Era. \n")
     data <- data %>%
-      dplyr::mutate(Age = 1950 - Age)
+      dplyr::mutate(Age = 1950/1000 - Age)
   } else {
     #cat("The inputed age value is units of Common Era. \n")
     data <- data
@@ -90,7 +90,7 @@ reslr_load <- function(data,
       list_preferred_TGs = list_preferred_TGs,
       TG_minimum_dist_proxy = TG_minimum_dist_proxy,
       all_TG_1deg = all_TG_1deg,
-      rolling_window_average = rolling_window_average
+      sediment_average_TG = sediment_average_TG
     )
     #cat("Note: No linear rate included. It is required for the ni_gam_decomp model \n")
     ##cat("Decadally averaged tide gauge data included by the package. \n")
@@ -143,7 +143,7 @@ reslr_load <- function(data,
       list_preferred_TGs = list_preferred_TGs,
       TG_minimum_dist_proxy = TG_minimum_dist_proxy,
       all_TG_1deg = all_TG_1deg,
-      rolling_window_average = rolling_window_average
+      sediment_average_TG = sediment_average_TG
     )
     #cat("Decadally averaged tide gauge data included by the package. \n")
     #---Adding linear rates from ICE5G for TG-----

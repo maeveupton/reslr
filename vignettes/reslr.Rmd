@@ -208,7 +208,7 @@ data_multisite <- reslr::NAACproxydata %>% dplyr::filter(Site %in% c(
 The general structure for running `reslr` is as follows:
 
 **Step 1.** Load in the data using `reslr_load`. 
-If tide gauge data required update the argument `include_tide_gauge = TRUE`, from this the user has three options as described above. Firstly, provide the list of names for the tide gauges from PSMSL website that the wish to use in the `list_preferred_TGs` option. Secondly, the package find the tide gauge closest to the proxy site `TG_minimum_dist_proxy = TRUE`. Thirdly, the package uses all tide gauges within 1 degree of the proxy site `all_TG_1deg = TRUE`. If sedimentation accumulation rates for the proxy records are less than or greater than a decade the user can alter this size of the rolling window average using `rolling_window_average = 10` which has a default of 10 years.
+If tide gauge data required update the argument `include_tide_gauge = TRUE`, from this the user has three options as described above. Firstly, provide the list of names for the tide gauges from PSMSL website that the wish to use in the `list_preferred_TGs` option. Secondly, the package find the tide gauge closest to the proxy site `TG_minimum_dist_proxy = TRUE`. Thirdly, the package uses all tide gauges within 1 degree of the proxy site `all_TG_1deg = TRUE`. If sedimentation accumulation rates for the proxy records are less than or greater than a decade the user can alter this size using `sediment_average_TG = 10` which has a default of 10 years.
 If linear_rate is of interest to the user update the argument `include_linear_rate = TRUE`. 
 The user can select the resolution of the output by changing the value of `prediction_grid_res = 50` with the default of 50 years. 
 The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
@@ -247,10 +247,10 @@ CedarIslandNC_input <- reslr_load(
   all_TG_1deg = FALSE,
   prediction_grid_res = 50,
   input_Age_type = "CE",
-  rolling_window_average = 10
+  sediment_average_TG = 10
 )
 ```
-In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `rolling_window_average = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate by changing the size of the rolling window average.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `rolling_window_average = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate.
 Note that for a simple linear regression we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `prediction_grid_res` with the default set at 50 years. 
 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
@@ -355,10 +355,10 @@ CedarIslandNC_input <- reslr_load(
   list_preferred_TGs = NULL,
   all_TG_1deg = FALSE,
   prediction_grid_res = 50,
-  rolling_window_average = 10
+  sediment_average_TG = 10
 )
 ```
-In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `rolling_window_average = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate by changing the size of the rolling window average.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `sediment_average_TG = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate by changing the size of the rolling window average.
 
 Note that for a change point model, we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `prediction_grid_res` with the default set at 50 years. 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
@@ -471,7 +471,7 @@ CedarIslandNC_input <- reslr_load(
   rolling_window_average = 10
 )
 ```
-In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `rolling_window_average = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate by changing the size of the rolling window average.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `sediment_average_TG = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate.
 
 Note that for an IGP we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `prediction_grid_res` with the default set at 50 years. 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
@@ -583,10 +583,10 @@ CedarIslandNC_input <- reslr_load(
   list_preferred_TGs = NULL,
   all_TG_1deg = FALSE,
   prediction_grid_res = 50,
-  rolling_window_average = 10
+  sediment_average_TG = 10
 )
 ```
-In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `rolling_window_average = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate by changing the size of the rolling window average.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `sediment_average_TG = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate by changing the size of the rolling window average.
 
 Note that for a spline in time, we recommend using the default settings as demonstrated in the above code chunk. The user can alter the resolution of the output plots using `prediction_grid_res` with the default set at 50 years. 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
@@ -698,7 +698,7 @@ multi_site_input <- reslr_load(
   rolling_window_average = 10
 )
 ```
-In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `rolling_window_average = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate by changing the size of the rolling window average.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. The default setting is `rolling_window_average = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate.
 
 Note that for a spline in space time, we recommend using the default settings as demonstrated in the above code chunk or investigating the resulting plots if additional tide gauge data could provide insight into recent changes. The user can alter the resolution of the output plots using `prediction_grid_res` with the default set at 50 years.
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
@@ -822,10 +822,10 @@ multi_9_sites_input <- reslr_load(
   list_preferred_TGs = NULL,
   all_TG_1deg = TRUE,
   prediction_grid_res = 50,
-  rolling_window_average = 10
+  sediment_average_TG = 10
 )
 ```
-In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. In this example, we use all tide gauges within 1 degree of the proxy site. The default setting is `rolling_window_average = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate by changing the size of the rolling window average.
+In this function, the user can select to add tide gauge data and estimates for linear_rate, by changing `include_tide_gauge = TRUE` and `include_linear_rate = TRUE` respectfully. If `include_tide_gauge = TRUE` the user must decide if they require the closest tide gauge i.e. `TG_minimum_dist_proxy = TRUE`, or select specific tide gauge i.e. `list_preferred_TGs = c("ARGENTIA")`, or all tide gauges within 1 degree of the proxy site i.e. `all_TG_1deg = TRUE`. In this example, we use all tide gauges within 1 degree of the proxy site. The default setting is `rolling_window_average = 10` which corresponds to sediment accumulation rates of the proxy records, yet the user has the ability to alter this sediment accumulation rate.
 
 Note that for this model, we recommend using the default settings as demonstrated in the above code chunk. If the user has not provided the linear rate and the associated linear rate uncertainty within the `linear_rate` and `linear_rate_err` column prior to running the package, the package to calculate it using the data. 
 
@@ -997,7 +997,7 @@ multi_site <- reslr_load(
   ),
   all_TG_1deg = FALSE,
   prediction_grid_res = 50,
-  rolling_window_average = 10
+  sediment_average_TG = 10
 )
 ```
 Here is how to plot this example:
