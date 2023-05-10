@@ -715,7 +715,7 @@ print(multi_site_input)
 ```
 
 **Step 2:** Plotting the data the raw data with:
-```{r,plotspst,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotspst,fig.align = 'center',fig.width = 7,fig.height = 10,eval = TRUE}
 plot(
   x = multi_site_input,
   title = "Plot of the raw data",
@@ -769,7 +769,7 @@ plot(res_ni_spline_st,
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE,results='hide',message=FALSE}
 plot(res_ni_spline_st,
   plot_type = "rate_plot",
   xlab = "Year (CE)",
