@@ -166,7 +166,6 @@ reslr_load <- function(data,
       dplyr::filter(data_type_id == "ProxyRecord") %>%
       dplyr::select(linear_rate) %>% unique()
     detrend_rate <- rep(detrend_rate_val$linear_rate,nrow(data))
-    browser()
     data <- data %>%
       # Use the same rate for proxy and then for TGs
       #dplyr::group_by(SiteName) %>%
