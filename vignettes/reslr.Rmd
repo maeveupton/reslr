@@ -847,7 +847,7 @@ print(multi_9_sites_input)
 ```
 
 **Step 2:** Plotting the data the raw data with:
-```{r, plotnigam,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r, plotnigam,fig.align = 'center',fig.width = 7,fig.height = 10,eval = TRUE}
 plot(
   x = multi_9_sites_input,
   title = "Plot of the raw data",
@@ -975,7 +975,7 @@ non_lin_loc_rate_component_df <- jags_output.ni_gam_decomp$output_dataframes$non
 ```
 
 In order to examine how all components vary, the user can examine the plot using the following method:
-```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE,message=FALSE,results='hide'}
 plot(res_ni_gam_decomp, plot_type = "nigam_component_plot")
 ```
 Each component is plotted with an 95\% credible interval and this plot gives insight into the variability of the different components through time and at the different locations in question. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
