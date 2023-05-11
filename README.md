@@ -9,7 +9,8 @@
 
 There are a variety of different statistical model types available to the user, all within a Bayesian Framework, and they uses Gibbs sampling and Markov Chain Monte Carlo (MCMC) algorithms via the Just Another Gibbs Sample (JAGS) software. To download the JAGS package use this [link](https://sourceforge.net/projects/mcmc-jags/). 
 
-A practical example of the package can be found [here] (https://maeveupton.github.io/reslr/). 
+A practical example of the package can be found here: 
+https://maeveupton.github.io/reslr/ 
 
 
 # Installing the reslr package
