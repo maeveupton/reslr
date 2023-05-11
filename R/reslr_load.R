@@ -161,7 +161,6 @@ reslr_load <- function(data,
     if (is.null(data$linear_rate) & is.null(core_col_year)) {
       stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate = TRUE. Must provide the year the core was collected \n")
     }
-    browser()
     # Detrending the data and updating RSL to SL
     detrend_rate_val <- data %>%
       dplyr::filter(data_type_id == "ProxyRecord") %>%
@@ -187,23 +186,28 @@ reslr_load <- function(data,
         x_4_upr = Age + Age_err)
 
     get_bounds <- data %>%
-      select(y_1_lwr:x_4_upr) %>%
-      mutate(obs_index = 1:n()) %>%
-      pivot_longer(cols = y_1_lwr:x_4_upr,
+      #select(y_1_lwr:x_4_upr) %>%
+      dplyr::select("y_1_lwr","y_2_upr","y_3_lwr","y_4_upr",
+               "x_1_upr","x_2_lwr","x_3_lwr","x_4_upr",
+               "data_type_id","SiteName") %>%
+      dplyr::mutate(obs_index = 1:n()) %>%
+      tidyr::pivot_longer(cols = y_1_lwr:x_4_upr,
                    names_to = "bounds",
                    values_to = "value") %>%
-      mutate(bounds = replace(bounds, bounds %in% c("y_1_lwr","y_2_upr","y_3_lwr","y_4_upr"), "SL"),
+      dplyr::mutate(bounds = replace(bounds, bounds %in% c("y_1_lwr","y_2_upr","y_3_lwr","y_4_upr"), "SL"),
              bounds = replace(bounds, bounds %in% c("x_1_upr","x_2_lwr","x_3_lwr","x_4_upr"), "Age"))
 
     x_bounds <- get_bounds %>%
-      filter(bounds == "Age")
+      dplyr::filter(bounds == "Age")
 
     y_bounds <- get_bounds %>%
-      filter(bounds == "SL")
+      dplyr::filter(bounds == "SL")
 
     detrend_data_un_box<- tibble(obs_index = x_bounds$obs_index,
                            Age = x_bounds$value,
-                           SL = y_bounds$value)
+                           SL = y_bounds$value,
+                           SiteName = x_bounds$SiteName,
+                           data_type_id = x_bounds$data_type_id)
 
   }
 

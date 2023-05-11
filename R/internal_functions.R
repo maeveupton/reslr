@@ -308,14 +308,14 @@ clean_tidal_gauge_data <- function(data,
   #---Rsl & Age error for tidal gauge data----
   tidal_gauge_full_df <- tidal_gauge_average_10_df %>%
     dplyr::mutate(
-      Age_err = 5, # years --> half a year/half a decade
+      Age_err = 1, # years --> half a year/half a decade
       #Age_err = 1, # years --> half a year/half a decade
     ) %>%
-    dplyr::mutate(sd_TG = ifelse(is.na(sd_TG), 0.001, sd_TG)) %>%
+    #dplyr::mutate(sd_TG = ifelse(is.na(sd_TG), 0.001, sd_TG)) %>%
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(
-      #RSL_err = 0.001#sd_TG
-      RSL_err = sd_TG
+      RSL_err = 0.001#sd_TG
+      #RSL_err = sd_TG
     )
 
   tidal_gauge_full_df <- tidal_gauge_full_df %>%

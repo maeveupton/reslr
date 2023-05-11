@@ -201,10 +201,12 @@ plot.reslr_input <- function(x,
 
   # Plotting detrend data put into 1 site only ------------------
   if (inherits(x, "detrend_data") == TRUE) {
+    detrend_data_un_box <- input_data$detrend_data_un_box
     # Plotting tide gauges & proxy records together
     if (plot_tide_gauges == TRUE & plot_proxy_records == TRUE) {
+      detrend_data_un_box <- detrend_data_un_box
       p <- ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = data_to_plot,
+        ggplot2::geom_polygon(data = detrend_data_un_box,
                               aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
@@ -239,8 +241,11 @@ plot.reslr_input <- function(x,
     if (plot_tide_gauges == TRUE & plot_proxy_records == FALSE) {
       data <- data %>%
         dplyr::filter(data_type_id == "TideGaugeData")
+      detrend_data_un_box <- detrend_data_un_box %>%
+        dplyr::filter(data_type_id == "TideGaugeData")
+
       p <- ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = data_to_plot,
+        ggplot2::geom_polygon(data = detrend_data_un_box,
                               aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
@@ -276,8 +281,11 @@ plot.reslr_input <- function(x,
     if (plot_tide_gauges == FALSE & plot_proxy_records == TRUE) {
       data <- data %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+
+      detrend_data_un_box <- detrend_data_un_box %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
       p <- ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = data_to_plot,
+        ggplot2::geom_polygon(data = detrend_data_un_box,
                               aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
