@@ -31,14 +31,16 @@ library(reslr)
 Some proxy record data is included with this package. Find where it is with:
 
 ```{r, eval = FALSE}
-system.file("extdata", "one_data_site_ex.csv", package = "read.csv")
+library(readr)
+path_to_data <- system.file("extdata", "one_data_site_ex.csv", package = "reslr")
+example_one_datasite <- read.csv(path_to_data)
 ```
 
 
 ## Step 3: load the data into `reslr`
 ```{r, loadslr, eval = FALSE}
-CedarIslandNC_input <- reslr_load(
-  data = CedarIslandNC,
+example_one_site_input <- reslr_load(
+  data = example_one_datasite,
   include_tide_gauge = FALSE,
   include_linear_rate = FALSE,
   TG_minimum_dist_proxy = FALSE,
@@ -54,7 +56,7 @@ CedarIslandNC_input <- reslr_load(
 
 ```{r, plotdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(
-  x = CedarIslandNC_input,
+  x = example_one_site_input,
   title = "Plot of the raw data",
   xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
@@ -63,9 +65,8 @@ plot(
 )
 ```
 
-## Step 5: Select your modelling technique
+## Step 5: Select your modelling technique from the modelling options available.
 
-There are a number of modelling options available to the user:
 
 | Statistical Model | Model Information | `model_type` code | Use |
 | ---- | ------- | -- |
@@ -76,29 +77,42 @@ There are a number of modelling options available to the user:
 | Noisy Input spline in space and time | A non-linear fit for a set of sites across a region using the method of Upton et al (2023). | **"ni_spline_st"**|
 | Noisy Input Generalised Additive model for the decomposition of the RSL signal | A non-linear fit for a set of sites across a region and provides a decomposition of the signal into regional, local-linear (commonly GIA) and local non-linear components. Again this full model is as described in Upton et al (2023). | **"ni_gam_decomp"** |
 
+
+For this example, it is a single site and we are interested in how it varies over time select the Noisy Input spline in time. If it was multiple sites, we recommend using a spatial temporal model, i.e. Noisy Input spline in space and time, or for decomposing the signal, i.e. Noisy Input Generalised Additive model. 
+
+
 ## Step 6: Run your model and check convergence
 
 ```{r, runslr,eval = FALSE}
-res_eiv_slr_t <- reslr_mcmc(
-  input_data = CedarIslandNC_input,
-  model_type = "eiv_slr_t",
+res_one_site_example <- reslr_mcmc(
+  input_data = example_one_site_input,
+  model_type = "ni_spline_t",
   CI = 0.95
 )
 ```
 
 The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
 ```{r, summaryslr, eval = FALSE}
-summary(res_eiv_slr_t)
+summary(res_one_site_example)
 ```
 
 ## Step 7: Plot the results
-The results from the eiv_slr_t model can be visualised using the following function:
-```{r, plotslrres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
-plot(res_eiv_slr_t,
+The model fit results can be visualised using the following function:
+```{r, plotres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+plot(res_one_site_example,
   xlab = "Year (CE)",
-  ylab = "Relative Sea Level (m)"
+  ylab = "Relative Sea Level (m)",
+  plot_type = "model_fit_plot"
 )
 ```
+For the rate of change plot use:
+
+```{r, plotresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+plot(res_one_site_example,
+  plot_type = "rate_plot"
+)
+```
+
 To examine the data creating these plots the user types the following:
 ```{r, dataframeslrres, eval = FALSE}
 output_dataframes <- res_eiv_slr_t$output_dataframes
