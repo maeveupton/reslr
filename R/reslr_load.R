@@ -184,26 +184,25 @@ reslr_load <- function(data,
         x_2_lwr = Age - Age_err,
         x_3_lwr = Age - Age_err,
         x_4_upr = Age + Age_err)
-    # Not working
 
-    # get_bounds <- data %>%
-    #   select(y_1_lwr:x_4_upr) %>%
-    #   mutate(obs_index = 1:n()) %>%
-    #   pivot_longer(cols = y_1_lwr:x_4_upr,
-    #                names_to = "bounds",
-    #                values_to = "value") %>%
-    #   mutate(bounds = replace(bounds, bounds %in% c("y_1_lwr","y_2_lwr","y_3_upr","y_4_upr"), "SL"),
-    #          bounds = replace(bounds, bounds %in% c("x_1_upr","x_2_lwr","x_3_lwr","x_4_upr"), "Age"))
-    #
-    # x_bounds <- get_bounds %>%
-    #   filter(bounds == "Age")
-    #
-    # y_bounds <- get_bounds %>%
-    #   filter(bounds == "SL")
-    #
-    # data_to_plot <- tibble(obs_index = x_bounds$obs_index,
-    #                        x = x_bounds$value,
-    #                        y = y_bounds$value)
+    get_bounds <- data %>%
+      select(y_1_lwr:x_4_upr) %>%
+      mutate(obs_index = 1:n()) %>%
+      pivot_longer(cols = y_1_lwr:x_4_upr,
+                   names_to = "bounds",
+                   values_to = "value") %>%
+      mutate(bounds = replace(bounds, bounds %in% c("y_1_lwr","y_2_lwr","y_3_upr","y_4_upr"), "SL"),
+             bounds = replace(bounds, bounds %in% c("x_1_upr","x_2_lwr","x_3_lwr","x_4_upr"), "Age"))
+
+    x_bounds <- get_bounds %>%
+      filter(bounds == "Age")
+
+    y_bounds <- get_bounds %>%
+      filter(bounds == "SL")
+
+    data_to_plot <- tibble(obs_index = x_bounds$obs_index,
+                           x = x_bounds$value,
+                           y = y_bounds$value)
 
   }
 
