@@ -135,7 +135,7 @@ create_model_fit_plot <- function(output_dataframes,
         ),
         labels = c(
           CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-          expression(paste("1-sigma Error"))
+          Uncertainty = expression(paste("1-sigma Error"))
         )
       ) +
       ggplot2::scale_colour_manual("",
@@ -170,13 +170,13 @@ create_model_fit_plot <- function(output_dataframes,
 #' @param list_preferred_TGs user can supply the name or names of the preferred tide gauges
 #' @param TG_minimum_dist_proxy The user wants the tide gauge closest to the proxy site
 #' @param all_TG_1deg The user wants all tide gauges within 1 degree of the proxy site
-#' @param rolling_window_average A rolling window that averages tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.
+#' @param sediment_average_TG Average tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.
 #' @noRd
 clean_tidal_gauge_data <- function(data,
                                    list_preferred_TGs = NULL,
                                    TG_minimum_dist_proxy = FALSE,
                                    all_TG_1deg = FALSE,
-                                   rolling_window_average) {
+                                   sediment_average_TG) {
   Age_epoch_id <- LongLat <- rolling_avg <- median <- nearest_proxy_site <- RSL_annual <- TG_min_dist1 <- minimum_dist <- nearest_TG <- rows_site <- site <- min_dist1 <- stationflag <- name <- sd <- sd_TG <- n_obs_by_site <- RSL_offset <- data_type_id <- decade <- decade_meanRSL <- Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- id <- NULL
   # Using data from PSMSL website for annual tide gauge data----------------------------------
   # Set up the URL for downloading the data
@@ -271,36 +271,36 @@ clean_tidal_gauge_data <- function(data,
 
 
   # Set the window size for the moving average (in this case, 10 years)
-  window_size <- rolling_window_average
+  # Rate of sedimentation for proxies when using continuous cores
+  window_size <- sediment_average_TG
 
-  # Version A: Create a new column for the decade based on the midpoint of the rolling window
-  annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
-    width = window_size,
-    FUN = mean,
-    align = "right",
-    fill = NA
-  )
-  # Calculate the decadal averages based on the rolling average
-  decadal_averages_TG <- annual_tidal_gauge_data_df %>% tidyr::drop_na()
-
+  # # Version A: Create a new column for the decade based on the midpoint of the rolling window
+  # annual_tidal_gauge_data_df$rolling_avg <- zoo::rollapply(annual_tidal_gauge_data_df$RSL,
+  #   width = window_size,
+  #   FUN = mean,
+  #   align = "right",
+  #   fill = NA
+  # )
+  # # Calculate the decadal averages based on the rolling average
+  # decadal_averages_TG <- annual_tidal_gauge_data_df %>% tidyr::drop_na()
   # Version B: Decadal Averages using simple method------
-  # decadal_averages_TG <-
-  #   annual_tidal_gauge_data_df %>%
-  #   dplyr::mutate(decade = (Age - 1) %/% window_size) %>%
-  #   dplyr::group_by(decade, SiteName) %>%
-  #   dplyr::summarise(
-  #     decade_meanRSL = mean(RSL),
-  #     rolling_avg = mean(RSL)#,
-  #     #Age = max(Age),
-  #     #rows_site = dplyr::n()
-  #   ) # Age=min(Age)
+  decadal_averages_TG <-
+    annual_tidal_gauge_data_df %>%
+    dplyr::mutate(decade = (Age - 1) %/% window_size) %>%
+    dplyr::group_by(decade, SiteName) %>%
+    dplyr::summarise(
+      #decade_meanRSL = mean(RSL)#,
+      rolling_avg = mean(RSL),
+      Age = max(Age)#,
+      #rows_site = dplyr::n()
+    ) # Age=min(Age)
 
   #---Using standard deviation of RSL over the decade as uncertainty----
   # too big
-  #decadal_averages_TG <- decadal_averages_TG %>%
-    #dplyr::group_by(SiteName) %>%
-    # dplyr::mutate(sd_TG = sd(decade_meanRSL))
-    #dplyr::mutate(sd_TG = sd(rolling_avg))
+  decadal_averages_TG <- decadal_averages_TG %>%
+  dplyr::group_by(SiteName) %>%
+  #dplyr::mutate(sd_TG = sd(decade_meanRSL))
+  dplyr::mutate(sd_TG = sd(rolling_avg))
 
   #----- New df with decadal averages for tide gauges-----
   tidal_gauge_average_10_df <- merge(decadal_averages_TG, annual_tidal_gauge_data_df)
@@ -308,13 +308,14 @@ clean_tidal_gauge_data <- function(data,
   #---Rsl & Age error for tidal gauge data----
   tidal_gauge_full_df <- tidal_gauge_average_10_df %>%
     dplyr::mutate(
-      #Age_err = 5, # years --> half a year/half a decade
-      Age_err = 1, # years --> half a year/half a decade
+      Age_err = 5, # years --> half a year/half a decade
+      #Age_err = 1, # years --> half a year/half a decade
     ) %>%
-    #dplyr::mutate(sd_TG = ifelse(is.na(sd_TG), 0.001, sd_TG)) %>%
+    dplyr::mutate(sd_TG = ifelse(is.na(sd_TG), 0.001, sd_TG)) %>%
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(
-      RSL_err = 0.001#sd_TG
+      #RSL_err = 0.001#sd_TG
+      RSL_err = sd_TG
     )
 
   tidal_gauge_full_df <- tidal_gauge_full_df %>%
@@ -334,7 +335,7 @@ clean_tidal_gauge_data <- function(data,
     tidal_gauge_full_df %>%
     # decadal_NA_TG %>%
     dplyr::group_by(SiteName) %>%
-    dplyr::filter(dplyr::n() >= 2)
+    dplyr::filter(dplyr::n() > 2)
   # dplyr::mutate(data_type_id = "TideGaugeData") %>%
 
   #-----Uniting original dataset and model run to give a site index to model_result data set-----

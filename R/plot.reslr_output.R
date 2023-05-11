@@ -35,7 +35,7 @@ plot.reslr_output <- function(x,
                               ylab = "Relative Sea Level (m)",
                               y_rate_lab = "Rate of change (mm per year)",
                               ...) {
-  Age <- RSL <- Age_err <- ID <- RSL_err <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
+  Age <- RSL <- SL <- y_lwr_box <- y_upr_box <- Age_err <- ID <- RSL_err <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
   jags_output <- x
 
   # EIV slr------------
@@ -843,10 +843,10 @@ plot.reslr_output <- function(x,
       total_model_rate_df <- total_model_rate_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
 
-      regional_component_df <- regional_component_df # %>%
-      # dplyr::filter(data_type_id == "ProxyRecord")
-      regional_rate_component_df <- regional_rate_component_df # %>%
-      # dplyr::filter(data_type_id == "ProxyRecord")
+      regional_component_df <- regional_component_df  %>%
+       dplyr::filter(data_type_id == "ProxyRecord")
+      regional_rate_component_df <- regional_rate_component_df  %>%
+       dplyr::filter(data_type_id == "ProxyRecord")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
@@ -865,9 +865,9 @@ plot.reslr_output <- function(x,
         dplyr::filter(data_type_id == "TideGaugeData")
 
       regional_component_df <- regional_component_df # %>%
-      # dplyr::filter(data_type_id == "TideGaugeData")
+       dplyr::filter(data_type_id == "TideGaugeData")
       regional_rate_component_df <- regional_rate_component_df # %>%
-      # dplyr::filter(data_type_id == "TideGaugeData")
+       dplyr::filter(data_type_id == "TideGaugeData")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")

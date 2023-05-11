@@ -27,8 +27,7 @@ Imports:
     R2jags,
     stringr,
     tidybayes,
-    tidyr,
-    zoo
+    tidyr
 Suggests: 
     knitr,
     rmarkdown,

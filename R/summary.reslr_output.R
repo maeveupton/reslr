@@ -234,7 +234,7 @@ summary.reslr_output <- function(object, # jags_output,#
         q95 = q95,
         rhat = rhat
       )
-    par_summary <- merge(par_summary_beta_r,par_summary_noise)
+    par_summary <- rbind(par_summary_beta_r,par_summary_noise)
 
   }
 

@@ -15,8 +15,8 @@ reslr_mcmc(
   n_chains = 3,
   CI = 0.95,
   spline_nseg = NULL,
-  spline_nseg_t = NULL,
-  spline_nseg_st = NULL
+  spline_nseg_t = 9,
+  spline_nseg_st = 4
 )
 }
 \arguments{

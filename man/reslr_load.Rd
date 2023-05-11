@@ -13,7 +13,7 @@ reslr_load(
   TG_minimum_dist_proxy = FALSE,
   all_TG_1deg = FALSE,
   input_Age_type = "CE",
-  rolling_window_average = 10,
+  sediment_average_TG = 10,
   detrend_data = FALSE,
   core_col_year = NULL
 )
@@ -35,11 +35,11 @@ reslr_load(
 
 \item{input_Age_type}{The inputted age in years "CE" or year "BCE"}
 
-\item{rolling_window_average}{A rolling window that averages tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.}
+\item{sediment_average_TG}{Average the tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.}
 
 \item{detrend_data}{Detrend the data using the linear rate provided}
 
-\item{core_col_year}{The year the core was collected.}
+\item{core_col_year}{The year the sediment core was collected.}
 }
 \value{
 A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points.
