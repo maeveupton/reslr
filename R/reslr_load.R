@@ -65,7 +65,7 @@ reslr_load <- function(data,
     #cat("The inputed age value is units of Common Era. \n")
     data <- data
   }
-  # Including no TG or linear rates
+  # Including no TG or no linear rates
   if (include_tide_gauge == FALSE & include_linear_rate == FALSE) {
     data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
     #cat("No decadally averaged Tide gauge data or linear_rate included.\n")
@@ -78,12 +78,22 @@ reslr_load <- function(data,
     is.null(list_preferred_TGs) == TRUE &
     TG_minimum_dist_proxy == FALSE &
     all_TG_1deg == FALSE) {
+    # # If the user wants to use their own tide gauge data
+    # if("data_type_id" %in% colnames(data) & "TideGaugeData" %in% data$data_type_id){
+    #   data <- data
+    # }
+    #else{
     message("Error: No tide gauge selection method chosen, please provide criteria for choosing preferred tide gauge. \n")
-  }
+    }
 
 
   # Including TGs and no linear rates
   if (include_tide_gauge == TRUE & include_linear_rate == FALSE) {
+    # # If the user wants to use their own tide gauge data
+    # if("data_type_id" %in% colnames(data) & "TideGaugeData" %in% data$data_type_id){
+    #   data <- data
+    # }
+    # else{
     data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
     data <- clean_tidal_gauge_data(
       data = data,
@@ -94,6 +104,7 @@ reslr_load <- function(data,
     )
     #cat("Note: No linear rate included. It is required for the ni_gam_decomp model \n")
     ##cat("Decadally averaged tide gauge data included by the package. \n")
+    #}
   }
 
 
