@@ -115,7 +115,7 @@ plot(res_one_site_example,
 
 To examine the data creating these plots the user types the following:
 ```{r, dataframeslrres, eval = TRUE}
-output_dataframes <- res_eiv_slr_t$output_dataframes
+output_dataframes <- res_one_site_example$output_dataframes
 head(output_dataframes)
 ```
 
