@@ -372,7 +372,6 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Detrended data---
     if (inherits(input_data, "detrend_data") == TRUE) {
       # JAGS data
-      # FINISH
       igp_dat_list <- igp_detrend_data(data, data_grid)
 
       jags_data <- list(

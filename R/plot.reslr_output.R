@@ -297,7 +297,7 @@ plot.reslr_output <- function(x,
         # Plot model fit
         plot_result <- ggplot2::ggplot() +
           ggplot2::geom_polygon(data = detrend_data_un_box,
-                                ggplot2:aes(x = Age*1000, y = SL,group = obs_index,fill = "Uncertainty"),alpha = 0.5)+
+                                ggplot2::aes(x = Age*1000, y = SL,group = obs_index,fill = "Uncertainty"),alpha = 0.5)+
           ggplot2::geom_point(
             data = data,
             ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
