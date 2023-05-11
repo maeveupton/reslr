@@ -166,7 +166,7 @@ reslr_load <- function(data,
       dplyr::filter(data_type_id == "ProxyRecord") %>%
       dplyr::select(linear_rate) %>% unique()
     detrend_rate <- rep(detrend_rate_val$linear_rate,nrow(data))
-
+    browser()
     data <- data %>%
       # Use the same rate for proxy and then for TGs
       #dplyr::group_by(SiteName) %>%
@@ -174,16 +174,41 @@ reslr_load <- function(data,
         SL = (core_col_year / 1000 - Age) * detrend_rate + RSL,
         x_lwr_box = Age - Age_err,
         x_upr_box = Age + Age_err,
-        y_lwr_box = ((core_col_year / 1000 - (Age - Age_err)) * detrend_rate) + (RSL - RSL_err),
-        y_upr_box = ((core_col_year / 1000 - (Age + Age_err)) * detrend_rate) + (RSL + RSL_err)
-        )
+        y_upr  = RSL + RSL_err,
+        y_lwr = RSL - RSL_err,
+        # Detrending the uncertainties
+        y_1_lwr = ((core_col_year / 1000 - (x_upr_box)) * detrend_rate) + (y_lwr),
+        y_2_upr = ((core_col_year / 1000 - (x_lwr_box)) * detrend_rate) + (y_lwr),
+        y_3_lwr = ((core_col_year / 1000 - (x_lwr_box)) * detrend_rate) + (y_upr),
+        y_4_upr = ((core_col_year / 1000 - (x_upr_box)) * detrend_rate) + (y_upr),
+        x_1_upr = Age + Age_err,
+        x_2_lwr = Age - Age_err,
+        x_3_lwr = Age - Age_err,
+        x_4_upr = Age + Age_err)
 
-    # Detrending the uncertainties
-    # y_1_lwr = ifelse(GIA == FALSE, y - RSLError,(((yocc/1000)-x_upr/1000)*rate.gia)+y_lwr)
-    # y_2_lwr = ifelse(GIA == FALSE, y - RSLError,(((yocc/1000)-x_lwr/1000)*rate.gia)+y_lwr)
-    # y_3_upr = ifelse(GIA == FALSE, y + RSLError,(((yocc/1000)-x_lwr/1000)*rate.gia)+y_upr)
-    # y_4_upr = ifelse(GIA == FALSE, y + RSLError,(((yocc/1000)-x_upr/1000)*rate.gia)+y_upr)
+    get_bounds <- data %>%
+      select(y_1_lwr:x_4_upr) %>%
+      mutate(obs_index = 1:n()) %>%
+      pivot_longer(cols = y_1_lwr:x_4_upr,
+                   names_to = "bounds",
+                   values_to = "value") %>%
+      mutate(bounds = replace(bounds, bounds %in% c("y_1_lwr","y_2_lwr","y_3_upr","y_4_upr"), "RSL"),
+             bounds = replace(bounds, bounds %in% c("x_1_upr","x_2_lwr","x_3_lwr","x_4_upr"), "Age"))
+
+    x_bounds <- get_bounds %>%
+      filter(bounds == "Age")
+
+    y_bounds <- get_bounds %>%
+      filter(bounds == "RSL")
+
+    data_to_plot <- tibble(obs_index = x_bounds$obs_index,
+                           x = x_bounds$value,
+                           y = y_bounds$value)
+
   }
+
+
+
 
   # Prediction dataframe-------------------------------------
   sites <- data %>%
