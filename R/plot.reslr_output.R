@@ -843,10 +843,10 @@ plot.reslr_output <- function(x,
       total_model_rate_df <- total_model_rate_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
 
-      regional_component_df <- regional_component_df # %>%
-      # dplyr::filter(data_type_id == "ProxyRecord")
-      regional_rate_component_df <- regional_rate_component_df # %>%
-      # dplyr::filter(data_type_id == "ProxyRecord")
+      regional_component_df <- regional_component_df  %>%
+       dplyr::filter(data_type_id == "ProxyRecord")
+      regional_rate_component_df <- regional_rate_component_df  %>%
+       dplyr::filter(data_type_id == "ProxyRecord")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
@@ -865,9 +865,9 @@ plot.reslr_output <- function(x,
         dplyr::filter(data_type_id == "TideGaugeData")
 
       regional_component_df <- regional_component_df # %>%
-      # dplyr::filter(data_type_id == "TideGaugeData")
+       dplyr::filter(data_type_id == "TideGaugeData")
       regional_rate_component_df <- regional_rate_component_df # %>%
-      # dplyr::filter(data_type_id == "TideGaugeData")
+       dplyr::filter(data_type_id == "TideGaugeData")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")

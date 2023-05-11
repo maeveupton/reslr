@@ -16,7 +16,7 @@ reslr_mcmc(
   CI = 0.95,
   spline_nseg = NULL,
   spline_nseg_t = 9,
-  spline_nseg_st = 5
+  spline_nseg_st = 4
 )
 }
 \arguments{
