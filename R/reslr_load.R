@@ -170,7 +170,7 @@ reslr_load <- function(data,
       # Use the same rate for proxy and then for TGs
       #dplyr::group_by(SiteName) %>%
       dplyr::mutate(
-        SL = (core_col_year / 1000 - Age) * detrend_rate + RSL,
+        SL = ((core_col_year / 1000 - Age) * detrend_rate) + RSL,
         x_lwr_box = Age - Age_err,
         x_upr_box = Age + Age_err,
         y_upr  = RSL + RSL_err,

@@ -273,11 +273,14 @@ plot.reslr_output <- function(x,
 
     # Plotting the detrended data:
     if (inherits(jags_output, "detrend_data") == TRUE) {
+      detrend_data_un_box <- jags_output$detrend_data_un_box
       # Plotting proxy only
       if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
         output_dataframes <- output_dataframes %>%
           dplyr::filter(data_type_id == "ProxyRecord")
         data <- data %>%
+          dplyr::filter(data_type_id == "ProxyRecord")
+        detrend_data_un_box <- detrend_data_un_box %>%
           dplyr::filter(data_type_id == "ProxyRecord")
       }
       # Plotting tide gauge only
@@ -286,18 +289,15 @@ plot.reslr_output <- function(x,
           dplyr::filter(data_type_id == "TideGaugeData")
         data <- data %>%
           dplyr::filter(data_type_id == "TideGaugeData")
+        detrend_data_un_box <- detrend_data_un_box %>%
+          dplyr::filter(data_type_id == "TideGaugeData")
       }
       # Using caption or not
       if (plot_caption == TRUE) {
         # Plot model fit
         plot_result <- ggplot2::ggplot() +
-          ggplot2::geom_rect(data = data, ggplot2::aes(
-            xmin = Age - Age_err,
-            xmax = Age + Age_err,
-            ymin = y_lwr_box,
-            ymax = y_upr_box,
-            fill = "Uncertainty",
-          ), alpha = 0.4) +
+          ggplot2::geom_polygon(data = detrend_data_un_box,
+                                aes(x = Age*1000, y = SL,group = obs_index,fill = "Uncertainty"),alpha = 0.5)+
           ggplot2::geom_point(
             data = data,
             ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
@@ -422,13 +422,9 @@ plot.reslr_output <- function(x,
       else {
         # Plot model fit
         plot_result <- ggplot2::ggplot() +
-          ggplot2::geom_rect(data = data, ggplot2::aes(
-            xmin = Age - Age_err,
-            xmax = Age + Age_err,
-            ymin = y_lwr_box,
-            ymax = y_upr_box,
-            fill = "Uncertainty",
-          ), alpha = 0.7) +
+          ggplot2::geom_polygon(data = detrend_data_un_box,
+                                aes(x = Age*1000, y = SL,
+                                    group = obs_index,fill = "Uncertainty"),alpha = 0.5)+
           ggplot2::geom_point(
             data = data,
             ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3

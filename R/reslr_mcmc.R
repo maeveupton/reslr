@@ -418,7 +418,8 @@ reslr_mcmc.reslr_input <- function(input_data,
         jags_data = jags_data,
         data = data,
         data_grid = data_grid,
-        output_dataframes = output_dataframes
+        output_dataframes = output_dataframes,
+        detrend_data_un_box = input_data$detrend_data_un_box
       )
       # Classing the JAGS output for eiv_igp_t--------------
       class(jags_output) <- c("reslr_output", "eiv_igp_t", "detrend_data")
