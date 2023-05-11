@@ -161,6 +161,7 @@ reslr_load <- function(data,
     if (is.null(data$linear_rate) & is.null(core_col_year)) {
       stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate = TRUE. Must provide the year the core was collected \n")
     }
+    browser()
     # Detrending the data and updating RSL to SL
     detrend_rate_val <- data %>%
       dplyr::filter(data_type_id == "ProxyRecord") %>%
@@ -191,7 +192,7 @@ reslr_load <- function(data,
       pivot_longer(cols = y_1_lwr:x_4_upr,
                    names_to = "bounds",
                    values_to = "value") %>%
-      mutate(bounds = replace(bounds, bounds %in% c("y_1_lwr","y_2_lwr","y_3_upr","y_4_upr"), "SL"),
+      mutate(bounds = replace(bounds, bounds %in% c("y_1_lwr","y_2_upr","y_3_lwr","y_4_upr"), "SL"),
              bounds = replace(bounds, bounds %in% c("x_1_upr","x_2_lwr","x_3_lwr","x_4_upr"), "Age"))
 
     x_bounds <- get_bounds %>%
@@ -200,9 +201,9 @@ reslr_load <- function(data,
     y_bounds <- get_bounds %>%
       filter(bounds == "SL")
 
-    data_to_plot <- tibble(obs_index = x_bounds$obs_index,
-                           x = x_bounds$value,
-                           y = y_bounds$value)
+    detrend_data_un_box<- tibble(obs_index = x_bounds$obs_index,
+                           Age = x_bounds$value,
+                           SL = y_bounds$value)
 
   }
 
@@ -276,6 +277,12 @@ reslr_load <- function(data,
     prediction_grid_res = prediction_grid_res
   )
   if (detrend_data == TRUE) {
+    input_data <- base::list(
+      data = data,
+      data_grid = data_grid,
+      prediction_grid_res = prediction_grid_res,
+      detrend_data_un_box = detrend_data_un_box
+    )
     class(input_data) <- c("reslr_input", "detrend_data")
   } else {
     class(input_data) <- "reslr_input"

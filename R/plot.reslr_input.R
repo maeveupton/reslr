@@ -204,13 +204,8 @@ plot.reslr_input <- function(x,
     # Plotting tide gauges & proxy records together
     if (plot_tide_gauges == TRUE & plot_proxy_records == TRUE) {
       p <- ggplot2::ggplot() +
-        ggplot2::geom_rect(data = data, ggplot2::aes(
-          xmin = Age - Age_err,
-          xmax = Age + Age_err,
-          ymin = y_lwr_box,
-          ymax = y_upr_box,
-          fill = "gray",
-        ), alpha = 0.7) +
+        ggplot2::geom_polygon(data = data_to_plot,
+                              aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
           ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
@@ -245,13 +240,8 @@ plot.reslr_input <- function(x,
       data <- data %>%
         dplyr::filter(data_type_id == "TideGaugeData")
       p <- ggplot2::ggplot() +
-        ggplot2::geom_rect(data = data, ggplot2::aes(
-          xmin = Age - Age_err,
-          xmax = Age + Age_err,
-          ymin = y_lwr_box,
-          ymax = y_upr_box,
-          fill = "gray",
-        ), alpha = 0.7) +
+        ggplot2::geom_polygon(data = data_to_plot,
+                              aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
           ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
@@ -287,13 +277,8 @@ plot.reslr_input <- function(x,
       data <- data %>%
         dplyr::filter(data_type_id == "ProxyRecord")
       p <- ggplot2::ggplot() +
-        ggplot2::geom_rect(data = data, ggplot2::aes(
-          xmin = Age - Age_err,
-          xmax = Age + Age_err,
-          ymin = y_lwr_box,
-          ymax = y_upr_box,
-          fill = "gray",
-        ), alpha = 0.7) +
+        ggplot2::geom_polygon(data = data_to_plot,
+                              aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
           ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
