@@ -1,7 +1,7 @@
 # reslr
 
 <!-- badges: start -->
-<a href = https://maeveupton.github.io/reslr/"><img src="https://raw.githubusercontent.com/maeveupton/reslr/master/badge/reslr_badge.png" width="240" height="276" align="right" />
+<a href = "https://maeveupton.github.io/reslr/"><img src="https://raw.githubusercontent.com/maeveupton/reslr/master/badge/reslr_badge.png" width="240" height="276" align="right" />
 <!-- badges: end -->
 
  
