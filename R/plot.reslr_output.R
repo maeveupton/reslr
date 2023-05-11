@@ -35,7 +35,7 @@ plot.reslr_output <- function(x,
                               ylab = "Relative Sea Level (m)",
                               y_rate_lab = "Rate of change (mm per year)",
                               ...) {
-  Age <- RSL <- SL <- y_lwr_box <- y_upr_box <- Age_err <- ID <- RSL_err <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
+  Age <- RSL <- SL <- y_lwr_box <- y_upr_box <- Age_err <- ID <- RSL_err <- obs_index <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
   jags_output <- x
 
   # EIV slr------------
@@ -297,7 +297,7 @@ plot.reslr_output <- function(x,
         # Plot model fit
         plot_result <- ggplot2::ggplot() +
           ggplot2::geom_polygon(data = detrend_data_un_box,
-                                aes(x = Age*1000, y = SL,group = obs_index,fill = "Uncertainty"),alpha = 0.5)+
+                                ggplot2:aes(x = Age*1000, y = SL,group = obs_index,fill = "Uncertainty"),alpha = 0.5)+
           ggplot2::geom_point(
             data = data,
             ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
@@ -423,7 +423,7 @@ plot.reslr_output <- function(x,
         # Plot model fit
         plot_result <- ggplot2::ggplot() +
           ggplot2::geom_polygon(data = detrend_data_un_box,
-                                aes(x = Age*1000, y = SL,
+                                ggplot2::aes(x = Age*1000, y = SL,
                                     group = obs_index,fill = "Uncertainty"),alpha = 0.5)+
           ggplot2::geom_point(
             data = data,

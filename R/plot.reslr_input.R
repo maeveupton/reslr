@@ -28,7 +28,7 @@ plot.reslr_input <- function(x,
                              plot_proxy_records = TRUE,
                              plot_caption = TRUE,
                              ...) {
-  Age <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <-y_lwr_box <- y_upr_box <- SL <-  NULL
+  Age <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <-y_lwr_box <- y_upr_box <- SL <- obs_index <-  NULL
   # Input data-------
   input_data <- x
   data <- input_data$data
@@ -207,7 +207,7 @@ plot.reslr_input <- function(x,
       detrend_data_un_box <- detrend_data_un_box
       p <- ggplot2::ggplot() +
         ggplot2::geom_polygon(data = detrend_data_un_box,
-                              aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
+                              ggplot2::aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
           ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
@@ -246,7 +246,7 @@ plot.reslr_input <- function(x,
 
       p <- ggplot2::ggplot() +
         ggplot2::geom_polygon(data = detrend_data_un_box,
-                              aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
+                              ggplot2::aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
           ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3

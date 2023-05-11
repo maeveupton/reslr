@@ -42,7 +42,7 @@ reslr_load <- function(data,
                        sediment_average_TG = 10,
                        detrend_data = FALSE,
                        core_col_year = NULL) {
-  Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- NULL
+  Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- n <- obs_index <- x_4_upr <-x_lwr_box<- x_upr_box<- y_1_lwr<-y_lwr<- y_upr<- NULL
 
   # Dividing Age & Age_err by 1000 for easier calculations-----
   data <- data %>%
@@ -214,7 +214,7 @@ reslr_load <- function(data,
     y_bounds <- get_bounds %>%
       dplyr::filter(bounds == "SL")
 
-    detrend_data_un_box<- tibble(obs_index = x_bounds$obs_index,
+    detrend_data_un_box<- data.frame(obs_index = x_bounds$obs_index,
                            Age = x_bounds$value,
                            SL = y_bounds$value,
                            SiteName = x_bounds$SiteName,
