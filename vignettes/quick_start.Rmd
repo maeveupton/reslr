@@ -31,7 +31,7 @@ library(reslr)
 Some proxy record data is included with this package. Find where it is with:
 
 ```{r, eval = FALSE}
-system.file("extdata", "one_data_site.csv", package = "reslr")
+system.file("extdata", "one_data_site_ex.csv", package = "read.csv")
 ```
 
 
