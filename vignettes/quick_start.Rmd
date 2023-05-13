@@ -40,16 +40,7 @@ example_one_datasite <- read.csv(path_to_data)
 ## Step 3: load the data into `reslr`
 ```{r, loadslr, eval = TRUE, message=FALSE, results='hide'}
 example_one_site_input <- reslr_load(
-  data = example_one_datasite,
-  include_tide_gauge = FALSE,
-  include_linear_rate = FALSE,
-  TG_minimum_dist_proxy = FALSE,
-  list_preferred_TGs = NULL,
-  all_TG_1deg = FALSE,
-  prediction_grid_res = 50,
-  input_Age_type = "CE",
-  sediment_average_TG = 10
-)
+  data = example_one_datasite)
 ```
 
 ## Step 4: plot the data
