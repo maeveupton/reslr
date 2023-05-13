@@ -287,11 +287,10 @@ reslr_load <- function(data,
     dplyr::mutate(Age = Age*1000)
 
   # Reducing size of the linear_rate_err
-
-  data <- data %>%
-    dplyr::mutate(linear_rate_err = linear_rate_err/100)
-  data_grid <- data_grid %>%
-    dplyr::mutate(linear_rate_err = linear_rate_err/100)
+  # data <- data %>%
+  #   dplyr::mutate(linear_rate_err = linear_rate_err/100)
+  # data_grid <- data_grid %>%
+  #   dplyr::mutate(linear_rate_err = linear_rate_err/100)
 
   input_data <- base::list(
     data = data,

@@ -21,12 +21,13 @@ library(tidyverse)
 
 In this document we present a range of advanced options that are available in the reslr package. To examine the all other options in the `reslr` package, see the main vignette.
 
-If you have created other examples demonstrating `reslr` capabilities yourself, please [contact me](https://github.com/andrewcparnell/simmr/issues) so I can include them here for other people to see.
+If you have created other examples demonstrating `reslr` capabilities yourself, please [contact me](https://github.com/maeveupton/reslr/issues) so I can include them here for other people to see.
 
 Installing `reslr` and loading it with:
-```{r, eval = FALSE}
-install.packages("simmr")
-library(simmr)
+```{r, eval = TRUE}
+#install.packages("reslr")
+devtools::install_github("maeveupton/reslr")
+library(reslr)
 ```
 
 ## Errors in Variables Integrated Gaussian Process with detrended data
@@ -140,7 +141,7 @@ This prints the plot of the rate of change with 95 \% credible intervals. The ca
 
 To examine the data creating these plots the user types the following:
 ```{r,igpdataout, eval = TRUE}
-output_dataframes <- res_eiv_igp_t$output_dataframes
+output_dataframes <- res_eiv_igp_t_detrend$output_dataframes
 head(output_dataframes)
 ```
 
@@ -221,6 +222,10 @@ final_plots$plot_result + ggplot2::ylab("New y axis label Added as Example")
 In the package the user has the ability access all the posterior sample for each unknown parameter in the following way:
 ```{r, eval = FALSE}
 # Example
-res_eiv_slr_t <- reslr_mcmc(x = CedarIslandNC, model_type = "eiv_slr_t")
+CedarIslandNC_input <- reslr_load(
+  data = CedarIslandNC)
+res_eiv_slr_t <- 
+  reslr_mcmc(CedarIslandNC_input, 
+             model_type = "eiv_slr_t")
 res_eiv_slr_t$noisy_model_run_output$BUGSoutput$sims.list$beta
 ```
