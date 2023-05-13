@@ -280,6 +280,7 @@ reslr_load <- function(data,
     ) %>%
     dplyr::select(!c(max_Age, min_Age)) %>%
     dplyr::arrange(Age)
+
   # Multiply by 1000 just keep it in right units
   data <- data %>%
     dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
