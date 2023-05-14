@@ -145,9 +145,110 @@ output_dataframes <- res_eiv_igp_t_detrend$output_dataframes
 head(output_dataframes)
 ```
 
+## Using a different input Age unit
+The default input Age for the reslr package is in units of years in the Common Era. The user can select to input the Age value in Before Present by updating the `input_Age_type = "BP"`. This will alter the output plots as the axis will be reversed. Here is an example of how this is done using the same example site as the previous case but using a Noisy Input spline in time instead.
+
+As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
+```{r,exampledataset2 ,eval = TRUE}
+# For 1 site
+CedarIslandNC <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
+```
+
+**Step 1:** Load in the data using the `reslr_load` function: 
+```{r, load ,eval = TRUE}
+CedarIslandNC_input_Age_BP <- reslr_load(
+  data = CedarIslandNC,
+  include_tide_gauge = FALSE,
+  include_linear_rate = FALSE,
+  TG_minimum_dist_proxy = FALSE,
+  list_preferred_TGs = NULL,
+  all_TG_1deg = FALSE,
+  prediction_grid_res = 50,
+  sediment_average_TG = 10,
+  input_Age_type = "BP"
+)
+```
+For this case, we update the setting `input_Age_type = "TRUE"BP`. 
+
+The output of this function is a list of two dataframes called `data` and `data_grid`. 
+- The `data` dataframe is the inputted data with additional columns for the data_type_id which will contain "ProxyRecord". It can be accessed by:
+```{r,data_new,eval=TRUE}
+data <- CedarIslandNC_input_Age_BP$data
+```
+- The `data_grid` is a dataframe that is evenly spaced in time based on the `prediction_grid_res` value chosen by the user and is used to create the plots and is accessed by
+```{r,datagrid_new, eval = TRUE}
+data_grid <- CedarIslandNC_input_Age_BP$data_grid
+```
+
+**Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
+```{r,print, eval=TRUE}
+print(CedarIslandNC_input_Age_BP)
+```
+
+**Step 2:** Plotting the data the raw data with:
+```{r, plotdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+plot(
+  x = CedarIslandNC_input_Age_BP,
+  title = "Plot of the raw data with input Age in Before Present",
+  plot_proxy_records = TRUE,
+  plot_tide_gauges = FALSE
+)
+```
+This will produce a plot of Age on the x-axis and Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The extra arguments can be used which allows the user to updated the titles and axis labels. The caption `plot_caption`, included by default, provides the number of proxy sites and tide gauge sites that will be used in the model and can be removed if required `plot_caption = FALSE`. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE`.
+
+**Step 3:** To run the ni_sp_t model the following function should be used:
+```{r,runsp, eval = TRUE}
+res_ni_sp_t_age_BP <- reslr_mcmc(
+  input_data = CedarIslandNC_input_Age_BP,
+  model_type = "ni_sp_t",
+  CI = 0.95
+)
+```
+This command takes the input data and the user specifies the statistical model, i.e. an integrated Gaussian process using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `res_ni_sp_t_age_BP`. The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`.
+
+**Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
+```{r,printout, eval=TRUE}
+print(res_ni_sp_t_age_BP)
+```
+
+**Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
+```{r,summarynew, eval = TRUE}
+summary(res_ni_sp_t_age_BP)
+```
+If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations.
+
+**Step 5:** The results from the EIV IGP model for the de-trended data can be illustrated using:
+```{r,plotres_new, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+plot(res_ni_sp_t_age_BP,
+  plot_type = "model_fit_plot",
+  plot_proxy_records = TRUE,
+  plot_tide_gauges = FALSE
+)
+```
+The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. In order to view the rate of change plot, the following setting should be used:
+
+```{r,plotresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+plot(res_ni_sp_t_age_BP,
+  plot_type = "rate_plot",
+  y_rate_lab = "Rate of Change (mm per year)"
+)
+```
+This prints the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used.
+
+To examine the data creating these plots the user types the following:
+```{r,dataoutnew, eval = TRUE}
+output_dataframes <- res_ni_sp_t_age_BP$output_dataframes
+head(output_dataframes)
+```
+
 
 ## Including Tide Gauge data
 In this package, we have described three ways to select a tide gauge and in the example we showed how to include the closest tide gauge to the proxy site. Here we are demonstrating the other options available to the user.
+```{r,data2sites, eval = FALSE}
+# For 2 site
+multi_site <- reslr::NAACproxydata %>%
+  dplyr::filter(Site %in% c("Cedar Island", "Nassau"))
+```
 
 If the user has a list of chosen tide gauges from PSMSL website, include them in a list in the `reslr_load` function as demonstrated: 
 ```{r, eval = FALSE}

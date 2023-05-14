@@ -90,6 +90,16 @@ plot.reslr_output <- function(x,
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
     }
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      plot_result <- plot_result +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      plot_result <- plot_result
+    }
+
     output_plots <- list(plot_result = plot_result)
   }
 
@@ -144,6 +154,15 @@ plot.reslr_output <- function(x,
     }
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
+    }
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      plot_result <- plot_result +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      plot_result <- plot_result
     }
     output_plots <- list(plot_result = plot_result)
   }
@@ -201,6 +220,15 @@ plot.reslr_output <- function(x,
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
     }
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      plot_result <- plot_result +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      plot_result <- plot_result
+    }
     output_plots <- list(plot_result = plot_result)
   }
 
@@ -255,6 +283,15 @@ plot.reslr_output <- function(x,
     }
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
+    }
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      plot_result <- plot_result +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      plot_result <- plot_result
     }
     output_plots <- list(plot_result = plot_result)
   }
@@ -626,6 +663,19 @@ plot.reslr_output <- function(x,
       }
     }
 
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      plot_result <- plot_result +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      plot_rate <- plot_rate +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      plot_result <- plot_result
+      plot_rate <- plot_rate
+    }
     output_plots <- list(plot_result = plot_result, plot_rate = plot_rate)
   }
 
@@ -709,6 +759,20 @@ plot.reslr_output <- function(x,
       plot_rate <- plot_rate +
         ggplot2::facet_wrap(~SiteName, scales = "free")
     }
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      plot_result <- plot_result +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      plot_rate <- plot_rate +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      plot_result <- plot_result
+      plot_rate <- plot_rate
+    }
+
     output_plots <- list(
       plot_result = plot_result,
       plot_rate = plot_rate
@@ -795,7 +859,22 @@ plot.reslr_output <- function(x,
       plot_rate <- plot_rate +
         ggplot2::facet_wrap(~SiteName, scales = "free")
     }
-    # # cat("NI spline in space time plotted and rate of change. \n")
+
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      plot_result <- plot_result +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      plot_rate <- plot_rate +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      plot_result <- plot_result
+      plot_rate <- plot_rate
+    }
+
+    # cat("NI spline in space time plotted and rate of change. \n")
     output_plots <- list(
       plot_result = plot_result,
       plot_rate = plot_rate
@@ -1486,6 +1565,44 @@ plot.reslr_output <- function(x,
         ggplot2::facet_wrap(~SiteName, scales = "free")
       all_components_CI_plot <- all_components_CI_plot +
         ggplot2::facet_wrap(~SiteName, scales = "free")
+    }
+
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      plot_result <- plot_result +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      plot_rate <- plot_rate +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      regional_plot <- regional_plot+
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      regional_rate_plot <- regional_rate_plot+
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      lin_loc_plot <- lin_loc_plot+
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      non_lin_loc_plot <- non_lin_loc_plot+
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      non_lin_loc_rate_plot <- non_lin_loc_rate_plot+
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+      all_components_CI_plot <- all_components_CI_plot+
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      plot_result <- plot_result
+      plot_rate <- plot_rate
+      regional_plot <- regional_plot
+      regional_rate_plot <- regional_rate_plot
+      lin_loc_plot <- lin_loc_plot
+      non_lin_loc_plot <- non_lin_loc_plot
+      non_lin_loc_rate_plot <- non_lin_loc_rate_plot
+      all_components_CI_plot <- all_components_CI_plot
     }
 
     output_plots <- list(

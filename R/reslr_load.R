@@ -43,11 +43,15 @@ reslr_load <- function(data,
                        detrend_data = FALSE,
                        core_col_year = NULL) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age<- bounds <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- n <- obs_index <- x_4_upr <-x_lwr_box<- x_upr_box<- y_1_lwr<-y_lwr<- y_upr<- NULL
-
   # Dividing Age & Age_err by 1000 for easier calculations-----
   data <- data %>%
     dplyr::mutate(Age = Age / 1000) %>%
     dplyr::mutate(Age_err = Age_err / 1000)
+                  # If minus signs???
+  #as.numeric(iconv(BB_data_df$Longitude, 'utf-8', 'ascii', sub=''))
+                  #Longitude = as.numeric(Longitude),
+                  #Latitude = as.numeric(Latitude))
+
 
   # Tidy Original data-------------------------------
   if (!("SiteName" %in% colnames(data))) {
@@ -173,7 +177,13 @@ reslr_load <- function(data,
   # Detrending the data using GIA rates which is known as linear rate in my input dataframe
   if (detrend_data == TRUE) {
     if (is.null(data$linear_rate) & is.null(core_col_year)) {
-      stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate = TRUE. Must provide the year the core was collected \n")
+      stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate = TRUE. \n Must provide the year the core was collected \n")
+    }
+    if (is.null(core_col_year)) {
+      stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate = TRUE.\n Must provide the year the core was collected \n")
+    }
+    if (is.null(data$linear_rate) ) {
+      stop("Error: Linear rate for the proxy site must be included or update the setting linear_rate = TRUE.\n Must provide the year the core was collected \n")
     }
     # Detrending the data and updating RSL to SL
     detrend_rate_val <- data %>%
@@ -204,7 +214,7 @@ reslr_load <- function(data,
       dplyr::select("y_1_lwr","y_2_upr","y_3_lwr","y_4_upr",
                "x_1_upr","x_2_lwr","x_3_lwr","x_4_upr",
                "data_type_id","SiteName") %>%
-      dplyr::mutate(obs_index = 1:n()) %>%
+      dplyr::mutate(obs_index = 1:dplyr::n()) %>%
       tidyr::pivot_longer(cols = y_1_lwr:x_4_upr,
                    names_to = "bounds",
                    values_to = "value") %>%
@@ -215,7 +225,7 @@ reslr_load <- function(data,
       dplyr::filter(bounds == "Age")
 
     if("Age_type" %in% colnames(data)){
-      Age <-1950 - x_bounds$value
+      Age <-1950/1000 - x_bounds$value
     }
     else{
       Age <- x_bounds$value
