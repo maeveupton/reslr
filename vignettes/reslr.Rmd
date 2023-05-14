@@ -213,7 +213,7 @@ The `input_Age_type` argument is associated with the type of input Age where the
 
 **Step 2.** Plot the raw data using `plot` and select whether to include tide gauges in the output plot. The user can update the title (`plot_title`) and axis labels (`xlab`,`ylab`). The captions  (`plot_captions`) can be included on the plots which provides a summary of the number of proxy sites and tide gauge sites.
 
-**Step 3.** Choose your preferred model type from the available list above and use the `reslr_mcmc` function to obtain the parameter estimates and the dataframes required for plotting the outputs. This function has a number of settings which allow the user to improve model diagnostics. In addition, this function allows the user to chose their preferred credible interval size from a list of 50\%, 95\% or 99\%, the default setting is `CI = "95\%"`.
+**Step 3.** Choose your preferred model type from the available list above and use the `reslr_mcmc` function to obtain the parameter estimates and the dataframes required for plotting the outputs. This function has a number of settings which allow the user to improve model diagnostics. In addition, this function allows the user to chose their preferred credible interval size, the default setting is `CI = 0.95`.
 
 **Step 3a.** The `print` function provides a brief insight into the output of the `reslr_mcmc` function.
 
