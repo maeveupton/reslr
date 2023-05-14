@@ -17,7 +17,7 @@
 #' @param prediction_grid_res Resolution of grid. Predictions over every 50 years(default) can vary based on user preference as larger values will reduce computational run time.
 #' @param include_tide_gauge Including tide gauge data from PSMSL website that is averaged over a decade using a rolling window
 #' @param include_linear_rate User decides to include linear_rate and linear_rate_err
-#' @param input_Age_type The inputted age in years "CE" or year "BCE"
+#' @param input_Age_type The inputted age in years "CE" or year "BP"
 #' @param list_preferred_TGs The user can supply the name or names of the preferred tide gauges
 #' @param TG_minimum_dist_proxy The package finds the tide gauge closest to the proxy site
 #' @param all_TG_1deg The package finds all tide gauges within 1 degree of the proxy site
@@ -57,11 +57,13 @@ reslr_load <- function(data,
     cat("Error: User must provide a column with site names and a column with region name. \n")
     stop()
   }
-  if (input_Age_type == "BCE") {
+  if (input_Age_type == "BP") {
     #cat("The inputed age value will be converted to units of Common Era. \n")
     data <- data %>%
       dplyr::group_by(SiteName) %>%
-      dplyr::mutate(Age = 1950/1000 - Age)
+      dplyr::mutate(Age = 1950/1000 - Age,
+       # If the Age type is BP the scales on the plots need to be reversed
+                    Age_type = "BP")
   } else {
     #cat("The inputed age value is units of Common Era. \n")
     data <- data
@@ -212,11 +214,18 @@ reslr_load <- function(data,
     x_bounds <- get_bounds %>%
       dplyr::filter(bounds == "Age")
 
+    if("Age_type" %in% colnames(data)){
+      Age <-1950 - x_bounds$value
+    }
+    else{
+      Age <- x_bounds$value
+    }
+
     y_bounds <- get_bounds %>%
       dplyr::filter(bounds == "SL")
 
     detrend_data_un_box<- data.frame(obs_index = x_bounds$obs_index,
-                           Age = x_bounds$value,
+                           Age = Age,
                            SL = y_bounds$value,
                            SiteName = x_bounds$SiteName,
                            data_type_id = x_bounds$data_type_id)
@@ -290,6 +299,8 @@ reslr_load <- function(data,
     data_grid = data_grid,
     prediction_grid_res = prediction_grid_res
   )
+
+
   if (detrend_data == TRUE) {
     input_data <- base::list(
       data = data,

@@ -78,6 +78,16 @@ plot.reslr_input <- function(x,
         axis.title = ggplot2::element_text(size = 12, face = "bold"),
         legend.text = ggplot2::element_text(size = 10)
       )
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      p <- p +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      p <- p
+    }
+    # Informed caption
     if (plot_caption == TRUE) {
       p <- p + ggplot2::labs(caption = paste0(
         "No. proxy sites:", n_proxy,
@@ -131,6 +141,15 @@ plot.reslr_input <- function(x,
         axis.title = ggplot2::element_text(size = 12, face = "bold"),
         legend.text = ggplot2::element_text(size = 10)
       )
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      p <- p +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      p <- p
+    }
     # Plotting informed caption
     if (plot_caption == TRUE) {
       p <- p +
@@ -185,6 +204,15 @@ plot.reslr_input <- function(x,
         axis.title = ggplot2::element_text(size = 12, face = "bold"),
         legend.text = ggplot2::element_text(size = 10)
       )
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      p <- p +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      p <- p
+    }
     # Plotting informed caption
     if (plot_caption == TRUE) {
       p <- p +
@@ -197,6 +225,7 @@ plot.reslr_input <- function(x,
     else {
       p <- p
     }
+
   }
 
   # Plotting detrend data put into 1 site only ------------------
@@ -317,6 +346,15 @@ plot.reslr_input <- function(x,
         )
     }
 
+    # Age type BP
+    if("Age_type" %in% colnames(data)){
+      p <- p +
+        ggplot2::scale_x_reverse()+
+        ggplot2::labs(xlab = "Year (BP)")
+    }
+    else{
+      p <- p
+    }
     # If plotting informed caption
     if (plot_caption == TRUE) {
       p <- p + ggplot2::labs(caption = paste0(

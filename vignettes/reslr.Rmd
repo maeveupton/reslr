@@ -109,7 +109,7 @@ The user must ensure that the input data is a dataframe. For a single site or mu
 
 - Region is the area in which is was collected, e.g. New Jersey. To note, in the package, the Site and the Region columns will be combined to form a factor called the `SiteName` which results in an output, e.g. "Leeds Point,\n New Jersey".
 
-- Age is the year of the data in Common era ("CE") or Before Common Era ("BCE"). If calibrated in the BCE form the package will convert the data into the Common Era form.
+- Age is the year of the data in Common era ("CE") or Before Present ("BP"). If calibrated in the BP form the package will convert the data into the Common Era form.
 
 - Age_err is the 1 standard deviation ($\sigma$) Age uncertainty associated with the Age.
 
