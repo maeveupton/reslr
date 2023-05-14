@@ -718,12 +718,17 @@ linear_reg_rates <- function(data) {
   Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- NULL
   data_filter <- data %>%
     dplyr::filter(!Age > 1.800) # Ignoring recent human influences to SL rise
+  # # Remove index points
+  # data_filter <- data %>%
+  #   dplyr::group_by(Site)%>%
+  #   dplyr::filter(dplyr::n()>1)
 
   # Doing linear regression on rest of data
   data_lm <- data_filter %>%
     dplyr::group_by(SiteName) %>%
     dplyr::mutate(
-      linear_rate = round(stats::lm(RSL ~ Age)$coefficients[[2]], 2),
+      #linear_rate = round(stats::lm(RSL ~ Age)$coefficients[[2]], 2),
+      linear_rate =stats::lm(RSL ~ Age)$coefficients[[2]],
       linear_rate_err = base::summary(stats::lm(RSL ~ Age))$coefficients[2, 2]
     )
 
