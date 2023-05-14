@@ -60,6 +60,7 @@ reslr_load <- function(data,
   if (input_Age_type == "BCE") {
     #cat("The inputed age value will be converted to units of Common Era. \n")
     data <- data %>%
+      dplyr::group_by(SiteName) %>%
       dplyr::mutate(Age = 1950/1000 - Age)
   } else {
     #cat("The inputed age value is units of Common Era. \n")
