@@ -222,9 +222,6 @@ reslr_load <- function(data,
 
   }
 
-
-
-
   # Prediction dataframe-------------------------------------
   sites <- data %>%
     dplyr::select(
@@ -286,12 +283,6 @@ reslr_load <- function(data,
     dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
   data_grid <- data_grid %>%
     dplyr::mutate(Age = Age*1000)
-
-  # Reducing size of the linear_rate_err
-  # data <- data %>%
-  #   dplyr::mutate(linear_rate_err = linear_rate_err/100)
-  # data_grid <- data_grid %>%
-  #   dplyr::mutate(linear_rate_err = linear_rate_err/100)
 
   input_data <- base::list(
     data = data,
