@@ -1,6 +1,7 @@
-#' Print a reslr output object which is created from the \code{reslr_mcmc} function.
+#' Print a reslr output object which is created by the \code{reslr_mcmc} function.
 #'
 #' This will be very high level printing that the user can use to obtain information about the MCMC run using JAGS. The number of iterations and chains used by the user is printed
+#' In addition, the type of statistical model is printed.
 #'
 #' @param x An object of class \code{reslr_output}
 #' @param ... Other arguments (not supported)
@@ -13,6 +14,7 @@
 #' input_data <- reslr_load(data = data)
 #' jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 #' print(x = jags_output)
+#'
 print.reslr_output <-
   function(x, ...) {
     SiteName <- data_type_id <- NULL

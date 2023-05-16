@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.reslr_output.R
 \name{print.reslr_output}
 \alias{print.reslr_output}
-\title{Print a reslr output object which is created from the \code{reslr_mcmc} function.}
+\title{Print a reslr output object which is created by the \code{reslr_mcmc} function.}
 \usage{
 \method{print}{reslr_output}(x, ...)
 }
@@ -16,10 +16,12 @@ Returns high level information about the reslr_output object, i.e. the number of
 }
 \description{
 This will be very high level printing that the user can use to obtain information about the MCMC run using JAGS. The number of iterations and chains used by the user is printed
+In addition, the type of statistical model is printed.
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 input_data <- reslr_load(data = data)
 jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 print(x = jags_output)
+
 }

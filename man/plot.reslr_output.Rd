@@ -26,7 +26,7 @@
 
 \item{title}{Plotting a title on the output plots}
 
-\item{plot_type}{The user can select the type of output plot they require from the following: "rate_plot","model_fit_plot","regional_plot","regional_rate_plot","linear_local_plot","non_linear_local_plot","non_linear_local_rate_plot","nigam_component_plot"}
+\item{plot_type}{The user can select the type of output plot they require from the following: "rate_plot", "model_fit_plot", "regional_plot", "regional_rate_plot", "linear_local_plot", "non_linear_local_plot", "non_linear_local_rate_plot", "nigam_component_plot"}
 
 \item{plot_caption}{Plotting an informed caption with the number of tide gauges and proxy sites.}
 
@@ -42,11 +42,11 @@
 Plot of model fit and the rate of change depending on the statistical model in question.
 }
 \description{
-For the EIV simple linear regression and the Change point models the model fit plots are created, preferably for 1 proxy site.
-For the EIV IGP and the NI spline in time the plots of the model fits and the derivative of the model fit are produced for 1 proxy site, as running these models with more than 1 site or with tide gauge data is not recommended.
-For the NI spline in space time, the plots of the model fits and the derivatives of the model fits are produced for any amount of proxy sites.
-For the NI GAM decomposition, the plots of the model fits and the derivatives of the model fits are produced for any amount of sites including tide gauges and proxy sites. It is important to note that tide gauge data is strongly recommended for this model. Also, the ni_gam_decomp model will produce plots for each individual component,i.e. the regional component and its rate of change, the linear local component, the non-linear local component and its rate of change.
-If tide gauges are used in the model, the user has the ability plot the output with or without the inclusion of the tide gauges.
+Depending on the model chosen in the \code{reslr_mcmc} function, the package produces a range of output plots.
+Total posterior model fit plot with the raw data and measurement uncertainty are created for each statistical model.
+The rate of change plots are created for the EIV IGP and the NI spline regression models.
+For the NI GAM decomposition, each individual component of the model is plotted. Also, the regional and the non-linear local component, an associated rate plot is produced.
+If tide gauges are used in the model, the user has the ability plot the output with or without this additional data source.
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")

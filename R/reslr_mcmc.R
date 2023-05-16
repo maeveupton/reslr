@@ -1,29 +1,24 @@
-#' Running a range of Bayesian statistical models using JAGS
+#' Run a \code{reslr_input} object through the main reslr Markov chain Monte Carlo (MCMC) function using a chosen statistical model
 #'
-#' In this function, a variety of statistical models can be run depending on the requirements of the user. All models are written within a Bayesian framework and use JAGS (Just Another Gibbs Sampler) to calculate Markov Chain Monte Carlo (MCMC) simulation to obtain estimates of unknown parameters. The user has the cability to alter the number of iterations, the number of burnin, the number of chains and the thinning. These options relate to the amount of MCMC simulations required and should be reviewed by the user to ensure model convergence is achieved without excessively long run times.
-#' Prior to using this function, the user is recommended to use the reslr_load function which organises the input data into the correct structure required for this function.
-#' The user chooses their 'model_type' and as a range of models to choose from. The simplest model available is the EIV simple linear regression. Followed by the EIV change point model which the user change decide how many change points are required using the n_cp function. This is limited to 3 change points.
-#' The EIV IGP and NI spline in time models allows for model fits as well as rate of change estimates for one site as it is not recommended to use more than one site for all these models mentioned above.
-#' The final two model options allow for examining model fits as well as rate of change estimates for multiple sites where the number of sites has no limit. The first option is the NI spline in space time.
-#' The final option is the NI GAM decomposition which also allows for the decomposition of the signal into a regional, a linear local component and a non-linear local component as describe by Upton et al 2023.
+#' In this function, a variety of statistical models can be run depending on the requirements of the user. All models are written within a Bayesian framework and use JAGS (Just Another Gibbs Sampler) to calculate Markov Chain Monte Carlo (MCMC) simulation to obtain estimates of unknown parameters. The user has the ability to alter the number of iterations, the number of burnin, the number of chains and the thinning. These options relate to the amount of MCMC simulations required and should be reviewed by the user to ensure model convergence is achieved without excessively long run times.
+#' The user chooses their 'model_type' and as a range of models to choose from.
 #'
-#'
-#' @param input_data Input data from the reslr_load function
-#' @param model_type Statistical Model type
-#' @param n_iterations Number of iterations. Increasing this value will increase the computational run time
-#' @param n_burnin Burnin value. This number removes a certain number of samples at the beginning.
-#' @param n_thin Thinning value
-#' @param n_chains Number of chains. The number of times the model will be run.
-#' @param igp_smooth Informs prior for the smoothness (correlation) parameter if model = "igp" is chosen. Choose a value between 0 and 1. Closer to 1 will increase smoothness.
-#' @param n_cp Number of change points 1,2 or 3
+#' @param input_data Input data from the \code{reslr_load} function
+#' @param model_type The user selects their statistical model type. The user can select a Errors in Variable Simple Linear Regression using "eiv_slr_t". The user can select a Errors in Variable Change Point Regression using  "eiv_cp_t". The user can select a Errors in Variable Integrated Gaussian Process using "eiv_igp_t". The user can select a Noisy Input Spline in Time using "ni_spline_t". The user can select a Noisy Input Spline in Space Time using "ni_spline_st". The user can select a Noisy Input Generalised Additive Model using "ni_gam_decomp".
+#' @param n_iterations Number of iterations. Increasing this value will increase the computational run time.
+#' @param n_burnin Size of burn-in. This number removes a certain number of samples at the beginning.
+#' @param n_thin Amount of thinning.
+#' @param n_chains Number of MCMC chains. The number of times the model will be run.
+#' @param igp_smooth This setting is focused on the Errors in Variables Integrated Gaussian Process model. It informs the prior for the smoothness (correlation) parameter if model = "igp" is chosen. Choose a value between 0 and 1. Closer to 1 will increase smoothness.
+#' @param n_cp This setting is focused on the Errors in Variables Change Point model. The user can select the number of change points 1,2 or 3.
 #' @param CI Size of the credible interval required by the user. The default is 0.95 corresponding to 95%.
-#' @param spline_nseg Number of segments used to create basis functions
-#' @param spline_nseg_t Number of segments used to create basis functions for NIGAM temporal component
-#' @param spline_nseg_st Number of segments used to create basis functions for NIGAM spatial temporal component
+#' @param spline_nseg This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions.
+#' @param spline_nseg_t This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
+#' @param spline_nseg_st This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
 # @param xr Range of data from cross validation
 # @param xl Range of data for cross validation
 
-#' @return A list containing the input data, the JAGS output and output dataframes used for final plots. The output of this function is a list containing the input data, the JAGS output and output dataframes used for final plots.
+#' @return A list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export
 #'
 #' @examples
