@@ -452,3 +452,87 @@ plot(
   plot_tide_gauges = TRUE
 )
 
+## ----runnigam,eval = TRUE-----------------------------------------------------
+res_ni_gam_decomp <- reslr_mcmc(
+  input_data = multi_9_sites_input,
+  model_type = "ni_gam_decomp",
+  CI = 0.95
+)
+
+## ----printnigamout, eval=TRUE-------------------------------------------------
+print(res_ni_gam_decomp)
+
+## ----summarynigam, eval = TRUE------------------------------------------------
+summary(res_ni_gam_decomp)
+
+## ---- runnigammore,eval = FALSE-----------------------------------------------
+#  res_ni_gam_decomp <- reslr_mcmc(
+#    input_data = multi_9_sites_input,
+#    model_type = "ni_gam_decomp",
+#    # Update these values
+#    n_iterations = 6000, # Number of iterations
+#    n_burnin = 1000, # Number of iterations to discard at the beginning
+#    n_thin = 4, # Reduces number of output samples to save memory and computation time
+#    n_chains = 3 # Number of Markov chains
+#  )
+
+## ----plotnigamres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5----
+plot(res_ni_gam_decomp,
+  plot_type = "model_fit_plot",
+  plot_tide_gauge = FALSE
+)
+
+## ----plotnigamresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(res_ni_gam_decomp,
+  plot_type = "rate_plot"
+)
+
+## ----totaldf, eval = TRUE-----------------------------------------------------
+total_model_fit_df <- res_ni_gam_decomp$output_dataframes$total_model_fit_df
+head(total_model_fit_df)
+
+## ----totalrate, eval = TRUE---------------------------------------------------
+total_model_rate_df <- res_ni_gam_decomp$output_dataframes$total_model_rate_df
+head(total_model_rate_df)
+
+## ----plotnigamregres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(res_ni_gam_decomp, plot_type = "regional_plot")
+
+## ----regdf, eval = FALSE------------------------------------------------------
+#  regional_component_df <- res_ni_gam_decomp$output_dataframes$regional_component_df
+
+## ----plotnigamregresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(res_ni_gam_decomp, plot_type = "regional_rate_plot")
+
+## ----regratedf, eval = FALSE--------------------------------------------------
+#  regional_rate_component_df <- res_ni_gam_decomp$output_dataframes$regional_rate_component_df
+
+## ----plotnigamlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(res_ni_gam_decomp, plot_type = "linear_local_plot")
+
+## ----linlocdf, eval = FALSE---------------------------------------------------
+#  lin_loc_component_df <- res_ni_gam_decomp$output_dataframes$lin_loc_component_df
+
+## ----linlocrate, eval = FALSE-------------------------------------------------
+#  lin_loc_component_rates <- lin_loc_component_df %>%
+#    dplyr::group_by(SiteName) %>%
+#    dplyr::summarise(
+#      linear_rate = unique(linear_rate),
+#      linear_rate_err = unique(linear_rate_err)
+#    )
+
+## ----plotnigamnonlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(res_ni_gam_decomp, plot_type = "non_linear_local_plot")
+
+## ----non_lindf, eval = FALSE--------------------------------------------------
+#  non_lin_loc_component_df <- res_ni_gam_decomp$output_dataframes$non_lin_loc_component_df
+
+## ----plotnigamnonlinresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE----
+plot(res_ni_gam_decomp, plot_type = "non_linear_local_rate_plot")
+
+## ----nonlinratedf, eval = FALSE-----------------------------------------------
+#  non_lin_loc_rate_component_df <- jags_output.ni_gam_decomp$output_dataframes$non_lin_loc_rate_component_df
+
+## ----plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE,message=FALSE,results='hide'----
+plot(res_ni_gam_decomp, plot_type = "nigam_component_plot")
+
