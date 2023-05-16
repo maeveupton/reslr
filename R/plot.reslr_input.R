@@ -5,7 +5,7 @@
 #'
 #'
 #' @param x An object created via the function \code{\link{reslr_load}}
-#' @param title Title of the Plot
+#' @param title Title of the plot
 #' @param xlab Labeling the x-axis
 #' @param ylab Labeling the y-axis
 #' @param plot_proxy_records Plotting the proxy records on their own and this is the default
@@ -20,7 +20,7 @@
 #' full_dataset <- reslr_load(NAACproxydata)
 #' plot(full_dataset)
 plot.reslr_input <- function(x,
-                             title = "Plot of the raw data",
+                             title = "",
                              xlab = "Year (CE)",
                              ylab = "Relative Sea Level (m)",
                              plot_tide_gauges = FALSE,
