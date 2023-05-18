@@ -31,27 +31,15 @@ print.reslr_output <-
 
     cat("This is a valid reslr output object with ")
     cat(paste(n_obs, "observations "))
-    if(n_sites > 1){
-      cat("and ", paste(n_sites), "sites.\n")
-    }
-    else{
-      cat("and ", paste(n_sites), "site.\n")
-    }
+    cat("and ", paste(n_sites), "site(s).\n")
+    cat("There are ", paste(n_proxy), " proxy site(s) ")
+    cat("and ", paste(n_tide_gauge), " tide gauge site(s).\n")
 
-    if(n_proxy > 1){
-      cat("There are ", paste(n_proxy), " proxy sites ")
+    if("Age_type" %in% colnames(data)){
+      cat("The age units are; Before Present Era. \n")
     }
     else{
-      cat("There is ", paste(n_proxy), " proxy site ")
-    }
-    if(n_tide_gauge > 1 ){
-      cat("and ", paste(n_tide_gauge), " tide gauge sites.\n")
-    }
-    else{
-      cat("and ", paste(n_tide_gauge), " tide gauge site.\n")
-    }
-
-    cat("The age units are; Common Era. \n")
+      cat("The age units are; Common Era. \n")}
 
     if(inherits(jags_output,"detrend_data") == TRUE){
       cat("Model has used detrended data.\n")

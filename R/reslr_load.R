@@ -6,7 +6,7 @@
 #'
 #'
 #' @param data The input data as a dataframe.
-#' @param input_Age_type The inputted age in years "CE" or year "BP". The default is "CE" and is the preferred structure of the package. The package has the ability to use Before Present ("BP") observations.
+#' @param input_age_type The inputted age in years "CE" or year "BP". The default is "CE" and is the preferred structure of the package. The package has the ability to use Before Present ("BP") observations.
 #' @param prediction_grid_res Resolution of grid. Predictions over every 50 years(default) can vary based on user preference, as larger values will reduce computational run time.
 #' @param include_linear_rate User decides to include linear_rate and linear_rate_err associated. This relates to linear rate which corresponds to an important physical process that impacts sea level observations which is glacial isostatic adjustment (GIA). For the linear_rate and its associated linear_rate_err, the user can provide these values as additional columns in the input dataframe. If they prefer, the package will calculate the linear_rate and the linear_rate_err using the data.
 #' @param include_tide_gauge Including tide gauge data from PSMSL website. The tide gauge data undergo a cleaning process in this function where flagged stations are removed as recommended by the online database. Next, the tide gauge data is averaged over period defined by sediment_average_TG which default is 10 years corresponding to accumulation rates of proxy records. Then, the user selects their preferred tide gauge based on three criteria: 1.nearest tide gauge to the proxy site; 2. User supplies a list of names of preferred tide gauges; 3. all tide gauges within 1 degree are chosen.
@@ -30,7 +30,7 @@ reslr_load <- function(data,
                        list_preferred_TGs = NULL,
                        TG_minimum_dist_proxy = FALSE,
                        all_TG_1deg = FALSE,
-                       input_Age_type = "CE",
+                       input_age_type = "CE",
                        sediment_average_TG = 10,
                        detrend_data = FALSE,
                        core_col_year = NULL) {
@@ -53,7 +53,7 @@ reslr_load <- function(data,
     cat("Error: User must provide a column with site names and a column with region name. \n")
     stop()
   }
-  if (input_Age_type == "BP") {
+  if (input_age_type == "BP") {
     #cat("The inputed age value will be converted to units of Common Era. \n")
     data <- data %>%
       dplyr::group_by(SiteName) %>%

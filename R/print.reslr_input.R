@@ -27,39 +27,28 @@ print.reslr_input <- function(x,
 
   cat("This is a valid reslr input object with ")
   cat(paste(n_obs, "observations "))
-  if(n_sites > 1){
-  cat("and ", paste(n_sites), "sites.\n")
-  }
-  else{
-    cat("and ", paste(n_sites), "site.\n")
-  }
+  cat("and ", paste(n_sites), "site(s).\n")
+  cat("There are ", paste(n_proxy), " proxy site(s) ")
 
-  if(n_proxy > 1){
-    cat("There are ", paste(n_proxy), " proxy sites ")
-  }
-  else{
-    cat("There is ", paste(n_proxy), " proxy site ")
-  }
-  if(n_tide_gauge > 1 ){
-    cat("and ", paste(n_tide_gauge), " tide gauge sites.\n")
-  }
-  else{
-    cat("and ", paste(n_tide_gauge), " tide gauge site.\n")
-  }
+  cat("and ", paste(n_tide_gauge), " tide gauge site(s).\n")
 
-  cat("The age units are; Common Era. \n")
+  if("Age_type" %in% colnames(data)){
+    cat("The age units are; Before Present Era. \n")
+  }
+  else{
+    cat("The age units are; Common Era. \n")}
 
   if(n_tide_gauge == 0){
-    cat("No decadally averaged yide gauge data included. It is recommended for the ni_gam_decomp model \n")
+    cat("Decadally averaged tide gauge data was not included. It is recommended for the ni_gam_decomp model \n")
   }
   else{
     cat("Decadally averaged tide gauge data included by the package. \n")
   }
   if("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data)){
-    cat("The linear_rate and linear_rate_err included. \n")
+    cat("The linear_rate and linear_rate_err has been included. \n")
   }
   else{
-    cat("No linear_rate or linear_rate_err included. It is required for the ni_gam_decomp model \n")
+    cat("The linear_rate or linear_rate_err was not included. It is required for the ni_gam_decomp model \n")
   }
   if(inherits(x,"detrend_data")){
     cat("Data has been detrended.\n")

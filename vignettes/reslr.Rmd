@@ -207,7 +207,7 @@ The general structure for running `reslr` is as follows:
 If tide gauge data required update the argument `include_tide_gauge = TRUE`, from this the user has three options as described above. Firstly, provide the list of names for the tide gauges from PSMSL website that the wish to use in the `list_preferred_TGs` option. Secondly, the package find the tide gauge closest to the proxy site `TG_minimum_dist_proxy = TRUE`. Thirdly, the package uses all tide gauges within 1 degree of the proxy site `all_TG_1deg = TRUE`. If sedimentation accumulation rates for the proxy records are less than or greater than a decade the user can alter this size using `sediment_average_TG = 10` which has a default of 10 years.
 If linear_rate is of interest to the user update the argument `include_linear_rate = TRUE`. 
 The user can select the resolution of the output by changing the value of `prediction_grid_res = 50` with the default of 50 years. 
-The `input_Age_type` argument is associated with the type of input Age where the default is in Common Era. 
+The `input_age_type` argument is associated with the type of input Age where the default is in Common Era. 
 
 **Step 1a.** The `print` function provides a brief insight into the inputted data.
 
@@ -242,7 +242,7 @@ CedarIslandNC_input <- reslr_load(
   list_preferred_TGs = NULL,
   all_TG_1deg = FALSE,
   prediction_grid_res = 50,
-  input_Age_type = "CE",
+  input_age_type = "CE",
   sediment_average_TG = 10
 )
 ```
