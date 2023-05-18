@@ -563,8 +563,8 @@ head(output_dataframes)
 
 
 
-# Noisy Input Generalised Additive Model in time (**"ni_spline_t"**)
-An alternative method to examine how the response variable varies in time is using the temporal Noisy Input Generalised Additive Model (ni_spline_t). 
+# Noisy input spline in time (**"ni_spline_t"**)
+An alternative method to examine how the response variable varies in time is using the Noisy input spline in time (ni_spline_t). 
 It model can obtain results in more efficient computational run times when compared with the eiv_igp_t model.
 
 This technique focuses on 1 site and we do not recommended for multiple proxy sites together. Tide gauge data can be used to gain insight into recent RSL changes. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
@@ -678,7 +678,7 @@ head(output_dataframes)
 
 
 # Noisy input spline in space time (**"ni_spline_st"**)
-The Noisy Input spline in space time examines changes in response over multiple locations and throughout time. 
+The Noisy input spline in space time examines changes in RSL over multiple locations and throughout time. 
 For this model, a minimum of 2 proxy sites should be used and tide gauge data provides insight into recent changes in RSL if the user is requires_ As an example, we will filter the example dataset `NAACproxydata` to select two sites to demonstrate the process:
 ```{r,data2sites, eval = TRUE}
 # For 2 site
