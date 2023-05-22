@@ -7,7 +7,7 @@ reslr_input_1 <- reslr_load(
   prediction_grid_res = 100,
   include_tide_gauge = FALSE,
   include_linear_rate = FALSE,
-  input_Age_type = "CE"
+  input_age_type = "CE"
 )
 
 testthat::test_that("Basic reslr_input plot", {
@@ -22,7 +22,7 @@ reslr_input_2 <- reslr_load(
   include_tide_gauge = TRUE,
   TG_minimum_dist_proxy = TRUE,
   include_linear_rate = TRUE,
-  input_Age_type = "CE"
+  input_age_type = "CE"
 )
 
 testthat::test_that("Basic reslr_input plot with tide gauges", {
@@ -40,7 +40,7 @@ reslr_input_3 <- reslr_load(
   prediction_grid_res = 100,
   include_tide_gauge = FALSE,
   include_linear_rate = FALSE,
-  input_Age_type = "CE"
+  input_age_type = "CE"
 )
 
 testthat::test_that("Basic reslr_input plot for multiple sites", {
@@ -56,7 +56,7 @@ reslr_input_4 <- reslr_load(
   include_tide_gauge = TRUE,
   include_linear_rate = FALSE,
   TG_minimum_dist_proxy = TRUE,
-  input_Age_type = "CE"
+  input_age_type = "CE"
 )
 
 testthat::test_that("Basic reslr_input plot for multiple sites and tide gauges", {

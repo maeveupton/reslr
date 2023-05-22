@@ -146,7 +146,7 @@ head(output_dataframes)
 ```
 
 ## Using a different input Age unit
-The default input Age for the reslr package is in units of years in the Common Era. The user can select to input the Age value in Before Present by updating the `input_Age_type = "BP"`. This will alter the output plots as the axis will be reversed. Here is an example of how this is done using the same example site as the previous case but using a Noisy Input spline in time instead.
+The default input Age for the reslr package is in units of years in the Common Era. The user can select to input the Age value in Before Present by updating the `input_age_type = "BP"`. This will alter the output plots as the axis will be reversed. Here is an example of how this is done using the same example site as the previous case but using a Noisy Input spline in time instead.
 
 As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledataset ,eval = TRUE}
@@ -156,7 +156,7 @@ CedarIslandNC <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 
 **Step 1:** Load in the data using the `reslr_load` function: 
 ```{r, load ,eval = TRUE}
-CedarIslandNC_input_Age_BP <- reslr_load(
+CedarIslandNC_input_age_BP <- reslr_load(
   data = CedarIslandNC,
   include_tide_gauge = FALSE,
   include_linear_rate = FALSE,
@@ -165,30 +165,30 @@ CedarIslandNC_input_Age_BP <- reslr_load(
   all_TG_1deg = FALSE,
   prediction_grid_res = 50,
   sediment_average_TG = 10,
-  input_Age_type = "BP"
+  input_age_type = "BP"
 )
 ```
-For this case, we update the setting `input_Age_type = "TRUE"BP`. 
+For this case, we update the setting `input_age_type = "TRUE"BP`. 
 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
 - The `data` dataframe is the inputted data with additional columns for the data_type_id which will contain "ProxyRecord". It can be accessed by:
 ```{r,data_new,eval=TRUE}
-data <- CedarIslandNC_input_Age_BP$data
+data <- CedarIslandNC_input_age_BP$data
 ```
 - The `data_grid` is a dataframe that is evenly spaced in time based on the `prediction_grid_res` value chosen by the user and is used to create the plots and is accessed by
 ```{r,datagrid_new, eval = TRUE}
-data_grid <- CedarIslandNC_input_Age_BP$data_grid
+data_grid <- CedarIslandNC_input_age_BP$data_grid
 ```
 
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
 ```{r,print, eval=TRUE}
-print(CedarIslandNC_input_Age_BP)
+print(CedarIslandNC_input_age_BP)
 ```
 
 **Step 2:** Plotting the data the raw data with:
 ```{r, plotdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
-  x = CedarIslandNC_input_Age_BP,
+  x = CedarIslandNC_input_age_BP,
   title = "Plot of the raw data with input Age in Before Present",
   plot_proxy_records = TRUE,
   plot_tide_gauges = FALSE
@@ -199,7 +199,7 @@ This will produce a plot of Age on the x-axis and Sea Level on the y-axis in met
 **Step 3:** To run the ni_sp_t model the following function should be used:
 ```{r,runsp, eval = TRUE}
 res_ni_sp_t_age_BP <- reslr_mcmc(
-  input_data = CedarIslandNC_input_Age_BP,
+  input_data = CedarIslandNC_input_age_BP,
   model_type = "ni_sp_t",
   CI = 0.95
 )
