@@ -26,6 +26,8 @@ then,
 library(reslr)
 ```
 
+Note: The JAGS software is a requirement for this instruction sheet and refer back to main vignettes for more information.
+
 ## Step 2: load in the data
 
 Some proxy record data is included with this package. Find where it is with:
@@ -56,8 +58,9 @@ plot(
 )
 ```
 
-## Step 5: Select your modelling technique from the modelling options available.
+## Step 5:  Run your statistical model and check convergence
 
+Select your modelling technique from the modelling options available:
 
 | Statistical Model | Model Information | `model_type` code | Use |
 | ---- | ------- | -- |
@@ -71,8 +74,7 @@ plot(
 
 For this example, it is a single site and we are interested in how it varies over time select the Noisy Input spline in time. If it was multiple sites, we recommend using a spatial temporal model, i.e. Noisy Input spline in space and time, or for decomposing the signal, i.e. Noisy Input Generalised Additive model. 
 
-
-## Step 6: Run your model and check convergence
+Once the model is chosen use the `reslr_mcmc` function to run it:
 
 ```{r, runslr,eval = TRUE,message=FALSE, results='hide'}
 res_one_site_example <- reslr_mcmc(
@@ -87,7 +89,7 @@ The convergence of the algorithm is examined and he parameter estimates from the
 summary(res_one_site_example)
 ```
 
-## Step 7: Plot the results
+## Step 6: Plot the results
 The model fit results can be visualised using the following function:
 ```{r, plotres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(res_one_site_example,

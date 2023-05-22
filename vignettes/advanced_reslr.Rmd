@@ -145,8 +145,8 @@ output_dataframes <- res_eiv_igp_t_detrend$output_dataframes
 head(output_dataframes)
 ```
 
-## Using a different input Age unit
-The default input Age for the reslr package is in units of years in the Common Era. The user can select to input the Age value in Before Present by updating the `input_age_type = "BP"`. This will alter the output plots as the axis will be reversed. Here is an example of how this is done using the same example site as the previous case but using a Noisy Input spline in time instead.
+## Using a different input age unit
+The default input age for the reslr package is in units of years in the Common Era. The user can select to input the Age value in Before Present by updating the `input_age_type = "BP"`. This will alter the output plots as the axis will be reversed. Here is an example of how this is done using the same example site as the previous case but using a Noisy Input spline in time instead.
 
 As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledataset ,eval = TRUE}
@@ -168,7 +168,7 @@ CedarIslandNC_input_age_BP <- reslr_load(
   input_age_type = "BP"
 )
 ```
-For this case, we update the setting `input_age_type = "TRUE"BP`. 
+For this case, we update the setting `input_age_type = "BP"`. 
 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
 - The `data` dataframe is the inputted data with additional columns for the data_type_id which will contain "ProxyRecord". It can be accessed by:

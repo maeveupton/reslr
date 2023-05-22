@@ -1147,8 +1147,7 @@ plot.reslr_output <- function(x,
             "CI" = ggplot2::alpha("#ad4c14", 0.2)
           ),
           labels = c(
-            CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-            expression(paste("1-sigma Error"))
+            CI = paste0(unique(output_dataframes$CI), " Credible Interval")
           )
         ) +
         ggplot2::scale_colour_manual("",

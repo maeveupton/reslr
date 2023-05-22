@@ -7,7 +7,6 @@ model {
 
           # Mean structure
           mu_y[i] <- r[i]
-          #r[i] <- inprod(B_t[i,], b_t)
 
           # Pulling out residuals of model
           residuals[i] <- y[i] - mu_y[i]
@@ -22,10 +21,8 @@ model {
 
       # Spline in time penalised 1st order
       r <- B_t %*% b_t
-      #b_t[1] ~ dnorm(0,0.01)
       b_t[1] ~ dnorm(0,1)
       for (j in 2:n_knots_t) {
-        #b_t[j] ~ dnorm(b_t[j-1], tau_t)
         b_t[j] ~ dnorm(b_t[j-1], sigma_beta^-2)
       }
 
@@ -41,13 +38,7 @@ model {
 
 
       # Priors
-      #tau_t ~ dgamma(1,1)
-      #delta ~ dgamma(0.0001,0.0001)
-      #tau_t ~ dgamma(0.5*nu,0.5*delta*nu)
-      #delta ~ dgamma(1,0.0001)
-
-      #sigma_t <- tau_t^-0.5
       sigma_beta~ dt(0, 1^-2, 1)T(0,)
-      sigma_y ~ dt(0, 1^-2, 1)T(0,) #1
+      sigma_y ~ dt(0, 1^-2, 1)T(0,)
 
       }

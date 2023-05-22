@@ -15,15 +15,6 @@ model {
           b_st[j] ~ dnorm(0, sigma_beta^-2)
        }
 
-      # Non-linear local component
-      #l <- B_st %*% b_st
-      #b_st[1] ~ dnorm(0,0.1)
-      #b_st[1] ~ dnorm(0,1)
-      #for (j in 2:n_knots_st) {
-       # b_st[j] ~ dnorm(b_st[j-1], sigma_st^-2)
-      #  b_st[j] ~ dnorm(b_st[j-1], tau_st)
-      #}
-
       # Predictions
       l_pred <- B_st_pred %*% b_st
       for (i in 1:n_pred){
@@ -42,10 +33,6 @@ model {
       }
 
       # Priors
-        #tau_st ~ dgamma(1,1)#10^-5)# Lang paper:precision too low
-        #tau_st ~ dgamma(0.5*nu,0.5*delta*nu)
-        #delta ~ dgamma(0.0001,0.0001)
-        #sigma_st <- tau_st^-0.5
         sigma_beta ~ dt(0, 1^-2, 1)T(0,)
         sigma_y ~ dt(0, 1^-2, 1)T(0,)
     }

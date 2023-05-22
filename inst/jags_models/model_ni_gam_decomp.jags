@@ -51,17 +51,13 @@ model {
 
     # Priors
     sigma_beta_r~ dt(0, 1^-2, 1)T(0,)
-    #tau_t ~ dgamma(0.5*nu,0.5*delta*nu)
-    #delta ~ dgamma(0.0001,0.0001)
-    #sigma_t <- tau_t^-0.5
+    sigma_y ~ dt(0, 1^-2, 1)T(0,)
 
-    #sigma_beta_h ~ dt(2.5, 2^-2, 1)T(0,)# old one
     sigma_beta_h ~ dt(2.5, 2^-2, 1)T(0,)# old one
-   # sigma_beta_h ~ dt(2.5, 1^-2, 1)T(0,)# wider variance
+    #sigma_beta_h ~ dt(2.5, 1^-2, 1)T(0,)# wider variance
     #sigma_beta_h ~ dt(0, 0.1^-2, 1)T(0,)# Not tuned at all
-
     #sigma_h ~ dt(0, 0.001^-2, 1)T(0,)
     #sigma_h ~ dt(0, 1^-2, 1)T(0,)
-    sigma_y ~ dt(0, 1^-2, 1)T(0,)
+
 
   }

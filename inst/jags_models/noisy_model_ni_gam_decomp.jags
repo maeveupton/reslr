@@ -99,9 +99,6 @@ model {
     }
 
     # Priors
-    #tau_st ~ dgamma(0.5*nu,0.5*delta*nu)
-    #delta ~ dgamma(0.0001,0.0001)
-    #sigma_st <- tau_st^-0.5
     sigma_beta_l ~ dt(0, 1^-2, 1)T(0,)
     sigma_y ~ dt(0, 1^-2, 1)T(0,)
     sigma_beta_r <- b_t_sd_value

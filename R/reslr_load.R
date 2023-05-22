@@ -50,25 +50,22 @@ reslr_load <- function(data,
     data <- data %>%
       dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
   } else {
-    cat("Error: User must provide a column with site names and a column with region name. \n")
+    cat("Error: User must provide a column with site name(s) and a column with region name(s). \n")
     stop()
   }
   if (input_age_type == "BP") {
-    #cat("The inputed age value will be converted to units of Common Era. \n")
     data <- data %>%
       dplyr::group_by(SiteName) %>%
       dplyr::mutate(Age = 1950/1000 - Age,
        # If the Age type is BP the scales on the plots need to be reversed
                     Age_type = "BP")
   } else {
-    #cat("The inputed age value is units of Common Era. \n")
     data <- data
   }
+
   # Including no TG or no linear rates
   if (include_tide_gauge == FALSE & include_linear_rate == FALSE) {
     data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
-    #cat("No decadally averaged Tide gauge data or linear_rate included.\n")
-    #cat("Note: Both are required for the ni_gam_decomp model \n")
   }
 
   # Including TG & no linear rates but forget to include TG method
@@ -82,7 +79,8 @@ reslr_load <- function(data,
     #   data <- data
     # }
     #else{
-    message("Error: No tide gauge selection method chosen, please provide criteria for choosing preferred tide gauge. \n")
+    cat("Error: No tide gauge selection method chosen, please provide criteria for choosing preferred tide gauge. \n")
+    stop()
     }
 
 
@@ -101,9 +99,6 @@ reslr_load <- function(data,
       all_TG_1deg = all_TG_1deg,
       sediment_average_TG = sediment_average_TG
     )
-    #cat("Note: No linear rate included. It is required for the ni_gam_decomp model \n")
-    ##cat("Decadally averaged tide gauge data included by the package. \n")
-    #}
   }
 
 
@@ -116,12 +111,10 @@ reslr_load <- function(data,
       data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
       cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
       data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
-      cat("Note: No Tide gauge data included. It is required for the ni_gam_decomp model \n")
     } else {
       data <- data
       cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
       data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
-     # cat("Note: No Tide gauge data included. It is required for the ni_gam_decomp model\n")
     }
   }
 
@@ -131,7 +124,6 @@ reslr_load <- function(data,
     is.null(list_preferred_TGs) == TRUE &
     TG_minimum_dist_proxy == FALSE &
     all_TG_1deg == FALSE) {
-    # message("Warning: No tide gauge selection method chosen. Select criteria to chose your prefered tide gauge")
     stop("Error: No tide gauge selection method chosen. Select criteria to chose your prefered tide gauge")
   }
 
@@ -147,7 +139,6 @@ reslr_load <- function(data,
       data <- data
       cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
     }
-    # cat("Warning: provide a method of selecting tide gauge data \n")
     data <- clean_tidal_gauge_data(
       data = data,
       list_preferred_TGs = list_preferred_TGs,
@@ -155,7 +146,6 @@ reslr_load <- function(data,
       all_TG_1deg = all_TG_1deg,
       sediment_average_TG = sediment_average_TG
     )
-    #cat("Decadally averaged tide gauge data included by the package. \n")
     #---Adding linear rates from ICE5G for TG-----
     data <- add_linear_rate(data = data)
     data <- data %>%
@@ -163,7 +153,6 @@ reslr_load <- function(data,
         linear_rate = ifelse(data_type_id == "TideGaugeData", ICE5_GIA_slope, linear_rate),
         linear_rate_err = ifelse(data_type_id == "TideGaugeData", 0.3, linear_rate_err)
       )
-    #cat("Tide Gauge data & linear_rate included \n")
   }
 
   # Detrending the data using GIA rates which is known as linear rate in my input dataframe
