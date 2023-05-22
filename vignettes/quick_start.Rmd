@@ -62,7 +62,7 @@ plot(
 
 Select your modelling technique from the modelling options available:
 
-| Statistical Model | Model Information | `model_type` code | Use |
+| Statistical Model | Model Information | `model_type` code | 
 | ---- | ------- | -- |
 | Errors in variables simple linear regression | A straight line of best fit taking account of any age and measurement errors in the RSL values using the method of Cahill et al (2015). Use for single proxy site. | **"eiv_slr_t"** |
 | Errors in variables change point model | An extension of the linear regression modelling process. It uses piece-wise linear sections and estimates where/when trend changes occur in the data (Cahill et al. 2015). | **"eiv_cp_t"** |

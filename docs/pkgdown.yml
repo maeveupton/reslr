@@ -2,7 +2,8 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  advanced_reslr: advanced_reslr.html
   quick_start: quick_start.html
   reslr: reslr.html
-last_built: 2023-05-16T16:01Z
+last_built: 2023-05-22T17:06Z
 

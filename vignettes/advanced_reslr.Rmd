@@ -146,7 +146,7 @@ head(output_dataframes)
 ```
 
 ## Using a different input age unit
-The default input age for the reslr package is in units of years in the Common Era. The user can select to input the Age value in Before Present by updating the `input_age_type = "BP"`. This will alter the output plots as the axis will be reversed. Here is an example of how this is done using the same example site as the previous case but using a Noisy Input spline in time instead.
+The default input age for the reslr package is in units of years in the Common Era. The user can select to input the age value in Before Present by updating the `input_age_type = "BP"`. This will alter the output plots as the axis will be reversed. Here is an example of how this is done using the same example site as the previous case but using a Noisy Input spline in time instead.
 
 As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledataset ,eval = TRUE}
