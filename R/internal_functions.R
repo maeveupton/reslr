@@ -729,6 +729,7 @@ linear_reg_rates <- function(data) {
     dplyr::mutate(
       #linear_rate = round(stats::lm(RSL ~ Age)$coefficients[[2]], 2),
       linear_rate =stats::lm(RSL ~ Age)$coefficients[[2]],
+      #linear_rate =lm(RSL ~ Age)$coefficients[[2]],
       linear_rate_err = base::summary(stats::lm(RSL ~ Age))$coefficients[2, 2]
     )
 
@@ -1924,7 +1925,7 @@ bs_bbase_t <- function(x,
     spline_nseg_t <- round(deg / (1 + deg / length(data$Age)))
   }
   cat("Number nseg for t")
-  print(spline_nseg_st)
+  print(spline_nseg_t)
   # Compute the length of the partitions
   dx <- (xr - xl) / spline_nseg_t
   # Create equally spaced knots
