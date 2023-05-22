@@ -1962,8 +1962,8 @@ bs_bbase_t <- function(x,
 #' @noRd
 # Basis function approach
 bs_bbase_st <- function(x,
-                        xl = min(x), # xl
-                        xr = max(x), # xr
+                        xl = min(x),
+                        xr = max(x),
                         deg = 3,
                         spline_nseg_st = NULL,
                         data = data) {
