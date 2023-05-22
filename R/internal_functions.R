@@ -1997,7 +1997,7 @@ bs_bbase_st <- function(x,
   return(bs_matrix)
 }
 
-# Think about using this one?
+# Think about using this one
 # These functions create the B-spline basis functions
 # They are taken from the Eilers and Marx 'Craft of smoothing' course
 # http://statweb.lsu.edu/faculty/marx/
