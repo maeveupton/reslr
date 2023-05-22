@@ -11,7 +11,7 @@ co <- function(expr) capture.output(expr, file = "NUL")
 #                               list_preferred_TGs = NULL,
 #                               TG_minimum_dist_proxy = FALSE,
 #                               all_TG_1deg = FALSE,
-#                               input_Age_type = "CE")
+#                               input_age_type = "CE")
 #   jags_output_slr <- reslr_mcmc(
 #     input_data = reslr_input_slr,
 #     model_type = "eiv_slr_t",
@@ -36,7 +36,7 @@ co <- function(expr) capture.output(expr, file = "NUL")
 #                               list_preferred_TGs = NULL,
 #                               TG_minimum_dist_proxy = FALSE,
 #                               all_TG_1deg = FALSE,
-#                               input_Age_type = "CE")
+#                               input_age_type = "CE")
 #   jags_output_cp1 <- reslr_mcmc(
 #     input_data = reslr_input_cp1,
 #     model_type = "eiv_cp_t",
@@ -62,7 +62,7 @@ co <- function(expr) capture.output(expr, file = "NUL")
 #                               list_preferred_TGs = NULL,
 #                               TG_minimum_dist_proxy = FALSE,
 #                               all_TG_1deg = FALSE,
-#                               input_Age_type = "CE")
+#                               input_age_type = "CE")
 #   jags_output_1 <- reslr_mcmc(
 #     input_data = reslr_input_1,
 #     model_type = "eiv_cp_t",
@@ -88,7 +88,7 @@ co <- function(expr) capture.output(expr, file = "NUL")
 #                               list_preferred_TGs = NULL,
 #                               TG_minimum_dist_proxy = FALSE,
 #                               all_TG_1deg = FALSE,
-#                               input_Age_type = "CE")
+#                               input_age_type = "CE")
 #   jags_output_1 <- reslr_mcmc(
 #     input_data = reslr_input_1,
 #     model_type = "eiv_igp_t",
@@ -113,7 +113,7 @@ co <- function(expr) capture.output(expr, file = "NUL")
 #                               list_preferred_TGs = NULL,
 #                               TG_minimum_dist_proxy = FALSE,
 #                               all_TG_1deg = FALSE,
-#                               input_Age_type = "CE")
+#                               input_age_type = "CE")
 #   jags_output_1 <- reslr_mcmc(
 #     input_data = reslr_input_1,
 #     model_type = "ni_spline_t",
@@ -138,7 +138,7 @@ co <- function(expr) capture.output(expr, file = "NUL")
 #                               list_preferred_TGs = NULL,
 #                               TG_minimum_dist_proxy = FALSE,
 #                               all_TG_1deg = FALSE,
-#                               input_Age_type = "CE")
+#                               input_age_type = "CE")
 #   jags_output_1 <- reslr_mcmc(
 #     input_data = reslr_input_1,
 #     model_type = "ni_spline_st",
@@ -164,7 +164,7 @@ co <- function(expr) capture.output(expr, file = "NUL")
 #                                                      "MAYPORT (BAR PILOTS DOCK), FLORIDA"),
 #                               TG_minimum_dist_proxy = FALSE,
 #                               all_TG_1deg = FALSE,
-#                               input_Age_type = "CE")
+#                               input_age_type = "CE")
 #   jags_output_1 <- reslr_mcmc(
 #     input_data = reslr_input_1,
 #     model_type = "ni_gam_decomp",
@@ -187,7 +187,7 @@ reslr_input_1 <- reslr_load(
   prediction_grid_res = 100,
   include_tide_gauge = FALSE,
   TG_minimum_dist_proxy = FALSE,
-  input_Age_type = "CE"
+  input_age_type = "CE"
 )
 # Testing EIV SLR
 jags_output_slr <- reslr_mcmc(
@@ -265,7 +265,7 @@ reslr_input_3 <- reslr_load(
   prediction_grid_res = 100,
   include_tide_gauge = FALSE,
   include_linear_rate = FALSE,
-  input_Age_type = "CE"
+  input_age_type = "CE"
 )
 # Testing NI spline st
 jags_output_nisplinest <- reslr_mcmc(
@@ -291,7 +291,7 @@ reslr_input_4 <- reslr_load(
   include_tide_gauge = TRUE,
   include_linear_rate = FALSE,
   TG_minimum_dist_proxy = TRUE,
-  input_Age_type = "CE"
+  input_age_type = "CE"
 )
 # Testing NI gam
 jags_output_nisplinest <- reslr_mcmc(

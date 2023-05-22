@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{reslr_input}(
   x,
-  title = "Plot of the raw data",
+  title = "",
   xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
   plot_tide_gauges = FALSE,
@@ -18,7 +18,7 @@
 \arguments{
 \item{x}{An object created via the function \code{\link{reslr_load}}}
 
-\item{title}{Title of the Plot}
+\item{title}{Title of the plot}
 
 \item{xlab}{Labeling the x-axis}
 

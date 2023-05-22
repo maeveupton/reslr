@@ -10,7 +10,7 @@ testthat::test_that("Testing SLR", {
     list_preferred_TGs = NULL,
     TG_minimum_dist_proxy = FALSE,
     all_TG_1deg = FALSE,
-    input_Age_type = "CE"
+    input_age_type = "CE"
   )
   jags_output_1 <- reslr_mcmc(
     input_data = reslr_input_1,
@@ -39,7 +39,7 @@ testthat::test_that("Testing cp 1", {
     list_preferred_TGs = NULL,
     TG_minimum_dist_proxy = FALSE,
     all_TG_1deg = FALSE,
-    input_Age_type = "CE"
+    input_age_type = "CE"
   )
   jags_output_1 <- reslr_mcmc(
     input_data = reslr_input_1,
@@ -69,7 +69,7 @@ testthat::test_that("Testing cp 2", {
     list_preferred_TGs = NULL,
     TG_minimum_dist_proxy = FALSE,
     all_TG_1deg = FALSE,
-    input_Age_type = "CE"
+    input_age_type = "CE"
   )
   jags_output_1 <- reslr_mcmc(
     input_data = reslr_input_1,
@@ -99,7 +99,7 @@ testthat::test_that("Testing eiv igp in time", {
     list_preferred_TGs = NULL,
     TG_minimum_dist_proxy = FALSE,
     all_TG_1deg = FALSE,
-    input_Age_type = "CE"
+    input_age_type = "CE"
   )
   jags_output_1 <- reslr_mcmc(
     input_data = reslr_input_1,
@@ -128,7 +128,7 @@ testthat::test_that("Testing ni spline in time", {
     list_preferred_TGs = NULL,
     TG_minimum_dist_proxy = FALSE,
     all_TG_1deg = FALSE,
-    input_Age_type = "CE"
+    input_age_type = "CE"
   )
   jags_output_1 <- reslr_mcmc(
     input_data = reslr_input_1,
@@ -157,7 +157,7 @@ testthat::test_that("Testing ni spline in space time", {
     list_preferred_TGs = NULL,
     TG_minimum_dist_proxy = FALSE,
     all_TG_1deg = FALSE,
-    input_Age_type = "CE"
+    input_age_type = "CE"
   )
   jags_output_1 <- reslr_mcmc(
     input_data = reslr_input_1,
@@ -187,7 +187,7 @@ testthat::test_that("Testing ni GAM decomposition with closest tide gauge and li
     #                                             "MAYPORT (BAR PILOTS DOCK), FLORIDA"),
     TG_minimum_dist_proxy = TRUE,
     all_TG_1deg = FALSE,
-    input_Age_type = "CE"
+    input_age_type = "CE"
   )
   jags_output_1 <- reslr_mcmc(
     input_data = reslr_input_1,

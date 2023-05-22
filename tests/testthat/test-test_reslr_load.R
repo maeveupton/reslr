@@ -15,7 +15,7 @@ testthat::test_that("Full data set example", {
       list_preferred_TGs = NULL,
       TG_minimum_dist_proxy = FALSE,
       all_TG_1deg = FALSE,
-      input_Age_type = "CE"
+      input_age_type = "CE"
     )
   testthat::expect_s3_class(reslr_1, "reslr_input")
   testthat::expect_true(is.data.frame(reslr_1$data))
@@ -36,7 +36,7 @@ testthat::test_that("One site example", {
       list_preferred_TGs = NULL,
       TG_minimum_dist_proxy = FALSE,
       all_TG_1deg = FALSE,
-      input_Age_type = "CE"
+      input_age_type = "CE"
     )
   testthat::expect_s3_class(reslr_1, "reslr_input")
   testthat::expect_true(is.data.frame(reslr_1$data))
@@ -58,7 +58,7 @@ testthat::test_that("Simplest example with closest tide gauge", {
       list_preferred_TGs = NULL,
       TG_minimum_dist_proxy = TRUE,
       all_TG_1deg = FALSE,
-      input_Age_type = "CE"
+      input_age_type = "CE"
     )
   testthat::expect_s3_class(reslr_1, "reslr_input")
   testthat::expect_true(is.data.frame(reslr_1$data))
@@ -80,7 +80,7 @@ testthat::test_that("Simplest example with list of tide gauges", {
       list_preferred_TGs = c("ARGENTIA"),
       TG_minimum_dist_proxy = FALSE,
       all_TG_1deg = FALSE,
-      input_Age_type = "CE"
+      input_age_type = "CE"
     )
   testthat::expect_s3_class(reslr_1, "reslr_input")
   testthat::expect_true(is.data.frame(reslr_1$data))
@@ -102,7 +102,7 @@ testthat::test_that("Simplest example with all tide gauges within 1 degree", {
       list_preferred_TGs = NULL,
       TG_minimum_dist_proxy = FALSE,
       all_TG_1deg = TRUE,
-      input_Age_type = "CE"
+      input_age_type = "CE"
     )
   testthat::expect_s3_class(reslr_1, "reslr_input")
   testthat::expect_true(is.data.frame(reslr_1$data))
@@ -124,7 +124,7 @@ testthat::test_that("Simplest example with linear rate", {
       list_preferred_TGs = NULL,
       TG_minimum_dist_proxy = FALSE,
       all_TG_1deg = FALSE,
-      input_Age_type = "CE"
+      input_age_type = "CE"
     )
   testthat::expect_s3_class(reslr_1, "reslr_input")
   testthat::expect_true(is.data.frame(reslr_1$data))
@@ -146,7 +146,7 @@ testthat::test_that("Simplest example with linear rate and closes tide gauge", {
       list_preferred_TGs = NULL,
       TG_minimum_dist_proxy = TRUE,
       all_TG_1deg = FALSE,
-      input_Age_type = "CE"
+      input_age_type = "CE"
     )
   testthat::expect_s3_class(reslr_1, "reslr_input")
   testthat::expect_true(is.data.frame(reslr_1$data))

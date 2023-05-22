@@ -116,7 +116,7 @@ reslr_input_3 <- reslr_load(
   list_preferred_TGs = NULL,
   TG_minimum_dist_proxy = TRUE,
   all_TG_1deg = FALSE,
-  input_Age_type = "CE"
+  input_age_type = "CE"
 )
 # Ni spline in space time
 jags_output_6 <- reslr_mcmc(

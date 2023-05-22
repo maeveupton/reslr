@@ -12,7 +12,7 @@ reslr_load(
   list_preferred_TGs = NULL,
   TG_minimum_dist_proxy = FALSE,
   all_TG_1deg = FALSE,
-  input_Age_type = "CE",
+  input_age_type = "CE",
   sediment_average_TG = 10,
   detrend_data = FALSE,
   core_col_year = NULL
@@ -33,7 +33,7 @@ reslr_load(
 
 \item{all_TG_1deg}{The package finds all tide gauges within 1 degree of the proxy site}
 
-\item{input_Age_type}{The inputted age in years "CE" or year "BP". The default is "CE" and is the preferred structure of the package. The package has the ability to use Before Present ("BP") observations.}
+\item{input_age_type}{The inputted age in years "CE" or year "BP". The default is "CE" and is the preferred structure of the package. The package has the ability to use Before Present ("BP") observations.}
 
 \item{sediment_average_TG}{Average the tide gauge data to make it comparable to accumulation rates of proxy records. The default averaging period for tide gauges is 10 years and the user can alter this.}
 
