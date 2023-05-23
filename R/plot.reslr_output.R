@@ -131,6 +131,9 @@ plot.reslr_output <- function(x,
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::scale_x_reverse()
     }
+    else{
+      plot_result <- plot_result
+    }
 
     # Informed caption
     if (plot_caption == TRUE) {
@@ -140,6 +143,7 @@ plot.reslr_output <- function(x,
     } else {
       plot_result <- plot_result
     }
+    # Output plots
     output_plots <- list(plot_result = plot_result)
   }
 
@@ -168,42 +172,89 @@ plot.reslr_output <- function(x,
       data <- data %>%
         dplyr::filter(data_type_id == "TideGaugeData")
     }
+    # Plot result
+    plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title)
 
-    # Using caption or not
-    if (plot_caption == TRUE) {
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = paste0(
-          "Model type: Errors in Variables 1 Change Point Model \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        )
-      )
-    } else {
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = NULL
-      )
-    }
+    # Plotting tide gauge and proxy
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
     }
-    # Age type BP
+
+    # Plotting when Age type is BP
     if("Age_type" %in% colnames(data)){
-      plot_result <- plot_result +
-        ggplot2::scale_x_reverse()+
-        ggplot2::labs(xlab = "Year (BP)")
+      plot_result <- ggplot2::ggplot()+
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          fill = "Uncertainty",
+        ), alpha = 0.7) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
+        ) +
+        ggplot2::geom_line(
+          data = output_dataframes,
+          ggplot2::aes(x = Age_BP , y = pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = output_dataframes,
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP , fill = "CI"), alpha = 0.3
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                     "CI" = ggplot2::alpha("purple3", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                     Uncertainty = expression(paste("1-sigma Error"))
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c("black" = "black",
+                                                "mean" = "purple3"),
+                                     labels = c("Data", "Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.3, 0.2),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(0, 1),
+            shape = c(16, NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::labs(x = "Year (BP)", y = ylab, title = title,colour = "") +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::scale_x_reverse()
     }
     else{
       plot_result <- plot_result
     }
+
+    # Informed caption
+    if (plot_caption == TRUE) {
+      plot_result <- plot_result + ggplot2::labs(caption = paste0(
+        "Model type:  Errors in Variables 1 Change Point Model \n No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy))
+    }
+    else {
+      plot_result <- plot_result
+    }
+    # Output plots
     output_plots <- list(plot_result = plot_result)
   }
 
@@ -269,6 +320,16 @@ plot.reslr_output <- function(x,
     else{
       plot_result <- plot_result
     }
+
+    # Informed caption
+    if (plot_caption == TRUE) {
+      plot_result <- plot_result + ggplot2::labs(caption = paste0(
+        "Model type:  Errors in Variables 2 Change Point Model \n No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy))
+    } else {
+      plot_result <- plot_result
+    }
+
     output_plots <- list(plot_result = plot_result)
   }
 
