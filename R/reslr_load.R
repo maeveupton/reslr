@@ -296,6 +296,15 @@ reslr_load <- function(data,
   data_grid <- data_grid %>%
     dplyr::mutate(Age = Age*1000)
 
+  # Including Age_BP column in the data_grid dataframe:
+  if (input_age_type == "BP") {
+    data_grid <- data_grid %>%
+      dplyr::group_by(SiteName) %>%
+      dplyr::mutate(Age_BP = 1950 - Age,
+                    # If the Age type is BP the scales on the plots need to be reversed
+                    Age_type = "BP")
+  }
+
   # Class the output depending on if the data is detrended or not
   if (detrend_data == TRUE) {
     input_data <- base::list(

@@ -63,40 +63,25 @@ plot.reslr_output <- function(x,
       data <- data %>%
         dplyr::filter(data_type_id == "TideGaugeData")
     }
+    # Plot result
+    plot_result <- create_model_fit_plot(
+        output_dataframes = output_dataframes,
+        data = data,
+        xlab = xlab,
+        ylab = ylab,
+        title = title)
 
-    # Using caption or not
-    if (plot_caption == TRUE) {
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = paste0(
-          "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_tide_gauges
-        )
-      )
-    } else {
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = NULL
-      )
-    }
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
     }
-    # Age type BP
+
+    # Plotting when Age type is  BP
     if("Age_type" %in% colnames(data)){
-      p <- ggplot2::ggplot()+
+      plot_result <- ggplot2::ggplot()+
         ggplot2::geom_rect(data = data, ggplot2::aes(
           xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
           ymin = RSL - RSL_err, ymax = RSL + RSL_err,
-          fill = "gray",
+          fill = "Uncertainty",
         ), alpha = 0.7) +
         ggplot2::geom_point(
           data = data,
@@ -113,7 +98,7 @@ plot.reslr_output <- function(x,
         ggplot2::scale_fill_manual("",
                                    values = c(
                                      "Uncertainty" = ggplot2::alpha("grey", 0.3),
-                                     "CI" = ggplot2::alpha(plot_colour, 0.2)
+                                     "CI" = ggplot2::alpha("purple3", 0.2)
                                    ),
                                    labels = c(
                                      CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
@@ -137,24 +122,24 @@ plot.reslr_output <- function(x,
           ))
         ) +
         ggplot2::facet_wrap(~SiteName) +
-        ggplot2::labs(caption = model_caption)+
         ggplot2::labs(x = "Year (BP)", y = ylab, title = title,colour = "") +
         ggplot2::theme_bw() +
         ggplot2::theme(
           strip.text.x = ggplot2::element_text(size = 7),
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::scale_x_reverse()
-
-
-      # plot_result <- plot_result +
-      #   ggplot2::scale_x_reverse()+
-      #   ggplot2::labs(xlab = "Year (BP)")
     }
-    else{
+
+    # Informed caption
+    if (plot_caption == TRUE) {
+      plot_result <- plot_result + ggplot2::labs(caption = paste0(
+        "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy))
+    } else {
       plot_result <- plot_result
     }
-
     output_plots <- list(plot_result = plot_result)
   }
 

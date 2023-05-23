@@ -89,7 +89,7 @@ create_rate_of_change_plot <- function(output_dataframes,
 #' @noRd
 create_model_fit_plot <- function(output_dataframes,
                                   data,
-                                  model_caption,
+                                 # model_caption,
                                   xlab,
                                   ylab,
                                   title,
@@ -154,8 +154,8 @@ create_model_fit_plot <- function(output_dataframes,
           size = 2
         ))
       ) +
-      ggplot2::facet_wrap(~SiteName) +
-      ggplot2::labs(caption = model_caption)
+      ggplot2::facet_wrap(~SiteName)# +
+      #ggplot2::labs(caption = model_caption)
    return(plot_result)
 }
 
