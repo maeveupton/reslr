@@ -2,7 +2,6 @@
 #'
 #' @param output_dataframes These are dataframes created for plotting and are outputs from the \code{reslr_mcmc} function.
 #' @param data This is the input dataset stored in a list created in the \code{reslr_mcmc} function.
-#' @param model_caption Caption depending on the model type and number of proxy and tide gauge sites.
 #' @param xlab Labeling the x-axis.
 #' @param ylab Labeling the y-axis.
 #' @param title Plotting a title.
@@ -11,7 +10,6 @@
 #' @noRd
 create_rate_of_change_plot <- function(output_dataframes,
                                   data,
-                                  model_caption,
                                   xlab,
                                   y_rate_lab,
                                   title,
@@ -71,8 +69,7 @@ create_rate_of_change_plot <- function(output_dataframes,
     ggplot2::labs(colour = "",
                   x = xlab,
                   y = y_rate_lab,
-                  title = title,
-                  caption = model_caption)
+                  title = title)
 
   return(plot_rate)
 }
@@ -80,7 +77,6 @@ create_rate_of_change_plot <- function(output_dataframes,
 #'
 #' @param output_dataframes These are dataframes created for plotting and are outputs from the \code{reslr_mcmc} function.
 #' @param data This is the input dataset stored in a list created in the \code{reslr_mcmc} function.
-#' @param model_caption Caption depending on the model type and number of proxy and tide gauge sites.
 #' @param xlab Labeling the x-axis.
 #' @param ylab Labeling the y-axis.
 #' @param title Plotting a title.
@@ -89,7 +85,6 @@ create_rate_of_change_plot <- function(output_dataframes,
 #' @noRd
 create_model_fit_plot <- function(output_dataframes,
                                   data,
-                                 # model_caption,
                                   xlab,
                                   ylab,
                                   title,
@@ -154,8 +149,7 @@ create_model_fit_plot <- function(output_dataframes,
           size = 2
         ))
       ) +
-      ggplot2::facet_wrap(~SiteName)# +
-      #ggplot2::labs(caption = model_caption)
+      ggplot2::facet_wrap(~SiteName)
    return(plot_result)
 }
 

@@ -646,6 +646,133 @@ plot.reslr_output <- function(x,
           colour = ""
         )
 
+      # Age type BP
+      if ("Age_type" %in% colnames(data)) {
+        # Plot model fit
+        plot_result <- ggplot2::ggplot() +
+          ggplot2::geom_polygon(
+            data = detrend_data_un_box,
+            ggplot2::aes(x = Age_BP * 1000, y = SL, group = obs_index,
+                         fill = "Uncertainty"), alpha = 0.5
+          ) +
+          ggplot2::geom_point(
+            data = data,
+            ggplot2::aes(y = SL, x = Age_BP, colour = "black"), size = 0.3
+          ) +
+          ggplot2::geom_line(
+            data = output_dataframes,
+            ggplot2::aes(x = Age_BP, y = pred, colour = "mean")
+          ) +
+          ggplot2::geom_ribbon(
+            data = output_dataframes,
+            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP, fill = "CI"), alpha = 0.3
+          ) +
+          ggplot2::labs(
+            x = "Year (BP)",
+            y = "Sea Level (m)",
+            title = title, colour = ""
+          ) +
+          ggplot2::theme_bw() +
+          ggplot2::theme(
+            strip.text.x = ggplot2::element_text(size = 7),
+            strip.background = ggplot2::element_rect(fill = c("white"))
+          ) +
+          ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+          ggplot2::theme(
+            plot.title = ggplot2::element_text(size = 18, face = "bold"),
+            axis.title = ggplot2::element_text(size = 12, face = "bold"),
+            legend.text = ggplot2::element_text(size = 10)
+          ) +
+          ggplot2::scale_fill_manual("",
+                                     values = c(
+                                       "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                       "CI" = ggplot2::alpha("purple3", 0.2)
+                                     ),
+                                     labels = c(
+                                       CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                       expression(paste("1-sigma Error"))
+                                     )
+          ) +
+          ggplot2::scale_colour_manual("",
+                                       values = c(
+                                         "black" = "black",
+                                         "mean" = "purple3"
+                                       ),
+                                       labels = c("Data", "Posterior Fit")
+          ) +
+          ggplot2::guides(
+            fill = ggplot2::guide_legend(override.aes = list(
+              alpha = c(0.2, 0.4),
+              size = 1
+            )),
+            colour = ggplot2::guide_legend(override.aes = list(
+              linetype = c(0, 1),
+              shape = c(16, NA),
+              size = 2
+            ))
+          ) +
+          ggplot2::facet_wrap(~SiteName)
+
+        # Plot rate
+        plot_rate <- ggplot2::ggplot() +
+          ggplot2::geom_line(
+            data = output_dataframes,
+            ggplot2::aes(x = Age_BP, y = rate_pred, colour = "mean")
+          ) +
+          ggplot2::geom_ribbon(
+            data = output_dataframes,
+            ggplot2::aes(
+              y = rate_pred,
+              ymin = rate_lwr, ymax = rate_upr, x = Age_BP, fill = "CI"
+            ), alpha = 0.3
+          ) +
+          ggplot2::theme_bw() +
+          ggplot2::theme(
+            strip.text.x = ggplot2::element_text(size = 7),
+            strip.background = ggplot2::element_rect(fill = c("white"))
+          ) +
+          ggplot2::scale_fill_manual("",
+                                     values = c(
+                                       "CI" = ggplot2::alpha("purple3", 0.2)
+                                     ),
+                                     labels = c(
+                                       CI = paste0(unique(output_dataframes$CI), " Credible Interval")
+                                     )
+          ) +
+          ggplot2::scale_colour_manual("",
+                                       values = c(
+                                         "mean" = "purple3"
+                                       ),
+                                       labels = c("Posterior Fit")
+          ) +
+          ggplot2::guides(
+            fill = ggplot2::guide_legend(override.aes = list(
+              alpha = c(0.3), # , 0.4),
+              size = 1
+            )),
+            colour = ggplot2::guide_legend(override.aes = list(
+              linetype = c(1),
+              shape = c(NA),
+              size = 2
+            ))
+          ) +
+          ggplot2::facet_wrap(~SiteName) +
+          ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+          ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+          ggplot2::theme(
+            plot.title = ggplot2::element_text(size = 18, face = "bold"),
+            axis.title = ggplot2::element_text(size = 12, face = "bold"),
+            legend.text = ggplot2::element_text(size = 10)
+          ) +
+          ggplot2::labs(
+            x = "Year (BP)",
+            y = y_rate_lab,
+            title = title,
+            colour = ""
+          )
+
+      }
+
       # Using informed caption or not
       if (plot_caption == TRUE) {
         plot_result <- plot_result + ggplot2::labs(caption = paste0(
@@ -684,55 +811,165 @@ plot.reslr_output <- function(x,
         data <- data %>%
           dplyr::filter(data_type_id == "TideGaugeData")
       }
-
-      # Using caption or not
-      if (plot_caption == TRUE) {
         # Plot model fit
         plot_result <- create_model_fit_plot(
           output_dataframes = output_dataframes,
           data = data,
           xlab = xlab,
           ylab = ylab,
-          title = title,
-          model_caption = paste0(
-            "Model type: Errors in Variables Integrated Gaussian Process Model \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
-          )
+          title = title
         )
 
         # Plot rate
         plot_rate <- create_rate_of_change_plot(
           output_dataframes = output_dataframes,
           data = data,
-          model_caption = paste0(
+          xlab = xlab,
+          y_rate_lab = y_rate_lab,
+          title = title
+        )
+        # Age type BP
+        if ("Age_type" %in% colnames(data)) {
+          # Plot model fit
+          plot_result <- ggplot2::ggplot() +
+            ggplot2::geom_rect(data = data, ggplot2::aes(
+              xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
+              ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+              fill = "Uncertainty",
+            ), alpha = 0.7) +
+            ggplot2::geom_point(
+              data = data,
+              ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
+            ) +
+            ggplot2::geom_line(
+              data = output_dataframes,
+              ggplot2::aes(x = Age_BP, y = pred, colour = "mean")
+            ) +
+            ggplot2::geom_ribbon(
+              data = output_dataframes,
+              ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP, fill = "CI"), alpha = 0.3
+            ) +
+            ggplot2::labs(
+              x = "Year (BP)",
+              y = "Relative Sea Level (m)",
+              title = title, colour = ""
+            ) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+              strip.text.x = ggplot2::element_text(size = 7),
+              strip.background = ggplot2::element_rect(fill = c("white"))
+            ) +
+            ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+            ggplot2::theme(
+              plot.title = ggplot2::element_text(size = 18, face = "bold"),
+              axis.title = ggplot2::element_text(size = 12, face = "bold"),
+              legend.text = ggplot2::element_text(size = 10)
+            ) +
+            ggplot2::scale_fill_manual("",
+                                       values = c(
+                                         "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                         "CI" = ggplot2::alpha("purple3", 0.2)
+                                       ),
+                                       labels = c(
+                                         CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                         expression(paste("1-sigma Error"))
+                                       )
+            ) +
+            ggplot2::scale_colour_manual("",
+                                         values = c(
+                                           "black" = "black",
+                                           "mean" = "purple3"
+                                         ),
+                                         labels = c("Data", "Posterior Fit")
+            ) +
+            ggplot2::guides(
+              fill = ggplot2::guide_legend(override.aes = list(
+                alpha = c(0.2, 0.4),
+                size = 1
+              )),
+              colour = ggplot2::guide_legend(override.aes = list(
+                linetype = c(0, 1),
+                shape = c(16, NA),
+                size = 2
+              ))
+            ) +
+            ggplot2::facet_wrap(~SiteName)
+
+          # Plot rate
+          plot_rate <- ggplot2::ggplot() +
+            ggplot2::geom_line(
+              data = output_dataframes,
+              ggplot2::aes(x = Age_BP, y = rate_pred, colour = "mean")
+            ) +
+            ggplot2::geom_ribbon(
+              data = output_dataframes,
+              ggplot2::aes(
+                y = rate_pred,
+                ymin = rate_lwr, ymax = rate_upr, x = Age_BP, fill = "CI"
+              ), alpha = 0.3
+            ) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+              strip.text.x = ggplot2::element_text(size = 7),
+              strip.background = ggplot2::element_rect(fill = c("white"))
+            ) +
+            ggplot2::scale_fill_manual("",
+                                       values = c(
+                                         "CI" = ggplot2::alpha("purple3", 0.2)
+                                       ),
+                                       labels = c(
+                                         CI = paste0(unique(output_dataframes$CI), " Credible Interval")
+                                       )
+            ) +
+            ggplot2::scale_colour_manual("",
+                                         values = c(
+                                           "mean" = "purple3"
+                                         ),
+                                         labels = c("Posterior Fit")
+            ) +
+            ggplot2::guides(
+              fill = ggplot2::guide_legend(override.aes = list(
+                alpha = c(0.3), # , 0.4),
+                size = 1
+              )),
+              colour = ggplot2::guide_legend(override.aes = list(
+                linetype = c(1),
+                shape = c(NA),
+                size = 2
+              ))
+            ) +
+            ggplot2::facet_wrap(~SiteName) +
+            ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+            ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+            ggplot2::theme(
+              plot.title = ggplot2::element_text(size = 18, face = "bold"),
+              axis.title = ggplot2::element_text(size = 12, face = "bold"),
+              legend.text = ggplot2::element_text(size = 10)
+            ) +
+            ggplot2::labs(
+              x = "Year (BP)",
+              y = y_rate_lab,
+              title = title,
+              colour = ""
+            )
+
+        }
+
+        # Using informed caption or not
+        if (plot_caption == TRUE) {
+          plot_result <- plot_result + ggplot2::labs(caption = paste0(
             "Model type: Errors in Variables Integrated Gaussian Process Model \n No. proxy sites:", n_proxy,
             "\n No. tide gauge sites:", n_sites - n_proxy
-          ),
-          xlab = xlab,
-          y_rate_lab = y_rate_lab,
-          title = title
-        )
-      } else {
-        # Plot model fit
-        plot_result <- create_model_fit_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          xlab = xlab,
-          ylab = ylab,
-          title = title,
-          model_caption = NULL
-        )
+          ))
+          plot_rate <- plot_rate + ggplot2::labs(caption = paste0(
+            "Model type: Errors in Variables Integrated Gaussian Process Model \n No. proxy sites:", n_proxy,
+            "\n No. tide gauge sites:", n_sites - n_proxy
+          ))
+        } else {
+          plot_result <- plot_result
+          plot_rate <- plot_rate
+        }
 
-        # Plot rate
-        plot_rate <- create_rate_of_change_plot(
-          output_dataframes = output_dataframes,
-          data = data,
-          model_caption = NULL,
-          xlab = xlab,
-          y_rate_lab = y_rate_lab,
-          title = title
-        )
-      }
       if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
         plot_result <- plot_result +
           ggplot2::facet_wrap(~SiteName, scales = "free")
@@ -741,18 +978,6 @@ plot.reslr_output <- function(x,
       }
     }
 
-    # Age type BP
-    if ("Age_type" %in% colnames(data)) {
-      plot_result <- plot_result +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(x = "Year (BP)")
-      plot_rate <- plot_rate +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(x = "Year (BP)")
-    } else {
-      plot_result <- plot_result
-      plot_rate <- plot_rate
-    }
     output_plots <- list(plot_result = plot_result, plot_rate = plot_rate)
   }
 
@@ -782,73 +1007,174 @@ plot.reslr_output <- function(x,
         dplyr::filter(data_type_id == "TideGaugeData")
     }
 
-    # Using caption or not
-    if (plot_caption == TRUE) {
+    # Plot model fit
+    plot_result <- create_model_fit_plot(
+      output_dataframes = output_dataframes,
+      data = data,
+      xlab = xlab,
+      ylab = ylab,
+      title = title,
+      model_caption = NULL
+    )
+
+    # Plot rate
+    plot_rate <- create_rate_of_change_plot(
+      output_dataframes = output_dataframes,
+      data = data,
+      model_caption = NULL,
+      xlab = xlab,
+      y_rate_lab = y_rate_lab,
+      title = title
+    )
+
+    # Age type BP
+    if ("Age_type" %in% colnames(data)) {
       # Plot model fit
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = paste0(
-          "Model type: Noisy Input Spline in Time \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
+      plot_result <- ggplot2::ggplot() +
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          fill = "Uncertainty",
+        ), alpha = 0.7) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
+        ) +
+        ggplot2::geom_line(
+          data = output_dataframes,
+          ggplot2::aes(x = Age_BP, y = pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = output_dataframes,
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP, fill = "CI"), alpha = 0.3
+        ) +
+        ggplot2::labs(
+          x = "Year (BP)",
+          y = "Relative Sea Level (m)",
+          title = title, colour = ""
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                     "CI" = ggplot2::alpha("purple3", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                     expression(paste("1-sigma Error"))
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                       "black" = "black",
+                                       "mean" = "purple3"
+                                     ),
+                                     labels = c("Data", "Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.2, 0.4),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(0, 1),
+            shape = c(16, NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName)
+
+      # Plot rate
+      plot_rate <- ggplot2::ggplot() +
+        ggplot2::geom_line(
+          data = output_dataframes,
+          ggplot2::aes(x = Age_BP, y = rate_pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = output_dataframes,
+          ggplot2::aes(
+            y = rate_pred,
+            ymin = rate_lwr, ymax = rate_upr, x = Age_BP, fill = "CI"
+          ), alpha = 0.3
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "CI" = ggplot2::alpha("purple3", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval")
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                       "mean" = "purple3"
+                                     ),
+                                     labels = c("Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.3), # , 0.4),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(1),
+            shape = c(NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        ) +
+        ggplot2::labs(
+          x = "Year (BP)",
+          y = y_rate_lab,
+          title = title,
+          colour = ""
         )
-      )
 
-      # Plot rate
-      plot_rate <- create_rate_of_change_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        model_caption = paste0(
-          "Model type: Noisy Input Spline in Time \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ),
-        xlab = xlab,
-        y_rate_lab = y_rate_lab,
-        title = title
-      )
-    } else {
-      # Plot model fit
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = NULL
-      )
-
-      # Plot rate
-      plot_rate <- create_rate_of_change_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        model_caption = NULL,
-        xlab = xlab,
-        y_rate_lab = y_rate_lab,
-        title = title
-      )
     }
+
+
+    # Plotting both tide gauge and proxy record
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result +
         ggplot2::facet_wrap(~SiteName, scales = "free")
       plot_rate <- plot_rate +
         ggplot2::facet_wrap(~SiteName, scales = "free")
     }
-    # Age type BP
-    if ("Age_type" %in% colnames(data)) {
-      plot_result <- plot_result +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-      plot_rate <- plot_rate +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-    } else {
-      plot_result <- plot_result
-      plot_rate <- plot_rate
+    # Using caption or not
+    if (plot_caption == TRUE) {
+      plot_result <- plot_result + ggplot2::labs(caption = paste0(
+        "Model type: Noisy Input Spline in Time \n No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy
+      )
+      )
+      plot_rate <- plot_rate + ggplot2::labs(caption = paste0(
+        "Model type: Noisy Input Spline in Time \n No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy)
+      )
     }
-
+    # Output plots
     output_plots <- list(
       plot_result = plot_result,
       plot_rate = plot_rate
@@ -881,54 +1207,154 @@ plot.reslr_output <- function(x,
         dplyr::filter(data_type_id == "TideGaugeData")
     }
 
-    # Using caption or not
-    if (plot_caption == TRUE) {
+    # Plot model fit
+    plot_result <- create_model_fit_plot(
+      output_dataframes = output_dataframes,
+      data = data,
+      xlab = xlab,
+      ylab = ylab,
+      title = title,
+      model_caption = NULL
+    )
+
+    # Plot rate
+    plot_rate <- create_rate_of_change_plot(
+      output_dataframes = output_dataframes,
+      data = data,
+      model_caption = NULL,
+      xlab = xlab,
+      y_rate_lab = y_rate_lab,
+      title = title
+    )
+
+    # Age type BP
+    if ("Age_type" %in% colnames(data)) {
       # Plot model fit
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = paste0(
-          "Model type: Noisy Input Spline in Space Time \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
+      plot_result <- ggplot2::ggplot() +
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          fill = "Uncertainty",
+        ), alpha = 0.7) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
+        ) +
+        ggplot2::geom_line(
+          data = output_dataframes,
+          ggplot2::aes(x = Age_BP, y = pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = output_dataframes,
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP, fill = "CI"), alpha = 0.3
+        ) +
+        ggplot2::labs(
+          x = "Year (BP)",
+          y = "Relative Sea Level (m)",
+          title = title, colour = ""
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                     "CI" = ggplot2::alpha("purple3", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                     expression(paste("1-sigma Error"))
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                       "black" = "black",
+                                       "mean" = "purple3"
+                                     ),
+                                     labels = c("Data", "Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.2, 0.4),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(0, 1),
+            shape = c(16, NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName)
+
+      # Plot rate
+      plot_rate <- ggplot2::ggplot() +
+        ggplot2::geom_line(
+          data = output_dataframes,
+          ggplot2::aes(x = Age_BP, y = rate_pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = output_dataframes,
+          ggplot2::aes(
+            y = rate_pred,
+            ymin = rate_lwr, ymax = rate_upr, x = Age_BP, fill = "CI"
+          ), alpha = 0.3
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "CI" = ggplot2::alpha("purple3", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval")
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                       "mean" = "purple3"
+                                     ),
+                                     labels = c("Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.3), # , 0.4),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(1),
+            shape = c(NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        ) +
+        ggplot2::labs(
+          x = "Year (BP)",
+          y = y_rate_lab,
+          title = title,
+          colour = ""
         )
-      )
 
-      # Plot rate
-      plot_rate <- create_rate_of_change_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        model_caption = paste0(
-          "Model type: Noisy Input Spline in Space Time \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ),
-        xlab = xlab,
-        y_rate_lab = y_rate_lab,
-        title = title
-      )
-    } else {
-      # Plot model fit
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = NULL
-      )
-
-      # Plot rate
-      plot_rate <- create_rate_of_change_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        model_caption = NULL,
-        xlab = xlab,
-        y_rate_lab = y_rate_lab,
-        title = title
-      )
     }
+
+
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result +
         ggplot2::facet_wrap(~SiteName, scales = "free")
@@ -936,20 +1362,21 @@ plot.reslr_output <- function(x,
         ggplot2::facet_wrap(~SiteName, scales = "free")
     }
 
-    # Age type BP
-    if ("Age_type" %in% colnames(data)) {
-      plot_result <- plot_result +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-      plot_rate <- plot_rate +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-    } else {
-      plot_result <- plot_result
-      plot_rate <- plot_rate
+    # Using caption or not
+    if (plot_caption == TRUE) {
+      # Plot model fit
+      plot_result <- plot_result + ggplot2::labs(caption  = paste0(
+        "Model type: Noisy Input Spline in Space Time \n No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy)
+      )
+      # Plot rate
+      plot_rate <- plot_rate + ggplot2::labs(caption  = paste0(
+        "Model type: Noisy Input Spline in Space Time \n No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy)
+      )
     }
 
-    # cat("NI spline in space time plotted and rate of change. \n")
+    # Output plots
     output_plots <- list(
       plot_result = plot_result,
       plot_rate = plot_rate
@@ -1026,334 +1453,19 @@ plot.reslr_output <- function(x,
       non_lin_loc_rate_component_df <- non_lin_loc_rate_component_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")
     }
-
-
-    # Using caption or not
-    if (plot_caption == TRUE) {
-      # Plot total model fit
-      plot_result <- create_model_fit_plot(
-        output_dataframes = total_model_fit_df,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = paste0(
-          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        )
-      )
-
-      # Plot total model rate of change plot
-      plot_rate <- create_rate_of_change_plot(
-        output_dataframes = total_model_rate_df,
-        data = data,
-        model_caption = paste0(
-          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ),
-        xlab = xlab,
-        y_rate_lab = y_rate_lab,
-        title = title
-      )
-      # Regional Component Plot---------------------------
-      regional_plot <-
-        ggplot2::ggplot() +
-        ggplot2::geom_line(
-          data = regional_component_df,
-          ggplot2::aes(x = Age, y = pred, colour = "mean")
-        ) +
-        ggplot2::geom_ribbon(
-          data = regional_component_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.2
-        ) +
-        ggplot2::theme_bw() +
-        ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 15),
-          axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          axis.text = ggplot2::element_text(size = 12),
-          legend.text = ggplot2::element_text(size = 12)
-        ) +
-        ggplot2::scale_fill_manual("",
-          values = c(
-            "CI" = ggplot2::alpha("#3b47ad", 0.2)
-          ),
-          labels = c(
-            CI = paste0(unique(regional_component_df$CI), " Credible Interval")
-          )
-        ) +
-        ggplot2::scale_colour_manual("",
-          values = c(
-            "mean" = "#3b47ad"
-          ),
-          labels = c("Posterior Fit")
-        ) +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::ylab("Sea Level (m)") +
-        ggplot2::xlab("Year (CE)") +
-        ggplot2::labs(caption = paste0(
-          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ))
-
-      # Derivative of Predicted Regional Component Plot---------------------------
-      regional_rate_plot <-
-        ggplot2::ggplot() +
-        ggplot2::geom_line(
-          data = regional_rate_component_df,
-          ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
-        ) +
-        ggplot2::geom_ribbon(
-          data = regional_rate_component_df,
-          ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
-        ) +
-        ggplot2::theme_bw() +
-        ggplot2::geom_hline(yintercept = 0) +
-        ggplot2::scale_fill_manual("",
-          values = c(
-            "CI" = ggplot2::alpha("#3b47ad", 0.2)
-          ),
-          labels = c(
-            CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
-          )
-        ) +
-        ggplot2::scale_colour_manual("",
-          values = c(
-            "mean" = "#3b47ad"
-          ),
-          labels = c("Posterior Fit")
-        ) +
-        ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 15),
-          axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          axis.text = ggplot2::element_text(size = 12),
-          legend.text = ggplot2::element_text(size = 12),
-          strip.text.x = ggplot2::element_text(size = 10),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::ylab("Rate of Change (mm/yr)") +
-        ggplot2::xlab("Year (CE)") +
-        ggplot2::labs(caption = paste0(
-          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        )) +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::labs(colour = "")
-
-      # Linear Local + Site specific vertical offset ---------------------
-      lin_loc_plot <-
-        ggplot2::ggplot() +
-        ggplot2::geom_line(
-          data = lin_loc_component_df,
-          ggplot2::aes(x = Age, y = pred, colour = "mean")
-        ) +
-        ggplot2::geom_ribbon(
-          data = lin_loc_component_df,
-          ggplot2::aes(
-            ymin = lwr, ymax = upr, x = Age,
-            fill = "CI"
-          ), alpha = 0.3
-        ) +
-        ggplot2::theme_bw() +
-        ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 22),
-          axis.title = ggplot2::element_text(size = 14, face = "bold"),
-          axis.text = ggplot2::element_text(size = 12),
-          legend.text = ggplot2::element_text(size = 12)
-        ) +
-        ggplot2::theme(
-          strip.text.x = ggplot2::element_text(size = 12),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::scale_colour_manual("",
-          values = c(
-            "mean" = "#5bac06"
-          ),
-          labels = c("Posterior Fit")
-        ) +
-        ggplot2::scale_fill_manual("",
-          values = c(
-            "CI" = ggplot2::alpha("#5bac06", 0.2)
-          ),
-          labels = c(
-            CI = paste0(unique(lin_loc_component_df$CI), " Credible Interval")
-          )
-        ) +
-        ggplot2::ylab("Sea Level (m)") +
-        ggplot2::facet_wrap(~SiteName) +
-        ggplot2::xlab("Year (CE)") +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::labs(colour = "") +
-        ggplot2::labs(caption = paste0(
-          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ))
-
-      # Plot Non linear local plot
-      non_lin_loc_plot <-
-        ggplot2::ggplot() +
-        ggplot2::geom_line(
-          data = non_lin_loc_component_df,
-          ggplot2::aes(x = Age, y = pred, colour = "mean")
-        ) +
-        ggplot2::geom_ribbon(
-          data = non_lin_loc_component_df,
-          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.3
-        ) +
-        ggplot2::labs(
-          x = xlab,
-          y = "Sea Level (m)",
-          title = title,
-          colour = ""
-        ) +
-        ggplot2::theme_bw() +
-        ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 15),
-          axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          axis.text = ggplot2::element_text(size = 12),
-          legend.text = ggplot2::element_text(size = 10)
-        ) +
-        ggplot2::theme(
-          strip.text.x = ggplot2::element_text(size = 10),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::scale_fill_manual("",
-          values = c(
-            "CI" = ggplot2::alpha("#ad4c14", 0.2)
-          ),
-          labels = c(
-            CI = paste0(unique(output_dataframes$CI), " Credible Interval")
-          )
-        ) +
-        ggplot2::scale_colour_manual("",
-          values = c(
-            "mean" = "#ad4c14"
-          ),
-          labels = c("Posterior Fit")
-        ) +
-        ggplot2::guides(
-          fill = ggplot2::guide_legend(override.aes = list(
-            alpha = c(0.2),
-            size = 1
-          )),
-          colour = ggplot2::guide_legend(override.aes = list(
-            linetype = c(1),
-            # shape = c(16, NA),
-            size = 2
-          ))
-        ) +
-        ggplot2::facet_wrap(~SiteName) +
-        ggplot2::labs(caption = paste0(
-          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ))
-
-
-      # Plot rate for non linear local
-      non_lin_loc_rate_plot <- create_rate_of_change_plot(
-        output_dataframes = non_lin_loc_rate_component_df,
-        data = data,
-        model_caption = paste0(
-          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ),
-        xlab = xlab,
-        y_rate_lab = y_rate_lab,
-        title = title,
-        plot_colour = "#ad4c14"
-      )
-
-      # Separate Components on one plot with CI --------
-      all_components_CI_plot <- ggplot2::ggplot() +
-        # Linear Local Component + site specific vertical offset
-        ggplot2::geom_line(
-          data = lin_loc_component_df,
-          ggplot2::aes(x = Age, y = pred, colour = "Site Specific vertical offset + \n Linear Local Component") # ID)
-        ) +
-        ggplot2::geom_ribbon(
-          data = lin_loc_component_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Site Specific vertical offset + \n Linear Local Component"), # ID),
-          alpha = 0.3
-        ) +
-
-        # Non linear Local
-        ggplot2::geom_line(
-          data = non_lin_loc_component_df,
-          ggplot2::aes(x = Age, y = pred, colour = "Non Linear Local Component") # ID)
-        ) +
-        ggplot2::geom_ribbon(
-          data = non_lin_loc_component_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Non Linear Local Component"), # ID),
-          alpha = 0.3
-        ) +
-        # Regional Component
-        ggplot2::geom_line(
-          data = regional_component_df,
-          ggplot2::aes(x = Age, y = pred, colour = "Regional Component") # ID)
-        ) +
-        ggplot2::geom_ribbon(
-          data = regional_component_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Regional Component"), # ID),
-          alpha = 0.3
-        ) +
-        # Total Model
-        ggplot2::geom_line(
-          data = total_model_fit_df,
-          ggplot2::aes(x = Age, y = pred, colour = "Total Posterior Model") # ID)
-        ) +
-        ggplot2::geom_ribbon(
-          data = total_model_fit_df,
-          ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Total Posterior Model"), # ID),
-          alpha = 0.3
-        ) +
-        ggplot2::theme_bw() +
-        ggplot2::theme(
-          strip.text.x = ggplot2::element_text(size = 9),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::scale_fill_manual(
-          name = "",
-          values = c(
-            "Site Specific vertical offset + \n Linear Local Component" = "#5bac06",
-            "Non Linear Local Component" = "#ad4c14",
-            "Regional Component" = "#3b47ad",
-            "Total Posterior Model" = "purple3"
-          ),
-          guide = ggplot2::guide_legend(override.aes = list(alpha = 0.1))
-        ) +
-        ggplot2::scale_colour_manual(
-          name = "",
-          values = c(
-            "Site Specific vertical offset + \n Linear Local Component" = "#5bac06",
-            "Non Linear Local Component" = "#ad4c14",
-            "Regional Component" = "#3b47ad",
-            "Total Posterior Model" = "purple3"
-          ),
-        ) +
-        ggplot2::ylab("Sea Level (m)") +
-        ggplot2::facet_wrap(~SiteName) +
-        ggplot2::xlab("Year (CE)") +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::labs(caption = paste0(
-          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ))
-    } else {
       # Plot model fit
       plot_result <- create_model_fit_plot(
         output_dataframes = total_model_fit_df,
         data = data,
         xlab = xlab,
         ylab = ylab,
-        title = title,
-        model_caption = NULL
+        title = title
       )
 
       # Plot rate
       plot_rate <- create_rate_of_change_plot(
         output_dataframes = total_model_rate_df,
         data = data,
-        model_caption = NULL,
         xlab = xlab,
         y_rate_lab = y_rate_lab,
         title = title
@@ -1377,18 +1489,18 @@ plot.reslr_output <- function(x,
           legend.text = ggplot2::element_text(size = 12)
         ) +
         ggplot2::scale_fill_manual("",
-          values = c(
-            "CI" = ggplot2::alpha("#3b47ad", 0.2)
-          ),
-          labels = c(
-            CI = paste0(unique(regional_component_df$CI), " Credible Interval")
-          )
+                                   values = c(
+                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(regional_component_df$CI), " Credible Interval")
+                                   )
         ) +
         ggplot2::scale_colour_manual("",
-          values = c(
-            "mean" = "#3b47ad"
-          ),
-          labels = c("Posterior Fit")
+                                     values = c(
+                                       "mean" = "#3b47ad"
+                                     ),
+                                     labels = c("Posterior Fit")
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::ylab("Sea Level (m)") +
@@ -1409,18 +1521,18 @@ plot.reslr_output <- function(x,
         ggplot2::theme_bw() +
         ggplot2::geom_hline(yintercept = 0) +
         ggplot2::scale_fill_manual("",
-          values = c(
-            "CI" = ggplot2::alpha("#3b47ad", 0.2)
-          ),
-          labels = c(
-            CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
-          )
+                                   values = c(
+                                     "CI" = ggplot2::alpha("#3b47ad", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
+                                   )
         ) +
         ggplot2::scale_colour_manual("",
-          values = c(
-            "mean" = "#3b47ad"
-          ),
-          labels = c("Posterior Fit")
+                                     values = c(
+                                       "mean" = "#3b47ad"
+                                     ),
+                                     labels = c("Posterior Fit")
         ) +
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 15),
@@ -1462,25 +1574,24 @@ plot.reslr_output <- function(x,
           strip.background = ggplot2::element_rect(fill = c("white"))
         ) +
         ggplot2::scale_colour_manual("",
-          values = c(
-            "mean" = "#5bac06"
-          ),
-          labels = c("Posterior Fit")
+                                     values = c(
+                                       "mean" = "#5bac06"
+                                     ),
+                                     labels = c("Posterior Fit")
         ) +
         ggplot2::scale_fill_manual("",
-          values = c(
-            "CI" = ggplot2::alpha("#5bac06", 0.2)
-          ),
-          labels = c(
-            CI = paste0(unique(lin_loc_component_df$CI), " Credible Interval")
-          )
+                                   values = c(
+                                     "CI" = ggplot2::alpha("#5bac06", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(lin_loc_component_df$CI), " Credible Interval")
+                                   )
         ) +
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
         ggplot2::xlab("Year (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::labs(colour = "") +
-        ggplot2::labs(caption = "")
+        ggplot2::labs(colour = "")
 
       # Plot Non linear local plot
       non_lin_loc_plot <-
@@ -1512,19 +1623,19 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::scale_fill_manual("",
-          values = c(
-            "CI" = ggplot2::alpha("#ad4c14", 0.2)
-          ),
-          labels = c(
-            CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-            expression(paste("1-sigma Error"))
-          )
+                                   values = c(
+                                     "CI" = ggplot2::alpha("#ad4c14", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                     expression(paste("1-sigma Error"))
+                                   )
         ) +
         ggplot2::scale_colour_manual("",
-          values = c(
-            "mean" = "#ad4c14"
-          ),
-          labels = c("Posterior Fit")
+                                     values = c(
+                                       "mean" = "#ad4c14"
+                                     ),
+                                     labels = c("Posterior Fit")
         ) +
         ggplot2::guides(
           fill = ggplot2::guide_legend(override.aes = list(
@@ -1537,14 +1648,12 @@ plot.reslr_output <- function(x,
             size = 2
           ))
         ) +
-        ggplot2::facet_wrap(~SiteName) +
-        ggplot2::labs(caption = "")
+        ggplot2::facet_wrap(~SiteName)
 
       # Plotting rate of non linear component
       non_lin_loc_rate_plot <- create_rate_of_change_plot(
         output_dataframes = non_lin_loc_rate_component_df,
         data = data,
-        model_caption = NULL,
         xlab = xlab,
         y_rate_lab = y_rate_lab,
         title = title,
@@ -1621,9 +1730,94 @@ plot.reslr_output <- function(x,
         ggplot2::ylab("Sea Level (m)") +
         ggplot2::facet_wrap(~SiteName) +
         ggplot2::xlab("Year (CE)") +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::labs(caption = "")
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom")
+
+      # Age type BP
+      if ("Age_type" %in% colnames(data)) {
+        plot_result <- plot_result +
+          ggplot2::scale_x_reverse() +
+          ggplot2::labs(xlab = "Year (BP)")
+        plot_rate <- plot_rate +
+          ggplot2::scale_x_reverse() +
+          ggplot2::labs(xlab = "Year (BP)")
+        regional_plot <- regional_plot +
+          ggplot2::scale_x_reverse() +
+          ggplot2::labs(xlab = "Year (BP)")
+        regional_rate_plot <- regional_rate_plot +
+          ggplot2::scale_x_reverse() +
+          ggplot2::labs(xlab = "Year (BP)")
+        lin_loc_plot <- lin_loc_plot +
+          ggplot2::scale_x_reverse() +
+          ggplot2::labs(xlab = "Year (BP)")
+        non_lin_loc_plot <- non_lin_loc_plot +
+          ggplot2::scale_x_reverse() +
+          ggplot2::labs(xlab = "Year (BP)")
+        non_lin_loc_rate_plot <- non_lin_loc_rate_plot +
+          ggplot2::scale_x_reverse() +
+          ggplot2::labs(xlab = "Year (BP)")
+        all_components_CI_plot <- all_components_CI_plot +
+          ggplot2::scale_x_reverse() +
+          ggplot2::labs(xlab = "Year (BP)")
+      }
+    # Using caption or not
+    if (plot_caption == TRUE) {
+      # Plot total model fit
+      plot_result <- plot_result + ggplot2::labs(caption = paste0(
+          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        )
+      )
+
+      # Plot total model rate of change plot
+      plot_rate <- plot_rate + ggplot2::labs(caption = paste0(
+          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        )
+      # Regional Component Plot---------------------------
+      regional_plot <- regional_plot +
+        ggplot2::labs(caption = paste0(
+          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
+
+      # Derivative of Predicted Regional Component Plot---------------------------
+      regional_rate_plot <-
+        regional_rate_plot +
+        ggplot2::labs(caption = paste0(
+          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
+
+      # Linear Local + Site specific vertical offset ---------------------
+      lin_loc_plot <-lin_loc_plot
+        ggplot2::labs(caption = paste0(
+          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
+
+      # Plot Non linear local plot
+      non_lin_loc_plot <-non_lin_loc_plot+
+        ggplot2::labs(caption = paste0(
+          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
+
+
+      # Plot rate for non linear local
+      non_lin_loc_rate_plot <- non_lin_loc_rate_plot + ggplot2::labs(caption = paste0(
+          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
+
+
+      # Separate Components on one plot with CI --------
+      all_components_CI_plot <- all_components_CI_plot +
+        ggplot2::labs(caption = paste0(
+          "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
     }
+
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result +
         ggplot2::facet_wrap(~SiteName, scales = "free")
@@ -1641,43 +1835,7 @@ plot.reslr_output <- function(x,
         ggplot2::facet_wrap(~SiteName, scales = "free")
     }
 
-    # Age type BP
-    if ("Age_type" %in% colnames(data)) {
-      plot_result <- plot_result +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-      plot_rate <- plot_rate +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-      regional_plot <- regional_plot +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-      regional_rate_plot <- regional_rate_plot +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-      lin_loc_plot <- lin_loc_plot +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-      non_lin_loc_plot <- non_lin_loc_plot +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-      non_lin_loc_rate_plot <- non_lin_loc_rate_plot +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-      all_components_CI_plot <- all_components_CI_plot +
-        ggplot2::scale_x_reverse() +
-        ggplot2::labs(xlab = "Year (BP)")
-    } else {
-      plot_result <- plot_result
-      plot_rate <- plot_rate
-      regional_plot <- regional_plot
-      regional_rate_plot <- regional_rate_plot
-      lin_loc_plot <- lin_loc_plot
-      non_lin_loc_plot <- non_lin_loc_plot
-      non_lin_loc_rate_plot <- non_lin_loc_rate_plot
-      all_components_CI_plot <- all_components_CI_plot
-    }
-
+    # Output plots
     output_plots <- list(
       plot_result = plot_result,
       plot_rate = plot_rate,
