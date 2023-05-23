@@ -130,7 +130,6 @@ create_model_fit_plot <- function(output_dataframes,
       ggplot2::scale_fill_manual("",
         values = c(
           "Uncertainty" = ggplot2::alpha("grey", 0.3),
-          #"CI" = ggplot2::alpha("purple3", 0.2)
           "CI" = ggplot2::alpha(plot_colour, 0.2)
         ),
         labels = c(

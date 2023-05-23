@@ -57,11 +57,11 @@ reslr_load <- function(data,
   if (input_age_type == "BP") {
     data <- data %>%
       dplyr::group_by(SiteName) %>%
-      #dplyr::rename(Age_BP = Age) %>%
-      dplyr::mutate(#Age = 1950/1000 - Age_BP,
+      dplyr::rename(Age_BP = Age) %>%
+      dplyr::mutate(Age = 1950/1000 - Age_BP,
                     # If the Age type is BP the scales on the plots need to be reversed
-                    Age_type = "BP")#,
-                    #Age_BP = Age_BP*1000)
+                    Age_type = "BP",
+                    Age_BP = Age_BP*1000)
   }
 
   # Including no TG or no linear rates
@@ -205,13 +205,13 @@ reslr_load <- function(data,
     x_bounds <- get_bounds %>%
       dplyr::filter(bounds == "Age")
 
-    if("Age_type" %in% colnames(data)){
-      #Age_BP <- x_bounds$value
-      Age <-1950/1000 - x_bounds$value
-    }
-    else{
-      Age <- x_bounds$value
-    }
+    # if("Age_type" %in% colnames(data)){
+    #   #Age_BP <- x_bounds$value
+    #   Age <-1950/1000 - x_bounds$value
+    # }
+    # else{
+       Age <- x_bounds$value
+    # }
 
     y_bounds <- get_bounds %>%
       dplyr::filter(bounds == "SL")
@@ -221,6 +221,16 @@ reslr_load <- function(data,
                            SL = y_bounds$value,
                            SiteName = x_bounds$SiteName,
                            data_type_id = x_bounds$data_type_id)
+
+    # Including the BP Age for plots
+    if("Age_type" %in% colnames(data)){
+      detrend_data_un_box <- detrend_data_un_box %>%
+        dplyr::group_by(SiteName) %>%
+        dplyr::mutate(Age_BP = 1950/1000 - Age)
+    }
+    else{
+      detrend_data_un_box <- detrend_data_un_box
+     }
 
   }
 

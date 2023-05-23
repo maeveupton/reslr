@@ -28,9 +28,9 @@ library(reslr)
 
 Note: The JAGS software is a requirement for this instruction sheet and refer back to main vignettes for more information.
 
-## Step 2: load in the data
+## Step 2: load in the data into `reslr`
 
-Some proxy record data is included with this package. Find where it is with:
+There is a large example dataset included in the `reslr` package called `NAACproxydata`. In this example, we demonstrate how to include proxy record data which is stored in a csv file. This csv file of data can be found in the package and the `readr` function reads the csv file:
 
 ```{r, eval = TRUE}
 library(readr)
@@ -38,14 +38,14 @@ path_to_data <- system.file("extdata", "one_data_site_ex.csv", package = "reslr"
 example_one_datasite <- read.csv(path_to_data)
 ```
 
-
-## Step 3: load the data into `reslr`
+Using the `reslr_load` function to read in the data into the `reslr` package:
 ```{r, loadslr, eval = TRUE, message=FALSE, results='hide'}
 example_one_site_input <- reslr_load(
   data = example_one_datasite)
 ```
 
-## Step 4: plot the data
+
+## Step 3: plot the data
 
 ```{r, plotdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
@@ -58,7 +58,7 @@ plot(
 )
 ```
 
-## Step 5:  Run your statistical model and check convergence
+## Step 4:  Run your statistical model and check convergence
 
 Select your modelling technique from the modelling options available:
 
@@ -89,7 +89,7 @@ The convergence of the algorithm is examined and he parameter estimates from the
 summary(res_one_site_example)
 ```
 
-## Step 6: Plot the results
+## Step 5: Plot the results
 The model fit results can be visualised using the following function:
 ```{r, plotres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(res_one_site_example,

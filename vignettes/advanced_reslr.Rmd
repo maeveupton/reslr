@@ -24,9 +24,9 @@ In this document we present a range of advanced options that are available in th
 If you have created other examples demonstrating `reslr` capabilities yourself, please [contact me](https://github.com/maeveupton/reslr/issues) so I can include them here for other people to see.
 
 Installing `reslr` and loading it with:
-```{r, eval = TRUE}
+```{r, eval = TRUE, results= 'hide', message=FALSE}
 #install.packages("reslr")
-devtools::install_github("maeveupton/reslr")
+devtools::install_github("maeveupton/reslr",force = TRUE,INSTALL_opts = '--no-lock')
 library(reslr)
 ```
 
@@ -36,11 +36,12 @@ The EIV Integrated Gaussian Process model provides the underlying rate of the pr
 This technique focuses on 1 site and we do not recommended for multiple proxy sites together. Tide gauge data can be included, however, the user must investigate which tide gauge is suitable and the tide gauge data will use the same linear_rate as the proxy records. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledataset2 ,eval = TRUE}
 # For 1 site
-CedarIslandNC <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
+CedarIslandNC <- reslr::NAACproxydata %>% 
+  dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, loadigp ,eval = TRUE}
+```{r, loadigp ,eval = TRUE, message=FALSE,results='hide'}
 CedarIslandNC_input_detrend <- reslr_load(
   data = CedarIslandNC,
   include_tide_gauge = FALSE,
@@ -85,7 +86,7 @@ plot(
 This will produce a plot of Age on the x-axis and Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The extra arguments can be used which allows the user to updated the titles and axis labels. The caption `plot_caption`, included by default, provides the number of proxy sites and tide gauge sites that will be used in the model and can be removed if required `plot_caption = FALSE`. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE`.
 
 **Step 3:** To run the eiv_igp_t model the following function should be used:
-```{r,runigp, eval = TRUE}
+```{r,runigp, eval = TRUE, message=FALSE,results='hide'}
 res_eiv_igp_t_detrend <- reslr_mcmc(
   input_data = CedarIslandNC_input_detrend,
   model_type = "eiv_igp_t",
@@ -151,11 +152,12 @@ The default input age for the reslr package is in units of years in the Common E
 As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledataset ,eval = TRUE}
 # For 1 site
-CedarIslandNC <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
+CedarIslandNC <- reslr::NAACproxydata %>% 
+  dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, load ,eval = FALSE}
+```{r, load ,eval = FALSE, message=FALSE,results='hide'}
 CedarIslandNC_input_age_BP <- reslr_load(
   data = CedarIslandNC,
   include_tide_gauge = FALSE,
@@ -197,7 +199,7 @@ plot(
 This will produce a plot of Age on the x-axis and Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The extra arguments can be used which allows the user to updated the titles and axis labels. The caption `plot_caption`, included by default, provides the number of proxy sites and tide gauge sites that will be used in the model and can be removed if required `plot_caption = FALSE`. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE`.
 
 **Step 3:** To run the ni_sp_t model the following function should be used:
-```{r,runsp, eval = FALSE}
+```{r,runsp, eval = FALSE, message=FALSE,results='hide'}
 res_ni_sp_t_age_BP <- reslr_mcmc(
   input_data = CedarIslandNC_input_age_BP,
   model_type = "ni_sp_t",
@@ -251,7 +253,7 @@ multi_site <- reslr::NAACproxydata %>%
 ```
 
 If the user has a list of chosen tide gauges from PSMSL website, include them in a list in the `reslr_load` function as demonstrated: 
-```{r, eval = FALSE}
+```{r, eval = FALSE, message=FALSE,results='hide'}
 multi_site <- reslr_load(
   data = multi_site,
   include_tide_gauge = TRUE,
@@ -283,7 +285,7 @@ plot(
 
 If the user requires all tide gauges within 1 degree of the proxy site, which is the equivalent of 111kms, this can be done by updating `all_TG_1deg=TRUE` in the following way:
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, message=FALSE,results='hide'}
 multi_site <- reslr_load(
   data = multi_site,
   include_tide_gauge = TRUE,
@@ -319,6 +321,19 @@ final_plots$plot_result + ggplot2::xlab("New x axis label Added as Example")
 final_plots$plot_result + ggplot2::ylab("New y axis label Added as Example")
 ```
 
+The user can access the dataframes creating these plots in order to recreate the output plots in their own style. To access the data frame used to create the raw plot use:
+```{r, eval=FALSE}
+data <- CedarIslandNC_input_detrend$data
+```
+
+To access the dataframe creating the output model fit plot use:
+```{r, eval=FALSE}
+data <- res_eiv_igp_t_detrend$output_dataframes
+```
+This dataframes contains the model fit under the column `pred` and the rate of change column is `rate_pred`.
+
+For the `ni_gam_decomp` model, there are a separate dataframe for each component and the rate of change for each component has a corresponding dataframe. This ensures the decomposition of the RSL signal can be plotted with all four components together, using separate colours to identify the different drivers of RSL change.
+
 ## Accessing the posterior samples
 In the package the user has the ability access all the posterior sample for each unknown parameter in the following way:
 ```{r, eval = FALSE}
@@ -328,5 +343,6 @@ CedarIslandNC_input <- reslr_load(
 res_eiv_slr_t <- 
   reslr_mcmc(CedarIslandNC_input, 
              model_type = "eiv_slr_t")
-res_eiv_slr_t$noisy_model_run_output$BUGSoutput$sims.list$beta
+# Accessing the slope of the EIV simple linear regression
+beta <- res_eiv_slr_t$noisy_model_run_output$BUGSoutput$sims.list$beta
 ```

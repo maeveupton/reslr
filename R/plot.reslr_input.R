@@ -79,43 +79,43 @@ plot.reslr_input <- function(x,
       )
     # Age type BP
     if("Age_type" %in% colnames(data)){
-      p <- p + ggplot2::scale_x_reverse()+
-        ggplot2::labs(x = "Year (BP)", y = ylab, title = title)
-      # p <- ggplot2::ggplot()+
-      #   ggplot2::geom_rect(data = data, ggplot2::aes(
-      #     xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
-      #     ymin = RSL - RSL_err, ymax = RSL + RSL_err,
-      #     fill = "gray",
-      #   ), alpha = 0.7) +
-      #   ggplot2::geom_point(
-      #     data = data,
-      #     ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
-      #   ) +
-      #   ggplot2::labs(x = "Year (BP)", y = ylab, title = title) +
-      #   ggplot2::theme_bw() +
-      #   ggplot2::labs(colour = "") +
-      #   ggplot2::theme(
-      #     strip.text.x = ggplot2::element_text(size = 7),
-      #     strip.background = ggplot2::element_rect(fill = c("white"))
-      #   ) +
-      #   ggplot2::scale_fill_manual("",
-      #                              values = "grey",
-      #                              labels = expression(paste("1-sigma Error")),
-      #                              guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-      #   ) +
-      #   ggplot2::scale_colour_manual(
-      #     values = c("black"),
-      #     labels = c("Data")
-      #   ) +
-      #   ggplot2::facet_wrap(~SiteName) +
-      #   ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      #   ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-      #   ggplot2::theme(
-      #     plot.title = ggplot2::element_text(size = 18, face = "bold"),
-      #     axis.title = ggplot2::element_text(size = 12, face = "bold"),
-      #     legend.text = ggplot2::element_text(size = 10)
-      #   )+
-      #   ggplot2::scale_x_reverse()
+      # p <- p + ggplot2::scale_x_reverse()+
+      #   ggplot2::labs(x = "Year (BP)", y = ylab, title = title)
+      p <- ggplot2::ggplot()+
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          fill = "gray",
+        ), alpha = 0.7) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
+        ) +
+        ggplot2::labs(x = "Year (BP)", y = ylab, title = title) +
+        ggplot2::theme_bw() +
+        ggplot2::labs(colour = "") +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = "grey",
+                                   labels = expression(paste("1-sigma Error")),
+                                   guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
+        ) +
+        ggplot2::scale_colour_manual(
+          values = c("black"),
+          labels = c("Data")
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        )+
+        ggplot2::scale_x_reverse()
     }
     else{
       p <- p
@@ -271,43 +271,43 @@ plot.reslr_input <- function(x,
       )
     # Age type BP
     if("Age_type" %in% colnames(data)){
-      p <- p + ggplot2::scale_x_reverse()+
-        ggplot2::labs(x = "Year (BP)", y = ylab, title = title)
-      # p <- ggplot2::ggplot()+
-      #   ggplot2::geom_rect(data = data, ggplot2::aes(
-      #     xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
-      #     ymin = RSL - RSL_err, ymax = RSL + RSL_err,
-      #     fill = "gray",
-      #   ), alpha = 0.7) +
-      #   ggplot2::geom_point(
-      #     data = data,
-      #     ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
-      #   ) +
-      #   ggplot2::labs(x = "Year (BP)", y = ylab, title = title) +
-      #   ggplot2::theme_bw() +
-      #   ggplot2::labs(colour = "") +
-      #   ggplot2::theme(
-      #     strip.text.x = ggplot2::element_text(size = 7),
-      #     strip.background = ggplot2::element_rect(fill = c("white"))
-      #   ) +
-      #   ggplot2::scale_fill_manual("",
-      #                              values = "grey",
-      #                              labels = expression(paste("1-sigma Error")),
-      #                              guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-      #   ) +
-      #   ggplot2::scale_colour_manual(
-      #     values = c("black"),
-      #     labels = c("Data")
-      #   ) +
-      #   ggplot2::facet_wrap(~SiteName) +
-      #   ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-      #   ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-      #   ggplot2::theme(
-      #     plot.title = ggplot2::element_text(size = 18, face = "bold"),
-      #     axis.title = ggplot2::element_text(size = 12, face = "bold"),
-      #     legend.text = ggplot2::element_text(size = 10)
-      #   )+
-      #   ggplot2::scale_x_reverse()
+      # p <- p + ggplot2::scale_x_reverse()+
+      #   ggplot2::labs(x = "Year (BP)", y = ylab, title = title)
+      p <- ggplot2::ggplot()+
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          fill = "gray",
+        ), alpha = 0.7) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
+        ) +
+        ggplot2::labs(x = "Year (BP)", y = ylab, title = title) +
+        ggplot2::theme_bw() +
+        ggplot2::labs(colour = "") +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = "grey",
+                                   labels = expression(paste("1-sigma Error")),
+                                   guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
+        ) +
+        ggplot2::scale_colour_manual(
+          values = c("black"),
+          labels = c("Data")
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        )+
+        ggplot2::scale_x_reverse()
     }
     else{
       p <- p
@@ -447,9 +447,41 @@ plot.reslr_input <- function(x,
 
     # Age type BP
     if("Age_type" %in% colnames(data)){
-      p <- p +
+      p <- ggplot2::ggplot() +
+        ggplot2::geom_polygon(data = detrend_data_un_box,
+                              ggplot2::aes(x = Age_BP*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = SL, x = Age_BP, colour = "black"), size = 0.3
+        ) +
+        ggplot2::labs(x = "Year (BP)", y = "Sea Level (m)", title = title) +
+        ggplot2::theme_bw() +
+        ggplot2::labs(colour = "") +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = "grey",
+                                   labels = expression(paste("1-sigma Error")),
+                                   guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
+        ) +
+        ggplot2::scale_colour_manual(
+          values = c("black"),
+          labels = c("Data")
+        ) +
         ggplot2::scale_x_reverse()+
-        ggplot2::labs(xlab = "Year (BP)")
+        # ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        )
+      # p <- p +
+      #   ggplot2::scale_x_reverse()+
+      #   ggplot2::labs(xlab = "Year (BP)")
     }
     else{
       p <- p
