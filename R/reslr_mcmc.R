@@ -37,8 +37,6 @@ reslr_mcmc <- function(input_data,
                        spline_nseg = NULL,
                        spline_nseg_t = 10,#9,
                        spline_nseg_st = 6#4 # ,
-                       # xl,
-                       # xr
 ) {
   UseMethod("reslr_mcmc")
 }
@@ -55,9 +53,7 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    CI = 0.95,
                                    spline_nseg = NULL,
                                    spline_nseg_t = 10,
-                                   spline_nseg_st = 6 # ,
-                                   # xr = min(input_data$data$Age),
-                                   # xl
+                                   spline_nseg_st = 6
 ) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
@@ -66,6 +62,12 @@ reslr_mcmc.reslr_input <- function(input_data,
     dplyr::mutate(Age = Age/1000, Age_err = Age_err/1000)
   data_grid <- input_data$data_grid %>%
     dplyr::mutate(Age = Age/1000)
+  # Converting Age from BP to CE to model ------
+  if("Age_type" %in% colnames(data)){
+    data <- data %>%
+      dplyr::group_by(SiteName) %>%
+      dplyr::mutate(Age = 1950/1000 - Age)
+  }
 
   # Simple Linear Regression ----------------
   if (model_type == "eiv_slr_t") {
@@ -117,9 +119,15 @@ reslr_mcmc.reslr_input <- function(input_data,
       CI = CI
     )
 
+    # Converting Age from CE back to BP for plots ------
+    if("Age_type" %in% colnames(data)){
+      data <- data %>%
+        dplyr::group_by(SiteName) %>%
+        dplyr::mutate(Age = 1950 - Age)
+    }
     # Output with everything-------------
     jags_output <- list(
-      noisy_model_run_output = model_run, # Watch this
+      noisy_model_run_output = model_run,
       jags_data = jags_data,
       data = data,
       data_grid = data_grid,
@@ -128,7 +136,6 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in NIGAM time--------------
     class(jags_output) <- c("reslr_output", "eiv_slr_t")
-    #message("JAGS model run finished for the EIV Simple Linear Regression")
   }
 
   # 1 Change Point Model-------------------
@@ -173,6 +180,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
     data_grid <- data_grid %>%
       dplyr::mutate(Age = Age*1000)
+
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(
       noisy_model_run_output = model_run,
@@ -181,9 +189,15 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = FALSE,
       CI = CI
     )
+    # Converting Age from CE back to BP for plots ------
+    if("Age_type" %in% colnames(data)){
+      data <- data %>%
+        dplyr::group_by(SiteName) %>%
+        dplyr::mutate(Age = 1950 - Age)
+    }
     # Output with everything-------------
     jags_output <- list(
-      noisy_model_run_output = model_run, # Watch this
+      noisy_model_run_output = model_run,
       jags_data = jags_data,
       data = data,
       data_grid = data_grid,
@@ -192,14 +206,12 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in 1 Change Point--------------
     class(jags_output) <- c("reslr_output", "eiv_cp1_t")
-    #message("JAGS model run finished for the EIV 1 Change Point model")
   }
 
 
   # 2 Change Point Model----------------------
   if (model_type == "eiv_cp_t" & n_cp == 2) {
     # JAGS file
-    # jags_file <- "inst/jags_models/model_eiv_cp2_t.jags"
     jags_file <- system.file("jags_models", "model_eiv_cp2_t.jags", package = "reslr")
 
     # Initial functions for Change point required
@@ -259,19 +271,24 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = FALSE,
       CI = CI
     )
+
+    # Converting Age from CE back to BP for plots ------
+    if("Age_type" %in% colnames(data)){
+      data <- data %>%
+        dplyr::group_by(SiteName) %>%
+        dplyr::mutate(Age = 1950 - Age)
+    }
     # Output with everything-------------
     jags_output <- list(
-      noisy_model_run_output = model_run, # Watch this
+      noisy_model_run_output = model_run,
       jags_data = jags_data,
       data = data,
       data_grid = data_grid,
       output_dataframes = output_dataframes
     )
 
-
     # Classing the JAGS output in 2 Change Point--------------
     class(jags_output) <- c("reslr_output", "eiv_cp2_t")
-    #message("JAGS model run finished for the EIV 2 Change Point model")
   }
 
   # 3 Change Point Model----------------------
@@ -336,19 +353,23 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = FALSE,
       CI = CI
     )
+    # Converting Age from CE back to BP for plots ------
+    if("Age_type" %in% colnames(data)){
+      data <- data %>%
+        dplyr::group_by(SiteName) %>%
+        dplyr::mutate(Age = 1950 - Age)
+    }
     # Output with everything-------------
     jags_output <- list(
-      noisy_model_run_output = model_run, # Watch this
+      noisy_model_run_output = model_run,
       jags_data = jags_data,
       data = data,
       data_grid = data_grid,
       output_dataframes = output_dataframes
     )
 
-
     # Classing the JAGS output in 3 Change Point--------------
     class(jags_output) <- c("reslr_output", "eiv_cp3_t")
-    #message("JAGS model run finished for the EIV 3 Change Point model")
   }
 
   # Errors-in-Variables Integrated Gaussian Process------------------
@@ -406,6 +427,12 @@ reslr_mcmc.reslr_input <- function(input_data,
         data_grid = data_grid,
         CI = CI
       )
+      # # Converting Age from CE back to BP for plots ------
+      # if("Age_type" %in% colnames(data)){
+      #   data <- data %>%
+      #     dplyr::group_by(SiteName) %>%
+      #     dplyr::mutate(Age = 1950 - Age)
+      # }
       # Output with everything-------------
       jags_output <- list(
         noisy_model_run_output = model_run, # Watch this
@@ -417,7 +444,6 @@ reslr_mcmc.reslr_input <- function(input_data,
       )
       # Classing the JAGS output for eiv_igp_t--------------
       class(jags_output) <- c("reslr_output", "eiv_igp_t", "detrend_data")
-      #message("JAGS model run finished for the eiv_igp_t using detrended data")
     }
 
     # No detrended data
@@ -463,6 +489,12 @@ reslr_mcmc.reslr_input <- function(input_data,
         CI = CI
       )
 
+      # Converting Age from CE back to BP for plots ------
+      if("Age_type" %in% colnames(data)){
+        data <- data %>%
+          dplyr::group_by(SiteName) %>%
+          dplyr::mutate(Age = 1950 - Age)
+      }
       # Output with everything-------------
       jags_output <- list(
         noisy_model_run_output = model_run, # Watch this
@@ -471,9 +503,9 @@ reslr_mcmc.reslr_input <- function(input_data,
         data_grid = data_grid,
         output_dataframes = output_dataframes
       )
+
       # Classing the JAGS output for eiv_igp_t--------------
       class(jags_output) <- c("reslr_output", "eiv_igp_t")
-      #message("JAGS model run finished for the eiv_igp_t")
     }
   }
 
@@ -590,6 +622,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = FALSE,
       CI = CI
     )
+    # Converting Age from CE back to BP for plots ------
+    if("Age_type" %in% colnames(data)){
+      data <- data %>%
+        dplyr::group_by(SiteName) %>%
+        dplyr::mutate(Age = 1950 - Age)
+    }
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
@@ -599,12 +637,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       output_dataframes = output_dataframes
     )
 
-
-
     # Classing the JAGS output in NIGAM time--------------
     class(jags_output) <- c("reslr_output", "ni_spline_t")
 
-    #message("JAGS model run finished for the NI spline in time")
   }
 
   # Noisy Input GAM in Space Time-------------------------------------------
@@ -719,6 +754,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = FALSE,
       CI = CI
     )
+    # Converting Age from CE back to BP for plots ------
+    if("Age_type" %in% colnames(data)){
+      data <- data %>%
+        dplyr::group_by(SiteName) %>%
+        dplyr::mutate(Age = 1950 - Age)
+    }
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
@@ -730,7 +771,7 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in NIGAM space time--------------
     class(jags_output) <- c("reslr_output", "ni_spline_st")
-    #message("JAGS model run finished for the NI spline in space time")
+
   }
 
   # Noisy Input GAM for decomposition of RSL signal-------------------------------------------
@@ -932,6 +973,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = TRUE,
       CI = CI
     )
+    # Converting Age from CE back to BP for plots ------
+    if("Age_type" %in% colnames(data)){
+      data <- data %>%
+        dplyr::group_by(SiteName) %>%
+        dplyr::mutate(Age = 1950 - Age)
+    }
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
@@ -944,7 +991,6 @@ reslr_mcmc.reslr_input <- function(input_data,
 
     # Classing the JAGS output in NIGAM for RSL decomposition--------------
     class(jags_output) <- c("reslr_output", "ni_gam_decomp")
-    #message("JAGS model run finished for the NI GAM Decomposition")
   }
   return(jags_output)
 }

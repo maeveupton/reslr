@@ -44,7 +44,6 @@ reslr_load <- function(data,
                   #Longitude = as.numeric(Longitude),
                   #Latitude = as.numeric(Latitude))
 
-
   # Tidy Original data-------------------------------
   if (!("SiteName" %in% colnames(data))) {
     data <- data %>%
@@ -53,14 +52,16 @@ reslr_load <- function(data,
     cat("Error: User must provide a column with site name(s) and a column with region name(s). \n")
     stop()
   }
+
+  # Converting BP to CE but keeping Age_BP for plots
   if (input_age_type == "BP") {
     data <- data %>%
       dplyr::group_by(SiteName) %>%
-      dplyr::mutate(Age = 1950/1000 - Age,
-       # If the Age type is BP the scales on the plots need to be reversed
-                    Age_type = "BP")
-  } else {
-    data <- data
+      #dplyr::rename(Age_BP = Age) %>%
+      dplyr::mutate(#Age = 1950/1000 - Age_BP,
+                    # If the Age type is BP the scales on the plots need to be reversed
+                    Age_type = "BP")#,
+                    #Age_BP = Age_BP*1000)
   }
 
   # Including no TG or no linear rates
@@ -79,8 +80,7 @@ reslr_load <- function(data,
     #   data <- data
     # }
     #else{
-    cat("Error: No tide gauge selection method chosen, please provide criteria for choosing preferred tide gauge. \n")
-    stop()
+    stop("Error: No tide gauge selection method chosen, please provide criteria for choosing preferred tide gauge. \n")
     }
 
 
@@ -206,6 +206,7 @@ reslr_load <- function(data,
       dplyr::filter(bounds == "Age")
 
     if("Age_type" %in% colnames(data)){
+      #Age_BP <- x_bounds$value
       Age <-1950/1000 - x_bounds$value
     }
     else{
@@ -246,7 +247,7 @@ reslr_load <- function(data,
     sites,
     Age = times
   )
-  # Problem here for time models
+
   data_age_boundary <- data %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(
@@ -285,13 +286,7 @@ reslr_load <- function(data,
   data_grid <- data_grid %>%
     dplyr::mutate(Age = Age*1000)
 
-  input_data <- base::list(
-    data = data,
-    data_grid = data_grid,
-    prediction_grid_res = prediction_grid_res
-  )
-
-
+  # Class the output depending on if the data is detrended or not
   if (detrend_data == TRUE) {
     input_data <- base::list(
       data = data,
@@ -301,6 +296,11 @@ reslr_load <- function(data,
     )
     class(input_data) <- c("reslr_input", "detrend_data")
   } else {
+    input_data <- base::list(
+      data = data,
+      data_grid = data_grid,
+      prediction_grid_res = prediction_grid_res
+    )
     class(input_data) <- "reslr_input"
   }
   return(input_data)
