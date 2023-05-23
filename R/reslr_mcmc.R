@@ -62,12 +62,12 @@ reslr_mcmc.reslr_input <- function(input_data,
     dplyr::mutate(Age = Age/1000, Age_err = Age_err/1000)
   data_grid <- input_data$data_grid %>%
     dplyr::mutate(Age = Age/1000)
-  # Converting Age from BP to CE to model ------
-  if("Age_type" %in% colnames(data)){
-    data <- data %>%
-      dplyr::group_by(SiteName) %>%
-      dplyr::mutate(Age = 1950/1000 - Age)
-  }
+  # # Converting Age from BP to CE to model ------
+  # if("Age_type" %in% colnames(data)){
+  #   data <- data %>%
+  #     dplyr::group_by(SiteName) %>%
+  #     dplyr::mutate(Age = 1950/1000 - Age)
+  # }
 
   # Simple Linear Regression ----------------
   if (model_type == "eiv_slr_t") {
@@ -110,6 +110,16 @@ reslr_mcmc.reslr_input <- function(input_data,
     data_grid <- data_grid %>%
       dplyr::mutate(Age = Age*1000)
 
+    # # Converting Age from CE back to BP for plots ------
+    # if("Age_type" %in% colnames(data)){
+    #   data <- data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::mutate(Age = 1950 - Age)
+    #   data_grid <- data_grid %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::mutate(Age = 1950 - Age)
+    #
+    # }
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(
       noisy_model_run_output = model_run,
@@ -119,12 +129,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       CI = CI
     )
 
-    # Converting Age from CE back to BP for plots ------
-    if("Age_type" %in% colnames(data)){
-      data <- data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::mutate(Age = 1950 - Age)
-    }
+
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run,
