@@ -1395,67 +1395,72 @@ plot.reslr_output <- function(x,
       nrow()
     n_tide_gauges <- n_sites - n_proxy
     # All the dataframes for each component
-    total_model_fit_df <- output_dataframes$total_model_fit_df %>%
-      dplyr::mutate(data_type_id = as.factor(data_type_id))
-    total_model_rate_df <- output_dataframes$total_model_rate_df %>%
-      dplyr::mutate(data_type_id = as.factor(data_type_id))
+    total_model_df <- output_dataframes$total_model_df %>%
+       dplyr::mutate(data_type_id = as.factor(data_type_id))
+    # total_model_fit_df <- output_dataframes$total_model_fit_df %>%
+    #   dplyr::mutate(data_type_id = as.factor(data_type_id))
+    # total_model_rate_df <- output_dataframes$total_model_rate_df %>%
+    #   dplyr::mutate(data_type_id = as.factor(data_type_id))
     regional_component_df <- output_dataframes$regional_component_df %>%
       dplyr::mutate(data_type_id = as.factor(data_type_id))
-    regional_rate_component_df <- output_dataframes$regional_rate_component_df %>%
-      dplyr::mutate(data_type_id = as.factor(data_type_id))
+    #regional_rate_component_df <- output_dataframes$regional_rate_component_df %>%
+    #  dplyr::mutate(data_type_id = as.factor(data_type_id))
     lin_loc_component_df <- output_dataframes$lin_loc_component_df %>%
       dplyr::mutate(data_type_id = as.factor(data_type_id))
     non_lin_loc_component_df <- output_dataframes$non_lin_loc_component_df %>%
       dplyr::mutate(data_type_id = as.factor(data_type_id))
-    non_lin_loc_rate_component_df <- output_dataframes$non_lin_loc_rate_component_df %>%
-      dplyr::mutate(data_type_id = as.factor(data_type_id))
+    #non_lin_loc_rate_component_df <- output_dataframes$non_lin_loc_rate_component_df %>%
+    #  dplyr::mutate(data_type_id = as.factor(data_type_id))
 
 
     # Plotting proxy only
     if (plot_proxy_records == TRUE & plot_tide_gauges == FALSE) {
       data <- data %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      total_model_fit_df <- total_model_fit_df %>%
+      #total_model_fit_df <- total_model_fit_df %>%
+      total_model_df <- total_model_fit_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      total_model_rate_df <- total_model_rate_df %>%
-        dplyr::filter(data_type_id == "ProxyRecord")
+      #total_model_rate_df <- total_model_rate_df %>%
+      #  dplyr::filter(data_type_id == "ProxyRecord")
 
       regional_component_df <- regional_component_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      regional_rate_component_df <- regional_rate_component_df %>%
-        dplyr::filter(data_type_id == "ProxyRecord")
+      #regional_rate_component_df <- regional_rate_component_df %>%
+      #  dplyr::filter(data_type_id == "ProxyRecord")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
       non_lin_loc_component_df <- non_lin_loc_component_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
-      non_lin_loc_rate_component_df <- non_lin_loc_rate_component_df %>%
-        dplyr::filter(data_type_id == "ProxyRecord")
+     # non_lin_loc_rate_component_df <- non_lin_loc_rate_component_df %>%
+    #    dplyr::filter(data_type_id == "ProxyRecord")
     }
     # Plotting tide gauge only
     if (plot_proxy_records == FALSE & plot_tide_gauges == TRUE) {
       data <- data %>%
         dplyr::filter(data_type_id == "TideGaugeData")
-      total_model_fit_df <- total_model_fit_df %>%
+      #total_model_fit_df <- total_model_fit_df %>%
+      total_model_df <- total_model_fit_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")
-      total_model_rate_df <- total_model_rate_df %>%
-        dplyr::filter(data_type_id == "TideGaugeData")
+      #total_model_rate_df <- total_model_rate_df %>%
+      #  dplyr::filter(data_type_id == "TideGaugeData")
 
       regional_component_df <- regional_component_df # %>%
-      dplyr::filter(data_type_id == "TideGaugeData")
-      regional_rate_component_df <- regional_rate_component_df # %>%
-      dplyr::filter(data_type_id == "TideGaugeData")
+      #dplyr::filter(data_type_id == "TideGaugeData")
+      #regional_rate_component_df <- regional_rate_component_df # %>%
+      #dplyr::filter(data_type_id == "TideGaugeData")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")
       non_lin_loc_component_df <- non_lin_loc_component_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")
-      non_lin_loc_rate_component_df <- non_lin_loc_rate_component_df %>%
-        dplyr::filter(data_type_id == "TideGaugeData")
+      #non_lin_loc_rate_component_df <- non_lin_loc_rate_component_df %>%
+      #  dplyr::filter(data_type_id == "TideGaugeData")
     }
       # Plot model fit
       plot_result <- create_model_fit_plot(
-        output_dataframes = total_model_fit_df,
+        #output_dataframes = total_model_fit_df,
+        output_dataframes = total_model_df,
         data = data,
         xlab = xlab,
         ylab = ylab,
@@ -1464,7 +1469,8 @@ plot.reslr_output <- function(x,
 
       # Plot rate
       plot_rate <- create_rate_of_change_plot(
-        output_dataframes = total_model_rate_df,
+        #output_dataframes = total_model_rate_df,
+        output_dataframes = total_model_df,
         data = data,
         xlab = xlab,
         y_rate_lab = y_rate_lab,
@@ -1511,11 +1517,13 @@ plot.reslr_output <- function(x,
       regional_rate_plot <-
         ggplot2::ggplot() +
         ggplot2::geom_line(
-          data = regional_rate_component_df,
+          #data = regional_rate_component_df,
+          data = regional_component_df,
           ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
         ) +
         ggplot2::geom_ribbon(
-          data = regional_rate_component_df,
+          #data = regional_rate_component_df,
+          data = regional_component_df,
           ggplot2::aes(ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.2
         ) +
         ggplot2::theme_bw() +
@@ -1652,7 +1660,8 @@ plot.reslr_output <- function(x,
 
       # Plotting rate of non linear component
       non_lin_loc_rate_plot <- create_rate_of_change_plot(
-        output_dataframes = non_lin_loc_rate_component_df,
+        #output_dataframes = non_lin_loc_rate_component_df,
+        output_dataframes = non_lin_loc_component_df,
         data = data,
         xlab = xlab,
         y_rate_lab = y_rate_lab,
@@ -1695,11 +1704,13 @@ plot.reslr_output <- function(x,
         ) +
         # Total Model
         ggplot2::geom_line(
-          data = total_model_fit_df,
+          #data = total_model_fit_df,
+          data = total_model_df,
           ggplot2::aes(x = Age, y = pred, colour = "Total Posterior Model") # ID)
         ) +
         ggplot2::geom_ribbon(
-          data = total_model_fit_df,
+          #data = total_model_fit_df,
+          data = total_model_df,
           ggplot2::aes(ymin = lwr, ymax = upr, x = Age, fill = "Total Posterior Model"), # ID),
           alpha = 0.3
         ) +
@@ -1732,8 +1743,8 @@ plot.reslr_output <- function(x,
         ggplot2::xlab("Year (CE)") +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom")
 
-      # Age type BP
-      if ("Age_type" %in% colnames(data)) {
+      # Age type BP --> To be finished
+    if ("Age_type" %in% colnames(data)) {
         plot_result <- plot_result +
           ggplot2::scale_x_reverse() +
           ggplot2::labs(xlab = "Year (BP)")
@@ -1771,14 +1782,11 @@ plot.reslr_output <- function(x,
       # Plot total model rate of change plot
       plot_rate <- plot_rate + ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        )
+          "\n No. tide gauge sites:", n_sites - n_proxy))
       # Regional Component Plot---------------------------
-      regional_plot <- regional_plot +
-        ggplot2::labs(caption = paste0(
+      regional_plot <- regional_plot + ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        ))
+          "\n No. tide gauge sites:", n_sites - n_proxy))
 
       # Derivative of Predicted Regional Component Plot---------------------------
       regional_rate_plot <-
@@ -1846,7 +1854,10 @@ plot.reslr_output <- function(x,
       non_lin_loc_rate_plot = non_lin_loc_rate_plot,
       all_components_CI_plot = all_components_CI_plot
     )
-  }
+
+}
+
+# Plotting individual plots
   if ("model_fit_plot" %in% plot_type) {
     # message("Print plot of the model fit\n")
     return(output_plots$plot_result)

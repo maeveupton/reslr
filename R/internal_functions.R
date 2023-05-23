@@ -875,35 +875,44 @@ create_output_df <- function(noisy_model_run_output,
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI)/2)
     lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 1-((1 - CI)/2))
+    # Total model fit rate
+    mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
     rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 1-((1 - CI)/2))
     rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
 
 
-    total_model_fit_df <- data.frame(
+    #total_model_fit_df <- data.frame(
+    total_model_df <- data.frame(
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
       upr = upr,
       lwr = lwr,
       ID = "Total Posterior Model",
+      rate_pred = apply(mu_pred_deriv_post, 2, mean),
+      rate_upr = rate_upr,
+      rate_lwr = rate_lwr,
       CI = paste0(CI*100,"%")
     )
 
-    # Total model fit rate
-    mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
-    total_model_rate_df <-
-      data.frame(
-        data_grid,
-        rate_pred = apply(mu_pred_deriv_post, 2, mean),
-        rate_upr = rate_upr,
-        rate_lwr = rate_lwr,
-        ID = "Total Rate of Change for Posterior Model",
-        CI = paste0(CI*100,"%")
-      )
+    # # Total model fit rate
+    # mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
+    # total_model_rate_df <-
+    #   data.frame(
+    #     data_grid,
+    #     rate_pred = apply(mu_pred_deriv_post, 2, mean),
+    #     rate_upr = rate_upr,
+    #     rate_lwr = rate_lwr,
+    #     ID = "Total Rate of Change for Posterior Model",
+    #     CI = paste0(CI*100,"%")
+    #   )
 
     # Regional component
     time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred
     upr <- apply(time_component_pred_post, 2, stats::quantile, probs = (1 - CI)/2)
     lwr <- apply(time_component_pred_post, 2, stats::quantile, probs = 1-((1 - CI)/2))
+    time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred_deriv
+    rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 1-((1 - CI)/2))
+    rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
 
     regional_component_df <- data.frame(
       data_grid,
@@ -911,22 +920,22 @@ create_output_df <- function(noisy_model_run_output,
       upr = upr,
       lwr = lwr,
       ID = "Regional Component",
-      CI = paste0(CI*100,"%")
+      CI = paste0(CI*100,"%"),
+      rate_pred = apply(time_component_pred_deriv_post, 2, mean),
+      rate_upr = rate_upr,
+      rate_lwr = rate_lwr,
     )
 
-    time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred_deriv
-    rate_lwr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = 1-((1 - CI)/2))
-    rate_upr <- apply(time_component_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
 
-    regional_rate_component_df <-
-      data.frame(
-        data_grid,
-        rate_pred = apply(time_component_pred_deriv_post, 2, mean),
-        rate_upr = rate_upr,
-        rate_lwr = rate_lwr,
-        ID = "Rate of Change for Regional Component",
-        CI = paste0(CI*100,"%")
-      )
+    # regional_rate_component_df <-
+    #   data.frame(
+    #     data_grid,
+    #     rate_pred = apply(time_component_pred_deriv_post, 2, mean),
+    #     rate_upr = rate_upr,
+    #     rate_lwr = rate_lwr,
+    #     ID = "Rate of Change for Regional Component",
+    #     CI = paste0(CI*100,"%")
+    #   )
 
     # Vertical Offset & Linear Local Component
     g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x_pred
@@ -949,6 +958,10 @@ create_output_df <- function(noisy_model_run_output,
     # space_time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$l
     upr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = (1 - CI)/2)
     lwr <- apply(space_time_component_pred_post, 2, stats::quantile, probs = 1-((1 - CI)/2))
+    space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred_deriv
+    rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 1-((1 - CI)/2))
+    rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
+
 
     non_lin_loc_component_df <-
       data.frame(
@@ -957,31 +970,32 @@ create_output_df <- function(noisy_model_run_output,
         upr = upr,
         lwr = lwr,
         ID = "Non Linear Local Component",
-        CI = paste0(CI*100,"%")
-      )
-    space_time_component_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$l_pred_deriv
-    rate_lwr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = 1-((1 - CI)/2))
-    rate_upr <- apply(space_time_component_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
-
-    non_lin_loc_rate_component_df <-
-      data.frame(
-        data_grid,
+        CI = paste0(CI*100,"%"),
         rate_pred = apply(space_time_component_pred_deriv_post, 2, mean),
         rate_upr = rate_upr,
-        rate_lwr = rate_lwr,
-        ID = "Rate of Change for Non Linear Local Component",
-        CI = paste0(CI*100,"%")
+        rate_lwr = rate_lwr
       )
+
+    # non_lin_loc_rate_component_df <-
+    #   data.frame(
+    #     data_grid,
+    #     rate_pred = apply(space_time_component_pred_deriv_post, 2, mean),
+    #     rate_upr = rate_upr,
+    #     rate_lwr = rate_lwr,
+    #     ID = "Rate of Change for Non Linear Local Component",
+    #     CI = paste0(CI*100,"%")
+    #   )
 
 
     output_dataframes <- list(
-      total_model_fit_df = total_model_fit_df %>% dplyr::mutate(ID = as.factor(ID)),
-      total_model_rate_df = total_model_rate_df %>% dplyr::mutate(ID = as.factor(ID)),
+      #total_model_fit_df = total_model_fit_df %>% dplyr::mutate(ID = as.factor(ID)),
+      total_model_df = total_model_fit_df %>% dplyr::mutate(ID = as.factor(ID)),
+      #total_model_rate_df = total_model_rate_df %>% dplyr::mutate(ID = as.factor(ID)),
       regional_component_df = regional_component_df %>% dplyr::mutate(ID = as.factor(ID)),
-      regional_rate_component_df = regional_rate_component_df %>% dplyr::mutate(ID = as.factor(ID)),
+      #regional_rate_component_df = regional_rate_component_df %>% dplyr::mutate(ID = as.factor(ID)),
       lin_loc_component_df = lin_loc_component_df %>% dplyr::mutate(ID = as.factor(ID)),
-      non_lin_loc_component_df = non_lin_loc_component_df %>% dplyr::mutate(ID = as.factor(ID)),
-      non_lin_loc_rate_component_df = non_lin_loc_rate_component_df %>% dplyr::mutate(ID = as.factor(ID))
+      non_lin_loc_component_df = non_lin_loc_component_df %>% dplyr::mutate(ID = as.factor(ID))
+      #non_lin_loc_rate_component_df = non_lin_loc_rate_component_df %>% dplyr::mutate(ID = as.factor(ID))
     )
   }
 
