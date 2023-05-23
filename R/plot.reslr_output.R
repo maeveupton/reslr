@@ -667,10 +667,10 @@ plot.reslr_output <- function(x,
     if("Age_type" %in% colnames(data)){
       plot_result <- plot_result +
         ggplot2::scale_x_reverse()+
-        ggplot2::labs(xlab = "Year (BP)")
+        ggplot2::labs(x = "Year (BP)")
       plot_rate <- plot_rate +
         ggplot2::scale_x_reverse()+
-        ggplot2::labs(xlab = "Year (BP)")
+        ggplot2::labs(x = "Year (BP)")
     }
     else{
       plot_result <- plot_result

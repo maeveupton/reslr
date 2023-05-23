@@ -194,12 +194,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = FALSE,
       CI = CI
     )
-    # Converting Age from CE back to BP for plots ------
-    if("Age_type" %in% colnames(data)){
-      data <- data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::mutate(Age = 1950 - Age)
-    }
+    # # Converting Age from CE back to BP for plots ------
+    # if("Age_type" %in% colnames(data)){
+    #   data <- data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::mutate(Age = 1950 - Age)
+    # }
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run,
@@ -277,12 +277,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       CI = CI
     )
 
-    # Converting Age from CE back to BP for plots ------
-    if("Age_type" %in% colnames(data)){
-      data <- data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::mutate(Age = 1950 - Age)
-    }
+    # # Converting Age from CE back to BP for plots ------
+    # if("Age_type" %in% colnames(data)){
+    #   data <- data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::mutate(Age = 1950 - Age)
+    # }
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run,
@@ -358,12 +358,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = FALSE,
       CI = CI
     )
-    # Converting Age from CE back to BP for plots ------
-    if("Age_type" %in% colnames(data)){
-      data <- data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::mutate(Age = 1950 - Age)
-    }
+    # # Converting Age from CE back to BP for plots ------
+    # if("Age_type" %in% colnames(data)){
+    #   data <- data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::mutate(Age = 1950 - Age)
+    # }
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = model_run,
@@ -494,12 +494,12 @@ reslr_mcmc.reslr_input <- function(input_data,
         CI = CI
       )
 
-      # Converting Age from CE back to BP for plots ------
-      if("Age_type" %in% colnames(data)){
-        data <- data %>%
-          dplyr::group_by(SiteName) %>%
-          dplyr::mutate(Age = 1950 - Age)
-      }
+      # # Converting Age from CE back to BP for plots ------
+      # if("Age_type" %in% colnames(data)){
+      #   data <- data %>%
+      #     dplyr::group_by(SiteName) %>%
+      #     dplyr::mutate(Age = 1950 - Age)
+      # }
       # Output with everything-------------
       jags_output <- list(
         noisy_model_run_output = model_run, # Watch this
@@ -515,7 +515,7 @@ reslr_mcmc.reslr_input <- function(input_data,
   }
 
 
-  # Noisy Input GAM in Time-----------------------------------
+  # Noisy Input spline in time-----------------------------------
   if (model_type == "ni_spline_t") {
     # No Noise
     jags_file <- system.file("jags_models", "model_ni_spline_t.jags", package = "reslr")
@@ -620,6 +620,12 @@ reslr_mcmc.reslr_input <- function(input_data,
     data_grid <- data_grid %>%
       dplyr::mutate(Age = Age*1000)
 
+    # # Converting Age from CE back to BP for plots ------
+    # if("Age_type" %in% colnames(data)){
+    #   data <- data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::mutate(Age = 1950 - Age)
+    # }
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
       data_grid = data_grid,
@@ -627,12 +633,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = FALSE,
       CI = CI
     )
-    # Converting Age from CE back to BP for plots ------
-    if("Age_type" %in% colnames(data)){
-      data <- data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::mutate(Age = 1950 - Age)
-    }
+
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
@@ -759,12 +760,12 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = FALSE,
       CI = CI
     )
-    # Converting Age from CE back to BP for plots ------
-    if("Age_type" %in% colnames(data)){
-      data <- data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::mutate(Age = 1950 - Age)
-    }
+    # # Converting Age from CE back to BP for plots ------
+    # if("Age_type" %in% colnames(data)){
+    #   data <- data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::mutate(Age = 1950 - Age)
+    # }
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
@@ -971,6 +972,12 @@ reslr_mcmc.reslr_input <- function(input_data,
     data_grid <- data_grid %>%
       dplyr::mutate(Age = Age*1000)
 
+    # # Converting Age from CE back to BP for plots ------
+    # if("Age_type" %in% colnames(data)){
+    #   data <- data %>%
+    #     dplyr::group_by(SiteName) %>%
+    #     dplyr::mutate(Age = 1950 - Age)
+    # }
     # Output from mcmc & dataframes for plots
     output_dataframes <- create_output_df(noisy_model_run_output,
       data_grid = data_grid,
@@ -978,12 +985,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       decomposition = TRUE,
       CI = CI
     )
-    # Converting Age from CE back to BP for plots ------
-    if("Age_type" %in% colnames(data)){
-      data <- data %>%
-        dplyr::group_by(SiteName) %>%
-        dplyr::mutate(Age = 1950 - Age)
-    }
+
     # Output with everything-------------
     jags_output <- list(
       noisy_model_run_output = noisy_model_run_output,
