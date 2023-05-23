@@ -301,8 +301,13 @@ reslr_load <- function(data,
     data_grid <- data_grid %>%
       dplyr::group_by(SiteName) %>%
       dplyr::mutate(Age_BP = 1950 - Age,
-                    # If the Age type is BP the scales on the plots need to be reversed
                     Age_type = "BP")
+    data <- data %>%
+      dplyr::group_by(SiteName) %>%
+      dplyr::mutate(Age_BP = 1950 - Age,
+                    Age_type = "BP")
+      #dplyr::mutate(Age_BP = ifelse(is.na(Age_BP),1950 - Age,Age_BP)) %>%
+      #dplyr::mutate(Age_type = ifelse(is.na(Age_type),"BP",Age_type))
   }
 
   # Class the output depending on if the data is detrended or not
