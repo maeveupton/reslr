@@ -148,7 +148,8 @@ plot.reslr_input <- function(x,
       data <- data %>%
         dplyr::filter(data_type_id == "TideGaugeData")
       detrend_data_un_box <- detrend_data_un_box %>%
-        dplyr::filter(data_type_id == "TideGaugeData")}
+        dplyr::filter(data_type_id == "TideGaugeData")
+      }
 
     # Plotting proxy records only
     if (plot_tide_gauges == FALSE & plot_proxy_records == TRUE) {
@@ -157,10 +158,13 @@ plot.reslr_input <- function(x,
 
       detrend_data_un_box <- detrend_data_un_box %>%
         dplyr::filter(data_type_id == "ProxyRecord")
+    }
+
       # Plot result
       p <- ggplot2::ggplot() +
         ggplot2::geom_polygon(data = detrend_data_un_box,
-                              ggplot2::aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
+                              ggplot2::aes(x = Age*1000, y = SL,
+                                           group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
           ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
@@ -190,86 +194,14 @@ plot.reslr_input <- function(x,
           legend.text = ggplot2::element_text(size = 10)
         )
 
-    # Plotting tide gauges & proxy records together
-    if (plot_tide_gauges == TRUE & plot_proxy_records == TRUE) {
-      detrend_data_un_box <- detrend_data_un_box
-      }
 
-
-
-
-      p <- ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = detrend_data_un_box,
-                              ggplot2::aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
-        ggplot2::geom_point(
-          data = data,
-          ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
-        ) +
-        ggplot2::labs(x = xlab, y = "Sea Level (m)", title = title) +
-        ggplot2::theme_bw() +
-        ggplot2::labs(colour = "") +
-        ggplot2::theme(
-          strip.text.x = ggplot2::element_text(size = 7),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::scale_fill_manual("",
-                                   values = "grey",
-                                   labels = expression(paste("1-sigma Error")),
-                                   guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-        ) +
-        ggplot2::scale_colour_manual(
-          values = c("black"),
-          labels = c("Data")
-        ) +
-        # ggplot2::facet_wrap(~SiteName) +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-        ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 18, face = "bold"),
-          axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          legend.text = ggplot2::element_text(size = 10)
-        )
-    }
-
-
-      p <- ggplot2::ggplot() +
-        ggplot2::geom_polygon(data = detrend_data_un_box,
-                              ggplot2::aes(x = Age*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
-        ggplot2::geom_point(
-          data = data,
-          ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
-        ) +
-        ggplot2::labs(x = xlab, y = "Sea Level (m)", title = title) +
-        ggplot2::theme_bw() +
-        ggplot2::labs(colour = "") +
-        ggplot2::theme(
-          strip.text.x = ggplot2::element_text(size = 7),
-          strip.background = ggplot2::element_rect(fill = c("white"))
-        ) +
-        ggplot2::scale_fill_manual("",
-                                   values = "grey",
-                                   labels = expression(paste("1-sigma Error")),
-                                   guide = ggplot2::guide_legend(override.aes = list(alpha = 0.7))
-        ) +
-        ggplot2::scale_colour_manual(
-          values = c("black"),
-          labels = c("Data")
-        ) +
-        # ggplot2::facet_wrap(~SiteName) +
-        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-        ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 18, face = "bold"),
-          axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          legend.text = ggplot2::element_text(size = 10)
-        )
-    }
 
     # Age type BP
     if("Age_type" %in% colnames(data)){
       p <- ggplot2::ggplot() +
         ggplot2::geom_polygon(data = detrend_data_un_box,
-                              ggplot2::aes(x = Age_BP*1000, y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
+                              ggplot2::aes(x = Age_BP*1000,
+                                           y = SL,group = obs_index,fill = "gray"),alpha = 0.5)+
         ggplot2::geom_point(
           data = data,
           ggplot2::aes(y = SL, x = Age_BP, colour = "black"), size = 0.3
@@ -291,7 +223,6 @@ plot.reslr_input <- function(x,
           labels = c("Data")
         ) +
         ggplot2::scale_x_reverse()+
-        # ggplot2::facet_wrap(~SiteName) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
         ggplot2::theme(
@@ -299,23 +230,27 @@ plot.reslr_input <- function(x,
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
           legend.text = ggplot2::element_text(size = 10)
         )
-      # p <- p +
-      #   ggplot2::scale_x_reverse()+
-      #   ggplot2::labs(xlab = "Year (BP)")
     }
     else{
       p <- p
     }
+    # Plotting tide gauges & proxy records together
+    if (plot_tide_gauges == TRUE & plot_proxy_records == TRUE) {
+        p <- p + ggplot2::facet_wrap(~SiteName, scales = "free")
+    }
+
     # If plotting informed caption
     if (plot_caption == TRUE) {
       p <- p + ggplot2::labs(caption = paste0(
         "No. proxy sites:", n_proxy,
         "\n No. tide gauge sites:", n_sites - n_proxy
       ))
-    } else {
+    }
+    else {
       p <- p
     }
   }
+
 
   return(p)
 }
