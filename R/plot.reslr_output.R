@@ -523,266 +523,142 @@ plot.reslr_output <- function(x,
         detrend_data_un_box <- detrend_data_un_box %>%
           dplyr::filter(data_type_id == "TideGaugeData")
       }
-      # Using caption or not
-      if (plot_caption == TRUE) {
-        # Plot model fit
-        plot_result <- ggplot2::ggplot() +
-          ggplot2::geom_polygon(
-            data = detrend_data_un_box,
-            ggplot2::aes(x = Age * 1000, y = SL, group = obs_index, fill = "Uncertainty"), alpha = 0.5
-          ) +
-          ggplot2::geom_point(
-            data = data,
-            ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
-          ) +
-          ggplot2::geom_line(
-            data = output_dataframes,
-            ggplot2::aes(x = Age, y = pred, colour = "mean")
-          ) +
-          ggplot2::geom_ribbon(
-            data = output_dataframes,
-            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.3
-          ) +
-          ggplot2::labs(
-            x = xlab,
-            y = "Sea Level (m)", # ylab,
-            title = title, colour = ""
-          ) +
-          ggplot2::theme_bw() +
-          ggplot2::theme(
-            strip.text.x = ggplot2::element_text(size = 7),
-            strip.background = ggplot2::element_rect(fill = c("white"))
-          ) +
-          ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-          ggplot2::theme(
-            plot.title = ggplot2::element_text(size = 18, face = "bold"),
-            axis.title = ggplot2::element_text(size = 12, face = "bold"),
-            legend.text = ggplot2::element_text(size = 10)
-          ) +
-          ggplot2::scale_fill_manual("",
-            values = c(
-              "Uncertainty" = ggplot2::alpha("grey", 0.3),
-              "CI" = ggplot2::alpha("purple3", 0.2)
-            ),
-            labels = c(
-              CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-              expression(paste("1-sigma Error"))
-            )
-          ) +
-          ggplot2::scale_colour_manual("",
-            values = c(
-              "black" = "black",
-              "mean" = "purple3"
-            ),
-            labels = c("Data", "Posterior Fit")
-          ) +
-          ggplot2::guides(
-            fill = ggplot2::guide_legend(override.aes = list(
-              alpha = c(0.2, 0.4),
-              size = 1
-            )),
-            colour = ggplot2::guide_legend(override.aes = list(
-              linetype = c(0, 1),
-              shape = c(16, NA),
-              size = 2
-            ))
-          ) +
-          # ggplot2::facet_wrap(~SiteName) +
-          ggplot2::labs(caption = paste0(
-            "Model type: Errors in Variables Integrated Gaussian Process Model using detrended data \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
+      # Plot model fit
+      plot_result <- ggplot2::ggplot() +
+        ggplot2::geom_polygon(
+          data = detrend_data_un_box,
+          ggplot2::aes(x = Age * 1000, y = SL, group = obs_index,
+                       fill = "Uncertainty"), alpha = 0.5
+        ) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
+        ) +
+        ggplot2::geom_line(
+          data = output_dataframes,
+          ggplot2::aes(x = Age, y = pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = output_dataframes,
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.3
+        ) +
+        ggplot2::labs(
+          x = xlab,
+          y = "Sea Level (m)", # ylab,
+          title = title, colour = ""
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                     "CI" = ggplot2::alpha("purple3", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                     expression(paste("1-sigma Error"))
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                       "black" = "black",
+                                       "mean" = "purple3"
+                                     ),
+                                     labels = c("Data", "Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.2, 0.4),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(0, 1),
+            shape = c(16, NA),
+            size = 2
           ))
+        ) +
+        ggplot2::facet_wrap(~SiteName)
 
-        # Plot rate
-        plot_rate <- ggplot2::ggplot() +
-          ggplot2::geom_line(
-            data = output_dataframes,
-            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
-          ) +
-          ggplot2::geom_ribbon(
-            data = output_dataframes,
-            ggplot2::aes(
-              y = rate_pred,
-              ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"
-            ), alpha = 0.3
-          ) +
-          ggplot2::theme_bw() +
-          ggplot2::theme(
-            strip.text.x = ggplot2::element_text(size = 7),
-            strip.background = ggplot2::element_rect(fill = c("white"))
-          ) +
-          ggplot2::scale_fill_manual("",
-            values = c(
-              "CI" = ggplot2::alpha("purple3", 0.2)
-            ),
-            labels = c(
-              CI = paste0(unique(output_dataframes$CI), " Credible Interval")
-            )
-          ) +
-          ggplot2::scale_colour_manual("",
-            values = c(
-              "mean" = "purple3"
-            ),
-            labels = c("Posterior Fit")
-          ) +
-          ggplot2::guides(
-            fill = ggplot2::guide_legend(override.aes = list(
-              alpha = c(0.3), # , 0.4),
-              size = 1
-            )),
-            colour = ggplot2::guide_legend(override.aes = list(
-              linetype = c(1),
-              shape = c(NA),
-              size = 2
-            ))
-          ) +
-          # ggplot2::facet_wrap(~SiteName) +
-          ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-          ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-          ggplot2::theme(
-            plot.title = ggplot2::element_text(size = 18, face = "bold"),
-            axis.title = ggplot2::element_text(size = 12, face = "bold"),
-            legend.text = ggplot2::element_text(size = 10)
-          ) +
-          ggplot2::labs(
-            x = xlab,
-            y = y_rate_lab,
-            title = title,
-            colour = "",
-            caption = paste0(
-              "Model type: Errors in Variables Integrated Gaussian Process Model using detrended data \n No. proxy sites:", n_proxy,
-              "\n No. tide gauge sites:", n_sites - n_proxy
-            )
-          )
+      # Plot rate
+      plot_rate <- ggplot2::ggplot() +
+        ggplot2::geom_line(
+          data = output_dataframes,
+          ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = output_dataframes,
+          ggplot2::aes(
+            y = rate_pred,
+            ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"
+          ), alpha = 0.3
+        ) +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "CI" = ggplot2::alpha("purple3", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval")
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                       "mean" = "purple3"
+                                     ),
+                                     labels = c("Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.3), # , 0.4),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(1),
+            shape = c(NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          axis.title = ggplot2::element_text(size = 12, face = "bold"),
+          legend.text = ggplot2::element_text(size = 10)
+        ) +
+        ggplot2::labs(
+          x = xlab,
+          y = y_rate_lab,
+          title = title,
+          colour = ""
+        )
+
+      # Using informed caption or not
+      if (plot_caption == TRUE) {
+        plot_result <- plot_result + ggplot2::labs(caption = paste0(
+          "Model type: Errors in Variables Integrated Gaussian Process Model using detrended data \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
+        plot_rate <- plot_rate + ggplot2::labs(caption = paste0(
+          "Model type: Errors in Variables Integrated Gaussian Process Model using detrended data \n No. proxy sites:", n_proxy,
+          "\n No. tide gauge sites:", n_sites - n_proxy
+        ))
       } else {
-        # Plot model fit
-        plot_result <- ggplot2::ggplot() +
-          ggplot2::geom_polygon(
-            data = detrend_data_un_box,
-            ggplot2::aes(
-              x = Age * 1000, y = SL,
-              group = obs_index, fill = "Uncertainty"
-            ), alpha = 0.5
-          ) +
-          ggplot2::geom_point(
-            data = data,
-            ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
-          ) +
-          ggplot2::geom_line(
-            data = output_dataframes,
-            ggplot2::aes(x = Age, y = pred, colour = "mean")
-          ) +
-          ggplot2::geom_ribbon(
-            data = output_dataframes,
-            ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age, fill = "CI"), alpha = 0.3
-          ) +
-          ggplot2::labs(
-            x = xlab,
-            y = ylab,
-            title = title
-          ) +
-          ggplot2::theme_bw() +
-          ggplot2::labs(colour = "") +
-          ggplot2::theme(
-            strip.text.x = ggplot2::element_text(size = 7),
-            strip.background = ggplot2::element_rect(fill = c("white"))
-          ) +
-          ggplot2::scale_fill_manual("",
-            values = c(
-              "Uncertainty" = ggplot2::alpha("grey", 0.3),
-              "CI" = ggplot2::alpha("purple3", 0.2)
-            ),
-            labels = c(
-              CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-              expression(paste("1-sigma Error"))
-            )
-          ) +
-          ggplot2::scale_colour_manual("",
-            values = c(
-              "black" = "black",
-              "mean" = "purple3"
-            ),
-            labels = c("Data", "Posterior Fit")
-          ) +
-          ggplot2::guides(
-            fill = ggplot2::guide_legend(override.aes = list(
-              alpha = c(0.2, 0.4),
-              size = 1
-            )),
-            colour = ggplot2::guide_legend(override.aes = list(
-              linetype = c(0, 1),
-              shape = c(16, NA),
-              size = 2
-            ))
-          ) +
-          # ggplot2::facet_wrap(~SiteName) +
-          ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-          ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-          ggplot2::theme(
-            plot.title = ggplot2::element_text(size = 18, face = "bold"),
-            axis.title = ggplot2::element_text(size = 12, face = "bold"),
-            legend.text = ggplot2::element_text(size = 10)
-          ) +
-          ggplot2::labs(caption = "")
-
-        # Plot rate
-        plot_rate <- ggplot2::ggplot() +
-          ggplot2::geom_line(
-            data = output_dataframes,
-            ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
-          ) +
-          ggplot2::geom_ribbon(
-            data = output_dataframes,
-            ggplot2::aes(
-              y = rate_pred,
-              ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"
-            ), alpha = 0.3
-          ) +
-          ggplot2::labs(
-            x = xlab,
-            y = y_rate_lab,
-            title = title
-          ) +
-          ggplot2::theme_bw() +
-          ggplot2::labs(colour = "") +
-          ggplot2::theme(
-            strip.text.x = ggplot2::element_text(size = 7),
-            strip.background = ggplot2::element_rect(fill = c("white"))
-          ) +
-          ggplot2::scale_fill_manual("",
-            values = c(
-              "CI" = ggplot2::alpha("purple3", 0.2)
-            ),
-            labels = c(
-              CI = paste0(unique(output_dataframes$CI), " Credible Interval")
-            )
-          ) +
-          ggplot2::scale_colour_manual("",
-            values = c(
-              "mean" = "purple3"
-            ),
-            labels = c("Posterior Fit")
-          ) +
-          ggplot2::guides(
-            fill = ggplot2::guide_legend(override.aes = list(
-              alpha = c(0.3), # , 0.4),
-              size = 1
-            )),
-            colour = ggplot2::guide_legend(override.aes = list(
-              linetype = c(1),
-              shape = c(NA),
-              size = 2
-            ))
-          ) +
-          # ggplot2::facet_wrap(~SiteName) +
-          ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-          ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
-          ggplot2::theme(
-            plot.title = ggplot2::element_text(size = 18, face = "bold"),
-            axis.title = ggplot2::element_text(size = 12, face = "bold"),
-            legend.text = ggplot2::element_text(size = 10)
-          ) +
-          ggplot2::labs(caption = "")
+        plot_result <- plot_result
+        plot_rate <- plot_rate
       }
       if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
         plot_result <- plot_result +
@@ -791,7 +667,6 @@ plot.reslr_output <- function(x,
           ggplot2::facet_wrap(~SiteName, scales = "free")
       }
     }
-
 
     # Plot the normal data:
     else {
