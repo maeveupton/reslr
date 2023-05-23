@@ -65,6 +65,7 @@ create_rate_of_change_plot <- function(output_dataframes,
         size = 2
       ))
     ) +
+    ggplot2::geom_hline(yintercept = 0) +
     ggplot2::facet_wrap(~SiteName)+
     ggplot2::labs(colour = "",
                   x = xlab,
@@ -923,7 +924,7 @@ create_output_df <- function(noisy_model_run_output,
       CI = paste0(CI*100,"%"),
       rate_pred = apply(time_component_pred_deriv_post, 2, mean),
       rate_upr = rate_upr,
-      rate_lwr = rate_lwr,
+      rate_lwr = rate_lwr
     )
 
 
@@ -989,7 +990,7 @@ create_output_df <- function(noisy_model_run_output,
 
     output_dataframes <- list(
       #total_model_fit_df = total_model_fit_df %>% dplyr::mutate(ID = as.factor(ID)),
-      total_model_df = total_model_fit_df %>% dplyr::mutate(ID = as.factor(ID)),
+      total_model_df = total_model_df %>% dplyr::mutate(ID = as.factor(ID)),
       #total_model_rate_df = total_model_rate_df %>% dplyr::mutate(ID = as.factor(ID)),
       regional_component_df = regional_component_df %>% dplyr::mutate(ID = as.factor(ID)),
       #regional_rate_component_df = regional_rate_component_df %>% dplyr::mutate(ID = as.factor(ID)),

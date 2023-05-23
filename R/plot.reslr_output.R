@@ -639,6 +639,7 @@ plot.reslr_output <- function(x,
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
           legend.text = ggplot2::element_text(size = 10)
         ) +
+        ggplot2::geom_hline(yintercept = 0) +
         ggplot2::labs(
           x = xlab,
           y = y_rate_lab,
@@ -764,6 +765,7 @@ plot.reslr_output <- function(x,
             axis.title = ggplot2::element_text(size = 12, face = "bold"),
             legend.text = ggplot2::element_text(size = 10)
           ) +
+          ggplot2::geom_hline(yintercept = 0) +
           ggplot2::labs(
             x = "Year (BP)",
             y = y_rate_lab,
@@ -951,7 +953,8 @@ plot.reslr_output <- function(x,
               y = y_rate_lab,
               title = title,
               colour = ""
-            )
+            )+
+            ggplot2::geom_hline(yintercept = 0)
 
         }
 
@@ -1013,15 +1016,13 @@ plot.reslr_output <- function(x,
       data = data,
       xlab = xlab,
       ylab = ylab,
-      title = title,
-      model_caption = NULL
+      title = title
     )
 
     # Plot rate
     plot_rate <- create_rate_of_change_plot(
       output_dataframes = output_dataframes,
       data = data,
-      model_caption = NULL,
       xlab = xlab,
       y_rate_lab = y_rate_lab,
       title = title
@@ -1092,7 +1093,8 @@ plot.reslr_output <- function(x,
             size = 2
           ))
         ) +
-        ggplot2::facet_wrap(~SiteName)
+        ggplot2::facet_wrap(~SiteName)+
+        ggplot2::scale_x_reverse()
 
       # Plot rate
       plot_rate <- ggplot2::ggplot() +
@@ -1150,7 +1152,9 @@ plot.reslr_output <- function(x,
           y = y_rate_lab,
           title = title,
           colour = ""
-        )
+        )+
+        ggplot2::scale_x_reverse()+
+        ggplot2::geom_hline(yintercept = 0)
 
     }
 
@@ -1213,15 +1217,13 @@ plot.reslr_output <- function(x,
       data = data,
       xlab = xlab,
       ylab = ylab,
-      title = title,
-      model_caption = NULL
+      title = title
     )
 
     # Plot rate
     plot_rate <- create_rate_of_change_plot(
       output_dataframes = output_dataframes,
       data = data,
-      model_caption = NULL,
       xlab = xlab,
       y_rate_lab = y_rate_lab,
       title = title
@@ -1292,7 +1294,8 @@ plot.reslr_output <- function(x,
             size = 2
           ))
         ) +
-        ggplot2::facet_wrap(~SiteName)
+        ggplot2::facet_wrap(~SiteName)+
+        ggplot2::scale_x_reverse()
 
       # Plot rate
       plot_rate <- ggplot2::ggplot() +
@@ -1345,12 +1348,14 @@ plot.reslr_output <- function(x,
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
           legend.text = ggplot2::element_text(size = 10)
         ) +
+        ggplot2::geom_hline(yintercept = 0) +
         ggplot2::labs(
           x = "Year (BP)",
           y = y_rate_lab,
           title = title,
           colour = ""
-        )
+        )+
+        ggplot2::scale_x_reverse()
 
     }
 
@@ -1394,6 +1399,7 @@ plot.reslr_output <- function(x,
       unique() %>%
       nrow()
     n_tide_gauges <- n_sites - n_proxy
+
     # All the dataframes for each component
     total_model_df <- output_dataframes$total_model_df %>%
        dplyr::mutate(data_type_id = as.factor(data_type_id))
@@ -1418,7 +1424,7 @@ plot.reslr_output <- function(x,
       data <- data %>%
         dplyr::filter(data_type_id == "ProxyRecord")
       #total_model_fit_df <- total_model_fit_df %>%
-      total_model_df <- total_model_fit_df %>%
+      total_model_df <- total_model_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
       #total_model_rate_df <- total_model_rate_df %>%
       #  dplyr::filter(data_type_id == "ProxyRecord")
@@ -1440,7 +1446,7 @@ plot.reslr_output <- function(x,
       data <- data %>%
         dplyr::filter(data_type_id == "TideGaugeData")
       #total_model_fit_df <- total_model_fit_df %>%
-      total_model_df <- total_model_fit_df %>%
+      total_model_df <- total_model_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")
       #total_model_rate_df <- total_model_rate_df %>%
       #  dplyr::filter(data_type_id == "TideGaugeData")
@@ -1533,7 +1539,7 @@ plot.reslr_output <- function(x,
                                      "CI" = ggplot2::alpha("#3b47ad", 0.2)
                                    ),
                                    labels = c(
-                                     CI = paste0(unique(regional_rate_component_df$CI), " Credible Interval")
+                                     CI = paste0(unique(regional_component_df$CI), " Credible Interval")
                                    )
         ) +
         ggplot2::scale_colour_manual("",
@@ -1797,7 +1803,7 @@ plot.reslr_output <- function(x,
         ))
 
       # Linear Local + Site specific vertical offset ---------------------
-      lin_loc_plot <-lin_loc_plot
+      lin_loc_plot <-lin_loc_plot+
         ggplot2::labs(caption = paste0(
           "Model type: Noisy Input GAM for signal decomposition \n No. proxy sites:", n_proxy,
           "\n No. tide gauge sites:", n_sites - n_proxy
