@@ -65,19 +65,20 @@ plot.reslr_output <- function(x,
     }
     # Plot result
     plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title)
+      output_dataframes = output_dataframes,
+      data = data,
+      xlab = xlab,
+      ylab = ylab,
+      title = title
+    )
 
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
     }
 
     # Plotting when Age type is  BP
-    if("Age_type" %in% colnames(data)){
-      plot_result <- ggplot2::ggplot()+
+    if ("Age_type" %in% colnames(data)) {
+      plot_result <- ggplot2::ggplot() +
         ggplot2::geom_rect(data = data, ggplot2::aes(
           xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
           ymin = RSL - RSL_err, ymax = RSL + RSL_err,
@@ -89,26 +90,28 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::geom_line(
           data = output_dataframes,
-          ggplot2::aes(x = Age_BP , y = pred, colour = "mean")
+          ggplot2::aes(x = Age_BP, y = pred, colour = "mean")
         ) +
         ggplot2::geom_ribbon(
           data = output_dataframes,
-          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP , fill = "CI"), alpha = 0.3
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP, fill = "CI"), alpha = 0.3
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "Uncertainty" = ggplot2::alpha("grey", 0.3),
-                                     "CI" = ggplot2::alpha("purple3", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-                                     Uncertainty = expression(paste("1-sigma Error"))
-                                   )
+          values = c(
+            "Uncertainty" = ggplot2::alpha("grey", 0.3),
+            "CI" = ggplot2::alpha("purple3", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+            Uncertainty = expression(paste("1-sigma Error"))
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c("black" = "black",
-                                                "mean" = "purple3"),
-                                     labels = c("Data", "Posterior Fit")
+          values = c(
+            "black" = "black",
+            "mean" = "purple3"
+          ),
+          labels = c("Data", "Posterior Fit")
         ) +
         ggplot2::guides(
           fill = ggplot2::guide_legend(override.aes = list(
@@ -122,7 +125,7 @@ plot.reslr_output <- function(x,
           ))
         ) +
         ggplot2::facet_wrap(~SiteName) +
-        ggplot2::labs(x = "Year (BP)", y = ylab, title = title,colour = "") +
+        ggplot2::labs(x = "Year (BP)", y = ylab, title = title, colour = "") +
         ggplot2::theme_bw() +
         ggplot2::theme(
           strip.text.x = ggplot2::element_text(size = 7),
@@ -130,8 +133,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::scale_x_reverse()
-    }
-    else{
+    } else {
       plot_result <- plot_result
     }
 
@@ -139,7 +141,8 @@ plot.reslr_output <- function(x,
     if (plot_caption == TRUE) {
       plot_result <- plot_result + ggplot2::labs(caption = paste0(
         "Model type: Errors in Variables Simple Linear Regression \n No. proxy sites:", n_proxy,
-        "\n No. tide gauge sites:", n_sites - n_proxy))
+        "\n No. tide gauge sites:", n_sites - n_proxy
+      ))
     } else {
       plot_result <- plot_result
     }
@@ -174,11 +177,12 @@ plot.reslr_output <- function(x,
     }
     # Plot result
     plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title)
+      output_dataframes = output_dataframes,
+      data = data,
+      xlab = xlab,
+      ylab = ylab,
+      title = title
+    )
 
     # Plotting tide gauge and proxy
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
@@ -186,8 +190,8 @@ plot.reslr_output <- function(x,
     }
 
     # Plotting when Age type is BP
-    if("Age_type" %in% colnames(data)){
-      plot_result <- ggplot2::ggplot()+
+    if ("Age_type" %in% colnames(data)) {
+      plot_result <- ggplot2::ggplot() +
         ggplot2::geom_rect(data = data, ggplot2::aes(
           xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
           ymin = RSL - RSL_err, ymax = RSL + RSL_err,
@@ -199,26 +203,28 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::geom_line(
           data = output_dataframes,
-          ggplot2::aes(x = Age_BP , y = pred, colour = "mean")
+          ggplot2::aes(x = Age_BP, y = pred, colour = "mean")
         ) +
         ggplot2::geom_ribbon(
           data = output_dataframes,
-          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP , fill = "CI"), alpha = 0.3
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP, fill = "CI"), alpha = 0.3
         ) +
         ggplot2::scale_fill_manual("",
-                                   values = c(
-                                     "Uncertainty" = ggplot2::alpha("grey", 0.3),
-                                     "CI" = ggplot2::alpha("purple3", 0.2)
-                                   ),
-                                   labels = c(
-                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-                                     Uncertainty = expression(paste("1-sigma Error"))
-                                   )
+          values = c(
+            "Uncertainty" = ggplot2::alpha("grey", 0.3),
+            "CI" = ggplot2::alpha("purple3", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+            Uncertainty = expression(paste("1-sigma Error"))
+          )
         ) +
         ggplot2::scale_colour_manual("",
-                                     values = c("black" = "black",
-                                                "mean" = "purple3"),
-                                     labels = c("Data", "Posterior Fit")
+          values = c(
+            "black" = "black",
+            "mean" = "purple3"
+          ),
+          labels = c("Data", "Posterior Fit")
         ) +
         ggplot2::guides(
           fill = ggplot2::guide_legend(override.aes = list(
@@ -232,7 +238,7 @@ plot.reslr_output <- function(x,
           ))
         ) +
         ggplot2::facet_wrap(~SiteName) +
-        ggplot2::labs(x = "Year (BP)", y = ylab, title = title,colour = "") +
+        ggplot2::labs(x = "Year (BP)", y = ylab, title = title, colour = "") +
         ggplot2::theme_bw() +
         ggplot2::theme(
           strip.text.x = ggplot2::element_text(size = 7),
@@ -240,8 +246,7 @@ plot.reslr_output <- function(x,
         ) +
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::scale_x_reverse()
-    }
-    else{
+    } else {
       plot_result <- plot_result
     }
 
@@ -249,9 +254,9 @@ plot.reslr_output <- function(x,
     if (plot_caption == TRUE) {
       plot_result <- plot_result + ggplot2::labs(caption = paste0(
         "Model type:  Errors in Variables 1 Change Point Model \n No. proxy sites:", n_proxy,
-        "\n No. tide gauge sites:", n_sites - n_proxy))
-    }
-    else {
+        "\n No. tide gauge sites:", n_sites - n_proxy
+      ))
+    } else {
       plot_result <- plot_result
     }
     # Output plots
@@ -285,39 +290,77 @@ plot.reslr_output <- function(x,
         dplyr::filter(data_type_id == "TideGaugeData")
     }
 
-    # Using caption or not
-    if (plot_caption == TRUE) {
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = paste0(
-          "Model type: Errors in Variables 2 Change Point Model \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        )
-      )
-    } else {
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = NULL
-      )
-    }
+    # Plotting result
+    plot_result <- create_model_fit_plot(
+      output_dataframes = output_dataframes,
+      data = data,
+      xlab = xlab,
+      ylab = ylab,
+      title = title
+    )
+
+    # Plotting tide gauge and proxy records together
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
     }
-    # Age type BP
-    if("Age_type" %in% colnames(data)){
-      plot_result <- plot_result +
-        ggplot2::scale_x_reverse()+
-        ggplot2::labs(xlab = "Year (BP)")
-    }
-    else{
+    # Plotting when Age type is BP
+    if ("Age_type" %in% colnames(data)) {
+      plot_result <- ggplot2::ggplot() +
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          fill = "Uncertainty",
+        ), alpha = 0.7) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
+        ) +
+        ggplot2::geom_line(
+          data = output_dataframes,
+          ggplot2::aes(x = Age_BP, y = pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = output_dataframes,
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP, fill = "CI"), alpha = 0.3
+        ) +
+        ggplot2::scale_fill_manual("",
+          values = c(
+            "Uncertainty" = ggplot2::alpha("grey", 0.3),
+            "CI" = ggplot2::alpha("purple3", 0.2)
+          ),
+          labels = c(
+            CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+            Uncertainty = expression(paste("1-sigma Error"))
+          )
+        ) +
+        ggplot2::scale_colour_manual("",
+          values = c(
+            "black" = "black",
+            "mean" = "purple3"
+          ),
+          labels = c("Data", "Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.3, 0.2),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(0, 1),
+            shape = c(16, NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::labs(x = "Year (BP)", y = ylab, title = title, colour = "") +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::scale_x_reverse()
+    } else {
       plot_result <- plot_result
     }
 
@@ -325,11 +368,12 @@ plot.reslr_output <- function(x,
     if (plot_caption == TRUE) {
       plot_result <- plot_result + ggplot2::labs(caption = paste0(
         "Model type:  Errors in Variables 2 Change Point Model \n No. proxy sites:", n_proxy,
-        "\n No. tide gauge sites:", n_sites - n_proxy))
+        "\n No. tide gauge sites:", n_sites - n_proxy
+      ))
     } else {
       plot_result <- plot_result
     }
-
+    # Output plot
     output_plots <- list(plot_result = plot_result)
   }
 
@@ -359,41 +403,90 @@ plot.reslr_output <- function(x,
         dplyr::filter(data_type_id == "TideGaugeData")
     }
 
-    # Using caption or not
-    if (plot_caption == TRUE) {
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = paste0(
-          "Model type: Errors in Variables 3 Change Point Model \n No. proxy sites:", n_proxy,
-          "\n No. tide gauge sites:", n_sites - n_proxy
-        )
-      )
-    } else {
-      plot_result <- create_model_fit_plot(
-        output_dataframes = output_dataframes,
-        data = data,
-        xlab = xlab,
-        ylab = ylab,
-        title = title,
-        model_caption = NULL
-      )
-    }
+    # Plotting result
+    plot_result <- create_model_fit_plot(
+      output_dataframes = output_dataframes,
+      data = data,
+      xlab = xlab,
+      ylab = ylab,
+      title = title
+    )
+
+    # Plotting tide gauge and proxy records together
     if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
       plot_result <- plot_result + ggplot2::facet_wrap(~SiteName, scales = "free")
     }
-    # Age type BP
-    if("Age_type" %in% colnames(data)){
-      plot_result <- plot_result +
-        ggplot2::scale_x_reverse()+
-        ggplot2::labs(xlab = "Year (BP)")
-    }
-    else{
+    # Plotting when Age type is BP
+    if ("Age_type" %in% colnames(data)) {
+      plot_result <- ggplot2::ggplot() +
+        ggplot2::geom_rect(data = data, ggplot2::aes(
+          xmin = Age_BP - Age_err, xmax = Age_BP + Age_err,
+          ymin = RSL - RSL_err, ymax = RSL + RSL_err,
+          fill = "Uncertainty",
+        ), alpha = 0.7) +
+        ggplot2::geom_point(
+          data = data,
+          ggplot2::aes(y = RSL, x = Age_BP, colour = "black"), size = 0.3
+        ) +
+        ggplot2::geom_line(
+          data = output_dataframes,
+          ggplot2::aes(x = Age_BP, y = pred, colour = "mean")
+        ) +
+        ggplot2::geom_ribbon(
+          data = output_dataframes,
+          ggplot2::aes(y = pred, ymin = lwr, ymax = upr, x = Age_BP, fill = "CI"), alpha = 0.3
+        ) +
+        ggplot2::scale_fill_manual("",
+                                   values = c(
+                                     "Uncertainty" = ggplot2::alpha("grey", 0.3),
+                                     "CI" = ggplot2::alpha("purple3", 0.2)
+                                   ),
+                                   labels = c(
+                                     CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+                                     Uncertainty = expression(paste("1-sigma Error"))
+                                   )
+        ) +
+        ggplot2::scale_colour_manual("",
+                                     values = c(
+                                       "black" = "black",
+                                       "mean" = "purple3"
+                                     ),
+                                     labels = c("Data", "Posterior Fit")
+        ) +
+        ggplot2::guides(
+          fill = ggplot2::guide_legend(override.aes = list(
+            alpha = c(0.3, 0.2),
+            size = 1
+          )),
+          colour = ggplot2::guide_legend(override.aes = list(
+            linetype = c(0, 1),
+            shape = c(16, NA),
+            size = 2
+          ))
+        ) +
+        ggplot2::facet_wrap(~SiteName) +
+        ggplot2::labs(x = "Year (BP)", y = ylab, title = title, colour = "") +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+          strip.text.x = ggplot2::element_text(size = 7),
+          strip.background = ggplot2::element_rect(fill = c("white"))
+        ) +
+        ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
+        ggplot2::scale_x_reverse()
+    } else {
       plot_result <- plot_result
     }
+
+    # Informed caption
+    if (plot_caption == TRUE) {
+      plot_result <- plot_result + ggplot2::labs(caption = paste0(
+        "Model type:  Errors in Variables 3 Change Point Model \n No. proxy sites:", n_proxy,
+        "\n No. tide gauge sites:", n_sites - n_proxy
+      ))
+    } else {
+      plot_result <- plot_result
+    }
+    # Output plot
     output_plots <- list(plot_result = plot_result)
   }
 
@@ -434,8 +527,10 @@ plot.reslr_output <- function(x,
       if (plot_caption == TRUE) {
         # Plot model fit
         plot_result <- ggplot2::ggplot() +
-          ggplot2::geom_polygon(data = detrend_data_un_box,
-                                ggplot2::aes(x = Age*1000, y = SL,group = obs_index,fill = "Uncertainty"),alpha = 0.5)+
+          ggplot2::geom_polygon(
+            data = detrend_data_un_box,
+            ggplot2::aes(x = Age * 1000, y = SL, group = obs_index, fill = "Uncertainty"), alpha = 0.5
+          ) +
           ggplot2::geom_point(
             data = data,
             ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
@@ -450,8 +545,8 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::labs(
             x = xlab,
-            y = "Sea Level (m)",#ylab,
-            title = title, colour= ""
+            y = "Sea Level (m)", # ylab,
+            title = title, colour = ""
           ) +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -483,7 +578,7 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::guides(
             fill = ggplot2::guide_legend(override.aes = list(
-              alpha = c(0.2 , 0.4),
+              alpha = c(0.2, 0.4),
               size = 1
             )),
             colour = ggplot2::guide_legend(override.aes = list(
@@ -506,8 +601,10 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred,
-                         ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.3
+            ggplot2::aes(
+              y = rate_pred,
+              ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"
+            ), alpha = 0.3
           ) +
           ggplot2::theme_bw() +
           ggplot2::theme(
@@ -553,16 +650,20 @@ plot.reslr_output <- function(x,
             title = title,
             colour = "",
             caption = paste0(
-            "Model type: Errors in Variables Integrated Gaussian Process Model using detrended data \n No. proxy sites:", n_proxy,
-            "\n No. tide gauge sites:", n_sites - n_proxy
-          ))
-      }
-      else {
+              "Model type: Errors in Variables Integrated Gaussian Process Model using detrended data \n No. proxy sites:", n_proxy,
+              "\n No. tide gauge sites:", n_sites - n_proxy
+            )
+          )
+      } else {
         # Plot model fit
         plot_result <- ggplot2::ggplot() +
-          ggplot2::geom_polygon(data = detrend_data_un_box,
-                                ggplot2::aes(x = Age*1000, y = SL,
-                                    group = obs_index,fill = "Uncertainty"),alpha = 0.5)+
+          ggplot2::geom_polygon(
+            data = detrend_data_un_box,
+            ggplot2::aes(
+              x = Age * 1000, y = SL,
+              group = obs_index, fill = "Uncertainty"
+            ), alpha = 0.5
+          ) +
           ggplot2::geom_point(
             data = data,
             ggplot2::aes(y = SL, x = Age, colour = "black"), size = 0.3
@@ -587,25 +688,25 @@ plot.reslr_output <- function(x,
             strip.background = ggplot2::element_rect(fill = c("white"))
           ) +
           ggplot2::scale_fill_manual("",
-                                     values = c(
-                                       "Uncertainty" = ggplot2::alpha("grey", 0.3),
-                                       "CI" = ggplot2::alpha("purple3", 0.2)
-                                     ),
-                                     labels = c(
-                                       CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
-                                       expression(paste("1-sigma Error"))
-                                     )
+            values = c(
+              "Uncertainty" = ggplot2::alpha("grey", 0.3),
+              "CI" = ggplot2::alpha("purple3", 0.2)
+            ),
+            labels = c(
+              CI = paste0(unique(output_dataframes$CI), " Credible Interval"),
+              expression(paste("1-sigma Error"))
+            )
           ) +
           ggplot2::scale_colour_manual("",
-                                       values = c(
-                                         "black" = "black",
-                                         "mean" = "purple3"
-                                       ),
-                                       labels = c("Data", "Posterior Fit")
+            values = c(
+              "black" = "black",
+              "mean" = "purple3"
+            ),
+            labels = c("Data", "Posterior Fit")
           ) +
           ggplot2::guides(
             fill = ggplot2::guide_legend(override.aes = list(
-              alpha = c(0.2 , 0.4),
+              alpha = c(0.2, 0.4),
               size = 1
             )),
             colour = ggplot2::guide_legend(override.aes = list(
@@ -632,8 +733,10 @@ plot.reslr_output <- function(x,
           ) +
           ggplot2::geom_ribbon(
             data = output_dataframes,
-            ggplot2::aes(y = rate_pred,
-                         ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"), alpha = 0.3
+            ggplot2::aes(
+              y = rate_pred,
+              ymin = rate_lwr, ymax = rate_upr, x = Age, fill = "CI"
+            ), alpha = 0.3
           ) +
           ggplot2::labs(
             x = xlab,
@@ -647,18 +750,18 @@ plot.reslr_output <- function(x,
             strip.background = ggplot2::element_rect(fill = c("white"))
           ) +
           ggplot2::scale_fill_manual("",
-                                     values = c(
-                                       "CI" = ggplot2::alpha("purple3", 0.2)
-                                     ),
-                                     labels = c(
-                                       CI = paste0(unique(output_dataframes$CI), " Credible Interval")
-                                     )
+            values = c(
+              "CI" = ggplot2::alpha("purple3", 0.2)
+            ),
+            labels = c(
+              CI = paste0(unique(output_dataframes$CI), " Credible Interval")
+            )
           ) +
           ggplot2::scale_colour_manual("",
-                                       values = c(
-                                         "mean" = "purple3"
-                                       ),
-                                       labels = c("Posterior Fit")
+            values = c(
+              "mean" = "purple3"
+            ),
+            labels = c("Posterior Fit")
           ) +
           ggplot2::guides(
             fill = ggplot2::guide_legend(override.aes = list(
@@ -680,7 +783,6 @@ plot.reslr_output <- function(x,
             legend.text = ggplot2::element_text(size = 10)
           ) +
           ggplot2::labs(caption = "")
-
       }
       if (plot_proxy_records == TRUE & plot_tide_gauges == TRUE) {
         plot_result <- plot_result +
@@ -765,15 +867,14 @@ plot.reslr_output <- function(x,
     }
 
     # Age type BP
-    if("Age_type" %in% colnames(data)){
+    if ("Age_type" %in% colnames(data)) {
       plot_result <- plot_result +
-        ggplot2::scale_x_reverse()+
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(x = "Year (BP)")
       plot_rate <- plot_rate +
-        ggplot2::scale_x_reverse()+
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(x = "Year (BP)")
-    }
-    else{
+    } else {
       plot_result <- plot_result
       plot_rate <- plot_rate
     }
@@ -861,15 +962,14 @@ plot.reslr_output <- function(x,
         ggplot2::facet_wrap(~SiteName, scales = "free")
     }
     # Age type BP
-    if("Age_type" %in% colnames(data)){
+    if ("Age_type" %in% colnames(data)) {
       plot_result <- plot_result +
-        ggplot2::scale_x_reverse()+
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
       plot_rate <- plot_rate +
-        ggplot2::scale_x_reverse()+
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
-    }
-    else{
+    } else {
       plot_result <- plot_result
       plot_rate <- plot_rate
     }
@@ -962,15 +1062,14 @@ plot.reslr_output <- function(x,
     }
 
     # Age type BP
-    if("Age_type" %in% colnames(data)){
+    if ("Age_type" %in% colnames(data)) {
       plot_result <- plot_result +
-        ggplot2::scale_x_reverse()+
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
       plot_rate <- plot_rate +
-        ggplot2::scale_x_reverse()+
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
-    }
-    else{
+    } else {
       plot_result <- plot_result
       plot_rate <- plot_rate
     }
@@ -1019,10 +1118,10 @@ plot.reslr_output <- function(x,
       total_model_rate_df <- total_model_rate_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
 
-      regional_component_df <- regional_component_df  %>%
-       dplyr::filter(data_type_id == "ProxyRecord")
-      regional_rate_component_df <- regional_rate_component_df  %>%
-       dplyr::filter(data_type_id == "ProxyRecord")
+      regional_component_df <- regional_component_df %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
+      regional_rate_component_df <- regional_rate_component_df %>%
+        dplyr::filter(data_type_id == "ProxyRecord")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "ProxyRecord")
@@ -1041,9 +1140,9 @@ plot.reslr_output <- function(x,
         dplyr::filter(data_type_id == "TideGaugeData")
 
       regional_component_df <- regional_component_df # %>%
-       dplyr::filter(data_type_id == "TideGaugeData")
+      dplyr::filter(data_type_id == "TideGaugeData")
       regional_rate_component_df <- regional_rate_component_df # %>%
-       dplyr::filter(data_type_id == "TideGaugeData")
+      dplyr::filter(data_type_id == "TideGaugeData")
 
       lin_loc_component_df <- lin_loc_component_df %>%
         dplyr::filter(data_type_id == "TideGaugeData")
@@ -1668,33 +1767,32 @@ plot.reslr_output <- function(x,
     }
 
     # Age type BP
-    if("Age_type" %in% colnames(data)){
+    if ("Age_type" %in% colnames(data)) {
       plot_result <- plot_result +
-        ggplot2::scale_x_reverse()+
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
       plot_rate <- plot_rate +
-        ggplot2::scale_x_reverse()+
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
-      regional_plot <- regional_plot+
-        ggplot2::scale_x_reverse()+
+      regional_plot <- regional_plot +
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
-      regional_rate_plot <- regional_rate_plot+
-        ggplot2::scale_x_reverse()+
+      regional_rate_plot <- regional_rate_plot +
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
-      lin_loc_plot <- lin_loc_plot+
-        ggplot2::scale_x_reverse()+
+      lin_loc_plot <- lin_loc_plot +
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
-      non_lin_loc_plot <- non_lin_loc_plot+
-        ggplot2::scale_x_reverse()+
+      non_lin_loc_plot <- non_lin_loc_plot +
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
-      non_lin_loc_rate_plot <- non_lin_loc_rate_plot+
-        ggplot2::scale_x_reverse()+
+      non_lin_loc_rate_plot <- non_lin_loc_rate_plot +
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
-      all_components_CI_plot <- all_components_CI_plot+
-        ggplot2::scale_x_reverse()+
+      all_components_CI_plot <- all_components_CI_plot +
+        ggplot2::scale_x_reverse() +
         ggplot2::labs(xlab = "Year (BP)")
-    }
-    else{
+    } else {
       plot_result <- plot_result
       plot_rate <- plot_rate
       regional_plot <- regional_plot
