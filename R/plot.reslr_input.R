@@ -249,8 +249,8 @@ plot.reslr_input <- function(x,
     else {
       p <- p
     }
-  }
 
+}
 
   return(p)
 }
