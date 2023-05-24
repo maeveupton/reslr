@@ -15,7 +15,7 @@ reslr_mcmc(
   n_chains = 3,
   CI = 0.95,
   spline_nseg = NULL,
-  spline_nseg_t = 10,
+  spline_nseg_t = 20,
   spline_nseg_st = 6
 )
 }
