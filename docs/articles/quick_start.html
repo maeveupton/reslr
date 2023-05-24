@@ -53,6 +53,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/advanced_reslr.html">reslr: advanced</a>
+    </li>
+    <li>
       <a href="../articles/quick_start.html">reslr: quick start guide</a>
     </li>
   </ul>
@@ -75,7 +78,7 @@
                         <h4 data-toc-skip class="author">Maeve Upton,
 Andrew Parnell and Niamh Cahill</h4>
             
-            <h4 data-toc-skip class="date">2023-05-16</h4>
+            <h4 data-toc-skip class="date">2023-05-24</h4>
       
       
       <div class="hidden name"><code>quick_start.Rmd</code></div>
@@ -93,44 +96,44 @@ Andrew Parnell and Niamh Cahill</h4>
 <span><span class="co">#install.packages("reslr")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"maeveupton/reslr"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Downloading GitHub repo maeveupton/reslr@HEAD</span></span></code></pre>
-<pre><code><span><span class="co">## ggdist (3.2.1 -&gt; 3.3.0) [CRAN]</span></span></code></pre>
-<pre><code><span><span class="co">## Installing 1 packages: ggdist</span></span></code></pre>
-<pre><code><span><span class="co">## Installing package into '/private/var/folders/j9/cnnbqp5x3n79rc565fcpxflw0000gn/T/RtmpjsF2y9/temp_libpath221496b0543'</span></span>
-<span><span class="co">## (as 'lib' is unspecified)</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD build</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></span>
-<span><span class="co">## * checking for file ‘/private/var/folders/j9/cnnbqp5x3n79rc565fcpxflw0000gn/T/RtmpnfgolF/remotes52f275f836e2/maeveupton-reslr-52af606/DESCRIPTION’ ... OK</span></span>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD build</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">## * checking for file ‘/private/var/folders/j9/cnnbqp5x3n79rc565fcpxflw0000gn/T/RtmpI2ONhs/remotes1f13b51a42a/maeveupton-reslr-bd317b7/DESCRIPTION’ ... OK</span></span>
 <span><span class="co">## * preparing ‘reslr’:</span></span>
 <span><span class="co">## * checking DESCRIPTION meta-information ... OK</span></span>
 <span><span class="co">## * checking for LF line-endings in source and make files and shell scripts</span></span>
 <span><span class="co">## * checking for empty or unneeded directories</span></span>
 <span><span class="co">## * building ‘reslr_0.0.0.9000.tar.gz’</span></span></code></pre>
-<pre><code><span><span class="co">## Installing package into '/private/var/folders/j9/cnnbqp5x3n79rc565fcpxflw0000gn/T/RtmpjsF2y9/temp_libpath221496b0543'</span></span>
+<pre><code><span><span class="co">## Installing package into '/private/var/folders/j9/cnnbqp5x3n79rc565fcpxflw0000gn/T/RtmpD8nUri/temp_libpathfc22f8421ed'</span></span>
 <span><span class="co">## (as 'lib' is unspecified)</span></span></code></pre>
 <p>then,</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">reslr</span><span class="op">)</span></span></code></pre></div>
+<p>Note: The JAGS software is a requirement for this instruction sheet
+and refer back to main vignettes for more information.</p>
 </div>
 <div class="section level2">
-<h2 id="step-2-load-in-the-data">Step 2: load in the data<a class="anchor" aria-label="anchor" href="#step-2-load-in-the-data"></a>
+<h2 id="step-2-load-in-the-data-into-reslr">Step 2: load in the data into <code>reslr</code><a class="anchor" aria-label="anchor" href="#step-2-load-in-the-data-into-reslr"></a>
 </h2>
-<p>Some proxy record data is included with this package. Find where it
-is with:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>There is a large example dataset included in the <code>reslr</code>
+package called <code>NAACproxydata</code>. In this example, we
+demonstrate how to include proxy record data which is stored in a csv
+file. This csv file of data can be found in the package and the
+<code>readr</code> function reads the csv file:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
 <span><span class="va">path_to_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"one_data_site_ex.csv"</span>, package <span class="op">=</span> <span class="st">"reslr"</span><span class="op">)</span></span>
 <span><span class="va">example_one_datasite</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">path_to_data</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="step-3-load-the-data-into-reslr">Step 3: load the data into <code>reslr</code><a class="anchor" aria-label="anchor" href="#step-3-load-the-data-into-reslr"></a>
-</h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>Using the <code>reslr_load</code> function to read in the data into
+the <code>reslr</code> package:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">example_one_site_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reslr_load.html">reslr_load</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">example_one_datasite</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="step-4-plot-the-data">Step 4: plot the data<a class="anchor" aria-label="anchor" href="#step-4-plot-the-data"></a>
+<h2 id="step-3-plot-the-data">Step 3: plot the data<a class="anchor" aria-label="anchor" href="#step-3-plot-the-data"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">example_one_site_input</span>,</span>
 <span>  title <span class="op">=</span> <span class="st">"Plot of the raw data"</span>,</span>
@@ -142,9 +145,10 @@ is with:</p>
 <p><img src="quick_start_files/figure-html/plotdata-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
-<h2 id="step-5-select-your-modelling-technique-from-the-modelling-options-available-">Step 5: Select your modelling technique from the modelling options
-available.<a class="anchor" aria-label="anchor" href="#step-5-select-your-modelling-technique-from-the-modelling-options-available-"></a>
+<h2 id="step-4-run-your-statistical-model-and-check-convergence">Step 4: Run your statistical model and check convergence<a class="anchor" aria-label="anchor" href="#step-4-run-your-statistical-model-and-check-convergence"></a>
 </h2>
+<p>Select your modelling technique from the modelling options
+available:</p>
 <table class="table">
 <colgroup>
 <col width="30%">
@@ -206,11 +210,9 @@ varies over time select the Noisy Input spline in time. If it was
 multiple sites, we recommend using a spatial temporal model, i.e. Noisy
 Input spline in space and time, or for decomposing the signal,
 i.e. Noisy Input Generalised Additive model.</p>
-</div>
-<div class="section level2">
-<h2 id="step-6-run-your-model-and-check-convergence">Step 6: Run your model and check convergence<a class="anchor" aria-label="anchor" href="#step-6-run-your-model-and-check-convergence"></a>
-</h2>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p>Once the model is chosen use the <code>reslr_mcmc</code> function to
+run it:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_one_site_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reslr_mcmc.html">reslr_mcmc</a></span><span class="op">(</span></span>
 <span>  input_data <span class="op">=</span> <span class="va">example_one_site_input</span>,</span>
 <span>  model_type <span class="op">=</span> <span class="st">"ni_spline_t"</span>,</span>
@@ -218,21 +220,21 @@ i.e. Noisy Input Generalised Additive model.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The convergence of the algorithm is examined and he parameter
 estimates from the model can be investigated using the following:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_one_site_example</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## No convergence issues detected.</span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">##   variable      mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.06    0.671   0.527   1.28     3.25    1.00</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">37</span> 0.004<span style="text-decoration: underline;">85</span> 0.004<span style="text-decoration: underline;">68</span> 0.000<span style="text-decoration: underline;">492</span> 0.015<span style="text-decoration: underline;">8</span>  1.00</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.13    0.738   0.537   1.30     3.47    1.00</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">27</span> 0.004<span style="text-decoration: underline;">70</span> 0.004<span style="text-decoration: underline;">60</span> 0.000<span style="text-decoration: underline;">518</span> 0.015<span style="text-decoration: underline;">2</span>  1.00</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="step-7-plot-the-results">Step 7: Plot the results<a class="anchor" aria-label="anchor" href="#step-7-plot-the-results"></a>
+<h2 id="step-5-plot-the-results">Step 5: Plot the results<a class="anchor" aria-label="anchor" href="#step-5-plot-the-results"></a>
 </h2>
 <p>The model fit results can be visualised using the following
 function:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_one_site_example</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Relative Sea Level (m)"</span>,</span>
@@ -240,14 +242,14 @@ function:</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="quick_start_files/figure-html/plotres-1.png" width="672" style="display: block; margin: auto;">
 For the rate of change plot use:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_one_site_example</span>,</span>
 <span>  plot_type <span class="op">=</span> <span class="st">"rate_plot"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="quick_start_files/figure-html/plotresrate-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>To examine the data creating these plots the user types the
 following:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dataframes</span> <span class="op">&lt;-</span> <span class="va">res_one_site_example</span><span class="op">$</span><span class="va">output_dataframes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output_dataframes</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   Longitude Latitude                       SiteName data_type_id     Age</span></span>
@@ -258,12 +260,12 @@ following:</p>
 <span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600.00</span></span>
 <span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550.00</span></span>
 <span><span class="co">##        pred       upr       lwr   rate_pred    rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">## 1 -2.299451 -2.416197 -2.183847 -0.25008127 -0.88333037 0.3740375 95%</span></span>
-<span><span class="co">## 2 -2.316906 -2.386356 -2.248738 -0.05306583 -0.51104976 0.3873127 95%</span></span>
-<span><span class="co">## 3 -2.317515 -2.377401 -2.261608  0.02803489 -0.35487742 0.3970288 95%</span></span>
-<span><span class="co">## 4 -2.314171 -2.364989 -2.263785  0.10506846 -0.20390601 0.4069824 95%</span></span>
-<span><span class="co">## 5 -2.307076 -2.355816 -2.258764  0.17803488 -0.06669684 0.4240934 95%</span></span>
-<span><span class="co">## 6 -2.296435 -2.345331 -2.247803  0.24693415  0.05587013 0.4435060 95%</span></span></code></pre>
+<span><span class="co">## 1 -2.299643 -2.414000 -2.183837 -0.25235132 -0.87809292 0.3626294 95%</span></span>
+<span><span class="co">## 2 -2.317324 -2.385642 -2.251903 -0.05477672 -0.49446047 0.3850857 95%</span></span>
+<span><span class="co">## 3 -2.318013 -2.374656 -2.261576  0.02650803 -0.33880173 0.3891164 95%</span></span>
+<span><span class="co">## 4 -2.314741 -2.364605 -2.263464  0.10372242 -0.19922954 0.4010352 95%</span></span>
+<span><span class="co">## 5 -2.307709 -2.356023 -2.258219  0.17686647 -0.06633546 0.4173686 95%</span></span>
+<span><span class="co">## 6 -2.297122 -2.346491 -2.245940  0.24594016  0.05545065 0.4320062 95%</span></span></code></pre>
 <p>To examine the additional options in the <code>reslr</code> package,
 see the main vignette.</p>
 </div>
