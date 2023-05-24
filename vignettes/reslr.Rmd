@@ -791,8 +791,6 @@ head(output_dataframes)
 ```
 
 
-
-
 # Noisy Input Generalised Additive Model for decomposition of response signal (**"ni_gam_decomp"**)
 
 The Noisy Input Generalised Additive Model for the decomposition of the response signal (RSL). 
@@ -908,22 +906,17 @@ plot(res_ni_gam_decomp,
   plot_type = "rate_plot"
 )
 ```
-This will print the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used. To examine the data creating the total model fit result plot, the user can use:
+This will print the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used. To examine the data creating the total model fit and the rate of change plot, the user can use:
 ```{r,totaldf, eval = TRUE}
 total_model_fit_df <- res_ni_gam_decomp$output_dataframes$total_model_fit_df
 head(total_model_fit_df)
-```
-To examine the data creating the total model rate of change plot the user can use:
-```{r,totalrate, eval = TRUE}
-total_model_rate_df <- res_ni_gam_decomp$output_dataframes$total_model_rate_df
-head(total_model_rate_df)
 ```
 
 There are separate settings to examine the plot of each component and its associated rate. To examine the regional component plot use:
 ```{r,plotnigamregres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(res_ni_gam_decomp, plot_type = "regional_plot")
 ```
-The regional component and the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the regional component plot, the user can use:
+The regional component and the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the regional component plot and rate plot, the user can use:
 ```{r,regdf, eval = FALSE}
 regional_component_df <- res_ni_gam_decomp$output_dataframes$regional_component_df
 ```
@@ -931,10 +924,7 @@ The rate for the regional component can be accessed using:
 ```{r,plotnigamregresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(res_ni_gam_decomp, plot_type = "regional_rate_plot")
 ```
-Similarly, the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the regional component rate of change plot the user can use:
-```{r,regratedf, eval = FALSE}
-regional_rate_component_df <- res_ni_gam_decomp$output_dataframes$regional_rate_component_df
-```
+Similarly, the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. 
 
 To examine the linear local component plot use:
 ```{r,plotnigamlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
@@ -959,7 +949,7 @@ To examine the non-linear local component plot use:
 ```{r,plotnigamnonlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(res_ni_gam_decomp, plot_type = "non_linear_local_plot")
 ```
-The non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the non-linear local component plot, the user can use:
+The non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the non-linear local component plot and rate plot, the user can use:
 ```{r,non_lindf, eval = FALSE}
 non_lin_loc_component_df <- res_ni_gam_decomp$output_dataframes$non_lin_loc_component_df
 ```
@@ -968,11 +958,6 @@ The plot of the rate of change for the non-linear local component use:
 plot(res_ni_gam_decomp, plot_type = "non_linear_local_rate_plot")
 ```
 The rate of change of the non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
-
-To examine the data creating the non-linear local component plot rate of change plot the user can use:
-```{r,nonlinratedf, eval = FALSE}
-non_lin_loc_rate_component_df <- jags_output.ni_gam_decomp$output_dataframes$non_lin_loc_rate_component_df
-```
 
 In order to examine how all components vary, the user can examine the plot using the following method:
 ```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE,message=FALSE,results='hide'}

@@ -35,7 +35,7 @@ plot.reslr_output <- function(x,
                               ylab = "Relative Sea Level (m)",
                               y_rate_lab = "Rate of change (mm per year)",
                               ...) {
-  Age <- RSL <- SL <- y_lwr_box <- y_upr_box <- Age_err <- ID <- RSL_err <- obs_index <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
+  Age <- Age_BP <- RSL <- SL <- y_lwr_box <- y_upr_box <- Age_err <- ID <- RSL_err <- obs_index <- lwr <- upr <- lwr <- rate_pred <- rate_lwr <- rate_upr <- SiteName <- data_type_id <- pred <- NULL
   jags_output <- x
 
   # EIV slr------------
@@ -1523,7 +1523,6 @@ plot.reslr_output <- function(x,
       regional_rate_plot <-
         ggplot2::ggplot() +
         ggplot2::geom_line(
-          #data = regional_rate_component_df,
           data = regional_component_df,
           ggplot2::aes(x = Age, y = rate_pred, colour = "mean")
         ) +

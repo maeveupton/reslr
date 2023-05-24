@@ -27,7 +27,7 @@ plot.reslr_input <- function(x,
                              plot_proxy_records = TRUE,
                              plot_caption = TRUE,
                              ...) {
-  Age <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <-y_lwr_box <- y_upr_box <- SL <- obs_index <-  NULL
+  Age <- Age_BP <- RSL <- Age_err <- RSL_err <- SiteName <- data_type_id <-y_lwr_box <- y_upr_box <- SL <- obs_index <-  NULL
   # Input data-------
   input_data <- x
   data <- input_data$data

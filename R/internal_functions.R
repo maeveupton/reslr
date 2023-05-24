@@ -277,6 +277,7 @@ clean_tidal_gauge_data <- function(data,
   # )
   # # Calculate the decadal averages based on the rolling average
   # decadal_averages_TG <- annual_tidal_gauge_data_df %>% tidyr::drop_na()
+
   # Version B: Decadal Averages using simple method------
   decadal_averages_TG <-
     annual_tidal_gauge_data_df %>%
@@ -303,7 +304,6 @@ clean_tidal_gauge_data <- function(data,
   tidal_gauge_full_df <- tidal_gauge_average_10_df %>%
     dplyr::mutate(
       Age_err = 1, # years --> half a year/half a decade
-      #Age_err = 1, # years --> half a year/half a decade
     ) %>%
     #dplyr::mutate(sd_TG = ifelse(is.na(sd_TG), 0.001, sd_TG)) %>%
     dplyr::group_by(SiteName) %>%
@@ -711,7 +711,8 @@ match.closest <- function(x, table, tolerance = Inf, nomatch = NA_integer_) {
 linear_reg_rates <- function(data) {
   Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- NULL
   data_filter <- data %>%
-    dplyr::filter(!Age > 1.800) # Ignoring recent human influences to SL rise
+    # Ignoring recent human influences to SL rise
+    dplyr::filter(!Age > 1.800)
   # # Remove index points
   # data_filter <- data %>%
   #   dplyr::group_by(Site)%>%
@@ -723,7 +724,6 @@ linear_reg_rates <- function(data) {
     dplyr::mutate(
       #linear_rate = round(stats::lm(RSL ~ Age)$coefficients[[2]], 2),
       linear_rate =stats::lm(RSL ~ Age)$coefficients[[2]],
-      #linear_rate =lm(RSL ~ Age)$coefficients[[2]],
       linear_rate_err = base::summary(stats::lm(RSL ~ Age))$coefficients[2, 2]
     )
 
@@ -766,7 +766,6 @@ create_igp_output_df <- function(model_run, jags_data, data_grid, CI) {
   K.gw <- K <- K.w.inv <- array(NA, c(n_iter, Ngrid, Ngrid))
 
   ######## Initialize quadrature for the integration########
-  # DOES this need to change if I change the size of the prediction grids?
   L <- 30 ## this sets the precision of the integration quadrature (higher is better but more computationally expensive)
   index <- 1:L
   cosfunc <- cos(((2 * index - 1) * pi) / (2 * L))
@@ -881,8 +880,6 @@ create_output_df <- function(noisy_model_run_output,
     rate_lwr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = 1-((1 - CI)/2))
     rate_upr <- apply(mu_pred_deriv_post, 2, stats::quantile, probs = (1 - CI)/2)
 
-
-    #total_model_fit_df <- data.frame(
     total_model_df <- data.frame(
       data_grid,
       pred = apply(mu_post_pred, 2, mean),
@@ -894,18 +891,6 @@ create_output_df <- function(noisy_model_run_output,
       rate_lwr = rate_lwr,
       CI = paste0(CI*100,"%")
     )
-
-    # # Total model fit rate
-    # mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
-    # total_model_rate_df <-
-    #   data.frame(
-    #     data_grid,
-    #     rate_pred = apply(mu_pred_deriv_post, 2, mean),
-    #     rate_upr = rate_upr,
-    #     rate_lwr = rate_lwr,
-    #     ID = "Total Rate of Change for Posterior Model",
-    #     CI = paste0(CI*100,"%")
-    #   )
 
     # Regional component
     time_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$r_pred
@@ -926,17 +911,6 @@ create_output_df <- function(noisy_model_run_output,
       rate_upr = rate_upr,
       rate_lwr = rate_lwr
     )
-
-
-    # regional_rate_component_df <-
-    #   data.frame(
-    #     data_grid,
-    #     rate_pred = apply(time_component_pred_deriv_post, 2, mean),
-    #     rate_upr = rate_upr,
-    #     rate_lwr = rate_lwr,
-    #     ID = "Rate of Change for Regional Component",
-    #     CI = paste0(CI*100,"%")
-    #   )
 
     # Vertical Offset & Linear Local Component
     g_h_component_pred_post <- noisy_model_run_output$BUGSoutput$sims.list$g_h_z_x_pred
@@ -977,26 +951,12 @@ create_output_df <- function(noisy_model_run_output,
         rate_lwr = rate_lwr
       )
 
-    # non_lin_loc_rate_component_df <-
-    #   data.frame(
-    #     data_grid,
-    #     rate_pred = apply(space_time_component_pred_deriv_post, 2, mean),
-    #     rate_upr = rate_upr,
-    #     rate_lwr = rate_lwr,
-    #     ID = "Rate of Change for Non Linear Local Component",
-    #     CI = paste0(CI*100,"%")
-    #   )
-
 
     output_dataframes <- list(
-      #total_model_fit_df = total_model_fit_df %>% dplyr::mutate(ID = as.factor(ID)),
       total_model_df = total_model_df %>% dplyr::mutate(ID = as.factor(ID)),
-      #total_model_rate_df = total_model_rate_df %>% dplyr::mutate(ID = as.factor(ID)),
       regional_component_df = regional_component_df %>% dplyr::mutate(ID = as.factor(ID)),
-      #regional_rate_component_df = regional_rate_component_df %>% dplyr::mutate(ID = as.factor(ID)),
       lin_loc_component_df = lin_loc_component_df %>% dplyr::mutate(ID = as.factor(ID)),
       non_lin_loc_component_df = non_lin_loc_component_df %>% dplyr::mutate(ID = as.factor(ID))
-      #non_lin_loc_rate_component_df = non_lin_loc_rate_component_df %>% dplyr::mutate(ID = as.factor(ID))
     )
   }
 
@@ -1018,8 +978,6 @@ add_noisy_input <- function(model_run,
                             spline_nseg_t,
                             spline_nseg_st ,
                             spline_nseg
-                            # xr,
-                            # xl
 ) {
   if (model_type == "ni_spline_t") {
     #-----Get posterior samples for SL-----
@@ -1027,11 +985,7 @@ add_noisy_input <- function(model_run,
 
     pred_mean_calc <- function(t_new) {
       # Create the basis functions
-      # B_deriv_t <- predict(B_t, t_new)
-
       B_deriv_t <- bs_bbase(t_new,
-        # xl = xl,
-        # xr=xr,
         xl = min(data$Age),
         xr = max(data$Age),
         data = data,
@@ -1249,9 +1203,7 @@ spline_basis_fun <- function(data,
                              model_type,
                              spline_nseg,
                              spline_nseg_st,
-                             spline_nseg_t # ,
-                             # xl,
-                             # xr
+                             spline_nseg_t
 ) {
   Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
 
@@ -1260,9 +1212,7 @@ spline_basis_fun <- function(data,
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase(t,
       xl = min(t),
-      # xl = xl,
       xr = max(t),
-      # xr = xr,
       data = data,
       spline_nseg = spline_nseg
     )
@@ -1283,15 +1233,12 @@ spline_basis_fun <- function(data,
     first_deriv_step1 <- first_deriv_calc(t + h)
     first_deriv_step2 <- first_deriv_calc(t - h)
     B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
-    # B_t_deriv <- (first_deriv_step1 - first_deriv_step2) / (h)
 
     # Basis functions in time using prediction data frame-----------------------
     t_pred <- data_grid$Age
 
     B_t_pred <-
       bs_bbase(t_pred,
-        # xl=xl,
-        # xr=xr,
         xl = min(t),
         xr = max(t),
         data = data,
@@ -1300,7 +1247,6 @@ spline_basis_fun <- function(data,
 
     # Now create derivatives----------------------
     h <- 0.001
-    # h <- 0.00001
     t_pred <- data_grid$Age
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
     first_deriv_step2 <- first_deriv_calc(t_pred - h)
@@ -1316,7 +1262,7 @@ spline_basis_fun <- function(data,
 
   if (model_type == "ni_spline_st") {
     t <- data$Age
-    # Basis functions in space time for data-----------------------
+    # Basis functions in space time for data-----------------
     B_time <- bs_bbase(t,
       xl = min(t),
       xr = max(t),
@@ -1355,15 +1301,12 @@ spline_basis_fun <- function(data,
     }
 
     # Get rid of all the columns which are just zero
-    # B_st <- B_st_full
     B_st <- B_st_full[, -which(colSums(B_st_full) < 0.1)]
 
     # Find the index here that you remove then use this in the derivative
     remove_col_index <- which(colSums(B_st_full) < 0.1)
 
-    # first_deriv_calc <- function(B_st,t_new) {
     first_deriv_calc <- function(t_new) {
-      # B_st_deriv <- predict(object = B_st,newx = t_new)#,x_train = t_old)t_old
       # Now the local basis functions
       B_time <- bs_bbase(t_new,
         xl = min(data$Age),
@@ -1406,7 +1349,6 @@ spline_basis_fun <- function(data,
     }
     # Now create derivatives----
     h <- 0.0001
-
     first_deriv_step1 <- first_deriv_calc(t_new = t + h)
     first_deriv_step2 <- first_deriv_calc(t_new = t - h)
     B_st_deriv <- (first_deriv_step1 - first_deriv_step2) / (2 * h)
@@ -1493,7 +1435,6 @@ spline_basis_fun <- function(data,
       }
 
       # Get rid of all the columns which are just zero
-      # B_st <- B_st_full[,-which(colSums(B_st_full) < 0.1)]
       B_st <- B_st_full[, -remove_col_index]
       return(B_st)
     }
@@ -1731,11 +1672,10 @@ spline_basis_fun <- function(data,
       }
 
       # Get rid of all the columns which are just zero
-      # B_st <- B_st_full[,-which(colSums(B_st_full) < 0.1)]
       B_st <- B_st_full[, -remove_col_index]
       return(B_st)
     }
-    h <- 0.00001 # h <- 0.001
+    h <- 0.00001
     t_pred <- data_grid$Age
 
     first_deriv_step1 <- first_deriv_calc(t_pred + h)
@@ -1848,12 +1788,12 @@ spline_basis_fun <- function(data,
   return(spline_basis_fun_list)
 }
 
-#' Creating spline basis functions for spline in time & spline in space tie
+#' Creating spline basis functions for spline in time & spline in space time
 #'
-#' @param x Age in years CE
-#' @param xl minimum Age
-#' @param xr maximum Age
-#' @param spline_nseg_t number of sections
+#' @param x Input age
+#' @param xl Minimum Age
+#' @param xr Maximum Age
+#' @param spline_nseg_t Number of sections
 #' @param deg Degree of polynomial
 #' @param data Input data
 #' @noRd
@@ -1876,10 +1816,9 @@ bs_bbase <- function(x,
                xr + deg * dx,
                by = dx
   )
-  # print(length(knots))
 
   # Use bs() function to generate the B-spline basis
-  get_bs_matrix <- matrix(
+  bs_matrix <- matrix(
     splines::bs(x,
                 degree = deg,
                 knots = knots,
@@ -1887,19 +1826,16 @@ bs_bbase <- function(x,
     ),
     nrow = length(x)
   )
-  # Remove columns that contain zero only
-  # bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  bs_matrix <- get_bs_matrix
   return(bs_matrix)
 }
 
 
 #' Creating spline basis functions for NIGAM for the temporal component
 #'
-#' @param x Age in years CE
-#' @param xl minimum Age
-#' @param xr maximum Age
-#' @param spline_nseg_t number of sections
+#' @param x Input age in years
+#' @param xl Minimum Age
+#' @param xr Maximum Age
+#' @param spline_nseg_t Number of sections
 #' @param deg Degree of polynomial
 #' @param data Input data
 #' @noRd
@@ -1927,7 +1863,7 @@ bs_bbase_t <- function(x,
   print(length(knots))
 
   # Use bs() function to generate the B-spline basis
-  get_bs_matrix <- matrix(
+  bs_matrix <- matrix(
     splines::bs(x,
       degree = deg,
       knots = knots,
@@ -1935,18 +1871,15 @@ bs_bbase_t <- function(x,
     ),
     nrow = length(x)
   )
-  # Remove columns that contain zero only
-  # bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  bs_matrix <- get_bs_matrix
   return(bs_matrix)
 }
 
 #' Creating spline basis functions for NIGAM spatial temporal component
 #'
-#' @param x Age in years CE
-#' @param xl minimum Age
-#' @param xr maximum Age
-#' @param spline_nseg_st number of sections
+#' @param x Input age in years
+#' @param xl Minimum Age
+#' @param xr Maximum Age
+#' @param spline_nseg_st Number of sections
 #' @param deg Degree of polynomial
 #' @param data Input data
 #' @noRd
@@ -1974,7 +1907,7 @@ bs_bbase_st <- function(x,
   print(length(knots))
 
   # Use bs() function to generate the B-spline basis
-  get_bs_matrix <- matrix(
+  bs_matrix <- matrix(
     splines::bs(x,
       degree = deg,
       knots = knots,
@@ -1982,32 +1915,5 @@ bs_bbase_st <- function(x,
     ),
     nrow = length(x)
   )
-  # Remove columns that contain zero only
-  # bs_matrix <- get_bs_matrix[, -c(1:deg, ncol(get_bs_matrix):(ncol(get_bs_matrix) - deg))]
-  bs_matrix <- get_bs_matrix
   return(bs_matrix)
 }
-
-# Think about using this one
-# These functions create the B-spline basis functions
-# They are taken from the Eilers and Marx 'Craft of smoothing' course
-# http://statweb.lsu.edu/faculty/marx/
-# tpower <- function(x, t, p) {
-#   # Truncated p-th power function
-#   return((x - t)^p * (x > t))
-# }
-# bs_bbase <- function(x, xl = min(x), xr = max(x),
-#                      nseg = NULL,#30,
-#                      deg = 3,data) {
-#     if (is.null(nseg)) {
-#      nseg <- round(deg / (1 + deg / length(data$Age)))
-#     }
-#   # Construct B-spline basis
-#   dx <- (xr - xl) / nseg
-#   knots <- seq(xl - deg * dx, xr + deg * dx, by = dx)
-#   P <- outer(x, knots, tpower, deg)
-#   n <- dim(P)[2]
-#   D <- diff(diag(n), diff = deg + 1) / (gamma(deg + 1) * dx^deg)
-#   B <- (-1)^(deg + 1) * P %*% t(D)
-#   return(B)
-# }
