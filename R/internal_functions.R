@@ -1858,8 +1858,8 @@ bs_bbase_t <- function(x,
   if (is.null(spline_nseg_t)) {
     spline_nseg_t <- round(deg / (1 + deg / length(data$Age)))
   }
-  cat("Number nseg for t")
-  print(spline_nseg_t)
+  #cat("Number nseg for t")
+  #print(spline_nseg_t)
   # Compute the length of the partitions
   dx <- (xr - xl) / spline_nseg_t
   # Create equally spaced knots
@@ -1867,8 +1867,8 @@ bs_bbase_t <- function(x,
     xr + deg * dx,
     by = dx
   )
-  cat("Number knots for t")
-  print(length(knots))
+  #cat("Number knots for t")
+  #print(length(knots))
 
   # Use bs() function to generate the B-spline basis
   bs_matrix <- matrix(
@@ -1902,8 +1902,8 @@ bs_bbase_st <- function(x,
   if (is.null(spline_nseg_st)) {
     spline_nseg_st <- round(deg / (1 + deg / length(data$Age)))
   }
-  cat("Number nseg for st")
-  print(spline_nseg_st)
+  #cat("Number nseg for st")
+  #print(spline_nseg_st)
   # Compute the length of the partitions
   dx <- (xr - xl) / spline_nseg_st
   # Create equally spaced knots
@@ -1911,8 +1911,8 @@ bs_bbase_st <- function(x,
     xr + deg * dx,
     by = dx
   )
-  cat("Number knots for st")
-  print(length(knots))
+  #cat("Number knots for st")
+  #print(length(knots))
 
   # Use bs() function to generate the B-spline basis
   bs_matrix <- matrix(
