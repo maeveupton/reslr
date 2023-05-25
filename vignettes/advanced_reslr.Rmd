@@ -315,7 +315,7 @@ plot(
 In the package, all plot labels for results, i.e. x and y labels and titles, can be updated in the following manner:
 ```{r, eval = FALSE}
 # Example
-final_plots <- plot(jags_output = reslr_mcmc(CedarIslandNC, model_type = "ni_spline_t"))
+final_plots <- plot(x = reslr_mcmc(CedarIslandNC, model_type = "ni_spline_t"))
 final_plots$plot_result
 # Adding new title to the total model fit plot
 final_plots$plot_result + ggplot2::ggtitle("New Title Added as Example")
