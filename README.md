@@ -5,16 +5,22 @@
 <!-- badges: end -->
 
  
-`reslr` is a package designed to account for measurement errors within commonly used models (e.g. linear regression, change-point regression, Integrated Gaussian process regression, splines, generalised additive models) for examining data in time and space. The package has the ability to utilise data derived from paleoenvironmental reconstructions such as examining relative sea level (RSL) over time and space. 
+`reslr` is a package designed to perform Bayesian modelling of relative sea level data. We provide a range of different statistical models which include: linear regression, change-point regression, integrated Gaussian process regression, splines, generalised additive models. In addition, we account for measurement uncertainty in multiple dimensions which is a common when examining relative sea-level data. The package has a unifying framework for loading data, fitting models, and summarising relative sea level (RSL) change over time and space. The output plots provide sea level curves and corresponding rates of change with appropriate consideration of uncertainty. An example dataset is included in the package which contains proxy reconstructed RSL records from the Atlantic Coast of North America. Also, the user can select to include instrumental data from tide gauges using the Permanent Service for Mean Sea Level [online database](https://psmsl.org/). 
+ 
+Markov Chain Monte Carlo (MCMC) algorithms via the Just Another Gibbs Sample (JAGS) software is used for our Bayesian statistical models. Before using the `reslr` package, the user must download the JAGS package using this [link](https://sourceforge.net/projects/mcmc-jags/). 
 
-There are a variety of different statistical model types available to the user, all within a Bayesian Framework, and they uses Gibbs sampling and Markov Chain Monte Carlo (MCMC) algorithms via the Just Another Gibbs Sample (JAGS) software. To download the JAGS package use this [link](https://sourceforge.net/projects/mcmc-jags/). 
+To examine the full vignette check out:
+[reslr](https://maeveupton.github.io/reslr/articles/reslr.html)
 
-A practical example of the package can be found here: 
-https://maeveupton.github.io/reslr/ 
+For a quick start use:
+[Quick start](https://maeveupton.github.io/reslr/articles/quick_start.html)
+ 
+For a more detailed discussion on advanced options within the `reslr` package examine:
+[Advanced](https://maeveupton.github.io/reslr/articles/advanced_reslr.html)
 
 
 # Installing the reslr package
-To use the `reslr` package install it using the following method as the package is not yet on CRAN.:
+To use the `reslr` package install it using the following method as the package is not yet on CRAN:
 ```{r}
 # install.packages("devtools")
 devtools::install_github("maeveupton/reslr")
