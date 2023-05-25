@@ -174,7 +174,6 @@ clean_tidal_gauge_data <- function(data,
   Age_epoch_id <- LongLat <- rolling_avg <- median <- nearest_proxy_site <- RSL_annual <- TG_min_dist1 <- minimum_dist <- nearest_TG <- rows_site <- site <- min_dist1 <- stationflag <- name <- sd <- sd_TG <- n_obs_by_site <- RSL_offset <- data_type_id <- decade <- decade_meanRSL <- Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- id <- NULL
   # Using data from PSMSL website for annual tide gauge data----------------------------------
   # Set up the URL for downloading the data
-  # url <- "https://raw.psmsl.org/data/obtaining/rlr.annual.data/rlr_annual.zip"
   url <- "https://psmsl.org/data/obtaining/rlr.annual.data/rlr_annual.zip"
 
   # Create a temporary file
@@ -189,15 +188,16 @@ clean_tidal_gauge_data <- function(data,
 
   ### ------------Loop to open all RSL & Age data files------------
   read_plus <- function(flnm) {
-    data.table::fread(flnm, sep = ";") %>% # fread quicker way to read in & allows for ; to be used
-      dplyr::mutate(filename = flnm) # allows you to include the file name as id
+    # fread quicker way to read in & allows for ; to be used
+    data.table::fread(flnm, sep = ";") %>%
+      # allows you to include the file name as id
+      dplyr::mutate(filename = flnm)
   }
   # Warnings: there are some files without data
   suppressWarnings(
     temp_SL <-
       list.files(
         path = file.path(temp_dir, "rlr_annual", "data"),
-        # path = "rlr_annual/data",
         pattern = "*.rlrdata",
         full.names = T
       ) %>%
@@ -211,13 +211,16 @@ clean_tidal_gauge_data <- function(data,
   # Access the individual data files within the 'rlr_annual' folder
   file_path <- file.path(temp_dir, "rlr_annual", "filelist.txt")
   file_list <- utils::read.csv(file_path, stringsAsFactors = FALSE, header = F, sep = ";")
-  colnames(file_list) <- c("id", "Latitude", "Longitude", "name", "coastline", "stationcode", "stationflag")
+  colnames(file_list) <- c("id", "Latitude", "Longitude", "name",
+                           "coastline", "stationcode", "stationflag")
+
   # Removing white space in the name of each site
   file_list$name <- stringr::str_trim(file_list$name, side = "both")
   file_list$stationflag <- stringr::str_trim(file_list$stationflag, side = "both")
+
   # Data from the PSMSL website
   data_TG <- temp_SL %>%
-    # pulling out the file number from string so that it matches the name from other files
+    # Pulling out the file number from string so that it matches the name from other files
     dplyr::mutate(id = stringr::str_extract(basename(temp_SL$id), "[0-9]+")) %>%
     # Cases where bad data was collected
     dplyr::filter(!RSL == -99999) #%>%
@@ -329,16 +332,15 @@ clean_tidal_gauge_data <- function(data,
   # No user option here -> this is a must: Removing sites with only 2 points (20 years of data)-----
   decadal_TG_df <-
     tidal_gauge_full_df %>%
-    # decadal_NA_TG %>%
     dplyr::group_by(SiteName) %>%
     dplyr::filter(dplyr::n() > 2)
-  # dplyr::mutate(data_type_id = "TideGaugeData") %>%
 
   #-----Uniting original dataset and model run to give a site index to model_result data set-----
   SL_site_df <- data %>%
     dplyr::mutate(Longitude = round(Longitude, 1)) %>%
     dplyr::mutate(Latitude = round(Latitude, 1)) %>%
-    tidyr::unite("LongLat", Latitude:Longitude, remove = FALSE) %>% # Uniting 2 columns
+    # Uniting 2 columns
+    tidyr::unite("LongLat", Latitude:Longitude, remove = FALSE) %>%
     dplyr::mutate(site = sprintf("%02d", as.integer(as.factor(LongLat)))) %>%
     dplyr::mutate(data_type_id = "ProxyRecord") %>%
     dplyr::group_by(SiteName) %>%
@@ -351,10 +353,10 @@ clean_tidal_gauge_data <- function(data,
     dplyr::ungroup()
 
   SL_tide_site_df <- decadal_TG_df %>%
-    # dplyr::select(!all_tidal_data_sites) %>%
     dplyr::mutate(Longitude = round(Longitude, 1)) %>%
     dplyr::mutate(Latitude = round(Latitude, 1)) %>%
-    tidyr::unite("LongLat", Latitude:Longitude, remove = FALSE) %>% # Uniting 2 columns
+    # Uniting 2 columns
+    tidyr::unite("LongLat", Latitude:Longitude, remove = FALSE) %>%
     dplyr::mutate(site = sprintf("%02d", as.integer(as.factor(LongLat)))) %>%
     dplyr::mutate(data_type_id = "TideGaugeData") %>%
     dplyr::group_by(SiteName) %>%
@@ -373,7 +375,6 @@ clean_tidal_gauge_data <- function(data,
 
   #---Distance Matrix for each site to each other---
   mat.distance <- geosphere::distm(SL_proxy_unique[, 2:3], SL_tide_unique[, 2:3])
-  # fun = distGeo)
   mat.distance_m <- as.matrix(mat.distance)
   #--finding row mins & corresponding tidal gauge--
   rownames(mat.distance) <- SL_proxy_unique$SiteName
@@ -400,7 +401,8 @@ clean_tidal_gauge_data <- function(data,
     "TG_site_5", "TG_min_dist5"
   )
   # Sorting the minimum distances from lowest to highest
-  dist_TG_proxy <- dist_TG_proxy %>% dplyr::arrange(dplyr::desc(TG_min_dist1))
+  dist_TG_proxy <- dist_TG_proxy %>%
+    dplyr::arrange(dplyr::desc(TG_min_dist1))
 
   dist_TG_proxy_long_1 <- dist_TG_proxy %>%
     tidyr::pivot_longer(
@@ -419,8 +421,7 @@ clean_tidal_gauge_data <- function(data,
     nearest_proxy_site = dist_TG_proxy_long_1$nearest_proxy_site,
     nearest_TG = dist_TG_proxy_long_2$nearest_TG,
     minimum_dist = as.numeric(dist_TG_proxy_long_1$minimum_distance)
-  ) # ,
-  # n_obs_tg = obs_sites)
+  )
 
 
   # Criteria 1: User provides a list of TGs------------------------
@@ -433,7 +434,7 @@ clean_tidal_gauge_data <- function(data,
     }
 
     decadal_TG_df_filter <- subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
-    #--There will be NAs were the proxy data doesn't have a corresponding index--
+    # There will be NAs were the proxy data doesn't have a corresponding index--
     data_tide_proxy <- plyr::rbind.fill(
       SL_site_df,
       decadal_TG_df_filter
@@ -457,7 +458,8 @@ clean_tidal_gauge_data <- function(data,
     all_nearest_TG_closest <- dist_TG_proxy_df_new %>%
       dplyr::group_by(nearest_proxy_site) %>%
       dplyr::filter(minimum_dist == min(minimum_dist)) %>%
-      dplyr::distinct(nearest_TG, .keep_all = TRUE) # Removing any duplicate tide gauge sites.
+      # Removing any duplicate tide gauge sites.
+      dplyr::distinct(nearest_TG, .keep_all = TRUE)
 
 
     # Joining the selected TG sites back with the original data
@@ -467,8 +469,9 @@ clean_tidal_gauge_data <- function(data,
     #--There will be NAs were the proxy data doesn't have a corresponding index--
     data_tide_proxy <- plyr::rbind.fill(
       SL_site_df,
+      # stacking rows
       join_new_index_tide_df
-    ) # stacking rows
+    )
 
 
     # Ensuring the SiteName is a factor
@@ -491,7 +494,8 @@ clean_tidal_gauge_data <- function(data,
     # 1 degree away from proxy site is 111.1km
     all_nearest_TG_closest <- dist_TG_proxy_df_new %>%
       dplyr::filter(minimum_dist <= 111100) %>%
-      dplyr::distinct(nearest_TG, .keep_all = TRUE) # Removing any duplicate tide gauge sites.
+      # Removing any duplicate tide gauge sites.
+      dplyr::distinct(nearest_TG, .keep_all = TRUE)
 
     # Joining the selected TG sites back with the original data
     join_new_index_tide_df <- SL_tide_site_df %>%
@@ -538,7 +542,8 @@ clean_tidal_gauge_data <- function(data,
     # 1 degree away from proxy site is 111.1km-------------
     all_nearest_TG_closest <- dist_TG_proxy_df_new %>%
       dplyr::filter(minimum_dist <= 111100) %>%
-      dplyr::distinct(nearest_TG, .keep_all = TRUE) # Removing any duplicate tide gauge sites.
+      # Removing any duplicate tide gauge sites.
+      dplyr::distinct(nearest_TG, .keep_all = TRUE)
 
     # Joining the selected TG sites back with the original data
     join_new_index_tide_df <- SL_tide_site_df %>%
@@ -580,7 +585,8 @@ clean_tidal_gauge_data <- function(data,
     all_nearest_TG_closest <- dist_TG_proxy_df_new %>%
       dplyr::group_by(nearest_proxy_site) %>%
       dplyr::filter(minimum_dist == min(minimum_dist)) %>%
-      dplyr::distinct(nearest_TG, .keep_all = TRUE) # Removing any duplicate tide gauge sites.
+      # Removing any duplicate tide gauge sites.
+      dplyr::distinct(nearest_TG, .keep_all = TRUE)
 
 
     # Joining the selected TG sites back with the original data
