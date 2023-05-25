@@ -223,25 +223,25 @@ clean_tidal_gauge_data <- function(data,
     # Pulling out the file number from string so that it matches the name from other files
     dplyr::mutate(id = stringr::str_extract(basename(temp_SL$id), "[0-9]+")) %>%
     # Cases where bad data was collected
-    dplyr::filter(!RSL == -99999) #%>%
-    #dplyr::group_by(id) %>%
+    dplyr::filter(!RSL == -99999) %>%
+    dplyr::group_by(id) %>%
     # 2000-2018 used as the tidal epoch
-    #dplyr::mutate(Age_epoch_id = ifelse(dplyr::between(Age, 2000, 2018), TRUE, FALSE))
+    dplyr::mutate(Age_epoch_id = ifelse(dplyr::between(Age, 2000, 2018), TRUE, FALSE))
 
   # Removing offset based on the location---
   # Offset value is the mean of RSL over the tidal epoch
   # Setting 2000-2018 as the tidal epoch
-  # Age_epoch_ref <- data_TG %>%
-  #   dplyr::select(RSL, Age_epoch_id) %>%
-  #   dplyr::filter(Age_epoch_id == TRUE) %>%
-  #   dplyr::summarise(RSL_offset = unique(mean(RSL)))
-  #
-  # data_TG <- merge(data_TG, Age_epoch_ref, by = "id", all = TRUE)
+  Age_epoch_ref <- data_TG %>%
+    dplyr::select(RSL, Age_epoch_id) %>%
+    dplyr::filter(Age_epoch_id == TRUE) %>%
+    dplyr::summarise(RSL_offset = unique(mean(RSL)))
+
+  data_TG <- merge(data_TG, Age_epoch_ref, by = "id", all = TRUE)
   # Cases where no data between 2000-2018 set the offset to 7000
-  #data_TG$RSL_offset[is.na(data_TG$RSL_offset)] <- 7000
+  data_TG$RSL_offset[is.na(data_TG$RSL_offset)] <- 7000
 
   # Updating the RSL to the shifted RSL value
-  data_TG$RSL <- data_TG$RSL - 7000#data_TG$RSL_offset
+  data_TG$RSL <- data_TG$RSL - data_TG$RSL_offset # 7000
 
   #--Joining SL data with location names--
   annual_SL_tide_df <- merge(data_TG, file_list, by = "id", all = TRUE)
@@ -257,7 +257,7 @@ clean_tidal_gauge_data <- function(data,
   # Annual Tidal Gauge data----
   annual_tidal_gauge_data_df <- annual_SL_tide_df %>%
     dplyr::select(Age, RSL, Latitude, name,
-                  #RSL_offset, Age_epoch_id,
+                  RSL_offset, Age_epoch_id,
                   Longitude) %>%
     dplyr::rename(SiteName = name) %>%
     # from mm --> m
@@ -295,15 +295,15 @@ clean_tidal_gauge_data <- function(data,
       #rows_site = dplyr::n()
     ) # Age=min(Age)
 
-  #---Using standard deviation of RSL over the decade as uncertainty----
-  # too big
+  # Using standard deviation of RSL over the decade as uncertainty----
   decadal_averages_TG <- decadal_averages_TG %>%
   dplyr::group_by(SiteName) %>%
   #dplyr::mutate(sd_TG = sd(decade_meanRSL))
   dplyr::mutate(sd_TG = sd(rolling_avg))
 
   #----- New df with decadal averages for tide gauges-----
-  tidal_gauge_average_10_df <- merge(decadal_averages_TG, annual_tidal_gauge_data_df)
+  tidal_gauge_average_10_df <- merge(decadal_averages_TG,
+                                     annual_tidal_gauge_data_df)
 
   #---Rsl & Age error for tidal gauge data----
   tidal_gauge_full_df <- tidal_gauge_average_10_df %>%
@@ -325,7 +325,7 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(RSL = rolling_avg) %>%
     #Change for Version B
     #dplyr::mutate(RSL = decade_meanRSL) %>%
-    dplyr::select(!c(decade, #Age_epoch_id,RSL_offset
+    dplyr::select(!c(decade, Age_epoch_id,RSL_offset,
                      rolling_avg,
                      RSL_annual))
 
