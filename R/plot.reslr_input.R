@@ -83,6 +83,7 @@ plot.reslr_input <- function(x,
         axis.title = ggplot2::element_text(size = 12, face = "bold"),
         legend.text = ggplot2::element_text(size = 10)
       )
+
     # Plotting when Age type is BP
     if("Age_type" %in% colnames(data)){
       p <- ggplot2::ggplot()+
