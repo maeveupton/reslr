@@ -33,7 +33,8 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 If you require fast instructions, check out the reslr: [Quick start](https://maeveupton.github.io/reslr/articles/quick_start.html).
 
-`reslr` is a package designed to account for measurement errors within commonly used models (e.g. linear regression, change-point regression, Integrated Gaussian process regression, splines, generalised additive models) for examining data in time and space. The package has the ability to utilise data derived from paleoenvironmental reconstructions. One such example is estimating Relative Sea Level (RSL) over time and space using a variety of different model types within a Bayesian Framework. This guide is developed for researchers interested in examining RSL historic change that varies in time or in time and space and how the RSL signal can be decomposed into a fundamental components.
+
+The `reslr` package is specifically developed for Bayesian modeling of relative sea-level data. It offers a diverse selection of statistical models, including linear regression, change-point regression, integrated Gaussian process regression, splines, and generalized additive models. One notable feature is the incorporation of measurement uncertainty in multiple dimensions, which is crucial when analyzing relative sea-level data. The package provides a unified framework for data loading, model fitting, and summarising changes in relative sea level (RSL) over time and space. The generated plots depict sea level curves and corresponding rates of change, taking into account the associated uncertainty.
 
 
 There are a number of modelling options available to the user:

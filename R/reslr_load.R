@@ -39,10 +39,8 @@ reslr_load <- function(data,
   data <- data %>%
     dplyr::mutate(Age = Age / 1000) %>%
     dplyr::mutate(Age_err = Age_err / 1000)
-                  # If minus signs???
-  #as.numeric(iconv(BB_data_df$Longitude, 'utf-8', 'ascii', sub=''))
-                  #Longitude = as.numeric(Longitude),
-                  #Latitude = as.numeric(Latitude))
+    # If minus signs for Long and Lat maybe an issue
+
 
   # Tidy Original data-------------------------------
   if (!("SiteName" %in% colnames(data))) {
