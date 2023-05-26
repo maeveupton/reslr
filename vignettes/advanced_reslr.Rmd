@@ -262,3 +262,6 @@ res_eiv_slr_t <-
 # Accessing the slope of the EIV simple linear regression
 beta <- res_eiv_slr_t$noisy_model_run_output$BUGSoutput$sims.list$beta
 ```
+
+## Smoothing settings for splines
+The NI GAM contains a spline in time and a spline in space time. When creating a spline, piecewise polynomials join together at knots to create the model fit. The number of knots for these models can be alter to achieve a more smooth model fit. This is done within the `reslr_mcmc` function.
