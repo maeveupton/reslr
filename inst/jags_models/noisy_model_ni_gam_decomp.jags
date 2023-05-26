@@ -24,7 +24,7 @@ model {
           g_z_x_deriv[i] <- b_g[site[i]]
 
           # Model residuals
-          residuals[i] <- y[i] - mu[i]
+          residuals[i] <- y[i] - mu_y[i]
 
         }
 

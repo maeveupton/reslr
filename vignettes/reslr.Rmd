@@ -128,7 +128,8 @@ The user must ensure that the input data is a dataframe. For a single site or mu
 
 ## Tide Gauge Data
 There is an option in the `reslr` package to include tide gauge data as an additional source of data which we recommend when using the `model_type = "ni_gam_decomp"`. The package will extract tide gauge data from the [PSMSL website](https://psmsl.org/data/obtaining/complete.php). The data is downloaded from this website and stored in a temporary directory.
-The tide gauges undergo a cleaning process within the package. Firstly, certain tide gauges have been flagged by the PSMSL website and we remove these locations. As collection of proxy reconstructions began in approximately 2000 CE, the tide gauge records are given in meters relative to the average over a time window, 2000 - 2018 CE. This time window corresponds to the variability of 19-year astronomical tides (Pugh and Woodworth 2014). Next, the tide gauge data is averaged over a decade to make it comparable with sedimentation rates associated proxy records sedimentation rates. The user can alter the size of the average if required when accumulation rates for the sediment in the proxy record is estimated to have a higher or lower accumulation rate, e.g. longer sediment accumulation rate result in a larger window average of 20 years.
+
+The tide gauges undergo a number of processing steps within the package. Firstly, certain tide gauges have been flagged by the PSMSL website and we remove these locations. Secondly, the tide gauge data in the PSMSL database is given in millimetres relative to a revised local reference datum (a coordinate system which defines the zero level for sea level measurements (Pugh et al., 2014)). We transform the data by removing 7000 mm to revert the tide gauge data into the observed reference frame and convert the RSL to metres following the PSMSL guidance as described in Aarup et al. 2006 . Lastly, the tide gauge data is averaged over a decade to make it comparable with sedimentation rates associated proxy records sedimentation rates. The user can alter the size of the average if required when accumulation rates for the sediment in the proxy record is estimated to have a higher or lower accumulation rate, e.g. longer sediment accumulation rate result in a larger window average of 20 years.
 
 Within the `reslr_load` function, the user has three options to choose from:
 
@@ -1000,11 +1001,15 @@ Model and GRACE’, Annual Review of Earth and Planetary Sciences 32, 111–149
 
 For the background to tide gauge data:
 
-Pugh, David, and rholip Woodworth. 2014. “Tidal Forces: Sea-Level Science: Understanding Tides,
+Pugh, David, and Philip Woodworth. 2014. “Tidal Forces: Sea-Level Science: Understanding Tides,
 Surges, Tsunamis and Mean Sea-Level Changes.” In Sea-Level Science: Understanding Tides, Surges,
 Tsunamis and Mean Sea-Level Changes, 36–59. Cambridge University Press. 
 
-Holgate, Simon J., Andrew Matthews, rholip L. Woodworth, Lesley J. Rickards, Mark E. Tamisiea,
+Holgate, Simon J., Andrew Matthews, Philip L. Woodworth, Lesley J. Rickards, Mark E. Tamisiea,
 Elizabeth Bradshaw, Peter R. Foden, Kathleen M. Gordon, Svetlana Jevrejeva, and Jeff Pugh. 2013.
 “New Data Systems and Products at the Permanent Service for Mean Sea Level.” Journal of Coastal
 Research 29 (3): 493–504. 
+
+Aarup, T., M. Merrifield, B. Pérez Gómez, I. Vassie, and P.Woodworth. 2006. “Manual on
+Sea-level Measurements and Interpretation, Volume IV : An update to 2006.” Intergovernmental
+Oceanographic Commission of UNESCO 4. https://unesdoc.unesco.org/ark:/48223/pf0000147773

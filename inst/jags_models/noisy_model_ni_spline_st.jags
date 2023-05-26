@@ -9,7 +9,7 @@ model {
           mu_y[i] <- l[i]
 
           # Model residuals
-          residuals[i] <- y[i] - mu[i]
+          residuals[i] <- y[i] - mu_y[i]
         }
 
       # Non-linear local component

@@ -13,8 +13,7 @@
 #' input_data <- reslr_load(data = data)
 #' jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
 #' summary(object = jags_output)
-summary.reslr_output <- function(object, # jags_output,#
-                                 # type = c("diagnostics", "parameter_estimates"),# "quantiles", "statistics",#' @param type User decides which type of summary they require
+summary.reslr_output <- function(object,
                                  ...) {
   mu_pred <- sd <- mad <- rhat <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- rho <- sigma <- NULL
   jags_output <- object
@@ -55,6 +54,7 @@ summary.reslr_output <- function(object, # jags_output,#
   }
   # EIV cp 1------
   if (inherits(jags_output, "eiv_cp1_t") == TRUE) {
+    browser()
     jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
     par_summary <- posterior::summarise_draws(sample_draws) %>%
