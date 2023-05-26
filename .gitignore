@@ -1,9 +1,15 @@
+# History files
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 /doc/
 /Meta/
+# Mac files
 .DS_Store
 .DS_Store
 .DS_Store
+
+# Produced vignettes
+vignettes/*.html
+vignettes/*.pdf
