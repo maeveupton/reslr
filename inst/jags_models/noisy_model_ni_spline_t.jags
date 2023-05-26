@@ -59,7 +59,6 @@ model {
 
       # Priors
       sigma_beta~ dt(0, 1^-2, 1)T(0,)
-
       sigma_y ~ dt(0, 1^-2, 1)T(0,)
 }
 

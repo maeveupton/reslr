@@ -23,6 +23,9 @@ model {
           # Linear Local component
           g_z_x_deriv[i] <- b_g[site[i]]
 
+          # Model residuals
+          residuals[i] <- y[i] - mu[i]
+
         }
 
       # Informed Regional component

@@ -7,6 +7,9 @@ model {
 
           # Mean structure
           mu_y[i] <- l[i]
+
+          # Model residuals
+          residuals[i] <- y[i] - mu[i]
         }
 
       # Non-linear local component
