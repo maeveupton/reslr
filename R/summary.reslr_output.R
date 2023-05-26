@@ -70,8 +70,14 @@ summary.reslr_output <- function(object,
         q95 = q95,
         rhat = rhat
       ) %>%
-      dplyr::mutate(variable = ifelse(variable == "cp", "Change Point:", variable)) %>%
-      dplyr::mutate(mean = ifelse(variable == "Change Point:", round(mean * 1000), mean))
+      dplyr::mutate(variable = ifelse(variable == "cp", "Change Point in CE:", variable)) %>%
+      dplyr::mutate(mean = ifelse(variable == "Change Point in CE:", round(mean * 1000), mean))
+    if("Age_type" %in% colnames(data)){
+      par_summary <- par_summary %>%
+        dplyr::mutate(mean = ifelse(variable == "Change Point in CE:", 1950 - mean, mean)) %>%
+        dplyr::mutate(variable = ifelse(variable == "Change Point in CE:",
+                                        "Change Point in BP:", variable))
+    }
   }
 
   # EIV cp 2
@@ -95,12 +101,21 @@ summary.reslr_output <- function(object,
         q95 = q95,
         rhat = rhat
       ) %>%
-      dplyr::mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
-      dplyr::mutate(variable = ifelse(variable == "cp[2]", "Change Point 2:", variable)) %>%
+      dplyr::mutate(variable = ifelse(variable == "cp[1]", "Change Point 1 in CE:", variable)) %>%
+      dplyr::mutate(variable = ifelse(variable == "cp[2]", "Change Point 2 in CE:", variable)) %>%
       dplyr::mutate(
-        mean = ifelse(variable == "Change Point 1:", round(mean * 1000), mean),
-        mean = ifelse(variable == "Change Point 2:", round(mean * 1000), mean)
+        mean = ifelse(variable == "Change Point 1 in CE:", round(mean * 1000), mean),
+        mean = ifelse(variable == "Change Point 2 in CE:", round(mean * 1000), mean)
       )
+    if("Age_type" %in% colnames(data)){
+      par_summary <- par_summary %>%
+        dplyr::mutate(mean = ifelse(variable == "Change Point 1 in CE:", 1950 - mean, mean)) %>%
+        dplyr::mutate(mean = ifelse(variable == "Change Point 2 in CE:", 1950 - mean, mean)) %>%
+        dplyr::mutate(variable = ifelse(variable == "Change Point 1 in CE:",
+                                        "Change Point 1 in BP:", variable)) %>%
+        dplyr::mutate(variable = ifelse(variable == "Change Point 1 in CE:",
+                                        "Change Point 2 in BP:", variable))
+    }
   }
 
   # EIV cp 3
@@ -124,14 +139,28 @@ summary.reslr_output <- function(object,
         q95 = q95,
         rhat = rhat
       ) %>%
-      dplyr::mutate(variable = ifelse(variable == "cp[1]", "Change Point 1:", variable)) %>%
-      dplyr::mutate(variable = ifelse(variable == "cp[2]", "Change Point 2:", variable)) %>%
-      dplyr::mutate(variable = ifelse(variable == "cp[3]", "Change Point 3:", variable)) %>%
+      dplyr::mutate(variable = ifelse(variable == "cp[1]", "Change Point 1 in CE:", variable)) %>%
+      dplyr::mutate(variable = ifelse(variable == "cp[2]", "Change Point 2 in CE:", variable)) %>%
+      dplyr::mutate(variable = ifelse(variable == "cp[3]", "Change Point 3 in CE:", variable)) %>%
       dplyr::mutate(
-        mean = ifelse(variable == "Change Point 1:", round(mean * 1000), mean),
-        mean = ifelse(variable == "Change Point 2:", round(mean * 1000), mean),
-        mean = ifelse(variable == "Change Point 3:", round(mean * 1000), mean),
+        mean = ifelse(variable == "Change Point 1 in CE:", round(mean * 1000), mean),
+        mean = ifelse(variable == "Change Point 2 in CE:", round(mean * 1000), mean),
+        mean = ifelse(variable == "Change Point 3 in CE:", round(mean * 1000), mean),
       )
+    if("Age_type" %in% colnames(data)){
+      par_summary <- par_summary %>%
+        dplyr::mutate(mean = ifelse(variable == "Change Point 1 in CE:", 1950 - mean, mean)) %>%
+        dplyr::mutate(mean = ifelse(variable == "Change Point 2 in CE:", 1950 - mean, mean)) %>%
+        dplyr::mutate(mean = ifelse(variable == "Change Point 3 in CE:", 1950 - mean, mean)) %>%
+        dplyr::mutate(variable =
+                        ifelse(variable == "Change Point 1 in CE:",
+                               "Change Point 1 in BP:", variable)) %>%
+        dplyr::mutate(variable = ifelse(variable == "Change Point 2 in CE:",
+                                        "Change Point 2 in BP:", variable)) %>%
+        dplyr::mutate(variable = ifelse(variable == "Change Point 3 in CE:",
+                                        "Change Point 3 in BP:", variable))
+    }
+
   }
 
   # EIV IGP t
