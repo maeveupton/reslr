@@ -39,18 +39,6 @@ summary.reslr_output <- function(object,
         q95 = q95,
         rhat = rhat
       )
-    # return(par_summary)
-    # }
-    # if ("diagnostics" %in% type) {
-    # Check convergence
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) == 0) {
-    #   cat("No convergence issues detected. \n")
-    # }
-    # if (sum(par_summary$rhat > 1.1, na.rm = TRUE) > 0) {
-    #   cat("Convergence issues detected. \n")
-    #   cat("Increase the number of iterations to make a longer model run in reslr_mcmc \n")
-    # }
-    # }
   }
   # EIV cp 1------
   if (inherits(jags_output, "eiv_cp1_t") == TRUE) {
