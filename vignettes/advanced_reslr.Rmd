@@ -264,4 +264,29 @@ beta <- res_eiv_slr_t$noisy_model_run_output$BUGSoutput$sims.list$beta
 ```
 
 ## Smoothing settings for splines
-The NI GAM contains a spline in time and a spline in space time. When creating a spline, piecewise polynomials join together at knots to create the model fit. The number of knots for these models can be alter to achieve a more smooth model fit. This is done within the `reslr_mcmc` function.
+When constructing a spline piecewise polynomials join together at knots to form smooth curves. The number of knots for these models can be reduced to achieve a more smooth model fit or increased for more flexibility. In the `reslr` package, tests have been carried out to select the correct number of knots for the spline in time, spline in space time and the GAM. However, if the situation arise where the model fits require additional flexibility or require additional smoothing, the user can adjust these settings. To adjust the setting for the number of knots in the spline in time update the reslr function in the following way:
+```{r, eval = FALSE}
+res_ni_sp_t <- 
+  reslr_mcmc(CedarIslandNC_input, 
+             model_type = "ni_spline_t",
+             spline_nseg = NULL)
+```
+By updating the `spline_nseg` function, the number of knots we change. Note the minimum value for this setting is 2. The default for this setting is `NULL` as we use a rule of thumb calculation to identify the number of knots based on the range of observations.
+Similarly, for the spline in space time. The number of knots is updated using:
+```{r, eval = FALSE}
+res_ni_sp_t <- 
+  reslr_mcmc(CedarIslandNC_input, 
+             model_type = "ni_spline_st",
+             spline_nseg = NULL)
+```
+By updating the `spline_nseg` function, the number of knots we change. Note the minimum value for this setting is 2. The default for this setting is `NULL` as we use a rule of thumb calculation to identify the number of knots based on the range of observations.
+
+When using the NI GAM approach, the number of knots for the separate components can be altered. To control the smoothness of the regional component (i.e. spline in time) the setting to vary is the `spline_nseg_t`. To vary the non-linear local component (i.e. spline in space time), the user can vary the `spline_nseg_st` setting. The following example will demonstrate these settings:
+```{r, eval = FALSE}
+res_ni_sp_t <- 
+  reslr_mcmc(CedarIslandNC_input, 
+             model_type = "ni_gam_decomp",
+             spline_nseg_t = 20,
+             spline_nseg_st = 6)
+```
+The default settings have been tested using cross validation techniques to incorporate the require flexibility for both components.
