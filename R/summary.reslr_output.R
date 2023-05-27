@@ -42,7 +42,7 @@ summary.reslr_output <- function(object,
   }
   # EIV cp 1------
   if (inherits(jags_output, "eiv_cp1_t") == TRUE) {
-    browser()
+    data <- jags_output$data
     jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
     par_summary <- posterior::summarise_draws(sample_draws) %>%
@@ -70,9 +70,9 @@ summary.reslr_output <- function(object,
 
   # EIV cp 2
   if (inherits(jags_output, "eiv_cp2_t") == TRUE) {
+    data <- jags_output$data
     jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
-    # if("parameter_estimates" %in% type){
     par_summary <- posterior::summarise_draws(sample_draws) %>%
       dplyr::filter(variable %in% c(
         "alpha[1]", "alpha[2]",
@@ -108,6 +108,7 @@ summary.reslr_output <- function(object,
 
   # EIV cp 3
   if (inherits(jags_output, "eiv_cp3_t") == TRUE) {
+    data <- jags_output$data
     jags_output_model_run <- jags_output$noisy_model_run_output$BUGSoutput$sims.matrix
     sample_draws <- tidybayes::tidy_draws(jags_output_model_run)
     # if("parameter_estimates" %in% type){
