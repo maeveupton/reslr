@@ -875,7 +875,8 @@ create_output_df <- function(noisy_model_run_output,
       CI = paste0(CI * 100, "%")
     )
   } else {
-    if ("CV_fold" %in% data_grid) {
+
+    if ("CV_fold" %in% colnames(data_grid)){
       mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
       upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI) / 2)
       lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - ((1 - CI) / 2))

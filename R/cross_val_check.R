@@ -51,6 +51,7 @@ cross_val_check <- function(raw_data,
                                 cross_val = TRUE,
                                 test_set = test_set
       )
+
       # reslr_mcmc
       train_output <- reslr_mcmc(input_train,
         model_type = model_type,
@@ -92,7 +93,7 @@ cross_val_check <- function(raw_data,
     # Append this df into a list to combine to do the tests
     model_run_list[i] <- list(output_df)
   }
-  browser()
+
 
   # Combining all the dataframes
   CV_model_run_df <- suppressWarnings(
@@ -178,7 +179,8 @@ cross_val_check <- function(raw_data,
     ME_MAE_RSME_site = ME_MAE_RSME_site,
     ME_MAE_RSME_overall = ME_MAE_RSME_overall,
     ME_MAE_RSME_fold = ME_MAE_RSME_fold,
-    true_pred_plot = true_pred_plot
+    true_pred_plot = true_pred_plot,
+    CV_model_df = CV_model_df
   )
   return(cross_validation_tests)
 }

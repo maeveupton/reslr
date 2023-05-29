@@ -719,6 +719,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       dplyr::mutate(Age = Age*1000)
 
     # Output from mcmc & dataframes for plots
+
     output_dataframes <- create_output_df(noisy_model_run_output,
       data_grid = data_grid,
       rate_grid = TRUE,
