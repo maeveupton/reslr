@@ -978,6 +978,8 @@ create_output_df <- function(noisy_model_run_output,
 #' @param spline_nseg Number of segments used to create basis functions for splines
 #' @param spline_nseg_t Number of segments used to create basis functions for NIGAM temporal component
 #' @param spline_nseg_st Number of segments used to create basis functions for NIGMA spatial temporal component
+#' @param xl Minimum value for the basis function for splines
+#' @param xr Maximum value for the basis function for splines
 #' @noRd
 add_noisy_input <- function(model_run,
                             jags_data,
@@ -985,7 +987,9 @@ add_noisy_input <- function(model_run,
                             data,
                             spline_nseg_t,
                             spline_nseg_st ,
-                            spline_nseg
+                            spline_nseg,
+                            xl,
+                            xr
 ) {
   if (model_type == "ni_spline_t") {
     #-----Get posterior samples for SL-----
@@ -1203,6 +1207,8 @@ igp_detrend_data <- function(data, data_grid) {
 #' @param spline_nseg_t Number of segments for the creation of the basis functions
 #' @param spline_nseg_t Number of segments for the creation of the basis functions for NIGAM temporal component
 #' @param spline_nseg_st Number of segments for the creation of the basis functions for NIGAM spatial temporal component
+#' @param xl Minimum value for the basis function for splines
+#' @param xr Maximum value for the basis function for splines
 #' @noRd
 
 
@@ -1211,7 +1217,9 @@ spline_basis_fun <- function(data,
                              model_type,
                              spline_nseg,
                              spline_nseg_st,
-                             spline_nseg_t
+                             spline_nseg_t,
+                             xl,
+                             xr
 ) {
   Age <- RSL <- Longitude <- Latitude <- SiteName <- NULL
 
@@ -1219,8 +1227,8 @@ spline_basis_fun <- function(data,
     t <- data$Age
     # Basis functions in time for data-----------------------
     B_t <- bs_bbase(t,
-      xl = min(t),
-      xr = max(t),
+      xl = xl,#min(t),
+      xr = xr,#max(t),
       data = data,
       spline_nseg = spline_nseg
     )
@@ -1558,8 +1566,8 @@ spline_basis_fun <- function(data,
         # deg = 3
       )
       B_space_1 <- bs_bbase_st(data$Latitude,
-        xl = min(data$Latitude),
-        xr = max(data$Latitude),
+        xl = xl,#min(data$Latitude),
+        xr = xr,#max(data$Latitude),
         spline_nseg_st = spline_nseg_st,
         data = data
       )
@@ -1849,8 +1857,8 @@ bs_bbase <- function(x,
 #' @noRd
 # Basis function approach
 bs_bbase_t <- function(x,
-                       xl = min(x),
-                       xr = max(x),
+                       xl, #= min(x),
+                       xr, #= max(x),
                        deg = 3,
                        spline_nseg_t = NULL,
                        data = data) {
@@ -1893,8 +1901,8 @@ bs_bbase_t <- function(x,
 #' @noRd
 # Basis function approach
 bs_bbase_st <- function(x,
-                        xl = min(x),
-                        xr = max(x),
+                        xl, #= min(x),
+                        xr, #= max(x),
                         deg = 3,
                         spline_nseg_st = NULL,
                         data = data) {

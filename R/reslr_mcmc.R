@@ -15,6 +15,8 @@
 #' @param spline_nseg This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions.
 #' @param spline_nseg_t This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
 #' @param spline_nseg_st This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
+#' @param xl Minimum value for the basis function for splines
+#' @param xr Maximum value for the basis function for splines
 
 #' @return A list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export
@@ -34,7 +36,9 @@ reslr_mcmc <- function(input_data,
                        CI = 0.95,
                        spline_nseg = NULL,
                        spline_nseg_t = 20,#10,#9,
-                       spline_nseg_st = 6#4 # ,
+                       spline_nseg_st = 6,
+                       #xl,
+                       #xr
 ) {
   UseMethod("reslr_mcmc")
 }
@@ -51,7 +55,9 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    CI = 0.95,
                                    spline_nseg = NULL,
                                    spline_nseg_t = 20,#10,
-                                   spline_nseg_st = 6
+                                   spline_nseg_st = 6,
+                                   xl,
+                                   xr
 ) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
@@ -60,12 +66,6 @@ reslr_mcmc.reslr_input <- function(input_data,
     dplyr::mutate(Age = Age/1000, Age_err = Age_err/1000)
   data_grid <- input_data$data_grid %>%
     dplyr::mutate(Age = Age/1000)
-  # # Converting Age from BP to CE to model ------
-  # if("Age_type" %in% colnames(data)){
-  #   data <- data %>%
-  #     dplyr::group_by(SiteName) %>%
-  #     dplyr::mutate(Age = 1950/1000 - Age)
-  # }
 
   # Simple Linear Regression ----------------
   if (model_type == "eiv_slr_t") {
@@ -460,12 +460,6 @@ reslr_mcmc.reslr_input <- function(input_data,
         CI = CI
       )
 
-      # # Converting Age from CE back to BP for plots ------
-      # if("Age_type" %in% colnames(data)){
-      #   data <- data %>%
-      #     dplyr::group_by(SiteName) %>%
-      #     dplyr::mutate(Age = 1950 - Age)
-      # }
       # Output with everything-------------
       jags_output <- list(
         noisy_model_run_output = model_run, # Watch this
@@ -502,7 +496,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg = spline_nseg
+      spline_nseg = spline_nseg,
+      xl = min(data$Age),#xl,
+      xr = max(data$Age)#xr
     )
 
     # JAGS data----------------------
@@ -616,7 +612,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg = spline_nseg
+      spline_nseg = spline_nseg,
+      xl_long = xl,
+      xr = xr
     )
 
     # JAGS data
@@ -747,7 +745,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       data_grid = data_grid,
       model_type = model_type,
       spline_nseg_t = spline_nseg_t,
-      spline_nseg_st = spline_nseg_st
+      spline_nseg_st = spline_nseg_st,
+      xl = xl,
+      xr = xr
     )
 
     # JAGS data
