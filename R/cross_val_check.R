@@ -49,7 +49,10 @@ cross_val_check <- function(raw_data,
       # reslr_load
       input_train <- reslr_load(training_set,
                                 cross_val = TRUE,
-                                test_set = test_set
+                                test_set = test_set,
+                                include_linear_rate = TRUE,
+                                include_tide_gauge = TRUE,
+                                all_TG_1deg = TRUE
       )
 
       # reslr_mcmc
@@ -86,8 +89,13 @@ cross_val_check <- function(raw_data,
     }
     # Check convergence of model:
     summary(train_output)
-    # Take out the dataframe with true & predicted
-    output_df <- train_output$output_dataframes
+    if(model_type == "ni_gam_decomp"){
+      output_df <- train_output$output_dataframes$total_model_df
+    }
+    else{
+      # Take out the dataframe with true & predicted
+      output_df <- train_output$output_dataframes
+    }
     # Column to identify the fold number in the loop
     output_df$CV_fold_number <- as.character(i)
     # Append this df into a list to combine to do the tests
