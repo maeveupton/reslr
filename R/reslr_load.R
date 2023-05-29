@@ -16,6 +16,8 @@
 #' @param all_TG_1deg The package finds all tide gauges within 1 degree of the proxy site
 #' @param detrend_data Detrend the data using the linear rate provided to remove this component.
 #' @param core_col_year The year the sediment core was collected in order to the data to be detrended.
+#' @param cross_val For the spline in time, spline in space time and the NIGAM the user can undertake cross validation to examine the
+#' @param test_set The test set dataframe for cross validation
 #'
 #' @return A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points. If tide gauge data is used, an ID column is included in the two output dataframes displaying the data source, "ProxyRecord" or "TideGaugeData".
 #' @export
@@ -33,7 +35,9 @@ reslr_load <- function(data,
                        input_age_type = "CE",
                        sediment_average_TG = 10,
                        detrend_data = FALSE,
-                       core_col_year = NULL) {
+                       core_col_year = NULL,
+                       cross_val = FALSE,
+                       test_set) {
   Age <- Age_BP <- RSL <- Age_err <- RSL_err <- SiteName <- max_Age <- min_Age<- bounds <- Longitude <- Latitude <- Site <- Region <- data_type_id <- ICE5_GIA_slope <- linear_rate_err <- linear_rate <- n <- obs_index <- x_4_upr <-x_lwr_box<- x_upr_box<- y_1_lwr<-y_lwr<- y_upr<- NULL
   # Dividing Age & Age_err by 1000 for easier calculations-----
   data <- data %>%
@@ -293,6 +297,18 @@ reslr_load <- function(data,
     dplyr::mutate(Age = Age*1000, Age_err = Age_err*1000)
   data_grid <- data_grid %>%
     dplyr::mutate(Age = Age*1000)
+
+  if(cross_val == TRUE){
+    # Test set
+    test_set <- test_set %>%
+      dplyr::mutate(test_set = "test_set")
+    # Joining my test set with the data_grid to do a pred vs true plot
+    data_grid <- rbind(data_grid,test_set) %>%  dplyr::arrange(Age)
+    data_grid <- data_grid %>% dplyr::select(-c(Region,Site))
+  }
+  else{
+    data_grid <- data_grid
+  }
 
   # Including Age_BP column in the data_grid dataframe:
   if (input_age_type == "BP") {

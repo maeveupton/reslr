@@ -22,6 +22,9 @@ model {
       l_pred <- B_st_pred %*% b_st
       for (i in 1:n_pred){
         mu_pred[i] <- l_pred[i]
+        # Creating prediction intervals without uncertainty
+        sigmasq_all_pred[i] <- sigma_y^2 # + y_err[i]^2 + NI_var_grid_term[i]^2
+        y_pred[i] ~ dnorm(mu_pred[i], sigmasq_all_pred[i]^-1)
       }
 
       # Derivatives

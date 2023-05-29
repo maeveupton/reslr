@@ -7,25 +7,16 @@ model {
 
           # Mean structure
           mu_y[i] <- r[i]
-          #r[i] <- inprod(B_t[i,], b_t)
 
           # Pulling out residuals of model
           residuals[i] <- y[i] - mu_y[i]
         }
 
-      ## No penalty Regional term
-      #r <- B_t %*% b_t
-      #for (j in 1:n_knots_t) {
-      #  #b_t[j] ~ dnorm(0, tau_t)
-      #   b_t[j] ~ dnorm(0, sigma_t^-2)
-      # }
 
       # Spline in time penalised 1st order
       r <- B_t %*% b_t
-      #b_t[1] ~ dnorm(0,0.01)
       b_t[1] ~ dnorm(0,1)
       for (j in 2:n_knots_t) {
-        #b_t[j] ~ dnorm(b_t[j-1], tau_t)
         b_t[j] ~ dnorm(0, sigma_beta^-2)
       }
 
@@ -44,6 +35,10 @@ model {
       r_pred <- B_t_pred %*% b_t
       for (i in 1:n_pred){
           mu_pred[i] <- r_pred[i]
+          # Creating prediction intervals without uncertainty
+          sigmasq_all_pred[i] <- sigma_y^2 # + y_err[i]^2 + NI_var_grid_term[i]^2
+          y_pred[i] ~ dnorm(mu_pred[i], sigmasq_all_pred[i]^-1)
+
       }
 
       # Derivatives

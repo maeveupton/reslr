@@ -36,7 +36,7 @@ reslr_mcmc <- function(input_data,
                        CI = 0.95,
                        spline_nseg = NULL,
                        spline_nseg_t = 20,#10,#9,
-                       spline_nseg_st = 6,
+                       spline_nseg_st = 6
                        #xl,
                        #xr
 ) {
@@ -55,9 +55,9 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    CI = 0.95,
                                    spline_nseg = NULL,
                                    spline_nseg_t = 20,#10,
-                                   spline_nseg_st = 6,
-                                   xl,
-                                   xr
+                                   spline_nseg_st = 6
+                                   #xl,
+                                   #xr
 ) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 
@@ -497,8 +497,8 @@ reslr_mcmc.reslr_input <- function(input_data,
       data_grid = data_grid,
       model_type = model_type,
       spline_nseg = spline_nseg,
-      xl = min(data$Age),#xl,
-      xr = max(data$Age)#xr
+      xl = xl,
+      xr = xr
     )
 
     # JAGS data----------------------
@@ -524,6 +524,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Adding Noisy Input-------------------
     data <- add_noisy_input(
       data = data,
+      data_grid = data_grid,
       model_run = model_run,
       model_type = model_type,
       jags_data = jags_data,
@@ -545,8 +546,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       "r_deriv",
       "sigma_beta",
       "sigmasq_all",
+      "sigmasq_all_pred",
+      "y_pred",
       "r_pred",
-      "tau_t",
       "residuals"
     )
 
@@ -607,13 +609,14 @@ reslr_mcmc.reslr_input <- function(input_data,
   # Noisy Input GAM in Space Time-------------------------------------------
   if (model_type == "ni_spline_st") {
     jags_file <- system.file("jags_models", "model_ni_spline_st.jags", package = "reslr")
+
     # Basis functions in space time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
       data_grid = data_grid,
       model_type = model_type,
       spline_nseg = spline_nseg,
-      xl_long = xl,
+      xl = xl,
       xr = xr
     )
 
@@ -653,6 +656,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Adding Noisy Input-------------------
     data <- add_noisy_input(
       data = data,
+      data_grid = data_grid,
       model_run = model_run,
       model_type = model_type,
       spline_nseg = spline_nseg
@@ -691,7 +695,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       "l_pred",
       "sigma_beta",
       "sigmasq_all",
-      "residuals"
+      "residuals",
+      "sigmasq_all_pred",
+      "y_pred"
     )
 
     # Run JAGS--------------
@@ -818,6 +824,7 @@ reslr_mcmc.reslr_input <- function(input_data,
     # Adding Noisy Input-------------------
     data <- add_noisy_input(
       data = data,
+      data_grid = data_grid,
       model_run = model_run,
       model_type = model_type,
       spline_nseg_st = spline_nseg_st,
@@ -910,7 +917,9 @@ reslr_mcmc.reslr_input <- function(input_data,
       "l_deriv",
       "l_pred",
       "l_pred_deriv",
-      "residuals"
+      "residuals",
+      "sigmasq_all_pred",
+      "y_pred"
     )
     # Run JAGS--------------
     noisy_model_run_output <-

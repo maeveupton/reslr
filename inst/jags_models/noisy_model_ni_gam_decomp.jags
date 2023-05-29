@@ -95,9 +95,13 @@ model {
 
         # Mean structure
         mu_pred[i] <- r_pred[i] + l_pred[i] + g_z_x_pred[i] + h_z_x_pred[i]
+        # Creating prediction intervals without uncertainty
+        sigmasq_all_pred[i] <- sigma_y^2 # + y_err[i]^2 + NI_var_grid_term[i]^2
+        y_pred[i] ~ dnorm(mu_pred[i], sigmasq_all_pred[i]^-1)
 
         # Derivative for the Total component
         mu_pred_deriv[i] <- r_pred_deriv[i] + l_pred_deriv[i] + g_z_x_pred_deriv[i]
+
 
     }
 
