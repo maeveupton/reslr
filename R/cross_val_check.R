@@ -32,6 +32,7 @@ cross_val_check <- function(raw_data,
                             seed = NULL,
                             CI = 0.95) {
   # Cross Validation tests-----------------
+  CV_fold_number <-RSL<- Region<- Site<- SiteName<- lwr_PI<- obs_in_PI<- pred<-true_RSL<- upr_PI <-xl <-xr<- y_post_pred<-NULL
   set.seed(seed)
   # Input data
   data <- raw_data

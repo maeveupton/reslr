@@ -15,8 +15,6 @@
 #' @param spline_nseg This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions.
 #' @param spline_nseg_t This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
 #' @param spline_nseg_st This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
-#' @param xl Minimum value for the basis function for splines
-#' @param xr Maximum value for the basis function for splines
 
 #' @return A list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export
@@ -35,10 +33,8 @@ reslr_mcmc <- function(input_data,
                        n_chains = 3,
                        CI = 0.95,
                        spline_nseg = NULL,
-                       spline_nseg_t = 20,#10,#9,
+                       spline_nseg_t = 20,
                        spline_nseg_st = 6
-                       #xl,
-                       #xr
 ) {
   UseMethod("reslr_mcmc")
 }
@@ -54,10 +50,8 @@ reslr_mcmc.reslr_input <- function(input_data,
                                    n_chains = 3,
                                    CI = 0.95,
                                    spline_nseg = NULL,
-                                   spline_nseg_t = 20,#10,
+                                   spline_nseg_t = 20,
                                    spline_nseg_st = 6
-                                   #xl,
-                                   #xr
 ) {
   Age <- RSL <- Age_err <- RSL_err <- SiteName <- Longitude <- Latitude <- max_Age <- min_Age <- linear_rate <- linear_rate_err <- NULL
 

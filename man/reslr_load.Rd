@@ -15,7 +15,9 @@ reslr_load(
   input_age_type = "CE",
   sediment_average_TG = 10,
   detrend_data = FALSE,
-  core_col_year = NULL
+  core_col_year = NULL,
+  cross_val = FALSE,
+  test_set
 )
 }
 \arguments{
@@ -40,6 +42,10 @@ reslr_load(
 \item{detrend_data}{Detrend the data using the linear rate provided to remove this component.}
 
 \item{core_col_year}{The year the sediment core was collected in order to the data to be detrended.}
+
+\item{cross_val}{For the spline in time, spline in space time and the NIGAM the user can undertake cross validation to examine the}
+
+\item{test_set}{The test set dataframe for cross validation}
 }
 \value{
 A list containing data frame of data and prediction grid. The output of this function is two data frames, one with the data and one with the data_grid which represent a grid with evenly spaced time points. If tide gauge data is used, an ID column is included in the two output dataframes displaying the data source, "ProxyRecord" or "TideGaugeData".
