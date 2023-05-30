@@ -1,0 +1,59 @@
+model {
+# Noisy Model for ni_spline_t
+        for (i in 1:n_obs) {
+          # Main likelihood
+          y[i] ~ dnorm(mu_y[i], sigmasq_all[i]^-1)
+          sigmasq_all[i] <- sigma_y^2 + y_err[i]^2 + NI_var_term[i]^2
+
+          # Mean structure
+          mu_y[i] <- r[i]
+
+          # Pulling out residuals of model
+          residuals[i] <- y[i] - mu_y[i]
+        }
+
+
+      # Spline in time penalised 1st order
+      r <- B_t %*% b_t
+      b_t[1] ~ dnorm(0,1)
+      for (j in 2:n_knots_t) {
+        b_t[j] ~ dnorm(0, sigma_beta^-2)
+      }
+
+       # 1st order difference on b_t for Regional term
+       #r <- B_t %*% b_t
+       #for (j in 1:(n_knots_t-1)) {
+       #for (j in 1:(n_knots_t)) {
+         #b_t[j] ~ dnorm(0, tau_t)
+         #b_t[j] ~ dnorm(0, sigma_t^-2)
+       #}
+        #---Sum to 0 constraint on the final knot---
+       #b_t[n_knots_t] <-  -sum(b_t[1:(n_knots_t-1)])
+
+
+      # Predictions
+      r_pred <- B_t_pred %*% b_t
+      for (i in 1:n_pred){
+          mu_pred[i] <- r_pred[i]
+          # Creating prediction intervals without uncertainty
+          sigmasq_all_pred[i] <- sigma_y^2  + y_err_grid[i]^2 + NI_var_grid_term[i]^2
+          y_pred[i] ~ dnorm(mu_pred[i], sigmasq_all_pred[i]^-1)
+
+      }
+
+      # Derivatives
+      r_deriv <- B_t_deriv %*% b_t
+      for (i in 1:n_obs){
+        mu_deriv[i] <- r_deriv[i]
+      }
+      r_pred_deriv <- B_t_pred_deriv %*% b_t
+      for (i in 1:n_pred){
+        mu_pred_deriv[i] <- r_pred_deriv[i]
+      }
+
+
+      # Priors
+      sigma_beta~ dt(0, 1^-2, 1)T(0,)
+      sigma_y ~ dt(0, 1^-2, 1)T(0,)
+}
+

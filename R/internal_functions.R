@@ -1072,8 +1072,8 @@ add_noisy_input <- function(model_run,
     # Raw data
     deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
     # Predicted data
-    #t_grid <- data_grid$Age
-    #deriv_grid <- (pred_mean_calc(t_grid + h) - pred_mean_calc(t_grid - h)) / (2 * h)
+    t_grid <- data_grid$Age
+    deriv_grid <- (pred_mean_calc(t_grid + h) - pred_mean_calc(t_grid - h)) / (2 * h)
   }
 
   if (model_type == "ni_spline_st") {
@@ -1125,8 +1125,8 @@ add_noisy_input <- function(model_run,
     t <- data$Age
     deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
     # Predicted data
-    #t_grid <- data_grid$Age
-    #deriv_grid <- (pred_mean_calc(t_grid + h) - pred_mean_calc(t_grid - h)) / (2 * h)
+    t_grid <- data_grid$Age
+    deriv_grid <- (pred_mean_calc(t_grid + h) - pred_mean_calc(t_grid - h)) / (2 * h)
   }
 
   if (model_type == "ni_gam_decomp") {
@@ -1151,17 +1151,22 @@ add_noisy_input <- function(model_run,
     t <- data$Age
     deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
     # Predicted data
-    #t_grid <- data_grid$Age
-    #deriv_grid <- (pred_mean_calc(t_grid + h) - pred_mean_calc(t_grid - h)) / (2 * h)
+    t_grid <- data_grid$Age
+    deriv_grid <- (pred_mean_calc(t_grid + h) - pred_mean_calc(t_grid - h)) / (2 * h)
   }
 
   # Add this new term in - this is the extra standard deviation on each term----
   data$NI_var_term <- sqrt(deriv^2 %*% data$Age_err^2)[, 1]
-  # data_grid$NI_var_grid_term <- sqrt(deriv_grid^2 %*% data$Age_err^2)[, 1]
+  if("CV_fold" %in%colnames(data_grid)){
+    data_grid$NI_var_grid_term <- sqrt(deriv_grid^2 %*% data$Age_err^2)[, 1]
+  }
 
   # Writing new dataframe with noisy extra column------
   data <- data.frame(data)
-  return(data)
+  data_grid <- data.frame(data_grid)
+  update_input_df <- list(data = data,
+                          data_grid = data_grid)
+  return(update_input_df)
 }
 
 

@@ -11,6 +11,7 @@
 #' @param n_chains Number of MCMC chains. The number of times the model will be run.
 #' @param n_fold Number of folds required in the cross validation. The default is 5 fold cross validation.
 #' @param seed If the user wants reproducible results, seed stores the output when random selection was used in the creation of the 5 fold cross validation.
+#' @param CI Size of the credible interval required by the user. The default is 0.95 corresponding to 95%.
 #'
 #' @return A list containing the model comparison measures, e.g. Root Mean Square Error (RMSE)
 #' @export
@@ -28,7 +29,8 @@ cross_val_check <- function(raw_data,
                             n_chains = 3,
                             model_type,
                             n_fold = 5,
-                            seed = NULL) {
+                            seed = NULL,
+                            CI = 0.95) {
   # Cross Validation tests-----------------
   set.seed(seed)
   # Input data
@@ -63,7 +65,8 @@ cross_val_check <- function(raw_data,
         n_iterations = n_iterations,
         n_burnin = n_burnin,
         n_thin = n_thin,
-        n_chains = n_chains
+        n_chains = n_chains,
+        CI = CI
       )
     } else {
 
@@ -84,7 +87,8 @@ cross_val_check <- function(raw_data,
         n_iterations = n_iterations,
         n_burnin = n_burnin,
         n_thin = n_thin,
-        n_chains = n_chains
+        n_chains = n_chains,
+        CI = CI
       )
     }
     # Check convergence of model:
@@ -102,7 +106,7 @@ cross_val_check <- function(raw_data,
     model_run_list[i] <- list(output_df)
   }
 
-  browser()
+
   # Combining all the dataframes
   CV_model_run_df <- suppressWarnings(
     dplyr::bind_rows(model_run_list)
@@ -151,23 +155,33 @@ cross_val_check <- function(raw_data,
   CV_model_df <- CV_model_df %>%
     dplyr::rename(true_RSL = RSL,
                   pred_RSL = pred)
+  # Creating the prediction intervals outside JAGS to include Age Error
   # Overall Empirical Coverage
   CV_model_df <- CV_model_df %>%
     dplyr::mutate(obs_in_PI =
-                    ifelse(dplyr::between(true_RSL,
-                                          lwr_PI,
-                                          upr_PI),
+                    ifelse(dplyr::between(true_RSL,upr_PI,
+                                          lwr_PI
+                                          ),
                            TRUE,FALSE))
   # Total coverage is trues/ number of rows with the prediction interval
   total_coverage <-
     length(which(CV_model_df$obs_in_PI == "TRUE"))/nrow(CV_model_df)
-  # Prediction Interval size
-  interval_size <- CV_model_df %>% dplyr::group_by(SiteName)
+  # Coverage is trues/ number of rows with the prediction interval by site
+  coverage_by_site <-CV_model_df %>%
+    dplyr::group_by(SiteName) %>%
+    dplyr::reframe(coverage_by_site =
+                     unique(length(which(obs_in_PI == "TRUE"))/dplyr::n()))
 
+  # Prediction Interval size
+  prediction_interval_size <- CV_model_df %>%
+    dplyr::group_by(SiteName) %>%
+    dplyr::reframe(PI_width = unique(mean(upr_PI - lwr_PI)))
 
 
   # True vs Predicted plot
-  true_pred_plot <- ggplot2::ggplot(data = CV_model_df, ggplot2::aes(x = true_RSL, y = y_post_pred,#y = pred_RSL,
+  true_pred_plot <- ggplot2::ggplot(data = CV_model_df, ggplot2::aes(x = true_RSL,
+                                                                     #y = pred_RSL,
+                                                                     y = y_post_pred,#
                                                                      colour = "PI")) +
     ggplot2::geom_errorbar(data = CV_model_df,
                   ggplot2::aes(x = true_RSL,ymin = lwr_PI,ymax = upr_PI),colour = "red3",
@@ -221,7 +235,9 @@ cross_val_check <- function(raw_data,
     ME_MAE_RSME_fold = ME_MAE_RSME_fold,
     true_pred_plot = true_pred_plot,
     CV_model_df = CV_model_df,
-    total_coverage = total_coverage
+    total_coverage = total_coverage,
+    prediction_interval_size = prediction_interval_size,
+    coverage_by_site=coverage_by_site
   )
   return(cross_validation_tests)
 }

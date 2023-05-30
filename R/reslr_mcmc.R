@@ -522,7 +522,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       n.chains = n_chains
     ))
     # Adding Noisy Input-------------------
-    data <- add_noisy_input(
+    update_input_df <- add_noisy_input(
       data = data,
       data_grid = data_grid,
       model_run = model_run,
@@ -530,8 +530,15 @@ reslr_mcmc.reslr_input <- function(input_data,
       jags_data = jags_data,
       spline_nseg = spline_nseg
     )
+    data <- update_input_df$data
+    data_grid <- update_input_df$data_grid
     # Include Noise-----------------------
-    noisy_jags_file <- system.file("jags_models", "noisy_model_ni_spline_t.jags", package = "reslr")
+    if("CV_fold" %in% colnames(data_grid)){
+      noisy_jags_file <- system.file("jags_models", "noisy_model_ni_spline_t_valid.jags", package = "reslr")
+    }
+    else{
+      noisy_jags_file <- system.file("jags_models", "noisy_model_ni_spline_t.jags", package = "reslr")
+    }
 
     # Parameters to save in JAGs-----------------
     jags_pars <- c(
@@ -551,7 +558,26 @@ reslr_mcmc.reslr_input <- function(input_data,
       "r_pred",
       "residuals"
     )
-
+    if("CV_fold" %in% colnames(data_grid)){
+      # JAGS data for second model run-----------
+      jags_data <- list(
+        NI_var_term = data$NI_var_term,
+        NI_var_grid_term = data_grid$NI_var_grid_term,
+        y = data$RSL,
+        y_err = data$RSL_err,
+        y_err_grid = data_grid$RSL_err,
+        t = data$Age,
+        n_obs = nrow(data),
+        t_pred = data_grid$Age,
+        n_pred = length(data_grid$Age),
+        B_t = spline_basis_fun_list$B_t,
+        B_t_deriv = spline_basis_fun_list$B_t_deriv,
+        B_t_pred = spline_basis_fun_list$B_t_pred,
+        n_knots_t = ncol(spline_basis_fun_list$B_t),
+        B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv
+      )
+    }
+    else{
     # JAGS data for second model run-----------
     jags_data <- list(
       NI_var_term = data$NI_var_term,
@@ -566,7 +592,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       B_t_pred = spline_basis_fun_list$B_t_pred,
       n_knots_t = ncol(spline_basis_fun_list$B_t),
       B_t_pred_deriv = spline_basis_fun_list$B_t_pred_deriv
-    )
+    )}
     # Run JAGS--------------
     noisy_model_run_output <-
       suppressWarnings(R2jags::jags(
@@ -654,25 +680,31 @@ reslr_mcmc.reslr_input <- function(input_data,
     ))
 
     # Adding Noisy Input-------------------
-    data <- add_noisy_input(
+    update_input_df <- add_noisy_input(
       data = data,
       data_grid = data_grid,
       model_run = model_run,
       model_type = model_type,
+      jags_data = jags_data,
       spline_nseg = spline_nseg
     )
-
-    #----NI JAGS model-----
-    noisy_jags_file <- system.file("jags_models",
-      "noisy_model_ni_spline_st.jags",
-      package = "reslr"
-    )
+    data <- update_input_df$data
+    data_grid <- update_input_df$data_grid
+    # Include Noise-----------------------
+    if("CV_fold" %in% colnames(data_grid)){
+      noisy_jags_file <- system.file("jags_models", "noisy_model_ni_spline_st_valid.jags", package = "reslr")
+    }
+    else{
+      noisy_jags_file <- system.file("jags_models", "noisy_model_ni_spline_st.jags", package = "reslr")
+    }
 
     # JAGS input data
     jags_data <- list(
       y = data$RSL,
       NI_var_term = data$NI_var_term,
+      NI_var_grid_term = data_grid$NI_var_grid_term,
       y_err = data$RSL_err,
+      y_err_grid = data_grid$RSL_err,
       t = data$Age,
       n_pred = length(data_grid$Age),
       n_obs = nrow(data),
@@ -719,7 +751,6 @@ reslr_mcmc.reslr_input <- function(input_data,
       dplyr::mutate(Age = Age*1000)
 
     # Output from mcmc & dataframes for plots
-
     output_dataframes <- create_output_df(noisy_model_run_output,
       data_grid = data_grid,
       rate_grid = TRUE,

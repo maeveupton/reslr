@@ -304,7 +304,11 @@ reslr_load <- function(data,
       dplyr::mutate(test_set = "test_set")
     # Joining my test set with the data_grid to do a pred vs true plot
     data_grid <- rbind(data_grid,test_set) %>%  dplyr::arrange(Age)
-    data_grid <- data_grid %>% dplyr::select(-c(Region,Site))
+
+    data_grid <- data_grid %>%
+      dplyr::select(-c(Region,Site)) %>%
+      dplyr::mutate(Age_err = ifelse(is.na(Age_err),0,Age_err),
+                    RSL_err = ifelse(is.na(RSL_err),0,RSL_err))
   }
   else{
     data_grid <- data_grid

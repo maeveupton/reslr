@@ -49,17 +49,8 @@ model {
       l <- B_st %*% b_st
       for (j in 1:n_knots_st) {
         b_st[j] ~ dnorm(0, sigma_beta_l^-2)
-      #  #b_st[j] ~ dnorm(0, tau_st)
       }
 
-      # Non-linear local component
-      #l <- B_st %*% b_st
-      ##b_st[1] ~ dnorm(0,0.1)
-      #b_st[1] ~ dnorm(0,1)
-      #for (j in 2:n_knots_st) {
-      #  b_st[j] ~ dnorm(b_st[1], sigma_st^-2)
-      #  #b_st[j] ~ dnorm(b_st[1], tau_st)
-      #}
 
       # Derivative of Non-linear local
       l_deriv <- B_st_deriv %*% b_st
@@ -95,8 +86,8 @@ model {
 
         # Mean structure
         mu_pred[i] <- r_pred[i] + l_pred[i] + g_z_x_pred[i] + h_z_x_pred[i]
-        # Creating prediction intervals without uncertainty
-        sigmasq_all_pred[i] <- sigma_y^2
+        # Creating prediction intervals with uncertainty
+        sigmasq_all_pred[i] <- sigma_y^2  + y_err_grid[i]^2 + NI_var_grid_term[i]^2
         y_pred[i] ~ dnorm(mu_pred[i], sigmasq_all_pred[i]^-1)
 
         # Derivative for the Total component

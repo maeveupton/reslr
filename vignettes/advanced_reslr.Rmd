@@ -290,3 +290,72 @@ res_ni_sp_t <-
              spline_nseg_st = 6)
 ```
 The default settings have been tested using cross validation techniques to incorporate the require flexibility for both components.
+
+## Cross Validation tests for Spline and NI-GAM
+
+In the previous section, we discussed altering the smoothness of the splines by varying the number of knots in the model. The user can test the validity of the model and the number of knots selected using this cross validation function with in the package. For example, the user can run different values for the knots and compare the model fits for each setting using the following cross validation function.
+
+```{r,eval = TRUE,message=FALSE}
+data1site_example <- NAACproxydata %>%
+  dplyr::filter(Site %in% c( "Cedar Island"))
+# Cross Validation test
+cv <- cross_val_check(raw_data = data1site_example,
+                      model_type ="ni_spline_t",
+                      spline_nseg = NULL,# User the package to calculate the number of knots
+                      # n_fold allows the user to alter the cross validation, i.e. 3, 5, 10 fold
+                      n_fold = 3,
+                      CI = 0.95)# Size of the credible intervals and prediction intervals
+
+```
+To alter the number of knots in the model, include the `spline_nseg` or `spline_nseg_t` or `spline_nseg_st` arguments in this function. The different meanings for these arguments are described in the section above. By altering the `CI` argument, the user can change the size of the prediction intervals.
+
+The `n_fold = 3` argument allows the user to change the number of folds used in the cross validation test. We recommend a minimum of 3 folds and the ideal number of folds is 5 or 10, however, using 10 folds will result in longer run times. 
+
+By updating the `model_type` argument, the user can undertake cross validation for the noisy input spline in time, the noisy input spline in space time or the noisy input generalised additive model.
+
+The outputs of the `cross_val_check` function are stored as a list. To examine the true versus predicted plot use the following command.
+```{r,eval = TRUE}
+cv$true_pred_plot
+```
+This figure presents the true RSL value in metres versus the predicted RSL value in metres for each data site. The predicted means are the red dots and the vertical lines over each point are the prediction intervals.
+
+To access the dataframe creating this plot use:
+```{r,eval = TRUE}
+cv$CV_model_df
+```
+This dataframe contains the `true_RSL` values from the test set and the corresponding predicted values `pred_RSL`. In this dataframe, there are the prediction intervals `upr_PI` and `lwr_PI`. The `SiteName` column identifies each site present in the dataframe and allows for site specific analysis of the model if required.
+
+The model performance is examined using a variety of different test. The first is the out of sample empirical coverage. The empirical coverage provides the percentage of occasions that the true RSL observation is within the model prediction interval (PI) for RSL and is given by:
+```{r,eval = TRUE}
+# Overall coverage
+total_empirical_coverage <- cv$total_coverage
+total_empirical_coverage
+# Coverage by site
+coverage_by_site <- cv$coverage_by_site
+coverage_by_site
+# Size of the prediction intervals
+prediction_interval_size <- cv$prediction_interval_size
+prediction_interval_size
+```
+The prediction intervals are created using posterior predictive simulations with the full error structure, i.e. $\hat{y}_{ij} \sim N(\hat{f}_{ij}, \sigma_{y_{ij}}^2 + \sigma_{{t}_{ij}}^2 + \sigma^2)$ where $\sigma_{y_{ij}}^2$ is the observed uncertainty associated with the RSL and $\sigma_{{t}_{ij}}^2$ is calculated to account for the noisy input uncertainty associated with the input (time). The size of these prediction intervals for each site can be examined to understand how the coverage is calculated and using different prediction intervals, e.g. 95\% versus 50\%, the model validity can be further examined.
+
+The remaining tools used to examine model performance within the `reslr` package are the Root Mean Squared Error (RMSE), mean error (ME) and mean absolute error (MAE). The RMSE provides insight into prediction performance in the same units as the response (meters). The RMSE can be examined by site or for each fold in the cross validation test. The overall mean error (ME) by finding the difference
+between the predicted observation and the true RSL observation. The mean absolute error (MAE) is
+calculated by taking the absolute value of the mean error, in turn, this provides the degree to which our
+model is biased. For each test, the recommendation is the lower the value the better the model fit and these values can be accessed by:
+```{r,eval = TRUE}
+# Overall
+ME_MAE_RSME_overall <- cv$ME_MAE_RSME_overall
+ME_MAE_RSME_overall
+# By fold and site
+ME_MAE_RSME_fold_site <- cv$ME_MAE_RSME_fold_site
+ME_MAE_RSME_fold_site
+# By site
+ME_MAE_RSME_site <- cv$ME_MAE_RSME_site
+ME_MAE_RSME_site
+# By fold
+ME_MAE_RSME_fold <- cv$ME_MAE_RSME_fold
+ME_MAE_RSME_fold
+```
+
+For more information about the outputs to these cross validation tests for RSL data refer to Upton et al. 2023 paper.
