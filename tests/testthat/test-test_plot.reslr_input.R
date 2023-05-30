@@ -1,4 +1,4 @@
-co <- function(expr) capture.output(expr, file = "NUL")
+co <- function(expr) capture.output(expr, file = "NULL")
 
 # Testing plotting functions for 1 site
 data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
@@ -12,6 +12,7 @@ reslr_input_1 <- reslr_load(
 
 testthat::test_that("Basic reslr_input plot", {
   p <- plot(reslr_input_1)
+  testthat::expect_s3_class(reslr_input_1, c("reslr_input"))
   vdiffr::expect_doppelganger("inputplot1site", p)
 })
 
@@ -29,6 +30,7 @@ testthat::test_that("Basic reslr_input plot with tide gauges", {
   p2 <- plot(reslr_input_2,
     plot_tide_gauges = TRUE
   )
+  testthat::expect_s3_class(reslr_input_2, c("reslr_input"))
   vdiffr::expect_doppelganger("inputplotTG1site", p2)
 })
 
@@ -45,6 +47,7 @@ reslr_input_3 <- reslr_load(
 
 testthat::test_that("Basic reslr_input plot for multiple sites", {
   p3 <- plot(reslr_input_3)
+  testthat::expect_s3_class(reslr_input_3, c("reslr_input"))
   vdiffr::expect_doppelganger("inputplot3sites", p3)
 })
 
@@ -61,5 +64,6 @@ reslr_input_4 <- reslr_load(
 
 testthat::test_that("Basic reslr_input plot for multiple sites and tide gauges", {
   p4 <- plot(reslr_input_4)
+  testthat::expect_s3_class(reslr_input_4, c("reslr_input"))
   vdiffr::expect_doppelganger("inputplot3sitesTG", p4)
 })

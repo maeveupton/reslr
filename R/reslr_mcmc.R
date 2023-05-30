@@ -490,9 +490,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg = spline_nseg,
-      xl = xl,
-      xr = xr
+      spline_nseg = spline_nseg
     )
 
     # JAGS data----------------------
@@ -634,9 +632,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       data = data,
       data_grid = data_grid,
       model_type = model_type,
-      spline_nseg = spline_nseg,
-      xl = xl,
-      xr = xr
+      spline_nseg = spline_nseg
     )
 
     # JAGS data
@@ -776,9 +772,7 @@ reslr_mcmc.reslr_input <- function(input_data,
       data_grid = data_grid,
       model_type = model_type,
       spline_nseg_t = spline_nseg_t,
-      spline_nseg_st = spline_nseg_st,
-      xl = xl,
-      xr = xr
+      spline_nseg_st = spline_nseg_st
     )
 
     # JAGS data

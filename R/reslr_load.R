@@ -193,7 +193,6 @@ reslr_load <- function(data,
         x_4_upr = Age + Age_err)
 
     get_bounds <- data %>%
-      #select(y_1_lwr:x_4_upr) %>%
       dplyr::select("y_1_lwr","y_2_upr","y_3_lwr","y_4_upr",
                "x_1_upr","x_2_lwr","x_3_lwr","x_4_upr",
                "data_type_id","SiteName") %>%
