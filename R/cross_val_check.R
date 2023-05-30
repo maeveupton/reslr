@@ -102,7 +102,7 @@ cross_val_check <- function(raw_data,
     model_run_list[i] <- list(output_df)
   }
 
-
+  browser()
   # Combining all the dataframes
   CV_model_run_df <- suppressWarnings(
     dplyr::bind_rows(model_run_list)
@@ -116,15 +116,15 @@ cross_val_check <- function(raw_data,
     dplyr::mutate(CV_fold_number = as.factor(CV_fold_number)) %>%
     dplyr::group_by(CV_fold_number) %>%
     dplyr::reframe(
-      RSME = unique(sqrt((sum(RSL - pred)^2) / n())),
-      MAE = unique(sum(abs(RSL - pred)) / n()),
+      RSME = unique(sqrt((sum(RSL - pred)^2) / dplyr::n())),
+      MAE = unique(sum(abs(RSL - pred)) / dplyr::n()),
       ME = unique(mean(RSL - pred))
     )
   # Mean Error & Mean Absolute Error & Root mean square error overall
   ME_MAE_RSME_overall <- CV_model_df %>%
     dplyr::reframe(
-      RSME = unique(sqrt((sum(RSL - pred)^2) / n())),
-      MAE = unique(sum(abs(RSL - pred)) / n()),
+      RSME = unique(sqrt((sum(RSL - pred)^2) / dplyr::n())),
+      MAE = unique(sum(abs(RSL - pred)) / dplyr::n()),
       ME = unique(mean(RSL - pred))
     )
 
@@ -133,8 +133,8 @@ cross_val_check <- function(raw_data,
     dplyr::mutate(CV_fold_number = as.factor(CV_fold_number)) %>%
     dplyr::group_by(SiteName, CV_fold_number) %>%
     dplyr::reframe(
-      RSME = unique(sqrt((sum(RSL - pred)^2) / n())),
-      MAE = unique(sum(abs(RSL - pred)) / n()),
+      RSME = unique(sqrt((sum(RSL - pred)^2) / dplyr::n())),
+      MAE = unique(sum(abs(RSL - pred)) / dplyr::n()),
       ME = unique(mean(RSL - pred))
     )
 
@@ -142,15 +142,37 @@ cross_val_check <- function(raw_data,
   ME_MAE_RSME_site <- CV_model_df %>%
     dplyr::group_by(SiteName) %>%
     dplyr::reframe(
-      RSME = unique(sqrt((sum(RSL - pred)^2) / n())),
-      MAE = unique(sum(abs(RSL - pred)) / n()),
+      RSME = unique(sqrt((sum(RSL - pred)^2) / dplyr::n())),
+      MAE = unique(sum(abs(RSL - pred)) / dplyr::n()),
       ME = unique(mean(RSL - pred))
     )
 
+  # Model dataframe CV
+  CV_model_df <- CV_model_df %>%
+    dplyr::rename(true_RSL = RSL,
+                  pred_RSL = pred)
+  # Overall Empirical Coverage
+  CV_model_df <- CV_model_df %>%
+    dplyr::mutate(obs_in_PI =
+                    ifelse(dplyr::between(true_RSL,
+                                          lwr_PI,
+                                          upr_PI),
+                           TRUE,FALSE))
+  # Total coverage is trues/ number of rows with the prediction interval
+  total_coverage <-
+    length(which(CV_model_df$obs_in_PI == "TRUE"))/nrow(CV_model_df)
+  # Prediction Interval size
+  interval_size <- CV_model_df %>% dplyr::group_by(SiteName)
+
+
 
   # True vs Predicted plot
-  true_pred_plot <- ggplot2::ggplot(data = CV_model_df, ggplot2::aes(x = RSL, y = pred)) +
-    ggplot2::geom_point(color = "red") +
+  true_pred_plot <- ggplot2::ggplot(data = CV_model_df, ggplot2::aes(x = true_RSL, y = y_post_pred,#y = pred_RSL,
+                                                                     colour = "PI")) +
+    ggplot2::geom_errorbar(data = CV_model_df,
+                  ggplot2::aes(x = true_RSL,ymin = lwr_PI,ymax = upr_PI),colour = "red3",
+                  width=0,alpha = 0.5)+
+    ggplot2::geom_point() +
     ggplot2::geom_abline(
       data = CV_model_df,
       ggplot2::aes(intercept = 0, slope = 1, colour = "True = Predicted")
@@ -163,22 +185,32 @@ cross_val_check <- function(raw_data,
       strip.text = ggplot2::element_text(size = 10),
       legend.text = ggplot2::element_text(size = 7),
       legend.title = ggplot2::element_blank(),
-      legend.justification = c(1, 0),
       axis.text.x = ggplot2::element_text(size = 8),
       axis.text.y = ggplot2::element_text(size = 8)
     ) +
     ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
-    # legend.position = c(1, 0.5))+
     ggplot2::labs(
       x = "True Relative Sea Level (m)",
       y = "Predicted Relative Sea Level (m)"
     ) +
     ggplot2::scale_colour_manual("",
       values = c(
-        "True = Predicted" = "black"
-      )
+        c("PI"="red3",
+        #"True = Predicted" = "black")
+        "True = Predicted" = "black")
+      ),
+      labels = c(
+        "PI" = paste0(unique(CV_model_df$CI), " Prediction Interval"),
+        "True = Predicted" = "True = Predicted")
     ) +
-    ggplot2::facet_wrap(~SiteName, scales = "free")
+    ggplot2::facet_wrap(~SiteName, scales = "free")+
+    ggplot2::guides(
+      colour = ggplot2::guide_legend(override.aes = list(
+        linetype = c(1, 1),
+        shape = c(NA, NA),
+        size = 2
+      ))
+    )
 
 
   # Return a list of CV tests
@@ -188,7 +220,8 @@ cross_val_check <- function(raw_data,
     ME_MAE_RSME_overall = ME_MAE_RSME_overall,
     ME_MAE_RSME_fold = ME_MAE_RSME_fold,
     true_pred_plot = true_pred_plot,
-    CV_model_df = CV_model_df
+    CV_model_df = CV_model_df,
+    total_coverage = total_coverage
   )
   return(cross_validation_tests)
 }

@@ -854,6 +854,29 @@ create_output_df <- function(noisy_model_run_output,
                              CI) {
   ID <- NULL
   if (rate_grid == TRUE) {
+
+    if ("CV_fold" %in% colnames(data_grid)){
+
+      mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+      upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI) / 2)
+      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - ((1 - CI) / 2))
+      # Cross Validation
+      y_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$y_pred
+      upr_PI <- apply(y_post_pred, 2, stats::quantile, probs = (1 - CI) / 2)
+      lwr_PI <- apply(y_post_pred, 2, stats::quantile, probs = 1 - ((1 - CI) / 2))
+
+      output_dataframes <- data.frame(
+        data_grid,
+        pred = apply(mu_post_pred, 2, mean),
+        upr = upr,
+        lwr = lwr,
+        y_post_pred = apply(y_post_pred, 2, mean),
+        upr_PI = upr_PI,
+        lwr_PI = lwr_PI,
+        CI = paste0(CI * 100, "%")
+      )
+    }
+    else{
     mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
     # mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_y
     mu_pred_deriv_post <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred_deriv
@@ -874,40 +897,19 @@ create_output_df <- function(noisy_model_run_output,
       rate_lwr = rate_lwr,
       CI = paste0(CI * 100, "%")
     )
-  } else {
-
-    if ("CV_fold" %in% colnames(data_grid)){
-      mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI) / 2)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - ((1 - CI) / 2))
-      # Cross Validation
-      y_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$y_pred
-      upr_PI <- apply(y_post_pred, 2, stats::quantile, probs = (1 - CI) / 2)
-      lwr_PI <- apply(y_post_pred, 2, stats::quantile, probs = 1 - ((1 - CI) / 2))
-
-      output_dataframes <- data.frame(
-        data_grid,
-        pred = apply(mu_post_pred, 2, mean),
-        upr = upr,
-        lwr = lwr,
-        y_post_pred = y_post_pred,
-        upr_PI = upr_PI,
-        lwr_PI = lwr_PI,
-        CI = paste0(CI * 100, "%")
-      )
-    } else {
-      mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
-      upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI) / 2)
-      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - ((1 - CI) / 2))
-
-      output_dataframes <- data.frame(
-        data_grid,
-        pred = apply(mu_post_pred, 2, mean),
-        upr = upr,
-        lwr = lwr,
-        CI = paste0(CI * 100, "%")
-      )
     }
+  } else {
+      mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
+      upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI) / 2)
+      lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - ((1 - CI) / 2))
+
+      output_dataframes <- data.frame(
+        data_grid,
+        pred = apply(mu_post_pred, 2, mean),
+        upr = upr,
+        lwr = lwr,
+        CI = paste0(CI * 100, "%")
+      )
   }
 
   if (decomposition == TRUE & rate_grid == TRUE) {
@@ -935,7 +937,7 @@ create_output_df <- function(noisy_model_run_output,
         rate_upr = rate_upr,
         rate_lwr = rate_lwr,
         CI = paste0(CI * 100, "%"),
-        y_post_pred = y_post_pred,
+        y_post_pred = apply(y_post_pred, 2, mean),
         upr_PI = upr_PI,
         lwr_PI = lwr_PI
       )
