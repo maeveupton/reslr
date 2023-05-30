@@ -10,10 +10,10 @@
 #' @param n_thin Amount of thinning.
 #' @param n_chains Number of MCMC chains. The number of times the model will be run.
 #' @param n_fold Number of folds required in the cross validation. The default is 5 fold cross validation.
-#' @param seed If the user wants reproducible results, seed stores the output when random selection was used in the creation of the 5 fold cross validation.
+#' @param seed If the user wants reproducible results, seed stores the output when random selection was used in the creation of the cross validation.
 #' @param CI Size of the credible interval required by the user. The default is 0.95 corresponding to 95%.
 #'
-#' @return A list containing the model comparison measures, e.g. Root Mean Square Error (RMSE)
+#' @return A list containing the model comparison measures, e.g. Root Mean Square Error (RMSE), and plot of true vs predicted values
 #' @export
 #'
 #' @examples
@@ -181,10 +181,15 @@ cross_val_check <- function(raw_data,
   # True vs Predicted plot
   true_pred_plot <- ggplot2::ggplot(data = CV_model_df, ggplot2::aes(x = true_RSL,
                                                                      #y = pred_RSL,
-                                                                     y = y_post_pred,#
+                                                                     y = y_post_pred,
                                                                      colour = "PI")) +
     ggplot2::geom_errorbar(data = CV_model_df,
-                  ggplot2::aes(x = true_RSL,ymin = lwr_PI,ymax = upr_PI),colour = "red3",
+                  ggplot2::aes(x = true_RSL,
+                               #ymin = lwr,
+                               #ymax = upr),
+                               ymin = lwr_PI,
+                               ymax = upr_PI),
+                               colour = "red3",
                   width=0,alpha = 0.5)+
     ggplot2::geom_point() +
     ggplot2::geom_abline(

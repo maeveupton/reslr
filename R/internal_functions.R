@@ -856,7 +856,6 @@ create_output_df <- function(noisy_model_run_output,
   if (rate_grid == TRUE) {
 
     if ("CV_fold" %in% colnames(data_grid)){
-
       mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
       upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI) / 2)
       lwr <- apply(mu_post_pred, 2, stats::quantile, probs = 1 - ((1 - CI) / 2))
@@ -913,7 +912,8 @@ create_output_df <- function(noisy_model_run_output,
   }
 
   if (decomposition == TRUE & rate_grid == TRUE) {
-    if ("CV_fold" %in% data_grid) {
+    if ("CV_fold" %in% colnames(data_grid)) {
+
       # Total Component from JAGS output
       mu_post_pred <- noisy_model_run_output$BUGSoutput$sims.list$mu_pred
       upr <- apply(mu_post_pred, 2, stats::quantile, probs = (1 - CI) / 2)
@@ -1118,13 +1118,100 @@ add_noisy_input <- function(model_run,
 
       # Get rid of all the columns which are just zero
       B_l_deriv <- B_l_deriv_full[, -which(colSums(B_l_deriv_full) < 0.1)]
+      # Find the index here that you remove then use this in the derivative
       return(B_l_deriv %*% colMeans(b_st_post))
     }
     #-------Now create derivatives----
     h <- 0.0001
     t <- data$Age
     deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
+    # Trying to save the columns that were removed and keep the same index
+    remove_index <- function(t_new) {
+      B_time <- bs_bbase(t_new,
+                         xl = min(data$Age),
+                         xr = max(data$Age),
+                         data = data,
+                         spline_nseg = spline_nseg
+      )
+      B_space_1 <- bs_bbase(data$Latitude,
+                            xl = min(data$Latitude),
+                            xr = max(data$Latitude),
+                            data = data,
+                            spline_nseg = spline_nseg
+      )
+      B_space_2 <- bs_bbase(data$Longitude,
+                            xl = min(data$Longitude),
+                            xr = max(data$Longitude),
+                            data = data,
+                            spline_nseg = spline_nseg
+      )
+      B_l_deriv_full <- matrix(NA,
+                               ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+                               nrow = nrow(data)
+      )
+      regional_knots_loc <- rep(NA,
+                                ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1)
+      )
+      count <- 1
+      for (i in 1:ncol(B_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_l_deriv_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero
+      B_l_deriv <- B_l_deriv_full[, -which(colSums(B_l_deriv_full) < 0.1)]
+      # Find the index here that you remove then use this in the derivative
+      remove_col_index <- which(colSums(B_l_deriv_full) < 0.1)
+      return(remove_col_index)
+    }
+    remove_col_index <- remove_index(t+h)
     # Predicted data
+    pred_mean_calc <- function(t_new) {
+      B_time <- bs_bbase(t_new,
+                         xl = min(data$Age),
+                         xr = max(data$Age),
+                         data = data,
+                         spline_nseg = spline_nseg
+      )
+      B_space_1 <- bs_bbase(data_grid$Latitude,
+                            xl = min(data$Latitude),
+                            xr = max(data$Latitude),
+                            data = data,
+                            spline_nseg = spline_nseg
+      )
+      B_space_2 <- bs_bbase(data_grid$Longitude,
+                            xl = min(data$Longitude),
+                            xr = max(data$Longitude),
+                            data = data,
+                            spline_nseg = spline_nseg
+      )
+      B_l_deriv_full <- matrix(NA,
+                               ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1),
+                               nrow = nrow(data_grid)
+      )
+      regional_knots_loc <- rep(NA,
+                                ncol = ncol(B_time) * ncol(B_space_1) * ncol(B_space_1)
+      )
+      count <- 1
+      for (i in 1:ncol(B_time)) {
+        for (j in 1:ncol(B_space_1)) {
+          for (k in 1:ncol(B_space_2)) {
+            regional_knots_loc[count] <- i
+            B_l_deriv_full[, count] <- B_time[, i] * B_space_1[, j] * B_space_2[, k]
+            count <- count + 1
+          }
+        }
+      }
+
+      # Get rid of all the columns which are just zero
+      B_l_deriv <- B_l_deriv_full[, -remove_col_index]
+      return(B_l_deriv %*% colMeans(b_st_post))
+    }
     t_grid <- data_grid$Age
     deriv_grid <- (pred_mean_calc(t_grid + h) - pred_mean_calc(t_grid - h)) / (2 * h)
   }
@@ -1151,8 +1238,19 @@ add_noisy_input <- function(model_run,
     t <- data$Age
     deriv <- (pred_mean_calc(t + h) - pred_mean_calc(t - h)) / (2 * h)
     # Predicted data
+    pred_mean_calc_grid <- function(t_new) {
+      # Create the regional basis functions
+      B_t <- bs_bbase_t(t_new,
+                        xl = min(data$Age),
+                        xr = max(data$Age),
+                        spline_nseg_t = spline_nseg_t,
+                        data = data
+      )
+      #----Deriv----
+      return(intercept_post[data_grid$SiteName] + B_t %*% colMeans(b_t_post) + b_g_post[data_grid$SiteName] * (t_new))
+    }
     t_grid <- data_grid$Age
-    deriv_grid <- (pred_mean_calc(t_grid + h) - pred_mean_calc(t_grid - h)) / (2 * h)
+    deriv_grid <- (pred_mean_calc_grid(t_grid + h) - pred_mean_calc_grid(t_grid - h)) / (2 * h)
   }
 
   # Add this new term in - this is the extra standard deviation on each term----

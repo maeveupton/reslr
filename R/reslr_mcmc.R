@@ -635,7 +635,6 @@ reslr_mcmc.reslr_input <- function(input_data,
   # Noisy Input GAM in Space Time-------------------------------------------
   if (model_type == "ni_spline_st") {
     jags_file <- system.file("jags_models", "model_ni_spline_st.jags", package = "reslr")
-
     # Basis functions in space time -----------------------------
     spline_basis_fun_list <- spline_basis_fun(
       data = data,
@@ -854,30 +853,37 @@ reslr_mcmc.reslr_input <- function(input_data,
     ))
 
     # Adding Noisy Input-------------------
-    data <- add_noisy_input(
+    update_input_df <- add_noisy_input(
       data = data,
       data_grid = data_grid,
       model_run = model_run,
       model_type = model_type,
-      spline_nseg_st = spline_nseg_st,
-      spline_nseg_t = spline_nseg_t
+      jags_data = jags_data,
+      spline_nseg_t = spline_nseg_t,
+      spline_nseg_st = spline_nseg_st
     )
+    data <- update_input_df$data
+    data_grid <- update_input_df$data_grid
+    # Include Noise-----------------------
+    if("CV_fold" %in% colnames(data_grid)){
+      noisy_jags_file <- system.file("jags_models", "noisy_model_ni_gam_decomp_valid.jags", package = "reslr")
+    }
+    else{
+      noisy_jags_file <- system.file("jags_models", "noisy_model_ni_gam_decomp.jags", package = "reslr")
+    }
 
-    #----NI JAGS model-----
-    noisy_jags_file <- system.file("jags_models",
-      "noisy_model_ni_gam_decomp.jags",
-      package = "reslr"
-    )
 
     # JAGS input data
     jags_data <- list(
       NI_var_term = data$NI_var_term,
+      NI_var_grid_term = data_grid$NI_var_grid_term,
       b_t_value = model_run$BUGSoutput$median$b_t,
       b_t_sd_value = model_run$BUGSoutput$sd$b_t,
       h_value = model_run$BUGSoutput$median$intercept,
       h_sd_value = model_run$BUGSoutput$sd$intercept,
       y = data$RSL,
       y_err = data$RSL_err,
+      y_err_grid = data_grid$RSL_err,
       t = data$Age,
       t_pred = data_grid$Age,
       site = as.factor(data$SiteName),

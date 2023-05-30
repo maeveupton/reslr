@@ -304,6 +304,7 @@ cv <- cross_val_check(raw_data = data1site_example,
                       spline_nseg = NULL,# User the package to calculate the number of knots
                       # n_fold allows the user to alter the cross validation, i.e. 3, 5, 10 fold
                       n_fold = 3,
+                      seed = NULL,#To reproducible results,seed stores the output of the random selection
                       CI = 0.95)# Size of the credible intervals and prediction intervals
 
 ```

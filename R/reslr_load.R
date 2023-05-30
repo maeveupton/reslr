@@ -304,11 +304,25 @@ reslr_load <- function(data,
       dplyr::mutate(test_set = "test_set")
     # Joining my test set with the data_grid to do a pred vs true plot
     data_grid <- rbind(data_grid,test_set) %>%  dplyr::arrange(Age)
-
     data_grid <- data_grid %>%
       dplyr::select(-c(Region,Site)) %>%
       dplyr::mutate(Age_err = ifelse(is.na(Age_err),0,Age_err),
-                    RSL_err = ifelse(is.na(RSL_err),0,RSL_err))
+                    RSL_err = ifelse(is.na(RSL_err),0,RSL_err)) %>%
+      dplyr::group_by(SiteName) %>%
+      tidyr::fill(linear_rate,
+                  linear_rate_err,
+                  data_type_id,
+                  .direction = "downup")
+    if(include_linear_rate == TRUE){
+      data_grid <- data_grid %>%
+        dplyr::group_by(SiteName) %>%
+        tidyr::fill(linear_rate,
+                    linear_rate_err,
+                    .direction = "downup")
+    }
+    else{
+      data_grid <- data_grid
+    }
   }
   else{
     data_grid <- data_grid
