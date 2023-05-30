@@ -301,6 +301,10 @@ data1site_example <- NAACproxydata %>%
 # Cross Validation test
 cv <- cross_val_check(raw_data = data1site_example,
                       model_type ="ni_spline_t",
+                      n_iterations = 1000,
+                      n_burnin = 100,
+                      n_thin = 5,
+                      n_chains = 2,
                       spline_nseg = NULL,# User the package to calculate the number of knots
                       # n_fold allows the user to alter the cross validation, i.e. 3, 5, 10 fold
                       n_fold = 3,
@@ -312,7 +316,7 @@ To alter the number of knots in the model, include the `spline_nseg` or `spline_
 
 The `n_fold = 3` argument allows the user to change the number of folds used in the cross validation test. We recommend a minimum of 3 folds and the ideal number of folds is 5 or 10, however, using 10 folds will result in longer run times. 
 
-By updating the `model_type` argument, the user can undertake cross validation for the noisy input spline in time, the noisy input spline in space time or the noisy input generalised additive model.
+By updating the `model_type` argument, the user can undertake cross validation for the noisy input spline in time, the noisy input spline in space time or the noisy input generalised additive model. This function will print a statement regarding model convergence. If the convergence issues are detected, the package will inform the user to increase the number of iterations in the `cross_val_check` function.
 
 The outputs of the `cross_val_check` function are stored as a list. To examine the true versus predicted plot use the following command.
 ```{r,eval = TRUE}
