@@ -6,3 +6,5 @@
 0 errors | 0 warnings | 1 note
 
 * This is a new release.
+
+The R-hub runs failed because it couldn't find JAGS but I think this is a missing dependency on R-hub rather than a problem with the package (or a missing option that I need to add in somehow).
