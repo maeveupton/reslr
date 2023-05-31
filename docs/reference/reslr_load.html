@@ -43,7 +43,16 @@ The user can choose to include data from tide gauges which is sourced from the P
       <a href="../articles/quick_start.html">reslr: quick start guide</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/maeveupton/reslr/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -53,7 +62,7 @@ The user can choose to include data from tide gauges which is sourced from the P
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Loading in data for the <code>reslr</code> package</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/maeveupton/reslr/blob/HEAD/R/reslr_load.R" class="external-link"><code>R/reslr_load.R</code></a></small>
     <div class="hidden name"><code>reslr_load.Rd</code></div>
     </div>
 
@@ -75,7 +84,9 @@ The user can choose to include data from tide gauges which is sourced from the P
 <span>  input_age_type <span class="op">=</span> <span class="st">"CE"</span>,</span>
 <span>  sediment_average_TG <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  detrend_data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  core_col_year <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  core_col_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cross_val <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">test_set</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -124,6 +135,14 @@ The user can choose to include data from tide gauges which is sourced from the P
 <dt>core_col_year</dt>
 <dd><p>The year the sediment core was collected in order to the data to be detrended.</p></dd>
 
+
+<dt>cross_val</dt>
+<dd><p>For the spline in time, spline in space time and the NIGAM the user can undertake cross validation to examine the</p></dd>
+
+
+<dt>test_set</dt>
+<dd><p>The test set dataframe for cross validation</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -151,7 +170,7 @@ The user can choose to include data from tide gauges which is sourced from the P
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Maeve Upton.</p>
+  <p></p><p>Developed by Maeve Upton, Andrew Parnell, Niamh Cahill.</p>
 </div>
 
 <div class="pkgdown">
