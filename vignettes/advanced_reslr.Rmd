@@ -13,7 +13,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r, include = FALSE}
+```{r start, include = FALSE}
 library(tidyverse)
 ```
 
@@ -36,8 +36,7 @@ The EIV Integrated Gaussian Process model provides the underlying rate of the pr
 This technique focuses on 1 site and we do not recommended for multiple proxy sites together. Tide gauge data can be included, however, the user must investigate which tide gauge is suitable and the tide gauge data will use the same linear_rate as the proxy records. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r,exampledataset2 ,eval = TRUE}
 # For 1 site
-CedarIslandNC <- reslr::NAACproxydata %>% 
-  dplyr::filter(Site == "Cedar Island")
+CedarIslandNC <- NAACproxydata[NAACproxydata$Site == "Cedar Island",]
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 

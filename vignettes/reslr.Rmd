@@ -155,27 +155,27 @@ The `reslr` package possesses a large dataset used as an example called `NAACpro
 
 | Site Name | Reference |
 | ------------------------ | --------------------------- |
-| Barn Island, Connecticut| [Donnelly et al (2004)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2003GL018933), [Gehrels et al (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL085814) |
-| Big River Marsh, Newfoundland | [Kemp et al (2018)](https://doi.org/10.1016/j.quascirev.2018.10.012) |
-| Cape May Courthouse, New Jersey | [Kemp et al (2013)](https://doi.org/10.1016/j.quascirev.2013.09.024), [Cahill et al (2016)](https://doi.org/10.5194/cp-12-525-2016) |
-| Cedar Island, North Carolina | [Kemp et al (2011)](https://doi.org/10.1073/pnas.1015619108), [Kemp et al (2017)](https://doi.org/10.1177/0959683616683263) |
- | Cheesequake, New Jersey | [Walker et al (2021)](https://www.nature.com/articles/s41467-021-22079-2) |
- | Chezzetcook Inlet, Nova Scotia | [Gehrels et al (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL085814) |
- |East River Marsh, Connecticut | [Kemp et al (2015)](https://doi.org/10.1016/j.epsl.2015.07.034), [Stearns et al (2023)](https://www.sciencedirect.com/science/article/pii/S0277379122004991)    |
- |  Fox Hill Marsh, Rhode Island | [Stearns et al (2023)](https://www.sciencedirect.com/science/article/pii/S0277379122004991) |
-| Leeds Point, New Jersey | [Kemp et al (2013)](https://doi.org/10.1016/j.quascirev.2013.09.024), [Cahill et al (2016)](https://doi.org/10.5194/cp-12-525-2016) |
-| Les Sillons, Magdelen Islands| [Barnett et al (2017)](https://doi.org/10.1002/jqs.2931) |
-| Little Manatee River, Florida | [Gerlach et al (2017)](https://doi.org/10.1016/j.margeo.2017.07.001) |
-|  Nassau, Florida | [Kemp et al (2014)](https://www.sciencedirect.com/science/article/pii/S0025322714002187?via%3Dihub)|
-| Pelham Bay, New York | [Kemp et al (2017)](https://doi.org/10.1177/0959683616683263), [Stearns et al (2017)](https://doi.org/10.23860/thesis-stearns-rachel-2017) |
-| Placentia, Newfoundland | [Kemp et al (2018)](https://doi.org/10.1016/j.quascirev.2018.10.012)) |
-| Revere, Massachusetts | [Donnelly et al (2006)](https://www.jstor.org/stable/4300372)  |
-| Saint Simeon, Quebec | [Barnett et al (2017)](https://doi.org/10.1002/jqs.2931) |
-| Sanborn Cove, Maine | [Gehrels et al (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL085814) |
-| Sand Point, North Carolina | [Kemp et al (2011)](https://doi.org/10.1073/pnas.1015619108), [Kemp et al (2017)](https://doi.org/10.1177/0959683616683263) |
-| Snipe Key, Florida | [Khan et al (2022)](https://doi.org/10.1016/j.gloplacha.2022.103902) |
-| Swan Key, Florida | [Khan et al (2022)](https://doi.org/10.1016/j.gloplacha.2022.103902) |
-| Wood Island, Massachusetts | [Kemp et al (2011)](https://doi.org/10.1073/pnas.1015619108) | 
+| Barn Island, Connecticut| Donnelly et al (2004), Gehrels et al (2020)|
+| Big River Marsh, Newfoundland | Kemp et al (2018) |
+| Cape May Courthouse, New Jersey | Kemp et al (2013), Cahill et al (2016)|
+| Cedar Island, North Carolina | Kemp et al (2011), Kemp et al (2017) |
+ | Cheesequake, New Jersey | Walker et al (2021) |
+ | Chezzetcook Inlet, Nova Scotia | Gehrels et al (2020) |
+ |East River Marsh, Connecticut | Kemp et al (2015), Stearns et al (2023)   |
+ |  Fox Hill Marsh, Rhode Island | Stearns et al (2023) |
+| Leeds Point, New Jersey | Kemp et al (2013), Cahill et al (2016) |
+| Les Sillons, Magdelen Islands| Barnett et al (2017) |
+| Little Manatee River, Florida | Gerlach et al (2017)|
+|  Nassau, Florida | Kemp et al (2014)|
+| Pelham Bay, New York | Kemp et al (2017), Stearns et al (2017) |
+| Placentia, Newfoundland | Kemp et al (2018) |
+| Revere, Massachusetts | Donnelly et al (2006)  |
+| Saint Simeon, Quebec | Barnett et al (2017) |
+| Sanborn Cove, Maine | Gehrels et al (2020) |
+| Sand Point, North Carolina | Kemp et al (2011), Kemp et al (2017) |
+| Snipe Key, Florida | Khan et al (2022) |
+| Swan Key, Florida | Khan et al (2022) |
+| Wood Island, Massachusetts | Kemp et al (2011) | 
 
 The `NAACproxydata` is a data frame with 1715 rows and 8 columns which include:
 
