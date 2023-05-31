@@ -61,7 +61,8 @@ Next, start Rstudio and find the window with the command prompt (the symbol `>`)
 # install.packages("reslr")
 # library(devtools)
 # devtools::install()
-devtools::install_github("maeveupton/reslr")
+#devtools::install_github("maeveupton/reslr")
+install_github("maeveupton/reslr")
 ```
 It may ask you to pick your nearest CRAN mirror (the nearest site which hosts R packages). You will then see some activity on the screen as the `reslr` package and the other packages it uses are downloaded. The final line should then read: 
 
@@ -231,7 +232,7 @@ The simplest model the `reslr` package can fit is a simple linear regression usi
 This technique focuses on 1 site and is not recommended for multiple proxy sites together. Tide gauge data can be included to gain insight into recent changes in RSL, however, the user must investigate which tide gauge is suitable. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
 ```{r, example1dataagain, eval = TRUE}
 # For 1 site
-CedarIslandNC <- reslr::NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
+CedarIslandNC <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 

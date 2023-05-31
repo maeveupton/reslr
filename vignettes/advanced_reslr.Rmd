@@ -13,9 +13,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r start, include = FALSE}
-library(tidyverse)
-```
 
 ## Introduction
 
@@ -26,7 +23,7 @@ If you have created other examples demonstrating `reslr` capabilities yourself, 
 Installing `reslr` and loading it with:
 ```{r, eval = TRUE, results= 'hide', message=FALSE}
 #install.packages("reslr")
-devtools::install_github("maeveupton/reslr",force = TRUE,INSTALL_opts = '--no-lock')
+#devtools::install_github("maeveupton/reslr",force = TRUE,INSTALL_opts = '--no-lock')
 library(reslr)
 ```
 
@@ -163,8 +160,7 @@ The output of this function is a list of two dataframes called `data` and `data_
 In this package, we have described three ways to select a tide gauge and in the example we showed how to include the closest tide gauge to the proxy site. Here we are demonstrating the other options available to the user.
 ```{r,data2sites, eval = FALSE}
 # For 2 site
-multi_site <- reslr::NAACproxydata %>%
-  dplyr::filter(Site %in% c("Cedar Island", "Nassau"))
+multi_site <- NAACproxydata[NAACproxydata$Site %in% c("Cedar Island", "Nassau"),]
 ```
 
 If the user has a list of chosen tide gauges from PSMSL website, include them in a list in the `reslr_load` function as demonstrated: 
@@ -295,8 +291,7 @@ The default settings have been tested using cross validation techniques to incor
 In the previous section, we discussed altering the smoothness of the splines by varying the number of knots in the model. The user can test the validity of the model and the number of knots selected using this cross validation function with in the package. For example, the user can run different values for the knots and compare the model fits for each setting using the following cross validation function.
 
 ```{r,eval = TRUE,message=FALSE}
-data1site_example <- NAACproxydata %>%
-  dplyr::filter(Site %in% c( "Cedar Island"))
+data1site_example <- NAACproxydata[NAACproxydata$Site == "Cedar Island",]
 # Cross Validation test
 cv <- cross_val_check(raw_data = data1site_example,
                       model_type ="ni_spline_t",
@@ -307,7 +302,8 @@ cv <- cross_val_check(raw_data = data1site_example,
                       spline_nseg = NULL,# User the package to calculate the number of knots
                       # n_fold allows the user to alter the cross validation, i.e. 3, 5, 10 fold
                       n_fold = 3,
-                      seed = NULL,#To reproducible results,seed stores the output of the random selection
+                      #To reproducible results,seed stores the output of the random selection
+                      seed = NULL,
                       CI = 0.95)# Size of the credible intervals and prediction intervals
 
 ```
