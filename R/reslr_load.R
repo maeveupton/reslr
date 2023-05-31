@@ -111,11 +111,11 @@ reslr_load <- function(data,
     if (!("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data))) {
       lm_data_rates <- linear_reg_rates(data)
       data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
-      cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
+      #cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
       data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
     } else {
       data <- data
-      cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
+      #cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
       data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
     }
   }
@@ -136,10 +136,10 @@ reslr_load <- function(data,
     if (!("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data))) {
       lm_data_rates <- linear_reg_rates(data)
       data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
-      cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
+      #cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
     } else {
       data <- data
-      cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
+      #cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
     }
     data <- clean_tidal_gauge_data(
       data = data,
@@ -308,9 +308,7 @@ reslr_load <- function(data,
       dplyr::mutate(Age_err = ifelse(is.na(Age_err),0,Age_err),
                     RSL_err = ifelse(is.na(RSL_err),0,RSL_err)) %>%
       dplyr::group_by(SiteName) %>%
-      tidyr::fill(linear_rate,
-                  linear_rate_err,
-                  data_type_id,
+      tidyr::fill(data_type_id,
                   .direction = "downup")
     if(include_linear_rate == TRUE){
       data_grid <- data_grid %>%

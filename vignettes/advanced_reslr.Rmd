@@ -321,7 +321,7 @@ This figure presents the true RSL value in metres versus the predicted RSL value
 
 To access the dataframe creating this plot use:
 ```{r,eval = TRUE}
-cv$CV_model_df
+head(cv$CV_model_df)
 ```
 This dataframe contains the `true_RSL` values from the test set and the corresponding predicted values `pred_RSL`. In this dataframe, there are the prediction intervals `upr_PI` and `lwr_PI`. The `SiteName` column identifies each site present in the dataframe and allows for site specific analysis of the model if required.
 

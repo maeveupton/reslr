@@ -11,7 +11,6 @@ testthat::test_that("Testing cross validation", {
                         n_chains = 1,
                         n_fold = 2)
 
-
   testthat::expect_true(is.list(cv))
   testthat::expect_true(is.data.frame(cv$CV_model_df))
   testthat::expect_true(is.numeric(cv$total_coverage))

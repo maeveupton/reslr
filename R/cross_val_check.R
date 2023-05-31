@@ -50,7 +50,7 @@ cross_val_check <- function(raw_data,
         dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
       training_set <- data[-CV_fold, ]
       # reslr_load
-      input_train <- reslr_load(training_set,
+      input_train <- reslr::reslr_load(training_set,
                                 cross_val = TRUE,
                                 test_set = test_set,
                                 include_linear_rate = TRUE,
@@ -59,7 +59,7 @@ cross_val_check <- function(raw_data,
       )
 
       # reslr_mcmc
-      train_output <- reslr_mcmc(input_train,
+      train_output <- reslr::reslr_mcmc(input_train,
         model_type = model_type,
         spline_nseg_t = spline_nseg_t,
         spline_nseg_st = spline_nseg_st,
@@ -77,12 +77,12 @@ cross_val_check <- function(raw_data,
         dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
       training_set <- data[-CV_fold, ]
       # reslr_load
-      input_train <- reslr_load(training_set,
+      input_train <- reslr::reslr_load(training_set,
                                 cross_val = TRUE,
                                 test_set = test_set
       )
       # reslr_mcmc
-      train_output <- reslr_mcmc(input_train,
+      train_output <- reslr::reslr_mcmc(input_train,
         model_type = model_type,
         spline_nseg = spline_nseg,
         n_iterations = n_iterations,

@@ -61,8 +61,8 @@ Next, start Rstudio and find the window with the command prompt (the symbol `>`)
 # install.packages("reslr")
 # library(devtools)
 # devtools::install()
-#devtools::install_github("maeveupton/reslr")
-install_github("maeveupton/reslr")
+devtools::install_github("maeveupton/reslr")
+#install_github("maeveupton/reslr")
 ```
 It may ask you to pick your nearest CRAN mirror (the nearest site which hosts R packages). You will then see some activity on the screen as the `reslr` package and the other packages it uses are downloaded. The final line should then read: 
 
