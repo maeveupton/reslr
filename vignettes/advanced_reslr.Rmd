@@ -13,7 +13,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-
 ## Introduction
 
 In this document we present a range of advanced options that are available in the reslr package. To examine the all other options in the `reslr` package, see the main vignette.
