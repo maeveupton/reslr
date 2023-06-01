@@ -1,6 +1,7 @@
 #' Cross validation check for spline in time, spline in space time and GAM in order to select the most appropriate number of knots when creating basis functions.
 #'
 #' @param raw_data Raw input data
+#' @param prediction_grid_res Resolution of grid. Predictions over every 50 years(default) can vary based on user preference, as larger values will reduce computational run time.
 #' @param spline_nseg This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions.
 #' @param spline_nseg_t This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
 #' @param spline_nseg_st This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
@@ -20,6 +21,7 @@
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' cross_val_check(raw_data = data, model_type = "ni_spline_t")
 cross_val_check <- function(raw_data,
+                            prediction_grid_res = 30,
                             spline_nseg = NULL,
                             spline_nseg_t = 20,
                             spline_nseg_st = 6,
@@ -32,13 +34,14 @@ cross_val_check <- function(raw_data,
                             seed = NULL,
                             CI = 0.95) {
   # Cross Validation tests-----------------
-  CV_fold_number <-RSL<- Region<- Site<- SiteName<- lwr_PI<- obs_in_PI<- pred<-true_RSL<- upr_PI <-xl <-xr<- y_post_pred<-NULL
+  CV_fold_number <- RSL <- Region <- Site <- SiteName <- lwr_PI <- obs_in_PI <- pred <- true_RSL <- upr_PI <- xl <- xr <- y_post_pred <- NULL
   set.seed(seed)
   # Input data
   data <- raw_data
   df_split_index <- dismo::kfold(data,
-                                 k = n_fold,
-                                 by = data$SiteName)
+    k = n_fold,
+    by = data$SiteName
+  )
   data$CV_fold <- df_split_index
   # Empty list for model runs
   model_run_list <- list()
@@ -51,11 +54,12 @@ cross_val_check <- function(raw_data,
       training_set <- data[-CV_fold, ]
       # reslr_load
       input_train <- reslr::reslr_load(training_set,
-                                cross_val = TRUE,
-                                test_set = test_set,
-                                include_linear_rate = TRUE,
-                                include_tide_gauge = TRUE,
-                                all_TG_1deg = TRUE
+        prediction_grid_res = prediction_grid_res,
+        cross_val = TRUE,
+        test_set = test_set,
+        include_linear_rate = TRUE,
+        include_tide_gauge = TRUE,
+        all_TG_1deg = TRUE
       )
 
       # reslr_mcmc
@@ -70,7 +74,6 @@ cross_val_check <- function(raw_data,
         CI = CI
       )
     } else {
-
       # Segment your data by fold using the which() function
       CV_fold <- base::which(df_split_index == i, arr.ind = TRUE)
       test_set <- data[CV_fold, ] %>%
@@ -78,8 +81,9 @@ cross_val_check <- function(raw_data,
       training_set <- data[-CV_fold, ]
       # reslr_load
       input_train <- reslr::reslr_load(training_set,
-                                cross_val = TRUE,
-                                test_set = test_set
+        prediction_grid_res = prediction_grid_res,
+        cross_val = TRUE,
+        test_set = test_set
       )
       # reslr_mcmc
       train_output <- reslr::reslr_mcmc(input_train,
@@ -94,10 +98,9 @@ cross_val_check <- function(raw_data,
     }
     # Check convergence of model:
     summary(train_output)
-    if(model_type == "ni_gam_decomp"){
+    if (model_type == "ni_gam_decomp") {
       output_df <- train_output$output_dataframes$total_model_df
-    }
-    else{
+    } else {
       # Take out the dataframe with true & predicted
       output_df <- train_output$output_dataframes
     }
@@ -154,24 +157,32 @@ cross_val_check <- function(raw_data,
 
   # Model dataframe CV
   CV_model_df <- CV_model_df %>%
-    dplyr::rename(true_RSL = RSL,
-                  pred_RSL = pred)
+    dplyr::rename(
+      true_RSL = RSL,
+      pred_RSL = pred
+    )
   # Creating the prediction intervals outside JAGS to include Age Error
   # Overall Empirical Coverage
   CV_model_df <- CV_model_df %>%
-    dplyr::mutate(obs_in_PI =
-                    ifelse(dplyr::between(true_RSL,upr_PI,
-                                          lwr_PI
-                                          ),
-                           TRUE,FALSE))
+    dplyr::mutate(
+      obs_in_PI =
+        ifelse(dplyr::between(
+          true_RSL, upr_PI,
+          lwr_PI
+        ),
+        TRUE, FALSE
+        )
+    )
   # Total coverage is trues/ number of rows with the prediction interval
   total_coverage <-
-    length(which(CV_model_df$obs_in_PI == "TRUE"))/nrow(CV_model_df)
+    length(which(CV_model_df$obs_in_PI == "TRUE")) / nrow(CV_model_df)
   # Coverage is trues/ number of rows with the prediction interval by site
-  coverage_by_site <-CV_model_df %>%
+  coverage_by_site <- CV_model_df %>%
     dplyr::group_by(SiteName) %>%
-    dplyr::reframe(coverage_by_site =
-                     unique(length(which(obs_in_PI == "TRUE"))/dplyr::n()))
+    dplyr::reframe(
+      coverage_by_site =
+        unique(length(which(obs_in_PI == "TRUE")) / dplyr::n())
+    )
 
   # Prediction Interval size
   prediction_interval_size <- CV_model_df %>%
@@ -180,18 +191,24 @@ cross_val_check <- function(raw_data,
 
 
   # True vs Predicted plot
-  true_pred_plot <- ggplot2::ggplot(data = CV_model_df, ggplot2::aes(x = true_RSL,
-                                                                     #y = pred_RSL,
-                                                                     y = y_post_pred,
-                                                                     colour = "PI")) +
-    ggplot2::geom_errorbar(data = CV_model_df,
-                  ggplot2::aes(x = true_RSL,
-                               #ymin = lwr,
-                               #ymax = upr),
-                               ymin = lwr_PI,
-                               ymax = upr_PI),
-                               colour = "red3",
-                  width=0,alpha = 0.5)+
+  true_pred_plot <- ggplot2::ggplot(data = CV_model_df, ggplot2::aes(
+    x = true_RSL,
+    # y = pred_RSL,
+    y = y_post_pred,
+    colour = "PI"
+  )) +
+    ggplot2::geom_errorbar(
+      data = CV_model_df,
+      ggplot2::aes(
+        x = true_RSL,
+        # ymin = lwr,
+        # ymax = upr),
+        ymin = lwr_PI,
+        ymax = upr_PI
+      ),
+      colour = "red3",
+      width = 0, alpha = 0.5
+    ) +
     ggplot2::geom_point() +
     ggplot2::geom_abline(
       data = CV_model_df,
@@ -215,15 +232,18 @@ cross_val_check <- function(raw_data,
     ) +
     ggplot2::scale_colour_manual("",
       values = c(
-        c("PI"="red3",
-        #"True = Predicted" = "black")
-        "True = Predicted" = "black")
+        c(
+          "PI" = "red3",
+          # "True = Predicted" = "black")
+          "True = Predicted" = "black"
+        )
       ),
       labels = c(
         "PI" = paste0(unique(CV_model_df$CI), " Prediction Interval"),
-        "True = Predicted" = "True = Predicted")
+        "True = Predicted" = "True = Predicted"
+      )
     ) +
-    ggplot2::facet_wrap(~SiteName, scales = "free")+
+    ggplot2::facet_wrap(~SiteName, scales = "free") +
     ggplot2::guides(
       colour = ggplot2::guide_legend(override.aes = list(
         linetype = c(1, 1),
@@ -243,7 +263,7 @@ cross_val_check <- function(raw_data,
     CV_model_df = CV_model_df,
     total_coverage = total_coverage,
     prediction_interval_size = prediction_interval_size,
-    coverage_by_site=coverage_by_site
+    coverage_by_site = coverage_by_site
   )
   return(cross_validation_tests)
 }

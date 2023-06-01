@@ -33,7 +33,6 @@ Imports:
     fields,
     geosphere,
     ggplot2,
-    httr,
     magrittr,
     ncdf4,
     plyr,

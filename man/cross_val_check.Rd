@@ -6,6 +6,7 @@
 \usage{
 cross_val_check(
   raw_data,
+  prediction_grid_res = 30,
   spline_nseg = NULL,
   spline_nseg_t = 20,
   spline_nseg_st = 6,
@@ -21,6 +22,8 @@ cross_val_check(
 }
 \arguments{
 \item{raw_data}{Raw input data}
+
+\item{prediction_grid_res}{Resolution of grid. Predictions over every 50 years(default) can vary based on user preference, as larger values will reduce computational run time.}
 
 \item{spline_nseg}{This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions.}
 

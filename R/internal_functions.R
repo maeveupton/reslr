@@ -188,9 +188,21 @@ clean_tidal_gauge_data <- function(data,
                        destfile = temp_file,
                        quiet = TRUE)
 
+  # Back up if an error
+  # # Create a temporary file
+  # temp_file <- paste0(tempdir(),'/tg',format(Sys.Date(), "%Y%m%d"))
+  # # Download the file and save it to the temporary file
+  # if(file.exists(temp_file) | override_download) {
+  #   utils::download.file(url,
+  #                        destfile = temp_file,
+  #                        quiet = TRUE)
+  # }
+
   # Unzip the data file to a temporary directory
   temp_dir <- tempfile()
   utils::unzip(temp_file, exdir = temp_dir)
+
+
 
   ### ------------Loop to open all RSL & Age data files------------
   read_plus <- function(flnm) {
@@ -641,30 +653,26 @@ clean_tidal_gauge_data <- function(data,
 add_linear_rate <- function(data) {
 
   # GIA DATA from Peltier Website ICE5G----------------
-  url <- httr::GET("https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc")
   # Set up the URL for downloading the data
   #url <- "https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc"
-  #url <- RCurl::getURL("https://www.atmosp.physics.utoronto.ca/~peltier/datasets/",
-  #              .opts=list(followlocation=TRUE,ssl.verifyhost=FALSE, ssl.verifypeer=FALSE))
-  #page <- httr::content(url)
+
   # Create a temporary file
-  temp_file <- tempfile()
+  #temp_file <- tempfile()
 
   # # Download the file and save it to the temporary file
-  # utils::download.file(url,
+  #  utils::download.file(url,
   #   destfile = temp_file,
   #   method = "libcurl",
-  #   #mode = "wb", extra = "--no-check-certificate",
+  #   mode = "wb",
   #  quiet = TRUE
   # )
-  # Unzip the data file to a temporary directory
-  # temp_dir <- tempfile()
-  # suppressWarnings(
-  #   utils::unzip(temp_file, exdir = temp_dir)
-  # )
 
+  # File is stored in the package:
+  ice5g_data <- system.file("extdata", "dsea.1grid_O512.nc", package = "reslr")
   # Opening the files
-  nc_data <- ncdf4::nc_open(temp_file) # ICE5G: better fit for data
+  #nc_data <- ncdf4::nc_open(temp_file) # ICE5G: better fit for data
+  nc_data <- ncdf4::nc_open(ice5g_data) # ICE5G: better fit for data
+
 
   # Rounding to 1 decimal point to reduce number of spatial options--
   dat_lon <- round(data$Longitude, 1)
@@ -695,7 +703,7 @@ add_linear_rate <- function(data) {
   data <- cbind(data, ICE5_GIA_slope = linear_slope) # mm/yr
 
   # Remove the temporary file and directory
-  unlink(temp_file)
+  #unlink(temp_file)
   #unlink(temp_dir, recursive = TRUE)
 
   return(data)
