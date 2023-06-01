@@ -644,7 +644,9 @@ add_linear_rate <- function(data) {
   url <- httr::GET("https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc")
   # Set up the URL for downloading the data
   #url <- "https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc"
-
+  #url <- RCurl::getURL("https://www.atmosp.physics.utoronto.ca/~peltier/datasets/",
+  #              .opts=list(followlocation=TRUE,ssl.verifyhost=FALSE, ssl.verifypeer=FALSE))
+  #page <- httr::content(url)
   # Create a temporary file
   temp_file <- tempfile()
 
