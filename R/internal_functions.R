@@ -640,12 +640,10 @@ clean_tidal_gauge_data <- function(data,
 #' @noRd
 add_linear_rate <- function(data) {
 
-  httr::set_config(httr::config(ssl_verifypeer = 0L))
   # GIA DATA from Peltier Website ICE5G----------------
-    #x <- RCurl::getURL(url)
-  #url <- httr::GET("https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc")
+  url <- httr::GET("https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc")
   # Set up the URL for downloading the data
-  url <- "https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc"
+  #url <- "https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc"
 
   # Create a temporary file
   temp_file <- tempfile()
