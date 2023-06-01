@@ -463,7 +463,7 @@ clean_tidal_gauge_data <- function(data,
         SiteName = as.factor(SiteName),
         data_type_id = as.factor(data_type_id)
       )
-    message("Choosing the tide gauges that the user listed as their preferred tide gauges. \n")
+   # message("Choosing the tide gauges that the user listed as their preferred tide gauges. \n")
   }
 
   # Criteria 2: Minimum distance to proxy site
@@ -501,7 +501,7 @@ clean_tidal_gauge_data <- function(data,
         SiteName = as.factor(SiteName),
         data_type_id = as.factor(data_type_id)
       )
-    message("Selecting the tide gauge with the minimum distance to the proxy site \n")
+    #message("Selecting the tide gauge with the minimum distance to the proxy site \n")
   }
   # Criteria 3: All tide gauges within 1 degree away from proxy site
   if (all_TG_1deg == TRUE) {
@@ -535,7 +535,7 @@ clean_tidal_gauge_data <- function(data,
         SiteName = as.factor(SiteName),
         data_type_id = as.factor(data_type_id)
       )
-    message("Selecting all tide gauges within 1 degree of the proxy site \n")
+   # message("Selecting all tide gauges within 1 degree of the proxy site \n")
   }
 
   # Criteria 4: All tide gauges within 1 degree away from proxy site & the preferred tide gauges listed by user
