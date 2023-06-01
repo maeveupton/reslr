@@ -177,7 +177,6 @@ clean_tidal_gauge_data <- function(data,
                                    sediment_average_TG) {
   Age_epoch_id <- LongLat <- rolling_avg <- median <- nearest_proxy_site <- RSL_annual <- TG_min_dist1 <- minimum_dist <- nearest_TG <- rows_site <- site <- min_dist1 <- stationflag <- name <- sd <- sd_TG <- n_obs_by_site <- RSL_offset <- data_type_id <- decade <- decade_meanRSL <- Age <- RSL <- Age_err <- RSL_err <- linear_rate <- linear_rate_err <- SiteName <- Longitude <- Latitude <- id <- NULL
   # Using data from PSMSL website for annual tide gauge data----------------------------------
-
   # Set up the URL for downloading the data
   url <- "https://psmsl.org/data/obtaining/rlr.annual.data/rlr_annual.zip"
 
@@ -185,7 +184,7 @@ clean_tidal_gauge_data <- function(data,
   temp_file <- tempfile()
 
   # Download the file and save it to the temporary file
-  utils::download.file(url, destfile = temp_file)
+  utils::download.file(url, destfile = temp_file,quiet = TRUE)
 
   # Unzip the data file to a temporary directory
   temp_dir <- tempfile()
@@ -639,22 +638,27 @@ clean_tidal_gauge_data <- function(data,
 #' @noRd
 add_linear_rate <- function(data) {
   # GIA DATA from Peltier Website ICE5G----------------
+browser()
   # Set up the URL for downloading the data
   url <- "https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc"
+  #x <- RCurl::getURL(url)
+  url <- httr::GET("https://www.atmosp.physics.utoronto.ca/~peltier/datasets/GRID/dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc")
   # Create a temporary file
   temp_file <- tempfile()
 
   # Download the file and save it to the temporary file
   utils::download.file(url,
-    destfile = temp_file, # "dsea250.1grid.ICE5Gv1.3_VM2_L90_2012.nc",#temp_file,
-    # method = "libcurl",
-    mode = "wb", extra = "--no-check-certificate"
+    destfile = temp_file,
+    method = "libcurl",
+    #mode = "wb", extra = "--no-check-certificate",
+   quiet = TRUE
   )
   # Unzip the data file to a temporary directory
-  temp_dir <- tempfile()
-  suppressWarnings(
-    utils::unzip(temp_file, exdir = temp_dir)
-  )
+  # temp_dir <- tempfile()
+  # suppressWarnings(
+  #   utils::unzip(temp_file, exdir = temp_dir)
+  # )
+
   # Opening the files
   nc_data <- ncdf4::nc_open(temp_file) # ICE5G: better fit for data
 
@@ -677,7 +681,7 @@ add_linear_rate <- function(data) {
 
   # GIA rates
   SL <- ncdf4::ncvar_get(nc_data, "Dsea_250")
-  # Repicating to match dim of data
+  # Replicating to match dim of data
   linear_slope <- rep(NA, nrow(data))
   for (i in 1:nrow(data)) {
     linear_slope[i] <- (SL[lon_index[i], lat_index[i]])
@@ -688,7 +692,7 @@ add_linear_rate <- function(data) {
 
   # Remove the temporary file and directory
   unlink(temp_file)
-  unlink(temp_dir, recursive = TRUE)
+  #unlink(temp_dir, recursive = TRUE)
 
   return(data)
 }

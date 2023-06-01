@@ -61,8 +61,8 @@ Next, start Rstudio and find the window with the command prompt (the symbol `>`)
 # install.packages("reslr")
 # library(devtools)
 # devtools::install()
-devtools::install_github("maeveupton/reslr")
-#install_github("maeveupton/reslr")
+#devtools::install_github("maeveupton/reslr")
+install_github("maeveupton/reslr")
 ```
 It may ask you to pick your nearest CRAN mirror (the nearest site which hosts R packages). You will then see some activity on the screen as the `reslr` package and the other packages it uses are downloaded. The final line should then read: 
 
@@ -622,7 +622,7 @@ This will produce a plot of Age on the x-axis and Relative Sea Level on the y-ax
 
 **Step 3:** To run this model type use the following:
 
-```{r,runspt,eval = TRUE}
+```{r,runspt,eval = TRUE,message=FALSE,results='hide'}
 res_ni_spline_t <- reslr_mcmc(
   input_data = CedarIslandNC_input,
   model_type = "ni_spline_t",
@@ -736,7 +736,7 @@ plot(
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. The extra arguments can be used which allows the user to updated the titles and axis labels. The caption `plot_caption`, included by default, provides the number of proxy sites and tide gauge sites that will be used in the model and can be removed if required `plot_caption = FALSE`. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE`.
 
 **Step 3:** Run the model for the two sites.
-```{r,runspst,eval = TRUE}
+```{r,runspst,eval = TRUE,results='hide',message=FALSE}
 res_ni_spline_st <- reslr_mcmc(
   input_data = multi_site_input,
   model_type = "ni_spline_st",
@@ -861,7 +861,7 @@ plot(
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. The extra arguments can be used which allows the user to updated the titles and axis labels. The caption `plot_caption`, included by default, provides the number of proxy sites and tide gauge sites that will be used in the model and can be removed if required `plot_caption = FALSE`. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE`.
 
 **Step 3:** Run the model
-```{r,runnigam,eval = TRUE}
+```{r,runnigam,eval = TRUE,results='hide',message=FALSE}
 res_ni_gam_decomp <- reslr_mcmc(
   input_data = multi_9_sites_input,
   model_type = "ni_gam_decomp",

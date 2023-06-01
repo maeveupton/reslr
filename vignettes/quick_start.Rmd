@@ -16,11 +16,11 @@ editor_options:
 ## Step 1: install `reslr`
 
 Use:
-```{r, eval = TRUE, results='hide',message=FALSE}
+```{r, eval = FALSE, results='hide',message=FALSE}
 # Not on CRAN yet
 #install.packages("reslr")
-devtools::install_github("maeveupton/reslr")
-#install_github("maeveupton/reslr")
+#devtools::install_github("maeveupton/reslr")
+install_github("maeveupton/reslr")
 ```
 then,
 ```{r, message=FALSE}
