@@ -184,7 +184,9 @@ clean_tidal_gauge_data <- function(data,
   temp_file <- tempfile()
 
   # Download the file and save it to the temporary file
-  utils::download.file(url, destfile = temp_file,quiet = TRUE)
+  utils::download.file(url,
+                       destfile = temp_file,
+                       quiet = TRUE)
 
   # Unzip the data file to a temporary directory
   temp_dir <- tempfile()
