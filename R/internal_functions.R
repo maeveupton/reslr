@@ -650,13 +650,13 @@ add_linear_rate <- function(data) {
   # Create a temporary file
   temp_file <- tempfile()
 
-  # Download the file and save it to the temporary file
-  utils::download.file(url,
-    destfile = temp_file,
-    method = "libcurl",
-    #mode = "wb", extra = "--no-check-certificate",
-   quiet = TRUE
-  )
+  # # Download the file and save it to the temporary file
+  # utils::download.file(url,
+  #   destfile = temp_file,
+  #   method = "libcurl",
+  #   #mode = "wb", extra = "--no-check-certificate",
+  #  quiet = TRUE
+  # )
   # Unzip the data file to a temporary directory
   # temp_dir <- tempfile()
   # suppressWarnings(
