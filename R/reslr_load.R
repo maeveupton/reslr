@@ -26,7 +26,7 @@
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' reslr_load(data = data)
 reslr_load <- function(data,
-                       prediction_grid_res = 50,
+                       prediction_grid_res = 30,
                        include_tide_gauge = FALSE,
                        include_linear_rate = FALSE,
                        list_preferred_TGs = NULL,
@@ -258,12 +258,11 @@ reslr_load <- function(data,
     sites,
     Age = times
   )
-
   data_age_boundary <- data %>%
     dplyr::group_by(SiteName) %>%
     dplyr::summarise(
       max_Age = max(Age) + Age_err[1],
-      min_Age = min(Age) - Age_err[length(Age_err)]
+      min_Age = min(Age) - abs(Age_err[length(Age_err)])
     ) %>%
     unique()
   # Filtering prediction grids to just cover the data
