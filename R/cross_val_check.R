@@ -35,15 +35,15 @@ cross_val_check <- function(data,
                             CI = 0.95) {
   # Cross Validation tests-----------------
   CV_fold_number <- RSL <- Region <- Site <- SiteName <- lwr_PI <- obs_in_PI <- pred <- true_RSL <- upr_PI <- xl <- xr <- y_post_pred <- NULL
-  if(is.null(seed) == TRUE){
-    base::set.seed(123)
-  }
-  else{
-    base::set.seed(seed)
-  }
+
+  # Random selection
+  base::set.seed(seed)
 
   # Input data
-  df_split_index <- dismo::kfold(data,
+  data <- data %>%
+    dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
+
+  df_split_index <- kfold_fun(data$Age,
     k = n_fold,
     by = data$SiteName
   )
@@ -54,8 +54,7 @@ cross_val_check <- function(data,
     if (model_type == "ni_gam_decomp") {
       # Segment your data by fold using the which() function
       CV_fold <- base::which(df_split_index == i, arr.ind = TRUE)
-      test_set <- data[CV_fold, ] %>%
-        dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
+      test_set <- data[CV_fold, ]
       training_set <- data[-CV_fold, ]
       # reslr_load
       input_train <- reslr::reslr_load(training_set,
@@ -81,9 +80,8 @@ cross_val_check <- function(data,
     } else {
       # Segment your data by fold using the which() function
       CV_fold <- base::which(df_split_index == i, arr.ind = TRUE)
-      test_set <- data[CV_fold, ] %>%
-        dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
-      training_set <- data[-CV_fold, ]
+      test_set <- data[CV_fold, ]
+      training_set <- data[-CV_fold, ] %>% dplyr::select(-SiteName)
       # reslr_load
       input_train <- reslr::reslr_load(training_set,
         prediction_grid_res = prediction_grid_res,
@@ -198,7 +196,6 @@ cross_val_check <- function(data,
   # True vs Predicted plot
   true_pred_plot <- ggplot2::ggplot(data = CV_model_df, ggplot2::aes(
     x = true_RSL,
-    # y = pred_RSL,
     y = y_post_pred,
     colour = "PI"
   )) +
@@ -206,8 +203,6 @@ cross_val_check <- function(data,
       data = CV_model_df,
       ggplot2::aes(
         x = true_RSL,
-        # ymin = lwr,
-        # ymax = upr),
         ymin = lwr_PI,
         ymax = upr_PI
       ),
@@ -270,5 +265,6 @@ cross_val_check <- function(data,
     prediction_interval_size = prediction_interval_size,
     coverage_by_site = coverage_by_site
   )
+
   return(cross_validation_tests)
 }

@@ -27,7 +27,6 @@ Depends:
 LazyData: true
 Imports: 
     data.table,
-    dismo,
     dplyr,
     fastDummies,
     fields,
