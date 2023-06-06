@@ -21,7 +21,7 @@
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' cross_val_check(data = data, model_type = "ni_spline_t")
 cross_val_check <- function(data,
-                            prediction_grid_res = 30,
+                            prediction_grid_res = 50,
                             spline_nseg = NULL,
                             spline_nseg_t = 20,
                             spline_nseg_st = 6,
@@ -35,7 +35,13 @@ cross_val_check <- function(data,
                             CI = 0.95) {
   # Cross Validation tests-----------------
   CV_fold_number <- RSL <- Region <- Site <- SiteName <- lwr_PI <- obs_in_PI <- pred <- true_RSL <- upr_PI <- xl <- xr <- y_post_pred <- NULL
-  set.seed(seed)
+  if(is.null(seed) == TRUE){
+    base::set.seed(123)
+  }
+  else{
+    base::set.seed(seed)
+  }
+
   # Input data
   df_split_index <- dismo::kfold(data,
     k = n_fold,

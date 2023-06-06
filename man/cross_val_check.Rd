@@ -6,7 +6,7 @@
 \usage{
 cross_val_check(
   data,
-  prediction_grid_res = 30,
+  prediction_grid_res = 50,
   spline_nseg = NULL,
   spline_nseg_t = 20,
   spline_nseg_st = 6,

@@ -266,7 +266,7 @@ clean_tidal_gauge_data <- function(data,
   data_TG$RSL <- data_TG$RSL - 7000 # data_TG$RSL_offset #
 
   #--Joining SL data with location names--
-  annual_SL_tide_df <- merge(data_TG, file_list, by = "id", all = TRUE)
+  annual_SL_tide_df <- base::merge(data_TG, file_list, by = "id", all = TRUE)
   #-- Removing sites which have a station flag raised as they are poor sites---
   annual_SL_tide_df <- annual_SL_tide_df %>%
     dplyr::filter(!stationflag == "Y") %>%
@@ -326,7 +326,7 @@ clean_tidal_gauge_data <- function(data,
     dplyr::mutate(sd_TG = sd(rolling_avg))
 
   #----- New df with decadal averages for tide gauges-----
-  tidal_gauge_average_10_df <- merge(
+  tidal_gauge_average_10_df <- base::merge(
     decadal_averages_TG,
     annual_tidal_gauge_data_df
   )
@@ -584,7 +584,8 @@ clean_tidal_gauge_data <- function(data,
     )
 
     # Combining both dataframes & removing duplicates----
-    data_tide_proxy <- merge(data_tide_proxy_all_1deg, data_tide_proxy_TGlist, all = TRUE)
+    data_tide_proxy <- base::merge(data_tide_proxy_all_1deg,
+                                   data_tide_proxy_TGlist, all = TRUE)
     data <- data_tide_proxy %>%
       dplyr::select(!c(
         n_obs_by_site, site, sd_TG
@@ -629,7 +630,8 @@ clean_tidal_gauge_data <- function(data,
 
 
     # Combining both dataframes & removing duplicates----
-    data_tide_proxy <- merge(data_tide_proxy_all_1deg, data_tide_proxy_closestTG, all = TRUE)
+    data_tide_proxy <- base::merge(data_tide_proxy_all_1deg,
+                                   data_tide_proxy_closestTG, all = TRUE)
     # Ensuring the SiteName is a factor
     data <- data_tide_proxy %>%
       dplyr::select(!c(
