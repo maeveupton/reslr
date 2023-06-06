@@ -24,7 +24,7 @@ kfold_fun <- function(x, k=5, by=NULL) {
         group <- c( group, rep(j, times=times[j]) )
       }
 
-      r <- order(runif(obs))
+      r <- order(stats::runif(obs))
       return(group[r])
     }
   }
