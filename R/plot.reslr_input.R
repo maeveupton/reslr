@@ -81,7 +81,8 @@ plot.reslr_input <- function(x,
       ggplot2::theme(
         plot.title = ggplot2::element_text(size = 18, face = "bold"),
         axis.title = ggplot2::element_text(size = 12, face = "bold"),
-        legend.text = ggplot2::element_text(size = 10)
+        legend.text = ggplot2::element_text(size = 8),
+        legend.title=ggplot2::element_blank()
       )
 
     # Plotting when Age type is BP
@@ -118,7 +119,8 @@ plot.reslr_input <- function(x,
         ggplot2::theme(
           plot.title = ggplot2::element_text(size = 18, face = "bold"),
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          legend.text = ggplot2::element_text(size = 10)
+          legend.text = ggplot2::element_text(size = 8),
+          legend.title=ggplot2::element_blank()
         )+
         ggplot2::scale_x_reverse()
     }
@@ -190,9 +192,10 @@ plot.reslr_input <- function(x,
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
         ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          plot.title = ggplot2::element_text(size = 13, face = "bold"),
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          legend.text = ggplot2::element_text(size = 8)
+          legend.text = ggplot2::element_text(size = 8),
+          legend.title=ggplot2::element_blank()
         )
 
 
@@ -227,9 +230,10 @@ plot.reslr_input <- function(x,
         ggplot2::theme(legend.box = "horizontal", legend.position = "bottom") +
         ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 3))) +
         ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 18, face = "bold"),
+          plot.title = ggplot2::element_text(size = 13, face = "bold"),
           axis.title = ggplot2::element_text(size = 12, face = "bold"),
-          legend.text = ggplot2::element_text(size = 10)
+          legend.text = ggplot2::element_text(size = 8),
+          legend.title=ggplot2::element_blank()
         )
     }
     else{

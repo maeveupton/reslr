@@ -32,7 +32,8 @@ create_rate_of_change_plot <- function(output_dataframes,
       plot.title = ggplot2::element_text(size = 15),
       axis.title = ggplot2::element_text(size = 12, face = "bold"),
       axis.text = ggplot2::element_text(size = 12),
-      legend.text = ggplot2::element_text(size = 10)
+      legend.text = ggplot2::element_text(size = 8),
+      legend.title=ggplot2::element_blank()
     ) +
     ggplot2::theme(
       strip.text.x = ggplot2::element_text(size = 10),
@@ -57,12 +58,12 @@ create_rate_of_change_plot <- function(output_dataframes,
     ggplot2::guides(
       fill = ggplot2::guide_legend(override.aes = list(
         alpha = c(0.4), # , 0.4),
-        size = 1
+        size = 0.75
       )),
       colour = ggplot2::guide_legend(override.aes = list(
         linetype = c(1),
         shape = c(NA),
-        size = 2
+        size = 1
       ))
     ) +
     ggplot2::geom_hline(yintercept = 0) +
@@ -118,7 +119,8 @@ create_model_fit_plot <- function(output_dataframes,
       plot.title = ggplot2::element_text(size = 15),
       axis.title = ggplot2::element_text(size = 12, face = "bold"),
       axis.text = ggplot2::element_text(size = 12),
-      legend.text = ggplot2::element_text(size = 10)
+      legend.text = ggplot2::element_text(size = 8),
+      legend.title=ggplot2::element_blank()
     ) +
     ggplot2::theme(
       strip.text.x = ggplot2::element_text(size = 10),
@@ -146,12 +148,12 @@ create_model_fit_plot <- function(output_dataframes,
     ggplot2::guides(
       fill = ggplot2::guide_legend(override.aes = list(
         alpha = c(0.3, 0.2), # , 0.4),
-        size = 1
+        size = 0.75
       )),
       colour = ggplot2::guide_legend(override.aes = list(
         linetype = c(0, 1),
         shape = c(16, NA),
-        size = 2
+        size = 1
       ))
     ) +
     ggplot2::facet_wrap(~SiteName)
