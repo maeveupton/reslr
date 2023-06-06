@@ -742,7 +742,6 @@ add_linear_rate <- function(data) {
   # File is stored in the package:
   ice5g_data <- system.file("extdata", "dsea.1grid_O512.nc", package = "reslr")
   # Opening the files
-  #nc_data <- ncdf4::nc_open(temp_file) # ICE5G: better fit for data
   nc_data <- ncdf4::nc_open(ice5g_data) # ICE5G: better fit for data
 
 
