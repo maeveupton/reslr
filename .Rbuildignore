@@ -6,3 +6,5 @@
 ^docs$
 ^badge$
 ^cran-comments\.md$
+^files/directories$
+^NUL$
