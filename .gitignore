@@ -23,3 +23,14 @@ doc
 Meta
 NULL
 files/directories
+revdep/checks
+revdep/library
+revdep/checks.noindex
+revdep/library.noindex
+revdep/data.sqlite
+
+# Compiled files
+src/*.so
+src/*.o
+src/*.gcda
+src/*.gcno
