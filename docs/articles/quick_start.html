@@ -88,7 +88,7 @@
                         <h4 data-toc-skip class="author">Maeve Upton,
 Andrew Parnell and Niamh Cahill</h4>
             
-            <h4 data-toc-skip class="date">2023-05-31</h4>
+            <h4 data-toc-skip class="date">2023-06-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maeveupton/reslr/blob/HEAD/vignettes/quick_start.Rmd" class="external-link"><code>vignettes/quick_start.Rmd</code></a></small>
       <div class="hidden name"><code>quick_start.Rmd</code></div>
@@ -104,8 +104,8 @@ Andrew Parnell and Niamh Cahill</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Not on CRAN yet</span></span>
 <span><span class="co">#install.packages("reslr")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"maeveupton/reslr"</span><span class="op">)</span></span>
-<span><span class="co">#install_github("maeveupton/reslr")</span></span></code></pre></div>
+<span><span class="co">#devtools::install_github("maeveupton/reslr")</span></span>
+<span><span class="fu">install_github</span><span class="op">(</span><span class="st">"maeveupton/reslr"</span><span class="op">)</span></span></code></pre></div>
 <p>then,</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/maeveupton/reslr" class="external-link">reslr</a></span><span class="op">)</span></span></code></pre></div>
@@ -226,8 +226,8 @@ estimates from the model can be investigated using the following:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">##   variable      mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.07    0.676   0.538   1.30     3.29    1.00</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">15</span> 0.004<span style="text-decoration: underline;">86</span> 0.004<span style="text-decoration: underline;">46</span> 0.000<span style="text-decoration: underline;">457</span> 0.015<span style="text-decoration: underline;">8</span>  1.00</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.08    0.678   0.546   1.28     3.30    1.00</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">28</span> 0.004<span style="text-decoration: underline;">68</span> 0.004<span style="text-decoration: underline;">66</span> 0.000<span style="text-decoration: underline;">544</span> 0.014<span style="text-decoration: underline;">9</span>  1.00</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="step-5-plot-the-results">Step 5: Plot the results<a class="anchor" aria-label="anchor" href="#step-5-plot-the-results"></a>
@@ -254,18 +254,18 @@ following:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output_dataframes</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   Longitude Latitude                       SiteName data_type_id     Age</span></span>
 <span><span class="co">## 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -865.25</span></span>
-<span><span class="co">## 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -750.00</span></span>
-<span><span class="co">## 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -700.00</span></span>
-<span><span class="co">## 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
-<span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600.00</span></span>
-<span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550.00</span></span>
-<span><span class="co">##        pred       upr       lwr   rate_pred    rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">## 1 -2.299519 -2.415364 -2.188923 -0.25163021 -0.84929538 0.3643490 95%</span></span>
-<span><span class="co">## 2 -2.317130 -2.383886 -2.249936 -0.05424006 -0.47669517 0.3774851 95%</span></span>
-<span><span class="co">## 3 -2.317794 -2.376959 -2.260679  0.02700739 -0.32583163 0.3826841 95%</span></span>
-<span><span class="co">## 4 -2.314497 -2.366029 -2.262182  0.10418361 -0.18182544 0.3938409 95%</span></span>
-<span><span class="co">## 5 -2.307444 -2.356916 -2.258195  0.17728859 -0.05129982 0.4080336 95%</span></span>
-<span><span class="co">## 6 -2.296836 -2.345665 -2.247783  0.24632234  0.06702597 0.4337505 95%</span></span></code></pre>
+<span><span class="co">## 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -770.00</span></span>
+<span><span class="co">## 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -740.00</span></span>
+<span><span class="co">## 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -710.00</span></span>
+<span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -680.00</span></span>
+<span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
+<span><span class="co">##        pred       upr       lwr   rate_pred   rate_upr  rate_lwr  CI</span></span>
+<span><span class="co">## 1 -2.300234 -2.420740 -2.183947 -0.24553384 -0.8516679 0.3699442 95%</span></span>
+<span><span class="co">## 2 -2.315914 -2.391610 -2.240860 -0.08327629 -0.5464661 0.3877881 95%</span></span>
+<span><span class="co">## 3 -2.317662 -2.384636 -2.253940 -0.03354343 -0.4542571 0.3936917 95%</span></span>
+<span><span class="co">## 4 -2.317941 -2.378540 -2.260828  0.01474239 -0.3652596 0.4025005 95%</span></span>
+<span><span class="co">## 5 -2.316792 -2.373400 -2.265408  0.06158119 -0.2774644 0.4075729 95%</span></span>
+<span><span class="co">## 6 -2.314260 -2.367574 -2.265364  0.10697297 -0.1929728 0.4169903 95%</span></span></code></pre>
 <p>To examine the additional options in the <code>reslr</code> package,
 see the main vignette.</p>
 </div>

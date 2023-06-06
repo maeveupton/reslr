@@ -459,7 +459,7 @@ clean_tidal_gauge_data <- function(data,
       stop()
     }
 
-    decadal_TG_df_filter <- subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
+    decadal_TG_df_filter <- base::subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
     # There will be NAs were the proxy data doesn't have a corresponding index--
     data_tide_proxy <- plyr::rbind.fill(
       SL_site_df,
@@ -558,7 +558,7 @@ clean_tidal_gauge_data <- function(data,
       cat("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
       stop()
     }
-    decadal_TG_df_filter <- subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
+    decadal_TG_df_filter <- base::subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
     #--There will be NAs were the proxy data doesn't have a corresponding index--
     data_tide_proxy_TGlist <- plyr::rbind.fill(
       SL_site_df,
@@ -600,7 +600,7 @@ clean_tidal_gauge_data <- function(data,
       cat("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
       stop()
     }
-    decadal_TG_df_filter <- subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
+    decadal_TG_df_filter <- base::subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
     #--There will be NAs were the proxy data doesn't have a corresponding index--
     data_tide_proxy_TGlist <- plyr::rbind.fill(
       SL_site_df,

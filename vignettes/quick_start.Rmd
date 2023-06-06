@@ -23,7 +23,7 @@ Use:
 install_github("maeveupton/reslr")
 ```
 then,
-```{r, message=FALSE}
+```{r, start, message=FALSE}
 library(reslr)
 ```
 
@@ -33,8 +33,7 @@ Note: The JAGS software is a requirement for this instruction sheet and refer ba
 
 There is a large example dataset included in the `reslr` package called `NAACproxydata`. In this example, we demonstrate how to include proxy record data which is stored in a csv file. This csv file of data can be found in the package and the `readr` function reads the csv file:
 
-```{r, eval = TRUE}
-library(readr)
+```{r, run_data, eval = TRUE}
 path_to_data <- system.file("extdata", "one_data_site_ex.csv", package = "reslr")
 example_one_datasite <- read.csv(path_to_data)
 ```

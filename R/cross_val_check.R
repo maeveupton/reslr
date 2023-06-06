@@ -1,6 +1,6 @@
 #' Cross validation check for spline in time, spline in space time and GAM in order to select the most appropriate number of knots when creating basis functions.
 #'
-#' @param raw_data Raw input data
+#' @param data Raw input data
 #' @param prediction_grid_res Resolution of grid. Predictions over every 50 years(default) can vary based on user preference, as larger values will reduce computational run time.
 #' @param spline_nseg This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions.
 #' @param spline_nseg_t This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
@@ -19,8 +19,8 @@
 #'
 #' @examples
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-#' cross_val_check(raw_data = data, model_type = "ni_spline_t")
-cross_val_check <- function(raw_data,
+#' cross_val_check(data = data, model_type = "ni_spline_t")
+cross_val_check <- function(data,
                             prediction_grid_res = 30,
                             spline_nseg = NULL,
                             spline_nseg_t = 20,
@@ -37,7 +37,6 @@ cross_val_check <- function(raw_data,
   CV_fold_number <- RSL <- Region <- Site <- SiteName <- lwr_PI <- obs_in_PI <- pred <- true_RSL <- upr_PI <- xl <- xr <- y_post_pred <- NULL
   set.seed(seed)
   # Input data
-  data <- raw_data
   df_split_index <- dismo::kfold(data,
     k = n_fold,
     by = data$SiteName

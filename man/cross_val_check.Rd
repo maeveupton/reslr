@@ -5,7 +5,7 @@
 \title{Cross validation check for spline in time, spline in space time and GAM in order to select the most appropriate number of knots when creating basis functions.}
 \usage{
 cross_val_check(
-  raw_data,
+  data,
   prediction_grid_res = 30,
   spline_nseg = NULL,
   spline_nseg_t = 20,
@@ -21,7 +21,7 @@ cross_val_check(
 )
 }
 \arguments{
-\item{raw_data}{Raw input data}
+\item{data}{Raw input data}
 
 \item{prediction_grid_res}{Resolution of grid. Predictions over every 50 years(default) can vary based on user preference, as larger values will reduce computational run time.}
 
@@ -55,5 +55,5 @@ Cross validation check for spline in time, spline in space time and GAM in order
 }
 \examples{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
-cross_val_check(raw_data = data, model_type = "ni_spline_t")
+cross_val_check(data = data, model_type = "ni_spline_t")
 }

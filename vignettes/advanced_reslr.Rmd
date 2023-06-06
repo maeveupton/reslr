@@ -292,7 +292,7 @@ In the previous section, we discussed altering the smoothness of the splines by 
 ```{r,eval = TRUE,message=FALSE,results='hide'}
 data1site_example <- NAACproxydata[NAACproxydata$Site == "Cedar Island",]
 # Cross Validation test
-cv <- cross_val_check(raw_data = data1site_example,
+cv <- cross_val_check(data = data1site_example,
                       model_type ="ni_spline_t",
                       n_iterations = 1000,
                       n_burnin = 100,
