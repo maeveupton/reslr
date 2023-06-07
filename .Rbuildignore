@@ -8,3 +8,6 @@
 ^cran-comments\.md$
 ^files/directories$
 ^NUL$
+^\.github$
+^_pkgdown\.yml$
+^codecov\.yml$
