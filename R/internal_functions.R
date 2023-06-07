@@ -1,4 +1,4 @@
-#' A function to create folds for cross validation, recreated from the dismo package.
+#' A function to create folds for cross validation, recreated from the dismo package to avoid dependency issues.
 #'
 #' @param x A vector containing the input data
 #' @param k The number of folds
@@ -1374,6 +1374,7 @@ igp_data <- function(data, data_grid) {
   tstar <- tgrid - min_t
 
   Dist <- fields::rdist(tstar) ### Distance matrix required for the model
+  #Dist <- rdist_fun(tstar) ### Distance matrix required for the model
   D <- cbind(t, data$RSL) ### Combine the x,y data for the model
 
   ######## Initialize quadrature for the integration########
@@ -1426,6 +1427,7 @@ igp_detrend_data <- function(data, data_grid) {
   tstar <- tgrid - min_t
 
   Dist <- fields::rdist(tstar) ### Distance matrix required for the model
+  #Dist <- rdist_fun(tstar) ### Distance matrix required for the model
   D <- cbind(t, data$SL) ### Combine the x,y data for the model
 
   ######## Initialize quadrature for the integration########
