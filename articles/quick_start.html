@@ -225,8 +225,8 @@ estimates from the model can be investigated using the following:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">##   variable      mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.14    0.768   0.576   1.30     3.58    1.00</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">09</span> 0.004<span style="text-decoration: underline;">66</span> 0.004<span style="text-decoration: underline;">62</span> 0.000<span style="text-decoration: underline;">387</span> 0.015<span style="text-decoration: underline;">1</span>  1.00</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.10    0.689   0.546   1.28     3.35    1.00</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">23</span> 0.004<span style="text-decoration: underline;">72</span> 0.004<span style="text-decoration: underline;">63</span> 0.000<span style="text-decoration: underline;">459</span> 0.015<span style="text-decoration: underline;">2</span>  1.00</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="step-5-plot-the-results">Step 5: Plot the results<a class="anchor" aria-label="anchor" href="#step-5-plot-the-results"></a>
@@ -258,13 +258,13 @@ following:</p>
 <span><span class="co">## 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -710.00</span></span>
 <span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -680.00</span></span>
 <span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
-<span><span class="co">##        pred       upr       lwr    rate_pred   rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">## 1 -2.297976 -2.417528 -2.181207 -0.260626197 -0.8987188 0.3676937 95%</span></span>
-<span><span class="co">## 2 -2.314931 -2.389856 -2.239698 -0.094798536 -0.5807525 0.3849777 95%</span></span>
-<span><span class="co">## 3 -2.317008 -2.383974 -2.249175 -0.043885985 -0.4788735 0.3847187 95%</span></span>
-<span><span class="co">## 4 -2.317580 -2.378207 -2.258324  0.005529828 -0.3767225 0.3983821 95%</span></span>
-<span><span class="co">## 5 -2.316691 -2.372703 -2.262296  0.053448903 -0.2872218 0.4062693 95%</span></span>
-<span><span class="co">## 6 -2.314388 -2.365747 -2.262845  0.099871241 -0.2016733 0.4095406 95%</span></span></code></pre>
+<span><span class="co">##        pred       upr       lwr   rate_pred   rate_upr  rate_lwr  CI</span></span>
+<span><span class="co">## 1 -2.301982 -2.418857 -2.180526 -0.24001384 -0.8659704 0.3491597 95%</span></span>
+<span><span class="co">## 2 -2.317188 -2.392039 -2.239004 -0.07883041 -0.5522496 0.3791170 95%</span></span>
+<span><span class="co">## 3 -2.318808 -2.385540 -2.249362 -0.02940334 -0.4592385 0.3870359 95%</span></span>
+<span><span class="co">## 4 -2.318967 -2.379523 -2.258714  0.01858810 -0.3641655 0.3901504 95%</span></span>
+<span><span class="co">## 5 -2.317707 -2.373676 -2.262341  0.06514391 -0.2762275 0.3962062 95%</span></span>
+<span><span class="co">## 6 -2.315072 -2.368359 -2.260972  0.11026408 -0.1919066 0.4049201 95%</span></span></code></pre>
 <p>To examine the additional options in the <code>reslr</code> package,
 see the main vignette.</p>
 </div>
