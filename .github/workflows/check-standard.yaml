@@ -33,11 +33,25 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
+      - name: Install jags Linux
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install jags
+
+      - name: Install jags Mac OS
+        if: runner.os == 'macOS'
+        run: |
+          brew link --overwrite gcc
+          brew install jags
+
+
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
+
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
