@@ -2,7 +2,7 @@ Package: reslr
 Title: Modelling Relative Sea Level Data 
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Maeve", "Upton", email= "maeve.upton.2020@mumail.ie", role = c("cph", "aut", "cre"),
+    person("Maeve", "Upton", email= "uptonmaeve010@gmail.com", role = c("cph", "aut", "cre"),
            comment = c(ORCID = "0000-0002-3185-7731")),
            person("Andrew", "Parnell", role = "aut"),
            person("Niamh", "Cahill", role = "aut"))
