@@ -514,7 +514,7 @@ res_eiv_igp_t <- reslr_mcmc(
 )
 ```
 
-```{r,runigp_less_it, echo=FALSE,results='hide',message = FALSE,eval = TRUE}
+```{r,runigp_less_it, echo=FALSE,results='hide',message = FALSE,eval = FALSE}
 res_eiv_igp_t <- reslr_mcmc(
   input_data = CedarIslandNC_input,
   model_type = "eiv_igp_t",
@@ -526,19 +526,15 @@ res_eiv_igp_t <- reslr_mcmc(
 )
 ```
 
-```{r,runigp_save, echo=FALSE,results='hide',message = FALSE,eval = TRUE}
-#res_eiv_igp_t_file <- system.file("reslrVigoutput", "res_eiv_igp_t.rds", package = "reslr")
-#res_eiv_igp_t <- readRDS(res_eiv_igp_t_file)
-```
 This command takes the input data and the user specifies the statistical model, i.e. an integrated Gaussian process using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `res_eiv_igp_t`. The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`. The computational run time for this model is approximately 14 minutes.
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
-```{r,printigpout, eval=TRUE}
+```{r,printigpout, eval=FALSE}
 print(res_eiv_igp_t)
 ```
 
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r,summaryigp, eval = TRUE}
+```{r,summaryigp, eval = FALSE}
 summary(res_eiv_igp_t)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
@@ -557,7 +553,7 @@ res_eiv_igp_t <- reslr_mcmc(
 For the parameter estimates, the length scale parameter, "rho" is the correlation parameter and "nu" is the standard deviation of the rate process. "sigma_y" is the variation of the model. 
 
 **Step 5:** The results from the EIV IGP model can be illustrated using:
-```{r,plotigpres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotigpres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_eiv_igp_t,
   plot_type = "model_fit_plot",
   xlab = "Year (CE)",
@@ -568,7 +564,7 @@ plot(res_eiv_igp_t,
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotigpresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotigpresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_eiv_igp_t,
   plot_type = "rate_plot",
   xlab = "Year (CE)",
@@ -578,9 +574,8 @@ plot(res_eiv_igp_t,
 This prints the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used.
 
 To examine the data creating these plots the user types the following:
-```{r,igpdataout, eval = TRUE}
+```{r,igpdataout, eval = FALSE}
 output_dataframes <- res_eiv_igp_t$output_dataframes
-head(output_dataframes)
 ```
 
 
@@ -763,7 +758,7 @@ res_ni_spline_st <- reslr_mcmc(
 )
 ```
 
-```{r,runspst_less_it,eval = TRUE,echo=FALSE,results='hide',message=FALSE}
+```{r,runspst_less_it,eval = FALSE,echo=FALSE,results='hide',message=FALSE}
 res_ni_spline_st <- reslr_mcmc(
   input_data = multi_site_input,
   model_type = "ni_spline_st",
@@ -777,12 +772,12 @@ res_ni_spline_st <- reslr_mcmc(
 The output object `jags_output.ni_spline_st` stores the JAGS model run. The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`. Note that additional computational run time is required for this model compared with the ni_spline_t. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
-```{r,printspstout,eval=TRUE}
+```{r,printspstout,eval=FALSE}
 print(res_ni_spline_st)
 ```
 
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r,summaryspst, eval = TRUE}
+```{r,summaryspst, eval = FALSE}
 summary(res_ni_spline_st)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
@@ -800,7 +795,7 @@ res_ni_spline_st <- reslr::reslr_mcmc(
 For the parameter estimates, we can present the standard deviation associated with the NI spline space time model. Where "sigma_beta" highlights the variation associated with the spline coefficient of the spline in time and "sigma_y" presenting the overall variation.
 
 **Step 5:** the results from the ni_spline_st model can be illustrated using:
-```{r,plotspstres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
+```{r,plotspstres, eval = FALSE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(res_ni_spline_st,
   plot_type = "model_fit_plot",
   xlab = "Year (CE)",
@@ -809,7 +804,7 @@ plot(res_ni_spline_st,
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval =TRUE,results='hide',message=FALSE}
+```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval =FALSE,results='hide',message=FALSE}
 plot(res_ni_spline_st,
   plot_type = "rate_plot",
   xlab = "Year (CE)",
@@ -932,8 +927,8 @@ plot(res_ni_gam_decomp,
 )
 ```
 
-```{r,plotnigamres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("vignettes/vig/plotnigamres.png")
+```{r,plotnigamres_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamres-1.png")
 ```
 In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot. The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 In order to view the rate of change plot, the following setting should be used:
@@ -945,7 +940,7 @@ plot(res_ni_gam_decomp,
 ```
 
 ```{r,plotnigamresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("vignettes/vig/plotnigamresrate.png")
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamresrate-1.png")
 ```
 This will print the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used. To examine the data creating the total model fit and the rate of change plot, the user can use:
 ```{r,totaldf, eval = FALSE}
@@ -958,7 +953,7 @@ plot(res_ni_gam_decomp, plot_type = "regional_plot")
 ```
 
 ```{r,plotnigamregres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("vignettes/vig/plotnigamregres.png")
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamregres-1.png")
 ```
 The regional component and the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the regional component plot and rate plot, the user can use:
 ```{r,regdf, eval = FALSE}
@@ -969,7 +964,7 @@ The rate for the regional component can be accessed using:
 plot(res_ni_gam_decomp, plot_type = "regional_rate_plot")
 ```
 ```{r,plotnigamregresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("vignettes/vig/plotnigamregresrate.png")
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamregresrate-1.png")
 ```
 Similarly, the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. 
 
@@ -979,7 +974,7 @@ plot(res_ni_gam_decomp, plot_type = "linear_local_plot")
 ```
 
 ```{r,plotnigamlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("vignettes/vig/plotnigamlinres.png")
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamlinres-1.png")
 ```
 The linear local component is plotted with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the linear local component plot, the user can use:
 ```{r,linlocdf, eval = FALSE}
@@ -1002,7 +997,7 @@ plot(res_ni_gam_decomp, plot_type = "non_linear_local_plot")
 ```
 
 ```{r,plotnigamnonlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("vignettes/vig/plotnigamnonlinres.png")
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamnonlinres-1.png")
 ```
 The non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the non-linear local component plot and rate plot, the user can use:
 ```{r,non_lindf, eval = FALSE}
@@ -1014,7 +1009,7 @@ plot(res_ni_gam_decomp, plot_type = "non_linear_local_rate_plot")
 ```
 
 ```{r,plotnigamnonlinresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("vignettes/vig/plotnigamnonlinresrate.png")
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamnonlinresrate-1.png")
 ```
 The rate of change of the non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 
@@ -1024,7 +1019,7 @@ plot(res_ni_gam_decomp, plot_type = "nigam_component_plot")
 ```
 
 ```{r,plotnigamall_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("vignettes/vig/plotnigamall.png")
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamall-1.png")
 ```
 Each component is plotted with an 95\% credible interval and this plot gives insight into the variability of the different components through time and at the different locations in question. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 
