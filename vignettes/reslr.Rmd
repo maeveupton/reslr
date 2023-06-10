@@ -809,7 +809,7 @@ plot(res_ni_spline_st,
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE,results='hide',message=FALSE}
+```{r,plotspstresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval =TRUE,results='hide',message=FALSE}
 plot(res_ni_spline_st,
   plot_type = "rate_plot",
   xlab = "Year (CE)",
@@ -819,9 +819,8 @@ plot(res_ni_spline_st,
 This will print the plot of the rate of change with 95 \% credible intervals. Again, the caption provides the model type, the number of proxy sites and tide gauge sites that were used.
 
 To examine the data creating these plots the user types the following:
-```{r,outdfspst, eval = TRUE}
+```{r,outdfspst, eval = FALSE}
 output_dataframes <- res_ni_spline_st$output_dataframes
-head(output_dataframes)
 ```
 
 
@@ -892,7 +891,7 @@ plot(
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. The extra arguments can be used which allows the user to updated the titles and axis labels. The caption `plot_caption`, included by default, provides the number of proxy sites and tide gauge sites that will be used in the model and can be removed if required `plot_caption = FALSE`. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE`.
 
 **Step 3:** Run the model
-```{r,runnigam,eval = TRUE,results='hide',message=FALSE}
+```{r,runnigam,eval = FALSE,results='hide',message=FALSE}
 res_ni_gam_decomp <- reslr_mcmc(
   input_data = multi_9_sites_input,
   model_type = "ni_gam_decomp",
@@ -902,12 +901,12 @@ res_ni_gam_decomp <- reslr_mcmc(
 The output object `res_ni_gam_decomp` stores the JAGS model run. The `CI` setting allows the user to set the credible intervals, the current default is `CI = 0.95`. Note that there will be two model runs printed in the console here but the output will be the same format as earlier models. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
-```{r,printnigamout, eval=TRUE}
+```{r,printnigamout, eval=FALSE}
 print(res_ni_gam_decomp)
 ```
 
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r,summarynigam, eval = TRUE}
+```{r,summarynigam, eval = FALSE}
 summary(res_ni_gam_decomp)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
@@ -926,19 +925,27 @@ res_ni_gam_decomp <- reslr_mcmc(
 For the parameter estimates, we can present the standard deviation associated with each component of the NIGAM decomposition. This gives an insight into the variation caused by the different components with "sigma_r" representing the regional component, "sigma_l" highlighting the non-linear local component, "sigma_y" presenting the overall variation and "sigma_h" representing the site specific vertical offset.
 
 **Step 5:** The results from the `ni_gam_decomp` model can be illustrated with the option of excluding the tide gauge using:
-```{r,plotnigamres, eval = TRUE,fig.align = 'center',fig.width = 7,fig.height = 5}
+```{r,plotnigamres, eval = FALSE,fig.align = 'center',fig.width = 7,fig.height = 5}
 plot(res_ni_gam_decomp,
   plot_type = "model_fit_plot",
   plot_tide_gauge = FALSE
 )
 ```
+
+```{r,plotnigamres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
+knitr::include_graphics("vignettes/vig/plotnigamres.png")
+```
 In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot. The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotnigamresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_ni_gam_decomp,
   plot_type = "rate_plot"
 )
+```
+
+```{r,plotnigamresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
+knitr::include_graphics("vignettes/vig/plotnigamresrate.png")
 ```
 This will print the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used. To examine the data creating the total model fit and the rate of change plot, the user can use:
 ```{r,totaldf, eval = FALSE}
@@ -946,22 +953,33 @@ total_model_fit_df <- res_ni_gam_decomp$output_dataframes$total_model_fit_df
 ```
 
 There are separate settings to examine the plot of each component and its associated rate. To examine the regional component plot use:
-```{r,plotnigamregres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamregres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_ni_gam_decomp, plot_type = "regional_plot")
+```
+
+```{r,plotnigamregres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
+knitr::include_graphics("vignettes/vig/plotnigamregres.png")
 ```
 The regional component and the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the regional component plot and rate plot, the user can use:
 ```{r,regdf, eval = FALSE}
 regional_component_df <- res_ni_gam_decomp$output_dataframes$regional_component_df
 ```
 The rate for the regional component can be accessed using:
-```{r,plotnigamregresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamregresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_ni_gam_decomp, plot_type = "regional_rate_plot")
+```
+```{r,plotnigamregresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
+knitr::include_graphics("vignettes/vig/plotnigamregresrate.png")
 ```
 Similarly, the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. 
 
 To examine the linear local component plot use:
-```{r,plotnigamlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_ni_gam_decomp, plot_type = "linear_local_plot")
+```
+
+```{r,plotnigamlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
+knitr::include_graphics("vignettes/vig/plotnigamlinres.png")
 ```
 The linear local component is plotted with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the linear local component plot, the user can use:
 ```{r,linlocdf, eval = FALSE}
@@ -979,22 +997,34 @@ lin_loc_component_rates <- lin_loc_component_df %>%
 
 To examine the non-linear local component plot use:
 
-```{r,plotnigamnonlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamnonlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_ni_gam_decomp, plot_type = "non_linear_local_plot")
+```
+
+```{r,plotnigamnonlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
+knitr::include_graphics("vignettes/vig/plotnigamnonlinres.png")
 ```
 The non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the non-linear local component plot and rate plot, the user can use:
 ```{r,non_lindf, eval = FALSE}
 non_lin_loc_component_df <- res_ni_gam_decomp$output_dataframes$non_lin_loc_component_df
 ```
 The plot of the rate of change for the non-linear local component use:
-```{r,plotnigamnonlinresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotnigamnonlinresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_ni_gam_decomp, plot_type = "non_linear_local_rate_plot")
+```
+
+```{r,plotnigamnonlinresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
+knitr::include_graphics("vignettes/vig/plotnigamnonlinresrate.png")
 ```
 The rate of change of the non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 
 In order to examine how all components vary, the user can examine the plot using the following method:
-```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE,message=FALSE,results='hide'}
+```{r,plotnigamall, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE,message=FALSE,results='hide'}
 plot(res_ni_gam_decomp, plot_type = "nigam_component_plot")
+```
+
+```{r,plotnigamall_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
+knitr::include_graphics("vignettes/vig/plotnigamall.png")
 ```
 Each component is plotted with an 95\% credible interval and this plot gives insight into the variability of the different components through time and at the different locations in question. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 
