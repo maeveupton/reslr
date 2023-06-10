@@ -13,3 +13,4 @@
 ^codecov\.yml$
 ^vig
 ^CRAN-SUBMISSION$
+^reslrvigplots
