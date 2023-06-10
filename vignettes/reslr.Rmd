@@ -960,21 +960,22 @@ The regional component and the rate of change of the regional component is prese
 regional_component_df <- res_ni_gam_decomp$output_dataframes$regional_component_df
 ```
 The rate for the regional component can be accessed using:
-```{r,plotnigamregresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotnigamregresrate, fig.align = 'center',eval = FALSE}
 plot(res_ni_gam_decomp, plot_type = "regional_rate_plot")
 ```
-```{r,plotnigamregresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
+```{r,plotnigamregresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center'}
 knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamregresrate-1.png")
 ```
 Similarly, the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. 
 
 To examine the linear local component plot use:
-```{r,plotnigamlinres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
+```{r,plotnigamlinres, fig.align = 'center',eval = FALSE}
 plot(res_ni_gam_decomp, plot_type = "linear_local_plot")
 ```
 
-```{r,plotnigamlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamlinres-1.png")
+```{r,plotnigamlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamlinres-1.png"
+knitr::include_graphics(url)
 ```
 The linear local component is plotted with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the linear local component plot, the user can use:
 ```{r,linlocdf, eval = FALSE}
@@ -996,8 +997,9 @@ To examine the non-linear local component plot use:
 plot(res_ni_gam_decomp, plot_type = "non_linear_local_plot")
 ```
 
-```{r,plotnigamnonlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamnonlinres-1.png")
+```{r,plotnigamnonlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamnonlinres-1.png"
+knitr::include_graphics(url)
 ```
 The non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the non-linear local component plot and rate plot, the user can use:
 ```{r,non_lindf, eval = FALSE}
@@ -1008,8 +1010,9 @@ The plot of the rate of change for the non-linear local component use:
 plot(res_ni_gam_decomp, plot_type = "non_linear_local_rate_plot")
 ```
 
-```{r,plotnigamnonlinresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamnonlinresrate-1.png")
+```{r,plotnigamnonlinresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamnonlinresrate-1.png"
+knitr::include_graphics(url)
 ```
 The rate of change of the non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 
@@ -1018,8 +1021,9 @@ In order to examine how all components vary, the user can examine the plot using
 plot(res_ni_gam_decomp, plot_type = "nigam_component_plot")
 ```
 
-```{r,plotnigamall_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamall-1.png")
+```{r,plotnigamall_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/articles/vig/plotnigamall-1.png"
+knitr::include_graphics(url)
 ```
 Each component is plotted with an 95\% credible interval and this plot gives insight into the variability of the different components through time and at the different locations in question. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 
