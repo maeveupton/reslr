@@ -11,3 +11,5 @@
 ^\.github$
 ^_pkgdown\.yml$
 ^codecov\.yml$
+^reslrVigoutput
+^CRAN-SUBMISSION$

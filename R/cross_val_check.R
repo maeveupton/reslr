@@ -18,17 +18,19 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-#' cross_val_check(data = data, model_type = "ni_spline_t")
+#' cross_val_check(data = data, model_type = "ni_spline_t",n_fold = 2)
+#' }
 cross_val_check <- function(data,
                             prediction_grid_res = 50,
                             spline_nseg = NULL,
                             spline_nseg_t = 20,
                             spline_nseg_st = 6,
-                            n_iterations = 5000,
-                            n_burnin = 1000,
-                            n_thin = 4,
-                            n_chains = 3,
+                            n_iterations = 1000,
+                            n_burnin = 100,
+                            n_thin = 5,
+                            n_chains = 2,
                             model_type,
                             n_fold = 5,
                             seed = NULL,

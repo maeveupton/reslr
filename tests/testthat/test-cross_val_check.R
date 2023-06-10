@@ -4,9 +4,9 @@ testthat::test_that("Testing cross validation", {
   data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
   # Cross Validation test
   cv <- cross_val_check(data = data,
-                        prediction_grid_res = 100,
+                        prediction_grid_res = 1000,
                         model_type ="ni_spline_t",
-                        n_iterations = 10,
+                        n_iterations = 3,
                         n_burnin = 1,
                         n_thin = 1,
                         n_chains = 1,

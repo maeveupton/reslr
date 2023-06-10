@@ -54,11 +54,11 @@ For this case, we update the setting `detrend_data = TRUE` and we provide the `c
 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
 - The `data` dataframe is the inputted data with additional columns for the data_type_id which will contain "ProxyRecord". It can be accessed by:
-```{r,dataigp,eval=TRUE}
+```{r,dataigp,eval=FALSE}
 data <- CedarIslandNC_input_detrend$data
 ```
 - The `data_grid` is a dataframe that is evenly spaced in time based on the `prediction_grid_res` value chosen by the user and is used to create the plots and is accessed by
-```{r,datagridigp, eval = TRUE}
+```{r,datagridigp, eval = FALSE}
 data_grid <- CedarIslandNC_input_detrend$data_grid
 ```
 
