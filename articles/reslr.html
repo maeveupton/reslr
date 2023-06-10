@@ -89,7 +89,7 @@ Sea Level Change in R</h1>
                         <h4 data-toc-skip class="author">Maeve Upton,
 Andrew Parnell &amp; Niamh Cahill</h4>
             
-            <h4 data-toc-skip class="date">2023-06-09</h4>
+            <h4 data-toc-skip class="date">2023-06-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maeveupton/reslr/blob/HEAD/vignettes/reslr.Rmd" class="external-link"><code>vignettes/reslr.Rmd</code></a></small>
       <div class="hidden name"><code>reslr.Rmd</code></div>
@@ -792,7 +792,7 @@ user and is used to create the plots and is accessed by</li>
 <span>  plot_proxy_records <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_caption <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotdata-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotdata-1.png" width="672" style="display: block; margin: auto;">
 This will produce a plot of Age on the x-axis and Relative Sea Level on
 the y-axis in meters. Grey boxes represent the uncertainty associated
 with the vertical and horizontal uncertainty. The black data points are
@@ -846,9 +846,9 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">#&gt;   variable    mean      sd     mad      q5     q95  rhat</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha    -<span style="color: #BB0000;">1.99</span>   0.016<span style="text-decoration: underline;">6</span>  0.016<span style="text-decoration: underline;">9</span>  -<span style="color: #BB0000;">2.02</span>   -<span style="color: #BB0000;">1.96</span>    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta      0.823  0.013<span style="text-decoration: underline;">0</span>  0.013<span style="text-decoration: underline;">5</span>   0.802   0.844   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_y   0.066<span style="text-decoration: underline;">3</span> 0.009<span style="text-decoration: underline;">36</span> 0.009<span style="text-decoration: underline;">07</span>  0.051<span style="text-decoration: underline;">2</span>  0.081<span style="text-decoration: underline;">5</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha    -<span style="color: #BB0000;">1.99</span>   0.017<span style="text-decoration: underline;">1</span>  0.016<span style="text-decoration: underline;">9</span>  -<span style="color: #BB0000;">2.02</span>   -<span style="color: #BB0000;">1.96</span>    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta      0.824  0.013<span style="text-decoration: underline;">1</span>  0.012<span style="text-decoration: underline;">9</span>   0.802   0.845   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_y   0.066<span style="text-decoration: underline;">5</span> 0.009<span style="text-decoration: underline;">54</span> 0.009<span style="text-decoration: underline;">53</span>  0.051<span style="text-decoration: underline;">5</span>  0.082<span style="text-decoration: underline;">9</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -877,7 +877,7 @@ visualised using the following function:</p>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Relative Sea Level (m)"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotslrres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotslrres-1.png" width="672" style="display: block; margin: auto;">
 The output of this function is a graph of the input data, i.e. Age and
 RSL and associated uncertainty boxes, and the model fit with 95 %
 credible interval. The caption provides the model type used and number
@@ -896,12 +896,12 @@ following:</p>
 <span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600.00</span></span>
 <span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550.00</span></span>
 <span><span class="co">#&gt;        pred       upr       lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.701081 -2.753115 -2.651674 95%</span></span>
-<span><span class="co">#&gt; 2 -2.606264 -2.655598 -2.559483 95%</span></span>
-<span><span class="co">#&gt; 3 -2.565129 -2.613311 -2.519353 95%</span></span>
-<span><span class="co">#&gt; 4 -2.523994 -2.570890 -2.479327 95%</span></span>
-<span><span class="co">#&gt; 5 -2.482859 -2.528433 -2.439568 95%</span></span>
-<span><span class="co">#&gt; 6 -2.441723 -2.485952 -2.399518 95%</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 -2.702759 -2.756042 -2.648760 95%</span></span>
+<span><span class="co">#&gt; 2 -2.607839 -2.658410 -2.556848 95%</span></span>
+<span><span class="co">#&gt; 3 -2.566659 -2.616172 -2.516812 95%</span></span>
+<span><span class="co">#&gt; 4 -2.525479 -2.573941 -2.476785 95%</span></span>
+<span><span class="co">#&gt; 5 -2.484299 -2.531627 -2.436676 95%</span></span>
+<span><span class="co">#&gt; 6 -2.443118 -2.489256 -2.396573 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="errors-in-variable-change-point-model-eiv_cp_t">Errors-in-Variable Change Point Model
@@ -1014,7 +1014,7 @@ user and is used to create the plots and is accessed by</li>
 <span>  plot_proxy_records <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_tide_gauges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotdatacp-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotdatacp-1.png" width="672" style="display: block; margin: auto;">
 This will produce a plot of Age on the x-axis and Relative Sea Level on
 the y-axis in meters. Grey boxes represent the uncertainty associated
 with the vertical and horizontal uncertainty. The black data points are
@@ -1071,13 +1071,13 @@ following:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_eiv_cp1_t</span><span class="op">)</span></span>
 <span><span class="co">#&gt; No convergence issues detected.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
-<span><span class="co">#&gt;   variable                 mean     sd     mad        q5     q95  rhat</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha                 -<span style="color: #BB0000;">0.959</span>  0.535  0.076<span style="text-decoration: underline;">7</span>  -<span style="color: #BB0000;">1.98</span>     -<span style="color: #BB0000;">0.559</span>   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta[1]                0.679  0.126  0.025<span style="text-decoration: underline;">7</span>   0.406     0.765   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> beta[2]                1.96   0.783  0.817    0.889     3.03    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Change Point in CE: <span style="text-decoration: underline;">1</span>376      0.652  0.074<span style="text-decoration: underline;">8</span>   0.129     1.85    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> sigma_y                0.014<span style="text-decoration: underline;">0</span> 0.013<span style="text-decoration: underline;">0</span> 0.009<span style="text-decoration: underline;">28</span>  0.000<span style="text-decoration: underline;">850</span>  0.041<span style="text-decoration: underline;">9</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt;   variable                 mean     sd    mad        q5     q95  rhat</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha                 -<span style="color: #BB0000;">0.979</span>  0.559  0.079<span style="text-decoration: underline;">8</span> -<span style="color: #BB0000;">2.00</span>     -<span style="color: #BB0000;">0.558</span>   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta[1]                0.672  0.129  0.025<span style="text-decoration: underline;">7</span>  0.393     0.767   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> beta[2]                1.95   0.791  0.851   0.887     3.05    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Change Point in CE: <span style="text-decoration: underline;">1</span>351      0.681  0.078<span style="text-decoration: underline;">5</span>  0.094<span style="text-decoration: underline;">8</span>    1.85    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> sigma_y                0.014<span style="text-decoration: underline;">4</span> 0.013<span style="text-decoration: underline;">2</span> 0.010<span style="text-decoration: underline;">0</span>  0.000<span style="text-decoration: underline;">813</span>  0.041<span style="text-decoration: underline;">6</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -1104,7 +1104,7 @@ can be illustrated using:</p>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Relative Sea Level (m)"</span>,</span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotcpres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotcpres-1.png" width="672" style="display: block; margin: auto;">
 The output of this function is a graph of the input data, i.e. Age and
 RSL and associated uncertainty boxes, and the model fit with 95 %
 credible interval. The caption provides the model type used and number
@@ -1123,12 +1123,12 @@ following:</p>
 <span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600.00</span></span>
 <span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550.00</span></span>
 <span><span class="co">#&gt;        pred       upr       lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.557474 -2.643297 -2.356883 95%</span></span>
-<span><span class="co">#&gt; 2 -2.479207 -2.554483 -2.317450 95%</span></span>
-<span><span class="co">#&gt; 3 -2.445251 -2.516186 -2.300153 95%</span></span>
-<span><span class="co">#&gt; 4 -2.411296 -2.477676 -2.282381 95%</span></span>
-<span><span class="co">#&gt; 5 -2.377340 -2.439367 -2.263764 95%</span></span>
-<span><span class="co">#&gt; 6 -2.343384 -2.400996 -2.245022 95%</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 -2.552356 -2.644900 -2.355399 95%</span></span>
+<span><span class="co">#&gt; 2 -2.474901 -2.556258 -2.312038 95%</span></span>
+<span><span class="co">#&gt; 3 -2.441299 -2.517780 -2.293357 95%</span></span>
+<span><span class="co">#&gt; 4 -2.407696 -2.479455 -2.274559 95%</span></span>
+<span><span class="co">#&gt; 5 -2.374093 -2.440774 -2.255106 95%</span></span>
+<span><span class="co">#&gt; 6 -2.340490 -2.402635 -2.235382 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="errors-in-variable-integrated-gaussian-process-model-eiv_igp_t">Errors-in-Variable Integrated Gaussian Process Model
@@ -1208,7 +1208,7 @@ user and is used to create the plots and is accessed by</li>
 <span>  plot_proxy_records <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_tide_gauges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotigpdata-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotigpdata-1.png" width="672" style="display: block; margin: auto;">
 This will produce a plot of Age on the x-axis and Relative Sea Level on
 the y-axis in meters. Grey boxes represent the uncertainty associated
 with the vertical and horizontal uncertainty. The black data points are
@@ -1225,17 +1225,9 @@ function should be used:</p>
 <code class="sourceCode R"><span><span class="va">res_eiv_igp_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reslr_mcmc.html">reslr_mcmc</a></span><span class="op">(</span></span>
 <span>  input_data <span class="op">=</span> <span class="va">CedarIslandNC_input</span>,</span>
 <span>  model_type <span class="op">=</span> <span class="st">"eiv_igp_t"</span>,</span>
-<span>  CI <span class="op">=</span> <span class="fl">0.95</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Compiling model graph</span></span>
-<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
-<span><span class="co">#&gt;    Allocating nodes</span></span>
-<span><span class="co">#&gt; Graph information:</span></span>
-<span><span class="co">#&gt;    Observed stochastic nodes: 208</span></span>
-<span><span class="co">#&gt;    Unobserved stochastic nodes: 110</span></span>
-<span><span class="co">#&gt;    Total graph size: 390255</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Initializing model</span></span></code></pre></div>
+<span>  CI <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  </span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>This command takes the input data and the user specifies the
 statistical model, i.e. an integrated Gaussian process using the EIV
 uncertainty method (“eiv_slr_t”). It tells <code>reslr</code> to store
@@ -1252,7 +1244,7 @@ approximately 14 minutes.</p>
 <span><span class="co">#&gt; There are  1  proxy site(s) and  0  tide gauge site(s).</span></span>
 <span><span class="co">#&gt; The age units are; Common Era. </span></span>
 <span><span class="co">#&gt; The model used was the Errors-in-Variables Integrated Gaussian Process model in time.</span></span>
-<span><span class="co">#&gt; The input data has been run via reslr_mcmc and has produced 3000 iterations over 3 MCMC chains.</span></span></code></pre></div>
+<span><span class="co">#&gt; The input data has been run via reslr_mcmc and has produced 360 iterations over 2 MCMC chains.</span></span></code></pre></div>
 <p><strong>Step 4:</strong> The convergence of the algorithm is examined
 and he parameter estimates from the model can be investigated using the
 following:</p>
@@ -1262,9 +1254,9 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">#&gt;   variable    mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> nu       1.24    0.560   0.455   0.601    2.35    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rho      0.263   0.123   0.130   0.077<span style="text-decoration: underline;">0</span>   0.480   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_y  0.006<span style="text-decoration: underline;">16</span> 0.004<span style="text-decoration: underline;">74</span> 0.004<span style="text-decoration: underline;">72</span> 0.000<span style="text-decoration: underline;">470</span> 0.015<span style="text-decoration: underline;">4</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> nu       1.24    0.563   0.450   0.575    2.53    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> rho      0.268   0.125   0.134   0.078<span style="text-decoration: underline;">3</span>   0.478   1.01</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_y  0.006<span style="text-decoration: underline;">60</span> 0.004<span style="text-decoration: underline;">83</span> 0.004<span style="text-decoration: underline;">81</span> 0.000<span style="text-decoration: underline;">666</span> 0.015<span style="text-decoration: underline;">9</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -1293,7 +1285,7 @@ illustrated using:</p>
 <span>  plot_proxy_records <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_tide_gauges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotigpres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotigpres-1.png" width="672" style="display: block; margin: auto;">
 The output of this function is a graph of the input data, i.e. Age and
 RSL and associated uncertainty boxes, and the model fit with 95 %
 credible interval. The caption provides the model type used and number
@@ -1306,7 +1298,7 @@ change plot, the following setting should be used:</p>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
 <span>  y_rate_lab <span class="op">=</span> <span class="st">"Rate of Change (mm per year)"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotigpresrate-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotigpresrate-1.png" width="672" style="display: block; margin: auto;">
 This prints the plot of the rate of change with 95 % credible intervals.
 The caption provides the model type, the number of proxy sites and tide
 gauge sites that were used.</p>
@@ -1318,12 +1310,12 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 12</span></span></span>
 <span><span class="co">#&gt;   Longitude Latitude SiteName     data_type_id   Age  pred   upr   lwr rate_pred</span></span>
 <span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">865.</span> -<span style="color: #BB0000;">2.35</span> -<span style="color: #BB0000;">2.48</span> -<span style="color: #BB0000;">2.23</span>     0.258</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">750</span>  -<span style="color: #BB0000;">2.32</span> -<span style="color: #BB0000;">2.39</span> -<span style="color: #BB0000;">2.26</span>     0.247</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">700</span>  -<span style="color: #BB0000;">2.31</span> -<span style="color: #BB0000;">2.37</span> -<span style="color: #BB0000;">2.25</span>     0.247</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">650</span>  -<span style="color: #BB0000;">2.30</span> -<span style="color: #BB0000;">2.36</span> -<span style="color: #BB0000;">2.24</span>     0.251</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">600</span>  -<span style="color: #BB0000;">2.29</span> -<span style="color: #BB0000;">2.34</span> -<span style="color: #BB0000;">2.23</span>     0.260</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">550</span>  -<span style="color: #BB0000;">2.27</span> -<span style="color: #BB0000;">2.33</span> -<span style="color: #BB0000;">2.21</span>     0.274</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">865.</span> -<span style="color: #BB0000;">2.35</span> -<span style="color: #BB0000;">2.47</span> -<span style="color: #BB0000;">2.24</span>     0.243</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">750</span>  -<span style="color: #BB0000;">2.32</span> -<span style="color: #BB0000;">2.39</span> -<span style="color: #BB0000;">2.26</span>     0.238</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">700</span>  -<span style="color: #BB0000;">2.31</span> -<span style="color: #BB0000;">2.37</span> -<span style="color: #BB0000;">2.25</span>     0.240</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">650</span>  -<span style="color: #BB0000;">2.30</span> -<span style="color: #BB0000;">2.36</span> -<span style="color: #BB0000;">2.24</span>     0.247</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">600</span>  -<span style="color: #BB0000;">2.29</span> -<span style="color: #BB0000;">2.35</span> -<span style="color: #BB0000;">2.23</span>     0.258</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Isla… ProxyRecord  -<span style="color: #BB0000;">550</span>  -<span style="color: #BB0000;">2.27</span> -<span style="color: #BB0000;">2.33</span> -<span style="color: #BB0000;">2.22</span>     0.275</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: rate_upr &lt;dbl&gt;, rate_lwr &lt;dbl&gt;, CI &lt;chr&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -1404,7 +1396,7 @@ user and is used to create the plots and is accessed by</li>
 <span>  plot_proxy_records <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_tide_gauges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotspt-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotspt-1.png" width="672" style="display: block; margin: auto;">
 This will produce a plot of Age on the x-axis and Relative Sea Level on
 the y-axis in meters. Grey boxes represent the uncertainty associated
 with the vertical and horizontal uncertainty. The black data points are
@@ -1446,8 +1438,8 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">#&gt;   variable      mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta 2.06    0.647   0.546   1.27     3.22    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">22</span> 0.004<span style="text-decoration: underline;">88</span> 0.004<span style="text-decoration: underline;">68</span> 0.000<span style="text-decoration: underline;">481</span> 0.015<span style="text-decoration: underline;">3</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta 2.11    0.678   0.559   1.29     3.42    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">20</span> 0.004<span style="text-decoration: underline;">67</span> 0.004<span style="text-decoration: underline;">59</span> 0.000<span style="text-decoration: underline;">494</span> 0.015<span style="text-decoration: underline;">0</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -1475,7 +1467,7 @@ be illustrated using:</p>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Relative Sea Level (m)"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotsptres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotsptres-1.png" width="672" style="display: block; margin: auto;">
 The output of this function is a graph of the input data, i.e. Age and
 RSL and associated uncertainty boxes, and the model fit with 95 %
 credible interval. The caption provides the model type used and number
@@ -1488,7 +1480,7 @@ change plot, the following setting should be used:</p>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
 <span>  y_rate_lab <span class="op">=</span> <span class="st">"Rate of Change (mm per year)"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotsptresrate-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotsptresrate-1.png" width="672" style="display: block; margin: auto;">
 This prints the plot of the rate of change with 95 % credible intervals.
 Again, the caption provides the model type, number of proxy sites and
 tide gauge sites that were used.</p>
@@ -1505,12 +1497,12 @@ following:</p>
 <span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600.00</span></span>
 <span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550.00</span></span>
 <span><span class="co">#&gt;        pred       upr       lwr   rate_pred    rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.299337 -2.418269 -2.182889 -0.25197097 -0.86865202 0.3637980 95%</span></span>
-<span><span class="co">#&gt; 2 -2.316971 -2.386794 -2.248632 -0.05423265 -0.49589965 0.3814068 95%</span></span>
-<span><span class="co">#&gt; 3 -2.317630 -2.375814 -2.260097  0.02718701 -0.34204673 0.3901848 95%</span></span>
-<span><span class="co">#&gt; 4 -2.314321 -2.366177 -2.263353  0.10451235 -0.19600632 0.4008025 95%</span></span>
-<span><span class="co">#&gt; 5 -2.307247 -2.356210 -2.258082  0.17774336 -0.06622142 0.4171651 95%</span></span>
-<span><span class="co">#&gt; 6 -2.296615 -2.345536 -2.247900  0.24688003  0.05398562 0.4359547 95%</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 -2.299577 -2.420565 -2.176975 -0.24093405 -0.84339091 0.3983053 95%</span></span>
+<span><span class="co">#&gt; 2 -2.316186 -2.384484 -2.245246 -0.04760468 -0.47988689 0.4055722 95%</span></span>
+<span><span class="co">#&gt; 3 -2.316561 -2.373384 -2.257240  0.03198579 -0.33086788 0.4103423 95%</span></span>
+<span><span class="co">#&gt; 4 -2.313053 -2.362353 -2.258766  0.10764050 -0.19475565 0.4150892 95%</span></span>
+<span><span class="co">#&gt; 5 -2.305862 -2.353182 -2.254872  0.17935945 -0.06514085 0.4260698 95%</span></span>
+<span><span class="co">#&gt; 6 -2.295183 -2.343044 -2.243449  0.24714265  0.05177556 0.4412466 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="noisy-input-spline-in-space-time-ni_spline_st">Noisy input spline in space time
@@ -1616,7 +1608,7 @@ user and is used to create the plots and is accessed by</li>
 <span>  plot_proxy_records <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_tide_gauges <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotspst-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotspst-1.png" width="672" style="display: block; margin: auto;">
 This will produce a plot of Age on the x-axis and Relative Sea Level on
 the y-axis in meters. Grey boxes represent the uncertainty associated
 with the vertical and horizontal uncertainty. The black data points are
@@ -1648,7 +1640,7 @@ compared with the ni_spline_t.</p>
 <span><span class="co">#&gt; There are  2  proxy site(s) and  0  tide gauge site(s).</span></span>
 <span><span class="co">#&gt; The age units are; Common Era. </span></span>
 <span><span class="co">#&gt; The model used was the Noisy Input Spline in space time model.</span></span>
-<span><span class="co">#&gt; The input data has been run via reslr_mcmc and has produced 3000 iterations over 3 MCMC chains.</span></span></code></pre></div>
+<span><span class="co">#&gt; The input data has been run via reslr_mcmc and has produced 360 iterations over 2 MCMC chains.</span></span></code></pre></div>
 <p><strong>Step 4:</strong> The convergence of the algorithm is examined
 and he parameter estimates from the model can be investigated using the
 following:</p>
@@ -1658,8 +1650,8 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">#&gt;   variable      mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta 3.18    0.745   0.671   2.21     4.56    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_y    0.004<span style="text-decoration: underline;">78</span> 0.003<span style="text-decoration: underline;">57</span> 0.003<span style="text-decoration: underline;">50</span> 0.000<span style="text-decoration: underline;">386</span> 0.011<span style="text-decoration: underline;">7</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta 3.09    0.591   0.562   2.28     4.16   0.998</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_y    0.004<span style="text-decoration: underline;">60</span> 0.003<span style="text-decoration: underline;">56</span> 0.003<span style="text-decoration: underline;">44</span> 0.000<span style="text-decoration: underline;">437</span> 0.011<span style="text-decoration: underline;">5</span> 0.998</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -1687,7 +1679,7 @@ be illustrated using:</p>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Relative Sea Level (m)"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotspstres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotspstres-1.png" width="672" style="display: block; margin: auto;">
 The output of this function is a graph of the input data, i.e. Age and
 RSL and associated uncertainty boxes, and the model fit with 95 %
 credible interval. The caption provides the model type used and number
@@ -1700,7 +1692,7 @@ change plot, the following setting should be used:</p>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
 <span>  y_rate_lab <span class="op">=</span> <span class="st">"Rate of Change (mm per year)"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotspstresrate-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotspstresrate-1.png" width="672" style="display: block; margin: auto;">
 This will print the plot of the rate of change with 95 % credible
 intervals. Again, the caption provides the model type, the number of
 proxy sites and tide gauge sites that were used.</p>
@@ -1716,13 +1708,13 @@ following:</p>
 <span><span class="co">#&gt; 4   -76.380   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
 <span><span class="co">#&gt; 5   -76.380   34.971 Cedar Island,\n North Carolina  ProxyRecord -600.00</span></span>
 <span><span class="co">#&gt; 6   -81.666   30.587              Nassau,\n Florida  ProxyRecord -569.50</span></span>
-<span><span class="co">#&gt;        pred       upr       lwr   rate_pred    rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.287734 -2.400622 -2.173160 -0.33037961 -0.92725649 0.2744967 95%</span></span>
-<span><span class="co">#&gt; 2 -2.313058 -2.379474 -2.244948 -0.10879883 -0.54294485 0.3258022 95%</span></span>
-<span><span class="co">#&gt; 3 -2.316195 -2.371159 -2.259049 -0.01749004 -0.37815149 0.3384997 95%</span></span>
-<span><span class="co">#&gt; 4 -2.314888 -2.363643 -2.264720  0.06897064 -0.22712062 0.3620351 95%</span></span>
-<span><span class="co">#&gt; 5 -2.309379 -2.356678 -2.261427  0.15058320 -0.09054349 0.3883340 95%</span></span>
-<span><span class="co">#&gt; 6 -1.177191 -1.271506 -1.086346  0.30145020 -0.26081189 0.9507951 95%</span></span></code></pre></div>
+<span><span class="co">#&gt;        pred       upr       lwr   rate_pred   rate_upr  rate_lwr  CI</span></span>
+<span><span class="co">#&gt; 1 -2.284005 -2.382592 -2.173365 -0.32998530 -0.8838124 0.1747071 95%</span></span>
+<span><span class="co">#&gt; 2 -2.309403 -2.368294 -2.241427 -0.11048488 -0.4907942 0.2402822 95%</span></span>
+<span><span class="co">#&gt; 3 -2.312645 -2.365437 -2.256675 -0.01999386 -0.3308333 0.2756478 95%</span></span>
+<span><span class="co">#&gt; 4 -2.311482 -2.362533 -2.262870  0.06573738 -0.1931097 0.3111965 95%</span></span>
+<span><span class="co">#&gt; 5 -2.306151 -2.356129 -2.260229  0.14670883 -0.0619298 0.3455383 95%</span></span>
+<span><span class="co">#&gt; 6 -1.175560 -1.272565 -1.076976  0.28610581 -0.2891380 0.8505045 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="noisy-input-generalised-additive-model-for-decomposition-of-response-signal-ni_gam_decomp">Noisy Input Generalised Additive Model for decomposition of response
@@ -1750,7 +1742,7 @@ sites and at least five associated tide gauge sites. Also, we strongly
 recommend using tide gauge data for this model to obtain insight into
 recent changes in RSL.</p>
 <p>As an example, we will filter the example dataset
-<code>NAACproxydata</code> to select eight random sites to demonstrate
+<code>NAACproxydata</code> to select nine random sites to demonstrate
 the process:</p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For 9 site</span></span>
@@ -1829,7 +1821,7 @@ user and is used to create the plots and is accessed by</li>
 <span>  plot_proxy_records <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_tide_gauges <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotnigam-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotnigam-1.png" width="672" style="display: block; margin: auto;">
 This will produce a plot of Age on the x-axis and Relative Sea Level on
 the y-axis in meters. Grey boxes represent the uncertainty associated
 with the vertical and horizontal uncertainty. The black data points are
@@ -1871,10 +1863,10 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
 <span><span class="co">#&gt;   variable       mean      sd      mad     q5    q95  rhat</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta_h 1.92   0.262   0.254    1.53   2.40    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_beta_r 0.301  0.059<span style="text-decoration: underline;">6</span>  0.053<span style="text-decoration: underline;">1</span>   0.222  0.414   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_beta_l 0.464  0.071<span style="text-decoration: underline;">5</span>  0.068<span style="text-decoration: underline;">8</span>   0.359  0.594   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> sigma_y      0.016<span style="text-decoration: underline;">3</span> 0.001<span style="text-decoration: underline;">01</span> 0.000<span style="text-decoration: underline;">993</span> 0.014<span style="text-decoration: underline;">7</span> 0.018<span style="text-decoration: underline;">0</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta_h 1.93   0.265   0.260    1.55   2.41    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_beta_r 0.301  0.055<span style="text-decoration: underline;">8</span>  0.051<span style="text-decoration: underline;">7</span>   0.222  0.401   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_beta_l 0.467  0.073<span style="text-decoration: underline;">2</span>  0.069<span style="text-decoration: underline;">4</span>   0.360  0.597   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> sigma_y      0.016<span style="text-decoration: underline;">1</span> 0.001<span style="text-decoration: underline;">01</span> 0.000<span style="text-decoration: underline;">996</span> 0.014<span style="text-decoration: underline;">5</span> 0.017<span style="text-decoration: underline;">8</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -1905,7 +1897,7 @@ excluding the tide gauge using:</p>
 <span>  plot_type <span class="op">=</span> <span class="st">"model_fit_plot"</span>,</span>
 <span>  plot_tide_gauge <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotnigamres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotnigamres-1.png" width="672" style="display: block; margin: auto;">
 In addition, the user can select to plot the additional tide gauge data,
 <code>plot_tide_gauge = TRUE</code> in the plot. The output of this
 function is a graph of the input data, i.e. Age and RSL and associated
@@ -1918,20 +1910,18 @@ plot, the following setting should be used:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_ni_gam_decomp</span>,</span>
 <span>  plot_type <span class="op">=</span> <span class="st">"rate_plot"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotnigamresrate-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotnigamresrate-1.png" width="672" style="display: block; margin: auto;">
 This will print the plot of the rate of change with 95 % credible
 intervals. The caption provides the model type, the number of proxy
 sites and tide gauge sites that were used. To examine the data creating
 the total model fit and the rate of change plot, the user can use:</p>
 <div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">total_model_fit_df</span> <span class="op">&lt;-</span> <span class="va">res_ni_gam_decomp</span><span class="op">$</span><span class="va">output_dataframes</span><span class="op">$</span><span class="va">total_model_fit_df</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">total_model_fit_df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">total_model_fit_df</span> <span class="op">&lt;-</span> <span class="va">res_ni_gam_decomp</span><span class="op">$</span><span class="va">output_dataframes</span><span class="op">$</span><span class="va">total_model_fit_df</span></span></code></pre></div>
 <p>There are separate settings to examine the plot of each component and
 its associated rate. To examine the regional component plot use:</p>
 <div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_ni_gam_decomp</span>, plot_type <span class="op">=</span> <span class="st">"regional_plot"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotnigamregres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotnigamregres-1.png" width="672" style="display: block; margin: auto;">
 The regional component and the rate of change of the regional component
 is presented with 95% credible interval. The caption provides the model
 type used and number of proxy sites and tide gauge sites used and can be
@@ -1943,7 +1933,7 @@ can use:</p>
 <p>The rate for the regional component can be accessed using:</p>
 <div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_ni_gam_decomp</span>, plot_type <span class="op">=</span> <span class="st">"regional_rate_plot"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotnigamregresrate-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotnigamregresrate-1.png" width="672" style="display: block; margin: auto;">
 Similarly, the rate of change of the regional component is presented
 with 95% credible interval. The caption provides the model type used and
 number of proxy sites and tide gauge sites used and can be removed if
@@ -1951,7 +1941,7 @@ necessary with <code>plot_caption = FALSE</code>.</p>
 <p>To examine the linear local component plot use:</p>
 <div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_ni_gam_decomp</span>, plot_type <span class="op">=</span> <span class="st">"linear_local_plot"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotnigamlinres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotnigamlinres-1.png" width="672" style="display: block; margin: auto;">
 The linear local component is plotted with 95% credible interval. The
 caption provides the model type used and number of proxy sites and tide
 gauge sites used and can be removed if necessary with
@@ -1971,7 +1961,7 @@ accessed by:</p>
 <p>To examine the non-linear local component plot use:</p>
 <div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_ni_gam_decomp</span>, plot_type <span class="op">=</span> <span class="st">"non_linear_local_plot"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotnigamnonlinres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotnigamnonlinres-1.png" width="672" style="display: block; margin: auto;">
 The non-linear local component is plotted with with 95% credible
 interval. The caption provides the model type used and number of proxy
 sites and tide gauge sites used and can be removed if necessary with
@@ -1983,7 +1973,7 @@ non-linear local component plot and rate plot, the user can use:</p>
 use:</p>
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_ni_gam_decomp</span>, plot_type <span class="op">=</span> <span class="st">"non_linear_local_rate_plot"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotnigamnonlinresrate-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotnigamnonlinresrate-1.png" width="672" style="display: block; margin: auto;">
 The rate of change of the non-linear local component is plotted with
 with 95% credible interval. The caption provides the model type used and
 number of proxy sites and tide gauge sites used and can be removed if
@@ -1992,7 +1982,7 @@ necessary with <code>plot_caption = FALSE</code>.</p>
 plot using the following method:</p>
 <div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_ni_gam_decomp</span>, plot_type <span class="op">=</span> <span class="st">"nigam_component_plot"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vig/plotnigamall-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="reslr_files/figure-html/plotnigamall-1.png" width="672" style="display: block; margin: auto;">
 Each component is plotted with an 95% credible interval and this plot
 gives insight into the variability of the different components through
 time and at the different locations in question. The caption provides
