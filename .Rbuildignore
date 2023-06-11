@@ -2,7 +2,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^doc$
-^Meta$
 ^docs$
 ^badge$
 ^cran-comments\.md$
