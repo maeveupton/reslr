@@ -18,8 +18,9 @@ A list containing convergence diagnostics and parameter estimates for the output
 A warning message will appear if the model has not been converge. If this appears the user is recommended to re-run the model and alter the \code{reslr_mcmc} function default iteration and MCMC settings. Also, it provides high-level summaries of the estimated parameters.
 }
 \examples{
+\dontrun{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 input_data <- reslr_load(data = data)
 jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
-summary(object = jags_output)
+summary(object = jags_output)}
 }

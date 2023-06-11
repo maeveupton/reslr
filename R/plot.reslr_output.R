@@ -21,10 +21,11 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' x <- reslr_load(data = data)
 #' jags_output <- reslr_mcmc(x, model_type = "eiv_slr_t")
-#' plot(x = jags_output)
+#' plot(x = jags_output)}
 plot.reslr_output <- function(x,
                               plot_proxy_records = TRUE,
                               plot_tide_gauges = FALSE,

@@ -9,10 +9,11 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' input_data <- reslr_load(data = data)
 #' jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")
-#' summary(object = jags_output)
+#' summary(object = jags_output)}
 summary.reslr_output <- function(object,
                                  ...) {
   mu_pred <- data <- sd <- mad <- rhat <- q5 <- q95 <- alpha <- cp <- variable <- sigma_g <- rho <- sigma <- NULL
