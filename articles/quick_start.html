@@ -88,7 +88,7 @@
                         <h4 data-toc-skip class="author">Maeve Upton,
 Andrew Parnell and Niamh Cahill</h4>
             
-            <h4 data-toc-skip class="date">2023-06-10</h4>
+            <h4 data-toc-skip class="date">2023-06-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maeveupton/reslr/blob/HEAD/vignettes/quick_start.Rmd" class="external-link"><code>vignettes/quick_start.Rmd</code></a></small>
       <div class="hidden name"><code>quick_start.Rmd</code></div>
@@ -225,8 +225,8 @@ estimates from the model can be investigated using the following:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">##   variable      mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.11    0.682   0.550   1.29     3.43    1.00</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">18</span> 0.004<span style="text-decoration: underline;">64</span> 0.004<span style="text-decoration: underline;">44</span> 0.000<span style="text-decoration: underline;">494</span> 0.014<span style="text-decoration: underline;">7</span>  1.00</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.08    0.664   0.513   1.30     3.35    1.00</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">30</span> 0.004<span style="text-decoration: underline;">86</span> 0.004<span style="text-decoration: underline;">60</span> 0.000<span style="text-decoration: underline;">502</span> 0.015<span style="text-decoration: underline;">7</span>  1.00</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="step-5-plot-the-results">Step 5: Plot the results<a class="anchor" aria-label="anchor" href="#step-5-plot-the-results"></a>
@@ -258,13 +258,13 @@ following:</p>
 <span><span class="co">## 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -710.00</span></span>
 <span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -680.00</span></span>
 <span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
-<span><span class="co">##        pred       upr       lwr    rate_pred   rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">## 1 -2.298014 -2.414814 -2.180558 -0.259271230 -0.8468874 0.3453776 95%</span></span>
-<span><span class="co">## 2 -2.314840 -2.390607 -2.238067 -0.093571723 -0.5477636 0.3710820 95%</span></span>
-<span><span class="co">## 3 -2.316881 -2.382801 -2.248342 -0.042774057 -0.4549103 0.3785665 95%</span></span>
-<span><span class="co">## 4 -2.317421 -2.377084 -2.255782  0.006531857 -0.3666858 0.3864603 95%</span></span>
-<span><span class="co">## 5 -2.316504 -2.370691 -2.260367  0.054346020 -0.2836512 0.3925751 95%</span></span>
-<span><span class="co">## 6 -2.314175 -2.365602 -2.262560  0.100668432 -0.1998441 0.3991378 95%</span></span></code></pre>
+<span><span class="co">##        pred       upr       lwr   rate_pred   rate_upr  rate_lwr  CI</span></span>
+<span><span class="co">## 1 -2.301255 -2.416272 -2.183786 -0.24109847 -0.8445068 0.3587737 95%</span></span>
+<span><span class="co">## 2 -2.316558 -2.390806 -2.239991 -0.07978113 -0.5348250 0.3805367 95%</span></span>
+<span><span class="co">## 3 -2.318206 -2.384053 -2.250729 -0.03031055 -0.4358562 0.3841114 95%</span></span>
+<span><span class="co">## 4 -2.318391 -2.376280 -2.257410  0.01772342 -0.3426566 0.3940880 95%</span></span>
+<span><span class="co">## 5 -2.317157 -2.370484 -2.261242  0.06432078 -0.2609972 0.4025865 95%</span></span>
+<span><span class="co">## 6 -2.314546 -2.366602 -2.261846  0.10948154 -0.1769657 0.4106128 95%</span></span></code></pre>
 <p>To examine the additional options in the <code>reslr</code> package,
 see the main vignette.</p>
 </div>
