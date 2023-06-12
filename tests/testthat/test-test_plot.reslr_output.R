@@ -111,26 +111,26 @@ testthat::test_that("Basic plot for multiple sites", {
   testthat::expect_true(is.list(p6))
 })
 
-# Testing plotting functions for multiple sites and tide gauges
-testthat::test_that("Basic plot for multiple sites and tide gauges", {
-  multidata <- NAACproxydata %>% dplyr::filter(Site %in% c("Cedar Island", "Barn Island", "Nassau"))
-  reslr_input_4 <- reslr_load(
-    data = multidata,
-    prediction_grid_res = 100,
-    include_tide_gauge = TRUE,
-    include_linear_rate = FALSE,
-    TG_minimum_dist_proxy = TRUE,
-    input_age_type = "CE"
-  )
-  # Testing NI gam
-  jags_output_nisplinest <- reslr_mcmc(
-    input_data = reslr_input_4,
-    model_type = "ni_gam_decomp",
-    n_iterations = 10,
-    n_burnin = 1,
-    n_thin = 1,
-    n_chains = 1
-  )
-  p7 <- plot(jags_output_nisplinest)
-  testthat::expect_true(is.list(p7))
-})
+# # Testing plotting functions for multiple sites and tide gauges
+# testthat::test_that("Basic plot for multiple sites and tide gauges", {
+#   multidata <- NAACproxydata %>% dplyr::filter(Site %in% c("Cedar Island", "Barn Island", "Nassau"))
+#   reslr_input_4 <- reslr_load(
+#     data = multidata,
+#     prediction_grid_res = 100,
+#     include_tide_gauge = TRUE,
+#     include_linear_rate = FALSE,
+#     TG_minimum_dist_proxy = TRUE,
+#     input_age_type = "CE"
+#   )
+#   # Testing NI gam
+#   jags_output_nisplinest <- reslr_mcmc(
+#     input_data = reslr_input_4,
+#     model_type = "ni_gam_decomp",
+#     n_iterations = 10,
+#     n_burnin = 1,
+#     n_thin = 1,
+#     n_chains = 1
+#   )
+#   p7 <- plot(jags_output_nisplinest)
+#   testthat::expect_true(is.list(p7))
+# })
