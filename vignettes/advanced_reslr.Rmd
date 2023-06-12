@@ -125,7 +125,7 @@ plot(res_eiv_igp_t_detrend,
 )
 ```
 
-```{r,plotigpres_adv, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+```{r,plotigpresload_adv, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
 url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotigpres_adv-1.png"
 knitr::include_graphics(url)
 ```
@@ -138,16 +138,15 @@ plot(res_eiv_igp_t_detrend,
   y_rate_lab = "Rate of Change (mm per year)"
 )
 ```
-```{r,plotigpresrate_adv, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+```{r,plotigpresrateload_adv, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
 url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotigpresrate_adv-1.png"
 knitr::include_graphics(url)
 ```
 This prints the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used.
 
 To examine the data creating these plots the user types the following:
-```{r,igpdataout_adv, eval = TRUE}
+```{r,igpdataout_adv, eval = FALSE}
 output_dataframes <- res_eiv_igp_t_detrend$output_dataframes
-head(output_dataframes)
 ```
 
 
@@ -322,9 +321,11 @@ The `n_fold = 3` argument allows the user to change the number of folds used in 
 By updating the `model_type` argument, the user can undertake cross validation for the noisy input spline in time, the noisy input spline in space time or the noisy input generalised additive model. This function will print a statement regarding model convergence. If the convergence issues are detected, the package will inform the user to increase the number of iterations in the `cross_val_check` function.
 
 The outputs of the `cross_val_check` function are stored as a list. To examine the true versus predicted plot use the following command.
+
 ```{r,cvpredplot_adv,eval = TRUE}
 cv$true_pred_plot
 ```
+
 This figure presents the true RSL value in metres versus the predicted RSL value in metres for each data site. The predicted means are the red dots and the vertical lines over each point are the prediction intervals.
 
 To access the dataframe creating this plot use:
