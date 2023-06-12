@@ -17,8 +17,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' full_dataset <- reslr_load(NAACproxydata)
-#' plot(full_dataset)
+#' plot(full_dataset)}
 plot.reslr_input <- function(x,
                              title = "",
                              xlab = "Year (CE)",

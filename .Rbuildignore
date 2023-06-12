@@ -11,6 +11,5 @@
 ^\.github$
 ^_pkgdown\.yml$
 ^codecov\.yml$
-^vig
 ^CRAN-SUBMISSION$
-^reslrvigplots
+^reslrvigplots$

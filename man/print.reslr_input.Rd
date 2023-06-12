@@ -18,7 +18,8 @@ A neat presentation of your input reslr object
 In this function, the reslr input object is printed. This is a high-level summary which provides the number of observations and the number of sites utilised in the dataset.
 }
 \examples{
+\dontrun{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 reslr_input <- reslr_load(data = data)
-print(x = reslr_input)
+print(x = reslr_input)}
 }

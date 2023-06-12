@@ -19,7 +19,6 @@ knitr::opts_chunk$set(
   #fig.path = "vig/"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
-# library(tidyverse)
 ```
 
 <!-- avoid border around images -->
@@ -563,7 +562,7 @@ plot(res_eiv_igp_t,
 )
 ```
 ```{r,plotigpres_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
-url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/plotigpres-1.png"
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotigpres-1.png"
 knitr::include_graphics(url)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. In order to view the rate of change plot, the following setting should be used:
@@ -577,7 +576,7 @@ plot(res_eiv_igp_t,
 ```
 
 ```{r,plotigpresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
-url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/plotigpresrate-1.png"
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotigpresrate-1.png"
 knitr::include_graphics(url)
 ```
 This prints the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used.
@@ -813,7 +812,7 @@ plot(res_ni_spline_st,
 ```
 
 ```{r,plotspstres_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
-url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/plotspstres-1.png"
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotspstres-1.png"
 knitr::include_graphics(url)
 ```
 The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. In order to view the rate of change plot, the following setting should be used:
@@ -827,7 +826,7 @@ plot(res_ni_spline_st,
 ```
 
 ```{r,plotspstresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
-url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/plotspstresrate-1.png"
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotspstresrate-1.png"
 knitr::include_graphics(url)
 ```
 This will print the plot of the rate of change with 95 \% credible intervals. Again, the caption provides the model type, the number of proxy sites and tide gauge sites that were used.
@@ -947,7 +946,7 @@ plot(res_ni_gam_decomp,
 ```
 
 ```{r,plotnigamres_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
-knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/vig/plotnigamres-1.png")
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotnigamres-1.png")
 ```
 In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE` in the plot. The output of this function is a graph of the input data, i.e. Age and RSL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
 In order to view the rate of change plot, the following setting should be used:
@@ -958,8 +957,8 @@ plot(res_ni_gam_decomp,
 )
 ```
 
-```{r,plotnigamresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/docs/reslrvigplots/plotnigamresrate-1.png")
+```{r,plotnigamresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/main/docs/reslrvigplots/plotnigamresrate-1.png")
 ```
 This will print the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used. To examine the data creating the total model fit and the rate of change plot, the user can use:
 ```{r,totaldf, eval = FALSE}
@@ -971,8 +970,8 @@ There are separate settings to examine the plot of each component and its associ
 plot(res_ni_gam_decomp, plot_type = "regional_plot")
 ```
 
-```{r,plotnigamregres_load, eval = TRUE,echo=FALSE, fig.align = 'center',fig.width = 7,fig.height = 5}
-knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/vig/plotnigamregres-1.png")
+```{r,plotnigamregres_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotnigamregres-1.png")
 ```
 The regional component and the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the regional component plot and rate plot, the user can use:
 ```{r,regdf, eval = FALSE}
@@ -982,8 +981,8 @@ The rate for the regional component can be accessed using:
 ```{r,plotnigamregresrate, fig.align = 'center',eval = FALSE}
 plot(res_ni_gam_decomp, plot_type = "regional_rate_plot")
 ```
-```{r,plotnigamregresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center'}
-knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/vig/plotnigamregresrate-1.png")
+```{r,plotnigamregresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+knitr::include_graphics("https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotnigamregresrate-1.png")
 ```
 Similarly, the rate of change of the regional component is presented with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. 
 
@@ -993,7 +992,7 @@ plot(res_ni_gam_decomp, plot_type = "linear_local_plot")
 ```
 
 ```{r,plotnigamlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
-url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/plotnigamlinres-1.png"
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotnigamlinres-1.png"
 knitr::include_graphics(url)
 ```
 The linear local component is plotted with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the linear local component plot, the user can use:
@@ -1017,7 +1016,7 @@ plot(res_ni_gam_decomp, plot_type = "non_linear_local_plot")
 ```
 
 ```{r,plotnigamnonlinres_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
-url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/plotnigamnonlinres-1.png"
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotnigamnonlinres-1.png"
 knitr::include_graphics(url)
 ```
 The non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. To examine the data creating the non-linear local component plot and rate plot, the user can use:
@@ -1030,7 +1029,7 @@ plot(res_ni_gam_decomp, plot_type = "non_linear_local_rate_plot")
 ```
 
 ```{r,plotnigamnonlinresrate_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
-url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/plotnigamnonlinresrate-1.png"
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotnigamnonlinresrate-1.png"
 knitr::include_graphics(url)
 ```
 The rate of change of the non-linear local component is plotted with with 95\% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.
@@ -1041,7 +1040,7 @@ plot(res_ni_gam_decomp, plot_type = "nigam_component_plot")
 ```
 
 ```{r,plotnigamall_load, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
-url <- "https://raw.githubusercontent.com/maeveupton/reslr/blob/main/reslrvigplots/plotnigamall-1.png"
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotnigamall-1.png"
 knitr::include_graphics(url)
 ```
 Each component is plotted with an 95\% credible interval and this plot gives insight into the variability of the different components through time and at the different locations in question. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`.

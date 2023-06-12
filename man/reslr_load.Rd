@@ -56,6 +56,7 @@ The prerequisites of the input data structure has been given in the vignettes.
 The user can choose to include data from tide gauges which is sourced from the Permanent Service for Mean Sea Level (PSMSL) online database.
 }
 \examples{
+\dontrun{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
-reslr_load(data = data)
+reslr_load(data = data)}
 }

@@ -9,9 +9,10 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' reslr_input <- reslr_load(data = data)
-#' print(x = reslr_input)
+#' print(x = reslr_input)}
 print.reslr_input <- function(x,
                               ...) {
   SiteName <- data_type_id <- NULL

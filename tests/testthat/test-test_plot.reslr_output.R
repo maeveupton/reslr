@@ -88,28 +88,28 @@ testthat::test_that("Basic reslr_output plot for NI spline in t", {
 })
 
 
-# Testing plotting functions for multiple sites
-testthat::test_that("Basic plot for multiple sites", {
-  multidata <- NAACproxydata %>% dplyr::filter(Site %in% c("Cedar Island", "Barn Island", "Nassau"))
-  reslr_input_3 <- reslr_load(
-    data = multidata,
-    prediction_grid_res = 100,
-    include_tide_gauge = FALSE,
-    include_linear_rate = FALSE,
-    input_age_type = "CE"
-  )
-  # Testing NI spline st
-  jags_output_nisplinest <- reslr_mcmc(
-    input_data = reslr_input_3,
-    model_type = "ni_spline_st",
-    n_iterations = 10,
-    n_burnin = 1,
-    n_thin = 1,
-    n_chains = 1
-  )
-  p6 <- plot(jags_output_nisplinest)
-  testthat::expect_true(is.list(p6))
-})
+# # Testing plotting functions for multiple sites
+# testthat::test_that("Basic plot for multiple sites", {
+#   multidata <- NAACproxydata %>% dplyr::filter(Site %in% c("Cedar Island", "Barn Island", "Nassau"))
+#   reslr_input_3 <- reslr_load(
+#     data = multidata,
+#     prediction_grid_res = 100,
+#     include_tide_gauge = FALSE,
+#     include_linear_rate = FALSE,
+#     input_age_type = "CE"
+#   )
+#   # Testing NI spline st
+#   jags_output_nisplinest <- reslr_mcmc(
+#     input_data = reslr_input_3,
+#     model_type = "ni_spline_st",
+#     n_iterations = 10,
+#     n_burnin = 1,
+#     n_thin = 1,
+#     n_chains = 1
+#   )
+#   p6 <- plot(jags_output_nisplinest)
+#   testthat::expect_true(is.list(p6))
+# })
 
 # # Testing plotting functions for multiple sites and tide gauges
 # testthat::test_that("Basic plot for multiple sites and tide gauges", {

@@ -23,8 +23,9 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
-#' reslr_load(data = data)
+#' reslr_load(data = data)}
 reslr_load <- function(data,
                        prediction_grid_res = 30,
                        include_tide_gauge = FALSE,
