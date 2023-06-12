@@ -9,15 +9,21 @@ Authors@R: c(
 URL: https://github.com/maeveupton/reslr, https://maeveupton.github.io/reslr/
 BugReports: https://github.com/maeveupton/reslr/issues
 Language: en-US
-Description: An R package to perform Bayesian
-    modelling of relative sea-level data. It
-    includes a variety of different statistical
-    models with a unifying framework for loading data, 
-    fitting models, and summarising the results.
-    Relative sea level data often contain 
-    measurement error in multiple dimensions
-    and so the package allows for these to be
-    included in the statistical models. 
+Description: The Bayesian modelling of relative sea-level data
+    using a comprehensive approach that incorporates
+    various statistical models within a unifying framework. 
+    Details regarding each statistical models; 
+    linear regression (Ashe et al 2019) <doi:10.1016/j.quascirev.2018.10.032>, 
+    change point models (Cahill et al 2015) <doi:10.1088/1748-9326/10/8/084002>, 
+    integrated Gaussian process models (Cahill et al 2015) <doi:10.1214/15-AOAS824>, 
+    temporal splines (Upton et al 2023) <arXiv:2301.09556>, 
+    spatio-temporal splines (Upton et al 2023) <arXiv:2301.09556> and
+    generalised additive models (Upton et al 2023) <arXiv:2301.09556>.
+    This package facilitates data loading, 
+    model fitting and result summarization.
+    Notably, it accommodates the inherent measurement errors
+    found in relative sea-level data across multiple dimensions,
+    allowing for their inclusion in the statistical models.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

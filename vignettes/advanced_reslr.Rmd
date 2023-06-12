@@ -36,7 +36,7 @@ CedarIslandNC <- NAACproxydata[NAACproxydata$Site == "Cedar Island",]
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r, loadigp ,eval = TRUE, message=FALSE,results='hide'}
+```{r, loadigp_adv,eval = TRUE, message=FALSE,results='hide'}
 CedarIslandNC_input_detrend <- reslr_load(
   data = CedarIslandNC,
   include_tide_gauge = FALSE,
@@ -54,21 +54,21 @@ For this case, we update the setting `detrend_data = TRUE` and we provide the `c
 
 The output of this function is a list of two dataframes called `data` and `data_grid`. 
 - The `data` dataframe is the inputted data with additional columns for the data_type_id which will contain "ProxyRecord". It can be accessed by:
-```{r,dataigp,eval=FALSE}
+```{r,dataigp_adv,eval=FALSE}
 data <- CedarIslandNC_input_detrend$data
 ```
 - The `data_grid` is a dataframe that is evenly spaced in time based on the `prediction_grid_res` value chosen by the user and is used to create the plots and is accessed by
-```{r,datagridigp, eval = FALSE}
+```{r,datagridigp_adv, eval = FALSE}
 data_grid <- CedarIslandNC_input_detrend$data_grid
 ```
 
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
-```{r,printigp, eval=TRUE}
+```{r,printigp_adv, eval=TRUE}
 print(CedarIslandNC_input_detrend)
 ```
 
 **Step 2:** Plotting the data the raw data with:
-```{r, plotigpdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r, plotigpdata_adv,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
   x = CedarIslandNC_input_detrend,
   title = "Plot of the raw detrended data",
@@ -81,7 +81,7 @@ plot(
 This will produce a plot of Age on the x-axis and Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The extra arguments can be used which allows the user to updated the titles and axis labels. The caption `plot_caption`, included by default, provides the number of proxy sites and tide gauge sites that will be used in the model and can be removed if required `plot_caption = FALSE`. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE`.
 
 **Step 3:** To run the eiv_igp_t model the following function should be used:
-```{r,runigp, eval = TRUE, message=FALSE,results='hide'}
+```{r,runigp_adv,echo = TRUE, eval = FALSE, message=FALSE,results='hide'}
 res_eiv_igp_t_detrend <- reslr_mcmc(
   input_data = CedarIslandNC_input_detrend,
   model_type = "eiv_igp_t",
@@ -91,16 +91,16 @@ res_eiv_igp_t_detrend <- reslr_mcmc(
 This command takes the input data and the user specifies the statistical model, i.e. an integrated Gaussian process using the EIV uncertainty method ("eiv_igp_t"). It tells `reslr` to store the output of the model run in an object called `res_eiv_igp_t`. The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`.
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:
-```{r,printigpout, eval=TRUE}
+```{r,printigpout_adv, eval=FALSE}
 print(res_eiv_igp_t_detrend)
 ```
 
 **Step 4:** The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r,summaryigp, eval = TRUE}
+```{r,summaryigp_adv, eval = FALSE}
 summary(res_eiv_igp_t_detrend)
 ```
 If the model run has the package will print: "No convergence issues detected". If the package prints: "Convergence issues detected, a longer run is necessary". The user is required to update the `reslr_mcmc` function with additional iterations in the following manner:
-```{r,runigpmore, eval = FALSE}
+```{r,runigpmore_adv, echo = TRUE, eval = FALSE}
 res_eiv_igp_t_detrend <- reslr_mcmc(
   input_data = CedarIslandNC_input_detrend,
   model_type = "eiv_igp_t",
@@ -115,7 +115,7 @@ res_eiv_igp_t_detrend <- reslr_mcmc(
 For the parameter estimates, the length scale parameter, "rho" is the correlation parameter and "nu" is the standard deviation of the rate process. "sigma_y" is the variation of the model. 
 
 **Step 5:** The results from the EIV IGP model for the de-trended data can be illustrated using:
-```{r,plotigpres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotigpres_adv,echo = TRUE, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_eiv_igp_t_detrend,
   plot_type = "model_fit_plot",
   xlab = "Year (CE)",
@@ -124,19 +124,28 @@ plot(res_eiv_igp_t_detrend,
   plot_tide_gauges = FALSE
 )
 ```
+
+```{r,plotigpres_adv, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotigpres_adv-1.png"
+knitr::include_graphics(url)
+```
 The output of this function is a graph of the input data, i.e. Age and SL and associated uncertainty boxes, and the model fit with 95 \% credible interval. The caption provides the model type used and number of proxy sites and tide gauge sites used and can be removed if necessary with `plot_caption = FALSE`. In order to view the rate of change plot, the following setting should be used:
 
-```{r,plotigpresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r,plotigpresrate_adv,echo = TRUE, fig.align = 'center',fig.width = 7,fig.height = 5,eval = FALSE}
 plot(res_eiv_igp_t_detrend,
   plot_type = "rate_plot",
   xlab = "Year (CE)",
   y_rate_lab = "Rate of Change (mm per year)"
 )
 ```
+```{r,plotigpresrate_adv, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotigpresrate_adv-1.png"
+knitr::include_graphics(url)
+```
 This prints the plot of the rate of change with 95 \% credible intervals. The caption provides the model type, the number of proxy sites and tide gauge sites that were used.
 
 To examine the data creating these plots the user types the following:
-```{r,igpdataout, eval = TRUE}
+```{r,igpdataout_adv, eval = TRUE}
 output_dataframes <- res_eiv_igp_t_detrend$output_dataframes
 head(output_dataframes)
 ```
@@ -146,7 +155,7 @@ head(output_dataframes)
 The default input age for the reslr package is in units of years in the Common Era. The user can select to input the age value in Before Present by updating the `input_age_type = "BP"` within the `reslr_load` function. Inside the package, the Age is converted into CE in order to run the models. The plots are then altered to account for the input age in BP and the x-axis is be reversed. 
 
 Load in the data using the `reslr_load` function: 
-```{r, load ,eval = FALSE, message=FALSE,results='hide'}
+```{r, loadBP,eval = FALSE, message=FALSE,results='hide'}
 CedarIslandNC_input_age_BP <- reslr_load(
   data = data_age_bp,
   input_age_type = "BP"
@@ -289,7 +298,7 @@ The default settings have been tested using cross validation techniques to incor
 
 In the previous section, we discussed altering the smoothness of the splines by varying the number of knots in the model. The user can test the validity of the model and the number of knots selected using this cross validation function with in the package. For example, the user can run different values for the knots and compare the model fits for each setting using the following cross validation function.
 
-```{r,eval = TRUE,message=FALSE,results='hide'}
+```{r,cv_adv,eval = TRUE,message=FALSE,results='hide'}
 data1site_example <- NAACproxydata[NAACproxydata$Site == "Cedar Island",]
 # Cross Validation test
 cv <- cross_val_check(data = data1site_example,
@@ -313,14 +322,14 @@ The `n_fold = 3` argument allows the user to change the number of folds used in 
 By updating the `model_type` argument, the user can undertake cross validation for the noisy input spline in time, the noisy input spline in space time or the noisy input generalised additive model. This function will print a statement regarding model convergence. If the convergence issues are detected, the package will inform the user to increase the number of iterations in the `cross_val_check` function.
 
 The outputs of the `cross_val_check` function are stored as a list. To examine the true versus predicted plot use the following command.
-```{r,eval = TRUE}
+```{r,cvpredplot_adv,eval = TRUE}
 cv$true_pred_plot
 ```
 This figure presents the true RSL value in metres versus the predicted RSL value in metres for each data site. The predicted means are the red dots and the vertical lines over each point are the prediction intervals.
 
 To access the dataframe creating this plot use:
-```{r,eval = TRUE}
-head(cv$CV_model_df)
+```{r,eval = FALSE}
+CV_model_df <- cv$CV_model_df
 ```
 This dataframe contains the `true_RSL` values from the test set and the corresponding predicted values `pred_RSL`. In this dataframe, there are the prediction intervals `upr_PI` and `lwr_PI`. The `SiteName` column identifies each site present in the dataframe and allows for site specific analysis of the model if required.
 
