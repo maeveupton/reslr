@@ -846,9 +846,9 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">#&gt;   variable    mean      sd     mad      q5     q95  rhat</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha    -<span style="color: #BB0000;">1.99</span>   0.016<span style="text-decoration: underline;">7</span>  0.016<span style="text-decoration: underline;">5</span>  -<span style="color: #BB0000;">2.02</span>   -<span style="color: #BB0000;">1.96</span>    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta      0.823  0.012<span style="text-decoration: underline;">6</span>  0.012<span style="text-decoration: underline;">6</span>   0.802   0.844   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_y   0.066<span style="text-decoration: underline;">2</span> 0.009<span style="text-decoration: underline;">71</span> 0.009<span style="text-decoration: underline;">46</span>  0.050<span style="text-decoration: underline;">8</span>  0.082<span style="text-decoration: underline;">3</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha    -<span style="color: #BB0000;">1.99</span>   0.016<span style="text-decoration: underline;">7</span>  0.016<span style="text-decoration: underline;">8</span>  -<span style="color: #BB0000;">2.02</span>   -<span style="color: #BB0000;">1.96</span>    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta      0.823  0.012<span style="text-decoration: underline;">7</span>  0.012<span style="text-decoration: underline;">7</span>   0.801   0.844   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_y   0.066<span style="text-decoration: underline;">5</span> 0.009<span style="text-decoration: underline;">42</span> 0.009<span style="text-decoration: underline;">27</span>  0.051<span style="text-decoration: underline;">1</span>  0.081<span style="text-decoration: underline;">7</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -896,12 +896,12 @@ following:</p>
 <span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -500.00</span></span>
 <span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -450.00</span></span>
 <span><span class="co">#&gt;        pred       upr       lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.594441 -2.642066 -2.544480 95%</span></span>
-<span><span class="co">#&gt; 2 -2.524669 -2.570498 -2.477201 95%</span></span>
-<span><span class="co">#&gt; 3 -2.483506 -2.528129 -2.437434 95%</span></span>
-<span><span class="co">#&gt; 4 -2.442342 -2.485673 -2.397185 95%</span></span>
-<span><span class="co">#&gt; 5 -2.401179 -2.443611 -2.357394 95%</span></span>
-<span><span class="co">#&gt; 6 -2.360016 -2.401511 -2.317113 95%</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 -2.594436 -2.644457 -2.544175 95%</span></span>
+<span><span class="co">#&gt; 2 -2.524672 -2.572831 -2.476717 95%</span></span>
+<span><span class="co">#&gt; 3 -2.483513 -2.530604 -2.436901 95%</span></span>
+<span><span class="co">#&gt; 4 -2.442355 -2.488395 -2.397093 95%</span></span>
+<span><span class="co">#&gt; 5 -2.401196 -2.446069 -2.356941 95%</span></span>
+<span><span class="co">#&gt; 6 -2.360038 -2.403652 -2.317087 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="errors-in-variable-change-point-model-eiv_cp_t">Errors-in-Variable Change Point Model
@@ -1071,13 +1071,13 @@ following:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_eiv_cp1_t</span><span class="op">)</span></span>
 <span><span class="co">#&gt; No convergence issues detected.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
-<span><span class="co">#&gt;   variable                mean     sd    mad       q5     q95  rhat</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha                -<span style="color: #BB0000;">1.53</span>   0.489  0.223  -<span style="color: #BB0000;">2.02</span>    -<span style="color: #BB0000;">0.595</span>   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta[1]               0.572  0.119  0.128   0.382    0.753   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> beta[2]               1.18   0.553  0.034<span style="text-decoration: underline;">3</span>  0.884    2.57    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Change Point in CE: 687      0.597  0.269   0.073<span style="text-decoration: underline;">0</span>   1.82    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> sigma_y               0.024<span style="text-decoration: underline;">3</span> 0.014<span style="text-decoration: underline;">5</span> 0.017<span style="text-decoration: underline;">5</span>  0.002<span style="text-decoration: underline;">27</span>  0.047<span style="text-decoration: underline;">3</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt;   variable                 mean     sd     mad        q5     q95  rhat</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha                 -<span style="color: #BB0000;">0.877</span>  0.442  0.078<span style="text-decoration: underline;">0</span>  -<span style="color: #BB0000;">1.82</span>     -<span style="color: #BB0000;">0.558</span>   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta[1]                0.705  0.079<span style="text-decoration: underline;">1</span> 0.023<span style="text-decoration: underline;">3</span>   0.517     0.766   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> beta[2]                2.01   0.769  0.877    0.910     3.08    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Change Point in CE: <span style="text-decoration: underline;">1</span>479      0.536  0.075<span style="text-decoration: underline;">7</span>   0.332     1.85    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> sigma_y                0.012<span style="text-decoration: underline;">6</span> 0.011<span style="text-decoration: underline;">9</span> 0.008<span style="text-decoration: underline;">39</span>  0.000<span style="text-decoration: underline;">747</span>  0.039<span style="text-decoration: underline;">0</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -1123,12 +1123,12 @@ following:</p>
 <span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -500.00</span></span>
 <span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -450.00</span></span>
 <span><span class="co">#&gt;        pred       upr       lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.405299 -2.526357 -2.298588 95%</span></span>
-<span><span class="co">#&gt; 2 -2.356781 -2.462029 -2.267109 95%</span></span>
-<span><span class="co">#&gt; 3 -2.328156 -2.424481 -2.247559 95%</span></span>
-<span><span class="co">#&gt; 4 -2.299531 -2.386724 -2.227576 95%</span></span>
-<span><span class="co">#&gt; 5 -2.270907 -2.348541 -2.206951 95%</span></span>
-<span><span class="co">#&gt; 6 -2.242282 -2.310539 -2.184895 95%</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 -2.478495 -2.543852 -2.345745 95%</span></span>
+<span><span class="co">#&gt; 2 -2.418708 -2.478955 -2.305339 95%</span></span>
+<span><span class="co">#&gt; 3 -2.383436 -2.440303 -2.280788 95%</span></span>
+<span><span class="co">#&gt; 4 -2.348164 -2.401763 -2.254916 95%</span></span>
+<span><span class="co">#&gt; 5 -2.312891 -2.363197 -2.230868 95%</span></span>
+<span><span class="co">#&gt; 6 -2.277619 -2.324770 -2.205963 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="errors-in-variable-integrated-gaussian-process-model-eiv_igp_t">Errors-in-Variable Integrated Gaussian Process Model
@@ -1415,8 +1415,8 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">#&gt;   variable      mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta 2.07    0.677   0.548   1.28     3.32    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">07</span> 0.004<span style="text-decoration: underline;">67</span> 0.004<span style="text-decoration: underline;">57</span> 0.000<span style="text-decoration: underline;">470</span> 0.015<span style="text-decoration: underline;">1</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta 2.10    0.719   0.546   1.31     3.42    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">23</span> 0.004<span style="text-decoration: underline;">67</span> 0.004<span style="text-decoration: underline;">60</span> 0.000<span style="text-decoration: underline;">512</span> 0.015<span style="text-decoration: underline;">5</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -1474,12 +1474,12 @@ following:</p>
 <span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -500.00</span></span>
 <span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -450.00</span></span>
 <span><span class="co">#&gt;        pred       upr       lwr   rate_pred    rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.318379 -2.383643 -2.253871 -0.02828803 -0.41792574 0.3700816 95%</span></span>
-<span><span class="co">#&gt; 2 -2.315032 -2.368873 -2.261070  0.10531512 -0.17628365 0.3884607 95%</span></span>
-<span><span class="co">#&gt; 3 -2.307917 -2.358744 -2.256586  0.17860438 -0.04826128 0.4125393 95%</span></span>
-<span><span class="co">#&gt; 4 -2.297240 -2.347303 -2.245358  0.24778776  0.06799435 0.4325469 95%</span></span>
-<span><span class="co">#&gt; 5 -2.283206 -2.332577 -2.232994  0.31286527  0.17211547 0.4575409 95%</span></span>
-<span><span class="co">#&gt; 6 -2.266022 -2.315527 -2.216428  0.37383691  0.25802027 0.4912548 95%</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 -2.318581 -2.383431 -2.252125 -0.02989598 -0.43612331 0.3857989 95%</span></span>
+<span><span class="co">#&gt; 2 -2.315346 -2.364942 -2.263550  0.10424887 -0.19233183 0.4061157 95%</span></span>
+<span><span class="co">#&gt; 3 -2.308277 -2.355676 -2.258109  0.17782613 -0.06009645 0.4195403 95%</span></span>
+<span><span class="co">#&gt; 4 -2.297632 -2.345904 -2.246719  0.24727408  0.05629699 0.4396271 95%</span></span>
+<span><span class="co">#&gt; 5 -2.283618 -2.332865 -2.234015  0.31259273  0.16371172 0.4613591 95%</span></span>
+<span><span class="co">#&gt; 6 -2.266442 -2.315143 -2.218141  0.37378208  0.25591114 0.4895852 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="noisy-input-spline-in-space-time-ni_spline_st">Noisy input spline in space time

@@ -233,9 +233,9 @@ following:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">##   variable    mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> nu       0.910   0.474   0.364   0.390    1.85    1.00</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> rho      0.226   0.114   0.119   0.060<span style="text-decoration: underline;">4</span>   0.432   1.00</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> sigma_y  0.006<span style="text-decoration: underline;">45</span> 0.004<span style="text-decoration: underline;">90</span> 0.004<span style="text-decoration: underline;">56</span> 0.000<span style="text-decoration: underline;">530</span> 0.016<span style="text-decoration: underline;">1</span>  1.00</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> nu       0.828   0.409   0.308   0.372    1.65    1.00</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> rho      0.227   0.117   0.121   0.061<span style="text-decoration: underline;">7</span>   0.443   1.00</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> sigma_y  0.006<span style="text-decoration: underline;">30</span> 0.004<span style="text-decoration: underline;">73</span> 0.004<span style="text-decoration: underline;">64</span> 0.000<span style="text-decoration: underline;">558</span> 0.015<span style="text-decoration: underline;">7</span>  1.00</span></span></code></pre>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -538,26 +538,26 @@ intervals.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cv</span><span class="op">$</span><span class="va">CV_model_df</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   Longitude Latitude                       SiteName data_type_id  Age true_RSL</span></span>
-<span><span class="co">## 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -525    -2.24</span></span>
-<span><span class="co">## 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -211    -2.16</span></span>
-<span><span class="co">## 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -143    -2.12</span></span>
-<span><span class="co">## 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -112    -2.10</span></span>
-<span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  346    -1.75</span></span>
-<span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  381    -1.73</span></span>
+<span><span class="co">## 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -800    -2.36</span></span>
+<span><span class="co">## 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -731    -2.32</span></span>
+<span><span class="co">## 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -661    -2.28</span></span>
+<span><span class="co">## 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -333    -2.20</span></span>
+<span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -270    -2.18</span></span>
+<span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -143    -2.12</span></span>
 <span><span class="co">##   Age_err RSL_err CV_fold test_set NI_var_grid_term  pred_RSL       upr</span></span>
-<span><span class="co">## 1   65.00    0.06       1 test_set     0.0006076181 -2.304803 -2.367969</span></span>
-<span><span class="co">## 2   40.25    0.06       1 test_set     0.0013057731 -2.150109 -2.197658</span></span>
-<span><span class="co">## 3   44.00    0.06       1 test_set     0.0014028506 -2.103105 -2.147868</span></span>
-<span><span class="co">## 4   42.50    0.06       1 test_set     0.0014407129 -2.080582 -2.121573</span></span>
-<span><span class="co">## 5   79.50    0.06       1 test_set     0.0016097789 -1.713805 -1.748707</span></span>
-<span><span class="co">## 6   78.50    0.06       1 test_set     0.0016079077 -1.685371 -1.719705</span></span>
+<span><span class="co">## 1   65.25    0.06       1 test_set     0.0012338931 -2.073871 -2.399435</span></span>
+<span><span class="co">## 2   36.25    0.06       1 test_set     0.0010118706 -2.130267 -2.389624</span></span>
+<span><span class="co">## 3   47.75    0.06       1 test_set     0.0007461136 -2.176206 -2.371427</span></span>
+<span><span class="co">## 4   35.00    0.06       1 test_set     0.0007551558 -2.215197 -2.273929</span></span>
+<span><span class="co">## 5   26.25    0.06       1 test_set     0.0009816272 -2.191596 -2.244043</span></span>
+<span><span class="co">## 6   44.00    0.06       1 test_set     0.0013503971 -2.121588 -2.172615</span></span>
 <span><span class="co">##         lwr y_post_pred    upr_PI    lwr_PI  CI CV_fold_number obs_in_PI</span></span>
-<span><span class="co">## 1 -2.246440   -2.310468 -2.452462 -2.186661 95%              1      TRUE</span></span>
-<span><span class="co">## 2 -2.099223   -2.148451 -2.272790 -2.024979 95%              1      TRUE</span></span>
-<span><span class="co">## 3 -2.058691   -2.100362 -2.217175 -1.980656 95%              1      TRUE</span></span>
-<span><span class="co">## 4 -2.042263   -2.079346 -2.201065 -1.947129 95%              1      TRUE</span></span>
-<span><span class="co">## 5 -1.679839   -1.713729 -1.823023 -1.583209 95%              1      TRUE</span></span>
-<span><span class="co">## 6 -1.651967   -1.684690 -1.806531 -1.561157 95%              1      TRUE</span></span></code></pre>
+<span><span class="co">## 1 -1.792142   -2.071844 -2.396682 -1.796857 95%              1      TRUE</span></span>
+<span><span class="co">## 2 -1.911346   -2.131771 -2.386189 -1.879947 95%              1      TRUE</span></span>
+<span><span class="co">## 3 -2.004440   -2.180961 -2.417327 -1.951885 95%              1      TRUE</span></span>
+<span><span class="co">## 4 -2.155405   -2.215335 -2.345408 -2.077704 95%              1      TRUE</span></span>
+<span><span class="co">## 5 -2.135632   -2.196241 -2.335405 -2.080396 95%              1      TRUE</span></span>
+<span><span class="co">## 6 -2.071307   -2.125546 -2.258040 -1.997201 95%              1      TRUE</span></span></code></pre>
 <p>This dataframe contains the <code>true_RSL</code> values from the
 test set and the corresponding predicted values <code>pred_RSL</code>.
 In this dataframe, there are the prediction intervals
@@ -589,7 +589,7 @@ given by:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
 <span><span class="co">##   SiteName                         PI_width</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>   -<span style="color: #BB0000;">0.246</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>   -<span style="color: #BB0000;">0.252</span></span></span></code></pre>
 <p>The prediction intervals are created using posterior predictive
 simulations with the full error structure, i.e. <span class="math inline">\(\hat{y}_{ij} \sim N(\hat{f}_{ij},
 \sigma_{y_{ij}}^2 + \sigma_{{t}_{ij}}^2 + \sigma^2)\)</span> where <span class="math inline">\(\sigma_{y_{ij}}^2\)</span> is the observed
@@ -614,8 +614,8 @@ model fit and these values can be accessed by:</p>
 <code class="sourceCode R"><span><span class="co"># Overall</span></span>
 <span><span class="va">ME_MAE_RSME_overall</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_overall</span></span>
 <span><span class="va">ME_MAE_RSME_overall</span></span></code></pre></div>
-<pre><code><span><span class="co">##         RSME        MAE           ME</span></span>
-<span><span class="co">## 1 0.01176529 0.03247742 -0.001153682</span></span></code></pre>
+<pre><code><span><span class="co">##         RSME        MAE          ME</span></span>
+<span><span class="co">## 1 0.04149929 0.03619239 -0.00406934</span></span></code></pre>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># By fold and site</span></span>
 <span><span class="va">ME_MAE_RSME_fold_site</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_fold_site</span></span>
@@ -623,9 +623,9 @@ model fit and these values can be accessed by:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
 <span><span class="co">##   SiteName                         CV_fold_number   RSME    MAE       ME</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 1              0.069<span style="text-decoration: underline;">4</span> 0.031<span style="text-decoration: underline;">6</span> -<span style="color: #BB0000;">0.011</span><span style="color: #BB0000; text-decoration: underline;">7</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 2              0.032<span style="text-decoration: underline;">4</span> 0.038<span style="text-decoration: underline;">5</span>  0.005<span style="text-decoration: underline;">55</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 3              0.017<span style="text-decoration: underline;">2</span> 0.027<span style="text-decoration: underline;">5</span>  0.002<span style="text-decoration: underline;">91</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 1              0.078<span style="text-decoration: underline;">5</span> 0.043<span style="text-decoration: underline;">8</span> -<span style="color: #BB0000;">0.013</span><span style="color: #BB0000; text-decoration: underline;">3</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 2              0.013<span style="text-decoration: underline;">3</span> 0.027<span style="text-decoration: underline;">6</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">28</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 3              0.020<span style="text-decoration: underline;">1</span> 0.036<span style="text-decoration: underline;">9</span>  0.003<span style="text-decoration: underline;">39</span></span></span></code></pre>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># By site</span></span>
 <span><span class="va">ME_MAE_RSME_site</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_site</span></span>
@@ -633,7 +633,7 @@ model fit and these values can be accessed by:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">##   SiteName                           RSME    MAE       ME</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 0.011<span style="text-decoration: underline;">8</span> 0.032<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">15</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 0.041<span style="text-decoration: underline;">5</span> 0.036<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">0.004</span><span style="color: #BB0000; text-decoration: underline;">07</span></span></span></code></pre>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># By fold</span></span>
 <span><span class="va">ME_MAE_RSME_fold</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_fold</span></span>
@@ -641,9 +641,9 @@ model fit and these values can be accessed by:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
 <span><span class="co">##   CV_fold_number   RSME    MAE       ME</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1              0.069<span style="text-decoration: underline;">4</span> 0.031<span style="text-decoration: underline;">6</span> -<span style="color: #BB0000;">0.011</span><span style="color: #BB0000; text-decoration: underline;">7</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2              0.032<span style="text-decoration: underline;">4</span> 0.038<span style="text-decoration: underline;">5</span>  0.005<span style="text-decoration: underline;">55</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3              0.017<span style="text-decoration: underline;">2</span> 0.027<span style="text-decoration: underline;">5</span>  0.002<span style="text-decoration: underline;">91</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1              0.078<span style="text-decoration: underline;">5</span> 0.043<span style="text-decoration: underline;">8</span> -<span style="color: #BB0000;">0.013</span><span style="color: #BB0000; text-decoration: underline;">3</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2              0.013<span style="text-decoration: underline;">3</span> 0.027<span style="text-decoration: underline;">6</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">28</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3              0.020<span style="text-decoration: underline;">1</span> 0.036<span style="text-decoration: underline;">9</span>  0.003<span style="text-decoration: underline;">39</span></span></span></code></pre>
 <p>For more information about the outputs to these cross validation
 tests for RSL data refer to Upton et al. 2023 paper.</p>
 </div>
