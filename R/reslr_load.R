@@ -268,11 +268,12 @@ reslr_load <- function(data,
     dplyr::group_by(SiteName) %>%
     dplyr::slice_min(Age) %>%
     dplyr::reframe(
-      min_Age = ifelse(Age>0, Age + Age_err,Age - Age_err)
+      min_Age = ifelse(Age>0, Age - Age_err,Age + Age_err)
     )
   data_age_boundary <- dplyr::left_join(data_age_boundary_max,
                                         data_age_boundary_min,
                                         by = "SiteName")
+
   # Filtering prediction grids to just cover the data
   data_grid <- data_grid_full %>%
     dplyr::left_join(data_age_boundary, by = "SiteName") %>%
