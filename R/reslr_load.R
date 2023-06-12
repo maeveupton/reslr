@@ -258,13 +258,21 @@ reslr_load <- function(data,
     sites,
     Age = times
   )
-  data_age_boundary <- data %>%
+  data_age_boundary_max <- data %>%
     dplyr::group_by(SiteName) %>%
-    dplyr::summarise(
-      max_Age = max(Age) + Age_err[1],
-      min_Age = min(Age) - abs(Age_err[length(Age_err)])
-    ) %>%
-    unique()
+    dplyr::slice_max(Age) %>%
+    dplyr::reframe(
+      max_Age = Age + Age_err
+    )
+  data_age_boundary_min <- data %>%
+    dplyr::group_by(SiteName) %>%
+    dplyr::slice_min(Age) %>%
+    dplyr::reframe(
+      min_Age = ifelse(Age>0, Age + Age_err,Age - Age_err)
+    )
+  data_age_boundary <- dplyr::left_join(data_age_boundary_max,
+                                        data_age_boundary_min,
+                                        by = "SiteName")
   # Filtering prediction grids to just cover the data
   data_grid <- data_grid_full %>%
     dplyr::left_join(data_age_boundary, by = "SiteName") %>%
