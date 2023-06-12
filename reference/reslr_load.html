@@ -19,7 +19,7 @@ The user can choose to include data from tide gauges which is sourced from the P
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">reslr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -153,13 +153,9 @@ The user can choose to include data from tide gauges which is sourced from the P
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">NAACproxydata</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Site</span> <span class="op">==</span> <span class="st">"Cedar Island"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">reslr_load</span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is a valid reslr input object with 104 observations and  1 site(s).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> There are  1  proxy site(s) and  0  tide gauge site(s).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The age units are; Common Era. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Decadally averaged tide gauge data was not included. It is recommended for the ni_gam_decomp model </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The linear_rate or linear_rate_err was not included. It is required for the ni_gam_decomp model </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">NAACproxydata</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Site</span> <span class="op">==</span> <span class="st">"Cedar Island"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">reslr_load</span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">)</span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
