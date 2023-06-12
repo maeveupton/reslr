@@ -225,8 +225,8 @@ estimates from the model can be investigated using the following:</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">##   variable      mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.08    0.664   0.547   1.28     3.31    1.00</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">26</span> 0.004<span style="text-decoration: underline;">69</span> 0.004<span style="text-decoration: underline;">62</span> 0.000<span style="text-decoration: underline;">468</span> 0.015<span style="text-decoration: underline;">5</span>  1.00</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.09    0.686   0.541   1.30     3.42    1.00</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">33</span> 0.004<span style="text-decoration: underline;">74</span> 0.004<span style="text-decoration: underline;">77</span> 0.000<span style="text-decoration: underline;">534</span> 0.014<span style="text-decoration: underline;">8</span>  1.00</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="step-5-plot-the-results">Step 5: Plot the results<a class="anchor" aria-label="anchor" href="#step-5-plot-the-results"></a>
@@ -252,19 +252,19 @@ following:</p>
 <code class="sourceCode R"><span><span class="va">output_dataframes</span> <span class="op">&lt;-</span> <span class="va">res_one_site_example</span><span class="op">$</span><span class="va">output_dataframes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output_dataframes</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   Longitude Latitude                       SiteName data_type_id     Age</span></span>
-<span><span class="co">## 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -865.25</span></span>
-<span><span class="co">## 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -770.00</span></span>
-<span><span class="co">## 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -740.00</span></span>
-<span><span class="co">## 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -710.00</span></span>
-<span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -680.00</span></span>
-<span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
-<span><span class="co">##        pred       upr       lwr   rate_pred   rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">## 1 -2.299964 -2.411158 -2.182212 -0.24605008 -0.8585338 0.3494947 95%</span></span>
-<span><span class="co">## 2 -2.315686 -2.386970 -2.241947 -0.08370718 -0.5557895 0.3720567 95%</span></span>
-<span><span class="co">## 3 -2.317447 -2.380797 -2.251971 -0.03397995 -0.4610530 0.3787099 95%</span></span>
-<span><span class="co">## 4 -2.317739 -2.375160 -2.259130  0.01430232 -0.3708359 0.3833341 95%</span></span>
-<span><span class="co">## 5 -2.316604 -2.369732 -2.263647  0.06113963 -0.2815858 0.3898017 95%</span></span>
-<span><span class="co">## 6 -2.314085 -2.364926 -2.264365  0.10653199 -0.1942343 0.3984147 95%</span></span></code></pre>
+<span><span class="co">## 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -734.75</span></span>
+<span><span class="co">## 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -680.00</span></span>
+<span><span class="co">## 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
+<span><span class="co">## 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -620.00</span></span>
+<span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -590.00</span></span>
+<span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -560.00</span></span>
+<span><span class="co">##        pred       upr       lwr   rate_pred    rate_upr  rate_lwr  CI</span></span>
+<span><span class="co">## 1 -2.317549 -2.382386 -2.252256 -0.03427787 -0.45568959 0.3664114 95%</span></span>
+<span><span class="co">## 2 -2.316974 -2.371824 -2.260973  0.05442730 -0.28853700 0.3800309 95%</span></span>
+<span><span class="co">## 3 -2.314641 -2.367660 -2.262254  0.10090964 -0.20622300 0.3900004 95%</span></span>
+<span><span class="co">## 4 -2.310935 -2.361747 -2.260326  0.14588880 -0.12634249 0.4039957 95%</span></span>
+<span><span class="co">## 5 -2.305902 -2.355434 -2.255498  0.18936479 -0.04604021 0.4104263 95%</span></span>
+<span><span class="co">## 6 -2.299588 -2.349347 -2.249388  0.23133760  0.02671390 0.4235684 95%</span></span></code></pre>
 <p>To examine the additional options in the <code>reslr</code> package,
 see the main vignette.</p>
 </div>
