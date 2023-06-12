@@ -13,3 +13,5 @@
 ^codecov\.yml$
 ^CRAN-SUBMISSION$
 ^reslrvigplots$
+^Meta$
+^tests/testthat/NUL$

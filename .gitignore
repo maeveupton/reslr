@@ -22,13 +22,14 @@ vignettes/*.pdf
 doc
 Meta
 NULL
+NUL
 files/directories
 revdep/checks
 revdep/library
 revdep/checks.noindex
 revdep/library.noindex
 revdep/data.sqlite
-
+/Meta/
 # Compiled files
 src/*.so
 src/*.o
