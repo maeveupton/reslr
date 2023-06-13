@@ -40,7 +40,7 @@ In this function, the raw data is plotted with grey uncertainty boxes representi
 The function allows the user to plot the proxy record data and tide gauge data together or separately.
 }
 \examples{
-\dontrun{
+\donttest{
 full_dataset <- reslr_load(NAACproxydata)
 plot(full_dataset)}
 }

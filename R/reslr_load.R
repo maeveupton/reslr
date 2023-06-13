@@ -23,7 +23,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' reslr_load(data = data)}
 reslr_load <- function(data,
@@ -52,7 +52,7 @@ reslr_load <- function(data,
     data <- data %>%
       dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
   } else {
-    cat("Error: User must provide a column with site name(s) and a column with region name(s). \n")
+    message("Error: User must provide a column with site name(s) and a column with region name(s). \n")
     stop()
   }
 
@@ -112,11 +112,9 @@ reslr_load <- function(data,
     if (!("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data))) {
       lm_data_rates <- linear_reg_rates(data)
       data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
-      #cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
       data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
     } else {
       data <- data
-      #cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
       data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
     }
   }
@@ -137,10 +135,8 @@ reslr_load <- function(data,
     if (!("linear_rate" %in% colnames(data) & "linear_rate_err" %in% colnames(data))) {
       lm_data_rates <- linear_reg_rates(data)
       data <- dplyr::left_join(data, lm_data_rates, by = "SiteName")
-      #cat("Package calculated linear_rate and linear_rate_err using the input data. \n")
     } else {
       data <- data
-      #cat("Package will use linear_rate and linear_rate_err provided by the user. \n")
     }
     data <- clean_tidal_gauge_data(
       data = data,

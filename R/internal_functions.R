@@ -325,12 +325,11 @@ clean_tidal_gauge_data <- function(data,
   #  dplyr::select(RSL, Age_epoch_id) %>%
   #  dplyr::filter(Age_epoch_id == TRUE) %>%
   #  dplyr::summarise(RSL_offset = unique(mean(RSL)))
-
   # data_TG <- merge(data_TG, Age_epoch_ref, by = "id", all = TRUE)
   # Cases where no data between 2000-2018 set the offset to 7000
   # data_TG$RSL_offset[is.na(data_TG$RSL_offset)] <- 7000
 
-  # Updating the RSL to the shifted RSL value
+  # Updating the RSL to the shifted RSL value using PSMSL instructions
   data_TG$RSL <- data_TG$RSL - 7000 # data_TG$RSL_offset #
 
   #--Joining SL data with location names--
@@ -525,7 +524,7 @@ clean_tidal_gauge_data <- function(data,
     # Check if TG exists in the list
     check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
     if (check_TG == FALSE) {
-      cat("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
+      message("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
       stop()
     }
 
@@ -583,7 +582,6 @@ clean_tidal_gauge_data <- function(data,
         SiteName = as.factor(SiteName),
         data_type_id = as.factor(data_type_id)
       )
-    #message("Selecting the tide gauge with the minimum distance to the proxy site \n")
   }
   # Criteria 3: All tide gauges within 1 degree away from proxy site
   if (all_TG_1deg == TRUE) {
@@ -617,7 +615,6 @@ clean_tidal_gauge_data <- function(data,
         SiteName = as.factor(SiteName),
         data_type_id = as.factor(data_type_id)
       )
-   # message("Selecting all tide gauges within 1 degree of the proxy site \n")
   }
 
   # Criteria 4: All tide gauges within 1 degree away from proxy site & the preferred tide gauges listed by user
@@ -625,7 +622,7 @@ clean_tidal_gauge_data <- function(data,
     # Check if TG exists in the list
     check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
     if (check_TG == FALSE) {
-      cat("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
+      message("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
       stop()
     }
     decadal_TG_df_filter <- base::subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
@@ -668,7 +665,7 @@ clean_tidal_gauge_data <- function(data,
     # Check if TG exists in the list
     check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
     if (check_TG == FALSE) {
-      cat("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
+      message("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
       stop()
     }
     decadal_TG_df_filter <- base::subset(decadal_TG_df, SiteName %in% list_preferred_TGs)
@@ -2127,8 +2124,7 @@ bs_bbase_t <- function(x,
   if (is.null(spline_nseg_t)) {
     spline_nseg_t <- round(deg / (1 + deg / length(data$Age)))
   }
-  # cat("Number nseg for t")
-  # print(spline_nseg_t)
+
   # Compute the length of the partitions
   dx <- (xr - xl) / spline_nseg_t
   # Create equally spaced knots
@@ -2136,8 +2132,6 @@ bs_bbase_t <- function(x,
     xr + deg * dx,
     by = dx
   )
-  # cat("Number knots for t")
-  # print(length(knots))
 
   # Use bs() function to generate the B-spline basis
   bs_matrix <- matrix(
@@ -2171,8 +2165,7 @@ bs_bbase_st <- function(x,
   if (is.null(spline_nseg_st)) {
     spline_nseg_st <- round(deg / (1 + deg / length(data$Age)))
   }
-  # cat("Number nseg for st")
-  # print(spline_nseg_st)
+
   # Compute the length of the partitions
   dx <- (xr - xl) / spline_nseg_st
   # Create equally spaced knots
@@ -2180,8 +2173,6 @@ bs_bbase_st <- function(x,
     xr + deg * dx,
     by = dx
   )
-  # cat("Number knots for st")
-  # print(length(knots))
 
   # Use bs() function to generate the B-spline basis
   bs_matrix <- matrix(

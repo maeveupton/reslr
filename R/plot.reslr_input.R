@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' full_dataset <- reslr_load(NAACproxydata)
 #' plot(full_dataset)}
 plot.reslr_input <- function(x,

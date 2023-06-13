@@ -1,5 +1,7 @@
 ## Resubmission
-This is resubmission where the vignettes were updated to reduce the run time. 
+I updated the 'dontrun' to 'donttest' for examples that don't depend on missing additional software(i.e. JAGS refer to below error).
+I replace all cat with message when writing text to the console.
+The vignettes were updated to reduce the run time. 
 The description title was updated to remove "An R package".
 I updated the description to include references to the models in the literature.
 
