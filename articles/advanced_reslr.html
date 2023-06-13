@@ -88,7 +88,7 @@
                         <h4 data-toc-skip class="author">Maeve Upton,
 Andrew Parnell and Niamh Cahill</h4>
             
-            <h4 data-toc-skip class="date">2023-06-12</h4>
+            <h4 data-toc-skip class="date">2023-06-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maeveupton/reslr/blob/HEAD/vignettes/advanced_reslr.Rmd" class="external-link"><code>vignettes/advanced_reslr.Rmd</code></a></small>
       <div class="hidden name"><code>advanced_reslr.Rmd</code></div>
@@ -171,15 +171,15 @@ user and is used to create the plots and is accessed by</li>
 <p><strong>Step 1a:</strong> A brief insight into the outputs of the
 <code>reslr_input</code> function can be obtained using:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">CedarIslandNC_input_detrend</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## This is a valid reslr input object with 104 observations and  1 site(s).</span></span>
-<span><span class="co">## There are  1  proxy site(s) and  0  tide gauge site(s).</span></span>
-<span><span class="co">## The age units are; Common Era. </span></span>
-<span><span class="co">## Decadally averaged tide gauge data was not included. It is recommended for the ni_gam_decomp model </span></span>
-<span><span class="co">## The linear_rate and linear_rate_err has been included. </span></span>
-<span><span class="co">## Data has been detrended.</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">CedarIslandNC_input_detrend</span><span class="op">)</span></span>
+<span><span class="co">#&gt; This is a valid reslr input object with 104 observations and  1 site(s).</span></span>
+<span><span class="co">#&gt; There are  1  proxy site(s) and  0  tide gauge site(s).</span></span>
+<span><span class="co">#&gt; The age units are; Common Era. </span></span>
+<span><span class="co">#&gt; Decadally averaged tide gauge data was not included. It is recommended for the ni_gam_decomp model </span></span>
+<span><span class="co">#&gt; The linear_rate and linear_rate_err has been included. </span></span>
+<span><span class="co">#&gt; Data has been detrended.</span></span></code></pre></div>
 <p><strong>Step 2:</strong> Plotting the data the raw data with:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">CedarIslandNC_input_detrend</span>,</span>
 <span>  title <span class="op">=</span> <span class="st">"Plot of the raw detrended data"</span>,</span>
@@ -201,7 +201,7 @@ the user can select to plot the additional tide gauge data,
 <code>plot_tide_gauge = TRUE</code>.</p>
 <p><strong>Step 3:</strong> To run the eiv_igp_t model the following
 function should be used:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_eiv_igp_t_detrend</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reslr_mcmc.html">reslr_mcmc</a></span><span class="op">(</span></span>
 <span>  input_data <span class="op">=</span> <span class="va">CedarIslandNC_input_detrend</span>,</span>
 <span>  model_type <span class="op">=</span> <span class="st">"eiv_igp_t"</span>,</span>
@@ -216,19 +216,19 @@ to set the credible intervals, the current default is
 <code>CI = 0.95</code>.</p>
 <p><strong>Step 3a:</strong> A brief insight into the outputs of the
 <code>reslr_output</code> function can be obtained using:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res_eiv_igp_t_detrend</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Step 4:</strong> The convergence of the algorithm is examined
 and he parameter estimates from the model can be investigated using the
 following:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_eiv_igp_t_detrend</span><span class="op">)</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
 <code>reslr_mcmc</code> function with additional iterations in the
 following manner:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_eiv_igp_t_detrend</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reslr_mcmc.html">reslr_mcmc</a></span><span class="op">(</span></span>
 <span>  input_data <span class="op">=</span> <span class="va">CedarIslandNC_input_detrend</span>,</span>
 <span>  model_type <span class="op">=</span> <span class="st">"eiv_igp_t"</span>,</span>
@@ -243,7 +243,7 @@ correlation parameter and “nu” is the standard deviation of the rate
 process. “sigma_y” is the variation of the model.</p>
 <p><strong>Step 5:</strong> The results from the EIV IGP model for the
 de-trended data can be illustrated using:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_eiv_igp_t_detrend</span>,</span>
 <span>  plot_type <span class="op">=</span> <span class="st">"model_fit_plot"</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
@@ -258,7 +258,7 @@ credible interval. The caption provides the model type used and number
 of proxy sites and tide gauge sites used and can be removed if necessary
 with <code>plot_caption = FALSE</code>. In order to view the rate of
 change plot, the following setting should be used:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_eiv_igp_t_detrend</span>,</span>
 <span>  plot_type <span class="op">=</span> <span class="st">"rate_plot"</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
@@ -270,7 +270,7 @@ The caption provides the model type, the number of proxy sites and tide
 gauge sites that were used.</p>
 <p>To examine the data creating these plots the user types the
 following:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dataframes</span> <span class="op">&lt;-</span> <span class="va">res_eiv_igp_t_detrend</span><span class="op">$</span><span class="va">output_dataframes</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -283,7 +283,7 @@ Present by updating the <code>input_age_type = "BP"</code> within the
 converted into CE in order to run the models. The plots are then altered
 to account for the input age in BP and the x-axis is be reversed.</p>
 <p>Load in the data using the <code>reslr_load</code> function:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">CedarIslandNC_input_age_BP</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reslr_load.html">reslr_load</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">data_age_bp</span>,</span>
 <span>  input_age_type <span class="op">=</span> <span class="st">"BP"</span></span>
@@ -304,13 +304,13 @@ Before Present (BP) and the x-axis will need to be reversed.</p>
 and in the example we showed how to include the closest tide gauge to
 the proxy site. Here we are demonstrating the other options available to
 the user.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For 2 site</span></span>
 <span><span class="va">multi_site</span> <span class="op">&lt;-</span> <span class="va">NAACproxydata</span><span class="op">[</span><span class="va">NAACproxydata</span><span class="op">$</span><span class="va">Site</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cedar Island"</span>, <span class="st">"Nassau"</span><span class="op">)</span>,<span class="op">]</span></span></code></pre></div>
 <p>If the user has a list of chosen tide gauges from PSMSL website,
 include them in a list in the <code>reslr_load</code> function as
 demonstrated:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">multi_site</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reslr_load.html">reslr_load</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">multi_site</span>,</span>
 <span>  include_tide_gauge <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -327,7 +327,7 @@ demonstrated:</p>
 <span>  sediment_average_TG <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Here is how to plot this example:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">multi_site</span>,</span>
 <span>  title <span class="op">=</span> <span class="st">"Plot of the raw data"</span>,</span>
@@ -340,7 +340,7 @@ demonstrated:</p>
 <p>If the user requires all tide gauges within 1 degree of the proxy
 site, which is the equivalent of 111kms, this can be done by updating
 <code>all_TG_1deg=TRUE</code> in the following way:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">multi_site</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reslr_load.html">reslr_load</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">multi_site</span>,</span>
 <span>  include_tide_gauge <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -351,7 +351,7 @@ site, which is the equivalent of 111kms, this can be done by updating
 <span>  prediction_grid_res <span class="op">=</span> <span class="fl">50</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Here is how to plot this example:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">multi_site</span>,</span>
 <span>  title <span class="op">=</span> <span class="st">"Plot of the raw data"</span>,</span>
@@ -367,7 +367,7 @@ site, which is the equivalent of 111kms, this can be done by updating
 </h2>
 <p>In the package, all plot labels for results, i.e. x and y labels and
 titles, can be updated in the following manner:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example</span></span>
 <span><span class="va">final_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="../reference/reslr_mcmc.html">reslr_mcmc</a></span><span class="op">(</span><span class="va">CedarIslandNC</span>, model_type <span class="op">=</span> <span class="st">"ni_spline_t"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">final_plots</span><span class="op">$</span><span class="va">plot_result</span></span>
@@ -378,10 +378,10 @@ titles, can be updated in the following manner:</p>
 <p>The user can access the dataframes creating these plots in order to
 recreate the output plots in their own style. To access the data frame
 used to create the raw plot use:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">CedarIslandNC_input_detrend</span><span class="op">$</span><span class="va">data</span></span></code></pre></div>
 <p>To access the dataframe creating the output model fit plot use:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">res_eiv_igp_t_detrend</span><span class="op">$</span><span class="va">output_dataframes</span></span></code></pre></div>
 <p>This dataframes contains the model fit under the column
 <code>pred</code> and the rate of change column is
@@ -397,7 +397,7 @@ colours to identify the different drivers of RSL change.</p>
 </h2>
 <p>In the package the user has the ability access all the posterior
 sample for each unknown parameter in the following way:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example</span></span>
 <span><span class="va">CedarIslandNC_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reslr_load.html">reslr_load</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">CedarIslandNC</span><span class="op">)</span></span>
@@ -420,7 +420,7 @@ model fits require additional flexibility or require additional
 smoothing, the user can adjust these settings. To adjust the setting for
 the number of knots in the spline in time update the reslr function in
 the following way:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_ni_sp_t</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="../reference/reslr_mcmc.html">reslr_mcmc</a></span><span class="op">(</span><span class="va">CedarIslandNC_input</span>, </span>
 <span>             model_type <span class="op">=</span> <span class="st">"ni_spline_t"</span>,</span>
@@ -431,7 +431,7 @@ default for this setting is <code>NULL</code> as we use a rule of thumb
 calculation to identify the number of knots based on the range of
 observations. Similarly, for the spline in space time. The number of
 knots is updated using:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_ni_sp_t</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="../reference/reslr_mcmc.html">reslr_mcmc</a></span><span class="op">(</span><span class="va">CedarIslandNC_input</span>, </span>
 <span>             model_type <span class="op">=</span> <span class="st">"ni_spline_st"</span>,</span>
@@ -448,7 +448,7 @@ component (i.e. spline in time) the setting to vary is the
 (i.e. spline in space time), the user can vary the
 <code>spline_nseg_st</code> setting. The following example will
 demonstrate these settings:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_ni_sp_t</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="../reference/reslr_mcmc.html">reslr_mcmc</a></span><span class="op">(</span><span class="va">CedarIslandNC_input</span>, </span>
 <span>             model_type <span class="op">=</span> <span class="st">"ni_gam_decomp"</span>,</span>
@@ -467,7 +467,7 @@ the validity of the model and the number of knots selected using this
 cross validation function with in the package. For example, the user can
 run different values for the knots and compare the model fits for each
 setting using the following cross validation function.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data1site_example</span> <span class="op">&lt;-</span> <span class="va">NAACproxydata</span><span class="op">[</span><span class="va">NAACproxydata</span><span class="op">$</span><span class="va">Site</span> <span class="op">==</span> <span class="st">"Cedar Island"</span>,<span class="op">]</span></span>
 <span><span class="co"># Cross Validation test</span></span>
 <span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cross_val_check.html">cross_val_check</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data1site_example</span>,</span>
@@ -502,7 +502,7 @@ function.</p>
 <p>The outputs of the <code>cross_val_check</code> function are stored
 as a list. To examine the true versus predicted plot use the following
 command.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cv</span><span class="op">$</span><span class="va">true_pred_plot</span></span></code></pre></div>
 <p><img src="advanced_reslr_files/figure-html/cvpredplot_adv-1.png" width="700"></p>
 <p>This figure presents the true RSL value in metres versus the
@@ -510,7 +510,7 @@ predicted RSL value in metres for each data site. The predicted means
 are the red dots and the vertical lines over each point are the
 prediction intervals.</p>
 <p>To access the dataframe creating this plot use:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">CV_model_df</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">CV_model_df</span></span></code></pre></div>
 <p>This dataframe contains the <code>true_RSL</code> values from the
 test set and the corresponding predicted values <code>pred_RSL</code>.
@@ -523,27 +523,25 @@ The first is the out of sample empirical coverage. The empirical
 coverage provides the percentage of occasions that the true RSL
 observation is within the model prediction interval (PI) for RSL and is
 given by:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Overall coverage</span></span>
 <span><span class="va">total_empirical_coverage</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">total_coverage</span></span>
-<span><span class="va">total_empirical_coverage</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 1</span></span></code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Coverage by site</span></span>
+<span><span class="va">total_empirical_coverage</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co"># Coverage by site</span></span>
 <span><span class="va">coverage_by_site</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">coverage_by_site</span></span>
-<span><span class="va">coverage_by_site</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
-<span><span class="co">##   SiteName                         coverage_by_site</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>                1</span></span></code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Size of the prediction intervals</span></span>
+<span><span class="va">coverage_by_site</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<span><span class="co">#&gt;   SiteName                         coverage_by_site</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>                1</span></span>
+<span><span class="co"># Size of the prediction intervals</span></span>
 <span><span class="va">prediction_interval_size</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">prediction_interval_size</span></span>
-<span><span class="va">prediction_interval_size</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
-<span><span class="co">##   SiteName                         PI_width</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>   -<span style="color: #BB0000;">0.249</span></span></span></code></pre>
+<span><span class="va">prediction_interval_size</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<span><span class="co">#&gt;   SiteName                         PI_width</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>   -<span style="color: #BB0000;">0.249</span></span></span></code></pre></div>
 <p>The prediction intervals are created using posterior predictive
 simulations with the full error structure, i.e. <span class="math inline">\(\hat{y}_{ij} \sim N(\hat{f}_{ij},
 \sigma_{y_{ij}}^2 + \sigma_{{t}_{ij}}^2 + \sigma^2)\)</span> where <span class="math inline">\(\sigma_{y_{ij}}^2\)</span> is the observed
@@ -564,40 +562,37 @@ error (MAE) is calculated by taking the absolute value of the mean
 error, in turn, this provides the degree to which our model is biased.
 For each test, the recommendation is the lower the value the better the
 model fit and these values can be accessed by:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Overall</span></span>
 <span><span class="va">ME_MAE_RSME_overall</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_overall</span></span>
-<span><span class="va">ME_MAE_RSME_overall</span></span></code></pre></div>
-<pre><code><span><span class="co">##         RSME        MAE           ME</span></span>
-<span><span class="co">## 1 0.01673109 0.03619336 -0.001640618</span></span></code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># By fold and site</span></span>
+<span><span class="va">ME_MAE_RSME_overall</span></span>
+<span><span class="co">#&gt;          RSME        MAE            ME</span></span>
+<span><span class="co">#&gt; 1 0.005572582 0.03407097 -0.0005464366</span></span>
+<span><span class="co"># By fold and site</span></span>
 <span><span class="va">ME_MAE_RSME_fold_site</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_fold_site</span></span>
-<span><span class="va">ME_MAE_RSME_fold_site</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">##   SiteName                         CV_fold_number   RSME    MAE       ME</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 1              0.096<span style="text-decoration: underline;">7</span> 0.035<span style="text-decoration: underline;">0</span> -<span style="color: #BB0000;">0.016</span><span style="color: #BB0000; text-decoration: underline;">3</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 2              0.015<span style="text-decoration: underline;">9</span> 0.038<span style="text-decoration: underline;">8</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">72</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 3              0.083<span style="text-decoration: underline;">5</span> 0.034<span style="text-decoration: underline;">9</span>  0.014<span style="text-decoration: underline;">1</span></span></span></code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># By site</span></span>
+<span><span class="va">ME_MAE_RSME_fold_site</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   SiteName                         CV_fold_number     RSME    MAE        ME</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 1              0.000<span style="text-decoration: underline;">814</span> 0.036<span style="text-decoration: underline;">9</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">138</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 2              0.013<span style="text-decoration: underline;">8</span>   0.032<span style="text-decoration: underline;">8</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">36</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 3              0.004<span style="text-decoration: underline;">79</span>  0.032<span style="text-decoration: underline;">5</span>  0.000<span style="text-decoration: underline;">809</span></span></span>
+<span><span class="co"># By site</span></span>
 <span><span class="va">ME_MAE_RSME_site</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_site</span></span>
-<span><span class="va">ME_MAE_RSME_site</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
-<span><span class="co">##   SiteName                           RSME    MAE       ME</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 0.016<span style="text-decoration: underline;">7</span> 0.036<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">0.001</span><span style="color: #BB0000; text-decoration: underline;">64</span></span></span></code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># By fold</span></span>
+<span><span class="va">ME_MAE_RSME_site</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">#&gt;   SiteName                            RSME    MAE        ME</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 0.005<span style="text-decoration: underline;">57</span> 0.034<span style="text-decoration: underline;">1</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">546</span></span></span>
+<span><span class="co"># By fold</span></span>
 <span><span class="va">ME_MAE_RSME_fold</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_fold</span></span>
-<span><span class="va">ME_MAE_RSME_fold</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
-<span><span class="co">##   CV_fold_number   RSME    MAE       ME</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1              0.096<span style="text-decoration: underline;">7</span> 0.035<span style="text-decoration: underline;">0</span> -<span style="color: #BB0000;">0.016</span><span style="color: #BB0000; text-decoration: underline;">3</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2              0.015<span style="text-decoration: underline;">9</span> 0.038<span style="text-decoration: underline;">8</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">72</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3              0.083<span style="text-decoration: underline;">5</span> 0.034<span style="text-decoration: underline;">9</span>  0.014<span style="text-decoration: underline;">1</span></span></span></code></pre>
+<span><span class="va">ME_MAE_RSME_fold</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
+<span><span class="co">#&gt;   CV_fold_number     RSME    MAE        ME</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1              0.000<span style="text-decoration: underline;">814</span> 0.036<span style="text-decoration: underline;">9</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">138</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2              0.013<span style="text-decoration: underline;">8</span>   0.032<span style="text-decoration: underline;">8</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">36</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3              0.004<span style="text-decoration: underline;">79</span>  0.032<span style="text-decoration: underline;">5</span>  0.000<span style="text-decoration: underline;">809</span></span></span></code></pre></div>
 <p>For more information about the outputs to these cross validation
 tests for RSL data refer to Upton et al. 2023 paper.</p>
 </div>
