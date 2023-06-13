@@ -13,6 +13,14 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"#,
+  #fig.path = "advanced_vig/"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
 ## Introduction
 
 In this document we present a range of advanced options that are available in the reslr package. To examine the all other options in the `reslr` package, see the main vignette.
@@ -30,7 +38,7 @@ library(reslr)
 The EIV Integrated Gaussian Process model provides the underlying rate of the process directly from the model. If the user requires a model applied to data that has been de-trended this is available in our package for a single site using the `model_type = "eiv_igp_t"`. The data is de-trended using the linear rate which can be provided by the user within the input dataframe along with the uncertainty associated with the rate. Or the linear rate is calculated within the package using the data and this rate is used to de-trend the data. In addition, the user will need to provide the estimated year of core collection.
 
 This technique focuses on 1 site and we do not recommended for multiple proxy sites together. Tide gauge data can be included, however, the user must investigate which tide gauge is suitable and the tide gauge data will use the same linear_rate as the proxy records. As an example, we will filter the example dataset `NAACproxydata` to select one site to demonstrate the process:
-```{r,exampledataset2 ,eval = TRUE}
+```{r,exampledataset2_adv,eval = TRUE}
 # For 1 site
 CedarIslandNC <- NAACproxydata[NAACproxydata$Site == "Cedar Island",]
 ```
@@ -154,7 +162,7 @@ output_dataframes <- res_eiv_igp_t_detrend$output_dataframes
 The default input age for the reslr package is in units of years in the Common Era. The user can select to input the age value in Before Present by updating the `input_age_type = "BP"` within the `reslr_load` function. Inside the package, the Age is converted into CE in order to run the models. The plots are then altered to account for the input age in BP and the x-axis is be reversed. 
 
 Load in the data using the `reslr_load` function: 
-```{r, loadBP,eval = FALSE, message=FALSE,results='hide'}
+```{r, loadBP_adv,eval = FALSE, message=FALSE,results='hide'}
 CedarIslandNC_input_age_BP <- reslr_load(
   data = data_age_bp,
   input_age_type = "BP"
@@ -165,7 +173,7 @@ The output of this function is a list of two dataframes called `data` and `data_
 
 ## Including Tide Gauge data
 In this package, we have described three ways to select a tide gauge and in the example we showed how to include the closest tide gauge to the proxy site. Here we are demonstrating the other options available to the user.
-```{r,data2sites, eval = FALSE}
+```{r, eval = FALSE}
 # For 2 site
 multi_site <- NAACproxydata[NAACproxydata$Site %in% c("Cedar Island", "Nassau"),]
 ```
@@ -329,13 +337,13 @@ cv$true_pred_plot
 This figure presents the true RSL value in metres versus the predicted RSL value in metres for each data site. The predicted means are the red dots and the vertical lines over each point are the prediction intervals.
 
 To access the dataframe creating this plot use:
-```{r,eval = FALSE}
+```{r,cvdf_adv,eval = FALSE}
 CV_model_df <- cv$CV_model_df
 ```
 This dataframe contains the `true_RSL` values from the test set and the corresponding predicted values `pred_RSL`. In this dataframe, there are the prediction intervals `upr_PI` and `lwr_PI`. The `SiteName` column identifies each site present in the dataframe and allows for site specific analysis of the model if required.
 
 The model performance is examined using a variety of different test. The first is the out of sample empirical coverage. The empirical coverage provides the percentage of occasions that the true RSL observation is within the model prediction interval (PI) for RSL and is given by:
-```{r,eval = TRUE}
+```{r,coverage_adv,eval = TRUE}
 # Overall coverage
 total_empirical_coverage <- cv$total_coverage
 total_empirical_coverage
@@ -352,7 +360,7 @@ The remaining tools used to examine model performance within the `reslr` package
 between the predicted observation and the true RSL observation. The mean absolute error (MAE) is
 calculated by taking the absolute value of the mean error, in turn, this provides the degree to which our
 model is biased. For each test, the recommendation is the lower the value the better the model fit and these values can be accessed by:
-```{r,eval = TRUE}
+```{r,rmse_adv,eval = TRUE}
 # Overall
 ME_MAE_RSME_overall <- cv$ME_MAE_RSME_overall
 ME_MAE_RSME_overall

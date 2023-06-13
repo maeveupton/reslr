@@ -513,17 +513,7 @@ res_eiv_igp_t <- reslr_mcmc(
 )
 ```
 
-```{r,runigp_less_it, echo=FALSE,results='hide',message = FALSE,eval = FALSE}
-res_eiv_igp_t <- reslr_mcmc(
-  input_data = CedarIslandNC_input,
-  model_type = "eiv_igp_t",
-  CI = 0.95,
-  n_iterations = 1000,
-  n_burnin = 100,
-  n_thin = 5,
-  n_chains = 2
-)
-```
+
 
 This command takes the input data and the user specifies the statistical model, i.e. an integrated Gaussian process using the EIV uncertainty method ("eiv_slr_t"). It tells `reslr` to store the output of the model run in an object called `res_eiv_igp_t`. The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`. The computational run time for this model is approximately 14 minutes.
 
@@ -766,17 +756,6 @@ res_ni_spline_st <- reslr_mcmc(
 )
 ```
 
-```{r,runspst_less_it,eval = FALSE,echo=FALSE,results='hide',message=FALSE}
-res_ni_spline_st <- reslr_mcmc(
-  input_data = multi_site_input,
-  model_type = "ni_spline_st",
-  CI = 0.95,
-  n_iterations = 1000,
-  n_burnin = 100,
-  n_thin = 5,
-  n_chains = 2
-)
-```
 The output object `jags_output.ni_spline_st` stores the JAGS model run. The `CI` setting allows the user to set the credible intervals, the current default is ` CI = 0.95`. Note that additional computational run time is required for this model compared with the ni_spline_t. 
 
 **Step 3a:** A brief insight into the outputs of the `reslr_output` function can be obtained using:

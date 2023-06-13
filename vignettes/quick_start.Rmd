@@ -12,7 +12,14 @@ vignette: >
 editor_options: 
   chunk_output_type: console
 ---
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"#,
+  #fig.path = "qs_vig/"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
 ## Step 1: install `reslr`
 
 Use:
@@ -33,13 +40,13 @@ Note: The JAGS software is a requirement for this instruction sheet and refer ba
 
 There is a large example dataset included in the `reslr` package called `NAACproxydata`. In this example, we demonstrate how to include proxy record data which is stored in a csv file. This csv file of data can be found in the package and the `readr` function reads the csv file:
 
-```{r, run_data, eval = TRUE}
+```{r, run_data_qs, eval = TRUE}
 path_to_data <- system.file("extdata", "one_data_site_ex.csv", package = "reslr")
 example_one_datasite <- read.csv(path_to_data)
 ```
 
 Using the `reslr_load` function to read in the data into the `reslr` package:
-```{r, loadslr, eval = TRUE, message=FALSE, results='hide'}
+```{r, loadslr_qs, eval = TRUE, message=FALSE, results='hide'}
 example_one_site_input <- reslr_load(
   data = example_one_datasite)
 ```
@@ -47,7 +54,7 @@ example_one_site_input <- reslr_load(
 
 ## Step 3: plot the data
 
-```{r, plotdata,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r, plotdata_qs,fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(
   x = example_one_site_input,
   title = "Plot of the raw data",
@@ -76,7 +83,7 @@ For this example, it is a single site and we are interested in how it varies ove
 
 Once the model is chosen use the `reslr_mcmc` function to run it:
 
-```{r, runslr,eval = TRUE,message=FALSE, results='hide'}
+```{r, runslr_qs,eval = TRUE,message=FALSE, results='hide'}
 res_one_site_example <- reslr_mcmc(
   input_data = example_one_site_input,
   model_type = "ni_spline_t",
@@ -85,13 +92,13 @@ res_one_site_example <- reslr_mcmc(
 ```
 
 The convergence of the algorithm is examined and he parameter estimates from the model can be investigated using the following:
-```{r, summaryslr, eval = TRUE}
+```{r, summaryslr_qs, eval = TRUE}
 summary(res_one_site_example)
 ```
 
 ## Step 5: Plot the results
 The model fit results can be visualised using the following function:
-```{r, plotres, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r, plotres_qs, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(res_one_site_example,
   xlab = "Year (CE)",
   ylab = "Relative Sea Level (m)",
@@ -100,14 +107,14 @@ plot(res_one_site_example,
 ```
 For the rate of change plot use:
 
-```{r, plotresrate, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
+```{r, plotresrate_qs, fig.align = 'center',fig.width = 7,fig.height = 5,eval = TRUE}
 plot(res_one_site_example,
   plot_type = "rate_plot"
 )
 ```
 
 To examine the data creating these plots the user types the following:
-```{r, dataframeslrres, eval = TRUE}
+```{r, dataframeslrres_qs, eval = TRUE}
 output_dataframes <- res_one_site_example$output_dataframes
 head(output_dataframes)
 ```

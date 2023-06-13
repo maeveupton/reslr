@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">reslr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
                         <h4 data-toc-skip class="author">Maeve Upton,
 Andrew Parnell and Niamh Cahill</h4>
             
-            <h4 data-toc-skip class="date">2023-06-06</h4>
+            <h4 data-toc-skip class="date">2023-06-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maeveupton/reslr/blob/HEAD/vignettes/quick_start.Rmd" class="external-link"><code>vignettes/quick_start.Rmd</code></a></small>
       <div class="hidden name"><code>quick_start.Rmd</code></div>
@@ -141,7 +141,7 @@ the <code>reslr</code> package:</p>
 <span>  plot_tide_gauges <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plot_caption <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="quick_start_files/figure-html/plotdata-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="qs_vig/plotdata_qs-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="step-4-run-your-statistical-model-and-check-convergence">Step 4: Run your statistical model and check convergence<a class="anchor" aria-label="anchor" href="#step-4-run-your-statistical-model-and-check-convergence"></a>
@@ -220,51 +220,51 @@ run it:</p>
 <p>The convergence of the algorithm is examined and he parameter
 estimates from the model can be investigated using the following:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_one_site_example</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## No convergence issues detected.</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
-<span><span class="co">##   variable      mean      sd     mad       q5    q95  rhat</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> sigma_beta 2.09    0.704   0.555   1.28     3.35    1.00</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">19</span> 0.004<span style="text-decoration: underline;">71</span> 0.004<span style="text-decoration: underline;">62</span> 0.000<span style="text-decoration: underline;">487</span> 0.015<span style="text-decoration: underline;">2</span>  1.00</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_one_site_example</span><span class="op">)</span></span>
+<span><span class="co">#&gt; No convergence issues detected.</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
+<span><span class="co">#&gt;   variable      mean      sd     mad       q5    q95  rhat</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta 2.08    0.675   0.540   1.29     3.35    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">22</span> 0.004<span style="text-decoration: underline;">73</span> 0.004<span style="text-decoration: underline;">62</span> 0.000<span style="text-decoration: underline;">465</span> 0.015<span style="text-decoration: underline;">1</span>  1.00</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="step-5-plot-the-results">Step 5: Plot the results<a class="anchor" aria-label="anchor" href="#step-5-plot-the-results"></a>
 </h2>
 <p>The model fit results can be visualised using the following
 function:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_one_site_example</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="st">"Year (CE)"</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Relative Sea Level (m)"</span>,</span>
 <span>  plot_type <span class="op">=</span> <span class="st">"model_fit_plot"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="quick_start_files/figure-html/plotres-1.png" width="672" style="display: block; margin: auto;">
+<p><img src="qs_vig/plotres_qs-1.png" width="672" style="display: block; margin: auto;">
 For the rate of change plot use:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_one_site_example</span>,</span>
 <span>  plot_type <span class="op">=</span> <span class="st">"rate_plot"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="quick_start_files/figure-html/plotresrate-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="qs_vig/plotresrate_qs-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>To examine the data creating these plots the user types the
 following:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dataframes</span> <span class="op">&lt;-</span> <span class="va">res_one_site_example</span><span class="op">$</span><span class="va">output_dataframes</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output_dataframes</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   Longitude Latitude                       SiteName data_type_id     Age</span></span>
-<span><span class="co">## 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -865.25</span></span>
-<span><span class="co">## 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -770.00</span></span>
-<span><span class="co">## 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -740.00</span></span>
-<span><span class="co">## 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -710.00</span></span>
-<span><span class="co">## 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -680.00</span></span>
-<span><span class="co">## 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
-<span><span class="co">##        pred       upr       lwr   rate_pred   rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">## 1 -2.299741 -2.414310 -2.182386 -0.24752891 -0.8596811 0.3526163 95%</span></span>
-<span><span class="co">## 2 -2.315598 -2.391318 -2.240273 -0.08490677 -0.5549964 0.3698001 95%</span></span>
-<span><span class="co">## 3 -2.317393 -2.383551 -2.250537 -0.03500223 -0.4616076 0.3744111 95%</span></span>
-<span><span class="co">## 4 -2.317713 -2.377478 -2.257375  0.01344766 -0.3686980 0.3855213 95%</span></span>
-<span><span class="co">## 5 -2.316601 -2.371348 -2.262515  0.06044292 -0.2823044 0.3912174 95%</span></span>
-<span><span class="co">## 6 -2.314101 -2.364804 -2.261939  0.10598353 -0.2001360 0.3994558 95%</span></span></code></pre>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output_dataframes</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Longitude Latitude                       SiteName data_type_id     Age</span></span>
+<span><span class="co">#&gt; 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -734.75</span></span>
+<span><span class="co">#&gt; 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -680.00</span></span>
+<span><span class="co">#&gt; 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
+<span><span class="co">#&gt; 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -620.00</span></span>
+<span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -590.00</span></span>
+<span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -560.00</span></span>
+<span><span class="co">#&gt;        pred       upr       lwr   rate_pred    rate_upr  rate_lwr  CI</span></span>
+<span><span class="co">#&gt; 1 -2.317719 -2.382296 -2.254439 -0.03138696 -0.43907973 0.3882168 95%</span></span>
+<span><span class="co">#&gt; 2 -2.317006 -2.369916 -2.263571  0.05660551 -0.27455515 0.3971179 95%</span></span>
+<span><span class="co">#&gt; 3 -2.314612 -2.365096 -2.262685  0.10272534 -0.19097021 0.4073522 95%</span></span>
+<span><span class="co">#&gt; 4 -2.310857 -2.360175 -2.260202  0.14736182 -0.10646312 0.4183673 95%</span></span>
+<span><span class="co">#&gt; 5 -2.305785 -2.354447 -2.256702  0.19051497 -0.03064797 0.4274714 95%</span></span>
+<span><span class="co">#&gt; 6 -2.299441 -2.348114 -2.250764  0.23218477  0.03758869 0.4400649 95%</span></span></code></pre></div>
 <p>To examine the additional options in the <code>reslr</code> package,
 see the main vignette.</p>
 </div>
