@@ -27,7 +27,7 @@
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' reslr_load(data = data)}
 reslr_load <- function(data,
-                       prediction_grid_res = 30,
+                       prediction_grid_res = 50,
                        include_tide_gauge = FALSE,
                        include_linear_rate = FALSE,
                        list_preferred_TGs = NULL,
