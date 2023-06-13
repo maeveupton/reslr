@@ -1,7 +1,7 @@
 ## Resubmission
 This is resubmission where the vignettes were updated to reduce the run time. 
 The description title was updated to remove "An R package".
-The description was updated to include references to the models in the literature.
+I updated the description to include references to the models in the literature.
 
 ## Test environments
 * local OS X install, R 4.2.3
