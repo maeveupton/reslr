@@ -818,7 +818,7 @@ used:</p>
 <span><span class="co">#&gt; Graph information:</span></span>
 <span><span class="co">#&gt;    Observed stochastic nodes: 208</span></span>
 <span><span class="co">#&gt;    Unobserved stochastic nodes: 107</span></span>
-<span><span class="co">#&gt;    Total graph size: 997</span></span>
+<span><span class="co">#&gt;    Total graph size: 1003</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Initializing model</span></span></code></pre></div>
 <p>This command takes the input data and the user specifies the
@@ -846,9 +846,9 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
 <span><span class="co">#&gt;   variable    mean      sd     mad      q5     q95  rhat</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha    -<span style="color: #BB0000;">1.99</span>   0.017<span style="text-decoration: underline;">3</span>  0.016<span style="text-decoration: underline;">9</span>  -<span style="color: #BB0000;">2.02</span>   -<span style="color: #BB0000;">1.96</span>    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta      0.823  0.013<span style="text-decoration: underline;">0</span>  0.012<span style="text-decoration: underline;">9</span>   0.801   0.844   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_y   0.066<span style="text-decoration: underline;">6</span> 0.009<span style="text-decoration: underline;">56</span> 0.009<span style="text-decoration: underline;">24</span>  0.051<span style="text-decoration: underline;">4</span>  0.082<span style="text-decoration: underline;">8</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha    -<span style="color: #BB0000;">1.99</span>   0.016<span style="text-decoration: underline;">5</span>  0.016<span style="text-decoration: underline;">6</span>  -<span style="color: #BB0000;">2.02</span>   -<span style="color: #BB0000;">1.96</span>    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta      0.823  0.012<span style="text-decoration: underline;">5</span>  0.012<span style="text-decoration: underline;">4</span>   0.803   0.844   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> sigma_y   0.066<span style="text-decoration: underline;">6</span> 0.009<span style="text-decoration: underline;">49</span> 0.009<span style="text-decoration: underline;">26</span>  0.051<span style="text-decoration: underline;">2</span>  0.082<span style="text-decoration: underline;">3</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -888,20 +888,20 @@ following:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dataframes</span> <span class="op">&lt;-</span> <span class="va">res_eiv_slr_t</span><span class="op">$</span><span class="va">output_dataframes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output_dataframes</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Longitude Latitude                       SiteName data_type_id     Age</span></span>
-<span><span class="co">#&gt; 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -734.75</span></span>
-<span><span class="co">#&gt; 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
-<span><span class="co">#&gt; 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600.00</span></span>
-<span><span class="co">#&gt; 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550.00</span></span>
-<span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -500.00</span></span>
-<span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -450.00</span></span>
-<span><span class="co">#&gt;        pred       upr       lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.593735 -2.643522 -2.541831 95%</span></span>
-<span><span class="co">#&gt; 2 -2.524021 -2.571902 -2.474332 95%</span></span>
-<span><span class="co">#&gt; 3 -2.482892 -2.529450 -2.434458 95%</span></span>
-<span><span class="co">#&gt; 4 -2.441764 -2.487088 -2.394268 95%</span></span>
-<span><span class="co">#&gt; 5 -2.400635 -2.444907 -2.354477 95%</span></span>
-<span><span class="co">#&gt; 6 -2.359506 -2.402884 -2.314497 95%</span></span></code></pre></div>
+<span><span class="co">#&gt;   Longitude Latitude                       SiteName data_type_id  Age      pred</span></span>
+<span><span class="co">#&gt; 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -800 -2.647908</span></span>
+<span><span class="co">#&gt; 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -750 -2.606754</span></span>
+<span><span class="co">#&gt; 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -700 -2.565600</span></span>
+<span><span class="co">#&gt; 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650 -2.524446</span></span>
+<span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600 -2.483292</span></span>
+<span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550 -2.442138</span></span>
+<span><span class="co">#&gt;         upr       lwr  CI</span></span>
+<span><span class="co">#&gt; 1 -2.697713 -2.599225 95%</span></span>
+<span><span class="co">#&gt; 2 -2.655694 -2.559330 95%</span></span>
+<span><span class="co">#&gt; 3 -2.613549 -2.519440 95%</span></span>
+<span><span class="co">#&gt; 4 -2.571055 -2.479211 95%</span></span>
+<span><span class="co">#&gt; 5 -2.528515 -2.439079 95%</span></span>
+<span><span class="co">#&gt; 6 -2.486315 -2.399249 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="errors-in-variable-change-point-model-eiv_cp_t">Errors-in-Variable Change Point Model
@@ -989,12 +989,12 @@ user and is used to create the plots and is accessed by</li>
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:   SiteName [1]</span></span></span>
 <span><span class="co">#&gt;   Longitude Latitude SiteName                         data_type_id   Age</span></span>
 <span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">735.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">650</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">600</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">550</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">500</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">450</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">800</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">750</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">700</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">650</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">600</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">550</span></span></span></code></pre></div>
 <p><strong>Step 1a:</strong> A brief insight into the outputs of the
 <code>reslr_input</code> function can be obtained using:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -1040,7 +1040,7 @@ select the number of change points you require:</p>
 <span><span class="co">#&gt; Graph information:</span></span>
 <span><span class="co">#&gt;    Observed stochastic nodes: 208</span></span>
 <span><span class="co">#&gt;    Unobserved stochastic nodes: 109</span></span>
-<span><span class="co">#&gt;    Total graph size: 1637</span></span>
+<span><span class="co">#&gt;    Total graph size: 1651</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Initializing model</span></span></code></pre></div>
 <p>If the user is interested in running 2 change points use method:</p>
@@ -1071,13 +1071,13 @@ following:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_eiv_cp1_t</span><span class="op">)</span></span>
 <span><span class="co">#&gt; No convergence issues detected.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
-<span><span class="co">#&gt;   variable                 mean     sd    mad        q5     q95  rhat</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha                 -<span style="color: #BB0000;">1.01</span>   0.534  0.092<span style="text-decoration: underline;">3</span> -<span style="color: #BB0000;">1.84</span>     -<span style="color: #BB0000;">0.566</span>   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta[1]                0.679  0.099<span style="text-decoration: underline;">0</span> 0.029<span style="text-decoration: underline;">3</span>  0.494     0.764   1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> beta[2]                1.86   0.763  0.904   0.902     2.92    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Change Point in CE: <span style="text-decoration: underline;">1</span>322      0.649  0.090<span style="text-decoration: underline;">0</span>  0.310     1.84    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> sigma_y                0.015<span style="text-decoration: underline;">3</span> 0.013<span style="text-decoration: underline;">6</span> 0.010<span style="text-decoration: underline;">8</span>  0.000<span style="text-decoration: underline;">886</span>  0.043<span style="text-decoration: underline;">1</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt;   variable                 mean     sd    mad       q5     q95  rhat</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> alpha                 -<span style="color: #BB0000;">1.02</span>   0.580  0.089<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">2.02</span>    -<span style="color: #BB0000;">0.561</span>   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> beta[1]                0.663  0.132  0.027<span style="text-decoration: underline;">2</span>  0.388    0.765   1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> beta[2]                1.90   0.778  0.872   0.886    2.99    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Change Point in CE: <span style="text-decoration: underline;">1</span>298      0.707  0.087<span style="text-decoration: underline;">4</span>  0.078<span style="text-decoration: underline;">1</span>   1.84    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> sigma_y                0.015<span style="text-decoration: underline;">6</span> 0.014<span style="text-decoration: underline;">0</span> 0.010<span style="text-decoration: underline;">9</span>  0.001<span style="text-decoration: underline;">01</span>  0.043<span style="text-decoration: underline;">1</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -1115,20 +1115,20 @@ following:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dataframes</span> <span class="op">&lt;-</span> <span class="va">res_eiv_cp1_t</span><span class="op">$</span><span class="va">output_dataframes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output_dataframes</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Longitude Latitude                       SiteName data_type_id     Age</span></span>
-<span><span class="co">#&gt; 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -734.75</span></span>
-<span><span class="co">#&gt; 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
-<span><span class="co">#&gt; 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600.00</span></span>
-<span><span class="co">#&gt; 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550.00</span></span>
-<span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -500.00</span></span>
-<span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -450.00</span></span>
-<span><span class="co">#&gt;        pred       upr       lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.464326 -2.540247 -2.334971 95%</span></span>
-<span><span class="co">#&gt; 2 -2.406744 -2.475510 -2.294582 95%</span></span>
-<span><span class="co">#&gt; 3 -2.372772 -2.437273 -2.271575 95%</span></span>
-<span><span class="co">#&gt; 4 -2.338801 -2.398987 -2.246162 95%</span></span>
-<span><span class="co">#&gt; 5 -2.304829 -2.360817 -2.221534 95%</span></span>
-<span><span class="co">#&gt; 6 -2.270858 -2.322665 -2.197287 95%</span></span></code></pre></div>
+<span><span class="co">#&gt;   Longitude Latitude                       SiteName data_type_id  Age      pred</span></span>
+<span><span class="co">#&gt; 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -800 -2.502986</span></span>
+<span><span class="co">#&gt; 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -750 -2.469813</span></span>
+<span><span class="co">#&gt; 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -700 -2.436640</span></span>
+<span><span class="co">#&gt; 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650 -2.403468</span></span>
+<span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600 -2.370295</span></span>
+<span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550 -2.337122</span></span>
+<span><span class="co">#&gt;         upr       lwr  CI</span></span>
+<span><span class="co">#&gt; 1 -2.591969 -2.330802 95%</span></span>
+<span><span class="co">#&gt; 2 -2.553598 -2.313051 95%</span></span>
+<span><span class="co">#&gt; 3 -2.515001 -2.295051 95%</span></span>
+<span><span class="co">#&gt; 4 -2.476724 -2.278248 95%</span></span>
+<span><span class="co">#&gt; 5 -2.438465 -2.258449 95%</span></span>
+<span><span class="co">#&gt; 6 -2.400112 -2.238193 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="errors-in-variable-integrated-gaussian-process-model-eiv_igp_t">Errors-in-Variable Integrated Gaussian Process Model
@@ -1415,8 +1415,8 @@ following:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
 <span><span class="co">#&gt;   variable      mean      sd     mad       q5    q95  rhat</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;num&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;num&gt;</span> <span style="color: #949494; font-style: italic;">&lt;num&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta 2.06    0.661   0.541   1.30     3.23    1.00</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">15</span> 0.004<span style="text-decoration: underline;">65</span> 0.004<span style="text-decoration: underline;">52</span> 0.000<span style="text-decoration: underline;">461</span> 0.015<span style="text-decoration: underline;">0</span>  1.00</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> sigma_beta 2.07    0.648   0.549   1.29     3.25    1.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sigma_y    0.006<span style="text-decoration: underline;">34</span> 0.004<span style="text-decoration: underline;">86</span> 0.004<span style="text-decoration: underline;">72</span> 0.000<span style="text-decoration: underline;">494</span> 0.015<span style="text-decoration: underline;">8</span>  1.00</span></span></code></pre></div>
 <p>If the model run has the package will print: “No convergence issues
 detected”. If the package prints: “Convergence issues detected, a longer
 run is necessary”. The user is required to update the
@@ -1466,20 +1466,20 @@ following:</p>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output_dataframes</span> <span class="op">&lt;-</span> <span class="va">res_ni_spline_t</span><span class="op">$</span><span class="va">output_dataframes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">output_dataframes</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Longitude Latitude                       SiteName data_type_id     Age</span></span>
-<span><span class="co">#&gt; 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -734.75</span></span>
-<span><span class="co">#&gt; 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650.00</span></span>
-<span><span class="co">#&gt; 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600.00</span></span>
-<span><span class="co">#&gt; 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550.00</span></span>
-<span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -500.00</span></span>
-<span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -450.00</span></span>
-<span><span class="co">#&gt;        pred       upr       lwr   rate_pred    rate_upr  rate_lwr  CI</span></span>
-<span><span class="co">#&gt; 1 -2.317786 -2.381235 -2.251904 -0.03205442 -0.44377906 0.3817394 95%</span></span>
-<span><span class="co">#&gt; 2 -2.314736 -2.366248 -2.263262  0.10206189 -0.19426443 0.4026653 95%</span></span>
-<span><span class="co">#&gt; 3 -2.307776 -2.357497 -2.258543  0.17564378 -0.06463169 0.4188814 95%</span></span>
-<span><span class="co">#&gt; 4 -2.297240 -2.347179 -2.247546  0.24511228  0.05086144 0.4375425 95%</span></span>
-<span><span class="co">#&gt; 5 -2.283333 -2.334203 -2.232303  0.31046740  0.16091391 0.4598115 95%</span></span>
-<span><span class="co">#&gt; 6 -2.266261 -2.317108 -2.214576  0.37170913  0.25455777 0.4853307 95%</span></span></code></pre></div>
+<span><span class="co">#&gt;   Longitude Latitude                       SiteName data_type_id  Age      pred</span></span>
+<span><span class="co">#&gt; 1    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -800 -2.312647</span></span>
+<span><span class="co">#&gt; 2    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -750 -2.317467</span></span>
+<span><span class="co">#&gt; 3    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -700 -2.318116</span></span>
+<span><span class="co">#&gt; 4    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -650 -2.314798</span></span>
+<span><span class="co">#&gt; 5    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -600 -2.307716</span></span>
+<span><span class="co">#&gt; 6    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -550 -2.297077</span></span>
+<span><span class="co">#&gt;         upr       lwr   rate_pred    rate_upr  rate_lwr  CI</span></span>
+<span><span class="co">#&gt; 1 -2.397000 -2.226121 -0.13948825 -0.66999472 0.3772588 95%</span></span>
+<span><span class="co">#&gt; 2 -2.387775 -2.248059 -0.05401026 -0.50065011 0.3806995 95%</span></span>
+<span><span class="co">#&gt; 3 -2.376057 -2.258972  0.02737879 -0.34773880 0.3889068 95%</span></span>
+<span><span class="co">#&gt; 4 -2.365980 -2.261616  0.10467869 -0.20470028 0.3985239 95%</span></span>
+<span><span class="co">#&gt; 5 -2.358482 -2.256516  0.17788944 -0.07208774 0.4168279 95%</span></span>
+<span><span class="co">#&gt; 6 -2.346373 -2.246947  0.24701104  0.04915431 0.4353068 95%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="noisy-input-spline-in-space-time-ni_spline_st">Noisy input spline in space time
@@ -1560,12 +1560,12 @@ user and is used to create the plots and is accessed by</li>
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:   SiteName [1]</span></span></span>
 <span><span class="co">#&gt;   Longitude Latitude SiteName                         data_type_id   Age</span></span>
 <span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">735.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">650</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">600</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">550</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">500</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord  -<span style="color: #BB0000;">450</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">800</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">750</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">700</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">650</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">600</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     -<span style="color: #BB0000;">76.4</span>     35.0 <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> ProxyRecord   -<span style="color: #BB0000;">550</span></span></span></code></pre></div>
 <p><strong>Step 1a:</strong> A brief insight into the outputs of the
 <code>reslr_input</code> function can be obtained using:</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">

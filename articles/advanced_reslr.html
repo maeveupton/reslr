@@ -541,7 +541,7 @@ given by:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
 <span><span class="co">#&gt;   SiteName                         PI_width</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>   -<span style="color: #BB0000;">0.248</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>   -<span style="color: #BB0000;">0.247</span></span></span></code></pre></div>
 <p>The prediction intervals are created using posterior predictive
 simulations with the full error structure, i.e. <span class="math inline">\(\hat{y}_{ij} \sim N(\hat{f}_{ij},
 \sigma_{y_{ij}}^2 + \sigma_{{t}_{ij}}^2 + \sigma^2)\)</span> where <span class="math inline">\(\sigma_{y_{ij}}^2\)</span> is the observed
@@ -566,33 +566,33 @@ model fit and these values can be accessed by:</p>
 <code class="sourceCode R"><span><span class="co"># Overall</span></span>
 <span><span class="va">ME_MAE_RSME_overall</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_overall</span></span>
 <span><span class="va">ME_MAE_RSME_overall</span></span>
-<span><span class="co">#&gt;         RSME        MAE          ME</span></span>
-<span><span class="co">#&gt; 1 0.01079736 0.03370901 0.001058768</span></span>
+<span><span class="co">#&gt;          RSME        MAE           ME</span></span>
+<span><span class="co">#&gt; 1 0.004776987 0.03154359 0.0004684222</span></span>
 <span><span class="co"># By fold and site</span></span>
 <span><span class="va">ME_MAE_RSME_fold_site</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_fold_site</span></span>
 <span><span class="va">ME_MAE_RSME_fold_site</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   SiteName                         CV_fold_number      RSME    MAE         ME</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 1              0.000<span style="text-decoration: underline;">099</span>5 0.037<span style="text-decoration: underline;">4</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">016</span><span style="color: #BB0000;">8</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 2              0.044<span style="text-decoration: underline;">9</span>    0.027<span style="text-decoration: underline;">4</span> -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">70</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 3              0.063<span style="text-decoration: underline;">0</span>    0.036<span style="text-decoration: underline;">1</span>  0.010<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">#&gt;   SiteName                         CV_fold_number    RSME    MAE        ME</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 1              0.034<span style="text-decoration: underline;">3</span>  0.026<span style="text-decoration: underline;">2</span>  0.005<span style="text-decoration: underline;">79</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 2              0.031<span style="text-decoration: underline;">9</span>  0.033<span style="text-decoration: underline;">1</span> -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">46</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 3              0.005<span style="text-decoration: underline;">36</span> 0.035<span style="text-decoration: underline;">4</span>  0.000<span style="text-decoration: underline;">906</span></span></span>
 <span><span class="co"># By site</span></span>
 <span><span class="va">ME_MAE_RSME_site</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_site</span></span>
 <span><span class="va">ME_MAE_RSME_site</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
-<span><span class="co">#&gt;   SiteName                           RSME    MAE      ME</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 0.010<span style="text-decoration: underline;">8</span> 0.033<span style="text-decoration: underline;">7</span> 0.001<span style="text-decoration: underline;">06</span></span></span>
+<span><span class="co">#&gt;   SiteName                            RSME    MAE       ME</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 0.004<span style="text-decoration: underline;">78</span> 0.031<span style="text-decoration: underline;">5</span> 0.000<span style="text-decoration: underline;">468</span></span></span>
 <span><span class="co"># By fold</span></span>
 <span><span class="va">ME_MAE_RSME_fold</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_fold</span></span>
 <span><span class="va">ME_MAE_RSME_fold</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
-<span><span class="co">#&gt;   CV_fold_number      RSME    MAE         ME</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1              0.000<span style="text-decoration: underline;">099</span>5 0.037<span style="text-decoration: underline;">4</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">016</span><span style="color: #BB0000;">8</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2              0.044<span style="text-decoration: underline;">9</span>    0.027<span style="text-decoration: underline;">4</span> -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">70</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3              0.063<span style="text-decoration: underline;">0</span>    0.036<span style="text-decoration: underline;">1</span>  0.010<span style="text-decoration: underline;">6</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   CV_fold_number    RSME    MAE        ME</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1              0.034<span style="text-decoration: underline;">3</span>  0.026<span style="text-decoration: underline;">2</span>  0.005<span style="text-decoration: underline;">79</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2              0.031<span style="text-decoration: underline;">9</span>  0.033<span style="text-decoration: underline;">1</span> -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">46</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3              0.005<span style="text-decoration: underline;">36</span> 0.035<span style="text-decoration: underline;">4</span>  0.000<span style="text-decoration: underline;">906</span></span></span></code></pre></div>
 <p>For more information about the outputs to these cross validation
 tests for RSL data refer to Upton et al. 2023 paper.</p>
 </div>
