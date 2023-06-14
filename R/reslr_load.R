@@ -264,7 +264,9 @@ reslr_load <- function(data,
     dplyr::group_by(SiteName) %>%
     dplyr::slice_min(Age) %>%
     dplyr::reframe(
-      min_Age = ifelse(Age>0, Age - Age_err,Age + Age_err)
+      # Test
+      min_Age = Age
+      #min_Age = ifelse(Age>0, Age - Age_err,Age - Age_err)
     )
   data_age_boundary <- dplyr::left_join(data_age_boundary_max,
                                         data_age_boundary_min,
