@@ -46,6 +46,8 @@ reslr_load <- function(data,
     dplyr::mutate(Age_err = Age_err / 1000)
     # If minus signs for Long and Lat maybe an issue
 
+  # Checking input dataframe
+
 
   # Tidy Original data-------------------------------
   if (!("SiteName" %in% colnames(data))) {

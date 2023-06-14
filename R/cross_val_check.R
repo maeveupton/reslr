@@ -45,6 +45,14 @@ cross_val_check <- function(data,
   data <- data %>%
     dplyr::mutate(SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
 
+  # Checking the number of observations > n_folds
+  nrow_by_site <- data %>%
+    dplyr::group_by(SiteName) %>%
+    dplyr::reframe(nrow_site = dplyr::n())
+  if(any(nrow_by_site$nrow_site < n_fold) == TRUE){
+    stop("Not enough observations in each site for the number of folds required.")
+  }
+
   df_split_index <- kfold_fun(data$Age,
     k = n_fold,
     by = data$SiteName
@@ -56,6 +64,17 @@ cross_val_check <- function(data,
     if (model_type == "ni_gam_decomp") {
       # Segment your data by fold using the which() function
       CV_fold <- base::which(df_split_index == i, arr.ind = TRUE)
+      # Remove SiteName column as it causes errors in next step
+      data_update <- data %>% dplyr::select(!SiteName)
+      # Run reslr_load to get GIA rates
+      data_GIA_df <- reslr::reslr_load(data_update,
+                                prediction_grid_res = prediction_grid_res,
+                                include_linear_rate = TRUE
+      )
+      data <- data_GIA_df$data
+      # Remove SiteName column as it causes errors in next step
+      data <- data %>% dplyr::select(!SiteName)
+      # Test and training
       test_set <- data[CV_fold, ]
       training_set <- data[-CV_fold, ]
       # reslr_load
@@ -63,9 +82,9 @@ cross_val_check <- function(data,
         prediction_grid_res = prediction_grid_res,
         cross_val = TRUE,
         test_set = test_set,
-        include_linear_rate = TRUE,
-        include_tide_gauge = TRUE,
-        all_TG_1deg = TRUE
+        include_linear_rate = TRUE
+        #include_tide_gauge = TRUE,
+        #all_TG_1deg = TRUE
       )
 
       # reslr_mcmc
