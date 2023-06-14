@@ -88,7 +88,7 @@
                         <h4 data-toc-skip class="author">Maeve Upton,
 Andrew Parnell and Niamh Cahill</h4>
             
-            <h4 data-toc-skip class="date">2023-06-13</h4>
+            <h4 data-toc-skip class="date">2023-06-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maeveupton/reslr/blob/HEAD/vignettes/advanced_reslr.Rmd" class="external-link"><code>vignettes/advanced_reslr.Rmd</code></a></small>
       <div class="hidden name"><code>advanced_reslr.Rmd</code></div>
@@ -566,33 +566,33 @@ model fit and these values can be accessed by:</p>
 <code class="sourceCode R"><span><span class="co"># Overall</span></span>
 <span><span class="va">ME_MAE_RSME_overall</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_overall</span></span>
 <span><span class="va">ME_MAE_RSME_overall</span></span>
-<span><span class="co">#&gt;         RSME        MAE          ME</span></span>
-<span><span class="co">#&gt; 1 0.01702025 0.03246034 0.001668973</span></span>
+<span><span class="co">#&gt;          RSME        MAE            ME</span></span>
+<span><span class="co">#&gt; 1 0.005043758 0.03176193 -0.0004945812</span></span>
 <span><span class="co"># By fold and site</span></span>
 <span><span class="va">ME_MAE_RSME_fold_site</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_fold_site</span></span>
 <span><span class="va">ME_MAE_RSME_fold_site</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   SiteName                         CV_fold_number   RSME    MAE       ME</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 1              0.074<span style="text-decoration: underline;">6</span> 0.029<span style="text-decoration: underline;">7</span>  0.012<span style="text-decoration: underline;">6</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 2              0.064<span style="text-decoration: underline;">2</span> 0.036<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">0.011</span><span style="color: #BB0000; text-decoration: underline;">0</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 3              0.018<span style="text-decoration: underline;">0</span> 0.031<span style="text-decoration: underline;">6</span>  0.003<span style="text-decoration: underline;">04</span></span></span>
+<span><span class="co">#&gt;   SiteName                         CV_fold_number    RSME    MAE        ME</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 1              0.014<span style="text-decoration: underline;">4</span>  0.032<span style="text-decoration: underline;">9</span>  0.002<span style="text-decoration: underline;">43</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 2              0.004<span style="text-decoration: underline;">78</span> 0.031<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">821</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 3              0.018<span style="text-decoration: underline;">4</span>  0.030<span style="text-decoration: underline;">9</span> -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">10</span></span></span>
 <span><span class="co"># By site</span></span>
 <span><span class="va">ME_MAE_RSME_site</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_site</span></span>
 <span><span class="va">ME_MAE_RSME_site</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
-<span><span class="co">#&gt;   SiteName                           RSME    MAE      ME</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 0.017<span style="text-decoration: underline;">0</span> 0.032<span style="text-decoration: underline;">5</span> 0.001<span style="text-decoration: underline;">67</span></span></span>
+<span><span class="co">#&gt;   SiteName                            RSME    MAE        ME</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 0.005<span style="text-decoration: underline;">04</span> 0.031<span style="text-decoration: underline;">8</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">495</span></span></span>
 <span><span class="co"># By fold</span></span>
 <span><span class="va">ME_MAE_RSME_fold</span> <span class="op">&lt;-</span> <span class="va">cv</span><span class="op">$</span><span class="va">ME_MAE_RSME_fold</span></span>
 <span><span class="va">ME_MAE_RSME_fold</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
-<span><span class="co">#&gt;   CV_fold_number   RSME    MAE       ME</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1              0.074<span style="text-decoration: underline;">6</span> 0.029<span style="text-decoration: underline;">7</span>  0.012<span style="text-decoration: underline;">6</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2              0.064<span style="text-decoration: underline;">2</span> 0.036<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">0.011</span><span style="color: #BB0000; text-decoration: underline;">0</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3              0.018<span style="text-decoration: underline;">0</span> 0.031<span style="text-decoration: underline;">6</span>  0.003<span style="text-decoration: underline;">04</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   CV_fold_number    RSME    MAE        ME</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1              0.014<span style="text-decoration: underline;">4</span>  0.032<span style="text-decoration: underline;">9</span>  0.002<span style="text-decoration: underline;">43</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2              0.004<span style="text-decoration: underline;">78</span> 0.031<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">821</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3              0.018<span style="text-decoration: underline;">4</span>  0.030<span style="text-decoration: underline;">9</span> -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">10</span></span></span></code></pre></div>
 <p>For more information about the outputs to these cross validation
 tests for RSL data refer to Upton et al. 2023 paper.</p>
 </div>
