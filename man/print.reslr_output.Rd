@@ -19,7 +19,7 @@ This will be very high level printing that the user can use to obtain informatio
 In addition, the type of statistical model is printed.
 }
 \examples{
-\dontrun{
+\donttest{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 input_data <- reslr_load(data = data)
 jags_output <- reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")

@@ -54,7 +54,7 @@ A list containing the model comparison measures, e.g. Root Mean Square Error (RM
 Cross validation check for spline in time, spline in space time and GAM in order to select the most appropriate number of knots when creating basis functions.
 }
 \examples{
-\dontrun{
+\donttest{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 cross_val_check(data = data, model_type = "ni_spline_t",n_fold = 2)
 }

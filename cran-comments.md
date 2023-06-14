@@ -1,5 +1,5 @@
 ## Resubmission
-I updated the 'dontrun' to 'donttest' for examples that don't depend on missing additional software(i.e. JAGS refer to below error).
+I updated the 'dontrun' to 'donttest' for all examples. 
 I replace all cat with message when writing text to the console.
 The vignettes were updated to reduce the run time. 
 The description title was updated to remove "An R package".

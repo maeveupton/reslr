@@ -20,7 +20,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data <- NAACproxydata %>% dplyr::filter(Site == "Cedar Island")
 #' input_data <- reslr_load(data = data)
 #' reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")}

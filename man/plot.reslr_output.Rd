@@ -49,7 +49,7 @@ For the NI GAM decomposition, each individual component of the model is plotted.
 If tide gauges are used in the model, the user has the ability plot the output with or without this additional data source.
 }
 \examples{
-\dontrun{
+\donttest{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 x <- reslr_load(data = data)
 jags_output <- reslr_mcmc(x, model_type = "eiv_slr_t")

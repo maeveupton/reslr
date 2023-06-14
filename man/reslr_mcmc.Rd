@@ -52,7 +52,7 @@ In this function, a variety of statistical models can be run depending on the re
 The user chooses their 'model_type' and as a range of models to choose from.
 }
 \examples{
-\dontrun{
+\donttest{
 data <- NAACproxydata \%>\% dplyr::filter(Site == "Cedar Island")
 input_data <- reslr_load(data = data)
 reslr_mcmc(input_data = input_data, model_type = "eiv_slr_t")}
