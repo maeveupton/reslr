@@ -25,7 +25,6 @@ To install from CRAN
 
 ```{r}
 install.packages("reslr")
-devtools::install_github("maeveupton/reslr")
 ```
 
 
