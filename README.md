@@ -20,13 +20,24 @@ For a more detailed discussion on advanced options within the `reslr` package ex
 
 
 # Installing the reslr package
-To use the `reslr` package install it using the following method as the package is not yet on CRAN:
+
+To install from CRAN
+
+```{r}
+install.packages("reslr")
+devtools::install_github("maeveupton/reslr")
+```
+
+
+To install from Github
+
 ```{r}
 # install.packages("devtools")
 devtools::install_github("maeveupton/reslr")
 ```
 
 Next, load the package with
+
 ```{r}
 library(reslr)
 ```
