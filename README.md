@@ -41,3 +41,7 @@ Next, load the package with
 library(reslr)
 ```
 
+# Citation for the reslr package
+Check out our corresponding paper for the reslr package here:
+https://arxiv.org/abs/2306.10847
+
