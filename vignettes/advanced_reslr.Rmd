@@ -2,7 +2,7 @@
 title: "reslr: advanced"
 author: "Maeve Upton, Andrew Parnell and Niamh Cahill"
 date: "`r Sys.Date()`"
-output: 
+output:   
   rmarkdown::html_vignette:
        toc: true
 vignette: >

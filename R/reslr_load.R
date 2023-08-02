@@ -306,7 +306,8 @@ reslr_load <- function(data,
   if(cross_val == TRUE){
     # Test set
     test_set <- test_set %>%
-      dplyr::mutate(test_set = "test_set")
+      dplyr::mutate(test_set = "test_set",
+                    SiteName = as.factor(paste0(Site, ",", "\n", " ", Region)))
     # Joining my test set with the data_grid to do a pred vs true plot
     data_grid <- rbind(data_grid,test_set) %>%  dplyr::arrange(Age)
     data_grid <- data_grid %>%
