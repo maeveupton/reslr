@@ -473,7 +473,8 @@ clean_tidal_gauge_data <- function(data,
   mat.distance_m <- as.matrix(mat.distance)
   #--finding row mins & corresponding tidal gauge--
   rownames(mat.distance) <- SL_proxy_unique$SiteName
-  colnames(mat.distance) <- SL_tide_unique$SiteName
+  # LongLat better than names as there were duplicate names
+  colnames(mat.distance) <- SL_tide_unique$LongLat#SL_tide_unique$SiteName
   #--finding row mins & corresponding tidal gauge--
   dist_TG_proxy <- t(sapply(seq(nrow(mat.distance)), function(z) {
     js <- order((mat.distance[z, ]))[1:5]
@@ -512,12 +513,23 @@ clean_tidal_gauge_data <- function(data,
   obs_sites <- SL_tide_unique %>%
     dplyr::filter(SiteName %in% dist_TG_proxy_long_2$nearest_TG) %>%
     dplyr::select(n_obs_by_site)
-  dist_TG_proxy_df_new <- data.frame(
+
+  dist_TG_proxy_df_no_sitename <- data.frame(
     nearest_proxy_site = dist_TG_proxy_long_1$nearest_proxy_site,
     nearest_TG = dist_TG_proxy_long_2$nearest_TG,
     minimum_dist = as.numeric(dist_TG_proxy_long_1$minimum_distance)
-  )
+  ) %>%
+    dplyr::rename(LongLat = nearest_TG)
 
+  # Matching the long and lat with name of TG
+  long_lat_name_match <- SL_tide_unique %>%
+    dplyr::select(SiteName,LongLat) %>%
+    dplyr::filter(LongLat %in% dist_TG_proxy_df_no_sitename$LongLat)
+
+  dist_TG_proxy_df_new <- dplyr::left_join(dist_TG_proxy_df_no_sitename,
+                                    long_lat_name_match, by = "LongLat",
+                                    relationship = "many-to-many") %>%
+    rename(nearest_TG = SiteName)
 
   # Criteria 1: User provides a list of TGs------------------------
   if (is.null(list_preferred_TGs) == FALSE) {
@@ -618,7 +630,7 @@ clean_tidal_gauge_data <- function(data,
   }
 
   # Criteria 4: All tide gauges within 1 degree away from proxy site & the preferred tide gauges listed by user
-  if (TG_minimum_dist_proxy == TRUE & is.null(list_preferred_TGs) == FALSE) {
+  if (all_TG_1deg == TRUE & is.null(list_preferred_TGs) == FALSE) {
     # Check if TG exists in the list
     check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
     if (check_TG == FALSE) {
@@ -661,7 +673,7 @@ clean_tidal_gauge_data <- function(data,
       )
   }
   # Criteria 5: Closest tide gauges to the proxy site & the preferred tide gauges listed by user
-  if (all_TG_1deg == TRUE & is.null(list_preferred_TGs) == FALSE) {
+  if (TG_minimum_dist_proxy == TRUE & is.null(list_preferred_TGs) == FALSE) {
     # Check if TG exists in the list
     check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
     if (check_TG == FALSE) {

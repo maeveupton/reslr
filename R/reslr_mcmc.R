@@ -12,9 +12,9 @@
 #' @param igp_smooth This setting is focused on the Errors in Variables Integrated Gaussian Process model. It informs the prior for the smoothness (correlation) parameter if model = "igp" is chosen. Choose a value between 0 and 1. Closer to 1 will increase smoothness.
 #' @param n_cp This setting is focused on the Errors in Variables Change Point model. The user can select the number of change points 1,2 or 3.
 #' @param CI Size of the credible interval required by the user. The default is 0.95 corresponding to 95%.
-#' @param spline_nseg This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions.
-#' @param spline_nseg_t This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
-#' @param spline_nseg_st This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.
+#' @param spline_nseg This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions. See Advanced vignette for more details.
+#' @param spline_nseg_t This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions. See Advanced vignette for more details.
+#' @param spline_nseg_st This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions. See Advanced vignette for more details.
 
 #' @return A list containing the input data, the JAGS output and output dataframes used for final plots.
 #' @export

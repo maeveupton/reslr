@@ -256,9 +256,11 @@ reslr_load <- function(data,
   )
   data_age_boundary_max <- data %>%
     dplyr::group_by(SiteName) %>%
-    dplyr::slice_max(Age) %>%
+    #dplyr::slice_max(Age) %>%
+    dplyr::slice_max(Age,with_ties = FALSE) %>%
     dplyr::reframe(
-      max_Age = Age + Age_err
+      #max_Age = Age + Age_err
+      max_Age = round(Age + Age_err, digits = 3)
     )
   data_age_boundary_min <- data %>%
     dplyr::group_by(SiteName) %>%
