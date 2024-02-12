@@ -281,7 +281,8 @@ res_ni_sp_t <-
              model_type = "ni_spline_t",
              spline_nseg = NULL)
 ```
-By updating the `spline_nseg` function, the number of knots we change. Note the minimum value for this setting is 2. The default for this setting is `NULL` as we use a rule of thumb calculation to identify the number of knots based on the range of observations.
+The `spline_nseg` parameter determines the number of segments used to construct the spline. Increasing `spline_nseg` results in a finer partitioning of the predictor variable's range, leading to more knots being placed along this range. This finer granularity allows for a more detailed approximation of the underlying relationship between the predictor and the response variable.  It's worth noting that the default value for `spline_nseg` is 2, and the minimum value is NULL, prompting an automatic calculation of the number of knots based on observation range. 
+
 Similarly, for the spline in space time. The number of knots is updated using:
 ```{r, eval = FALSE}
 res_ni_sp_t <- 

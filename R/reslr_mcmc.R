@@ -1,6 +1,6 @@
 #' Run a \code{reslr_input} object through the main reslr Markov chain Monte Carlo (MCMC) function using a chosen statistical model
 #'
-#' In this function, a variety of statistical models can be run depending on the requirements of the user. All models are written within a Bayesian framework and use JAGS (Just Another Gibbs Sampler) to calculate Markov Chain Monte Carlo (MCMC) simulation to obtain estimates of unknown parameters. The user has the ability to alter the number of iterations, the number of burnin, the number of chains and the thinning. These options relate to the amount of MCMC simulations required and should be reviewed by the user to ensure model convergence is achieved without excessively long run times.
+#' In this function, a variety of statistical models can be run depending on the requirements of the user (see reslr vignette for extension list of options). All models are written within a Bayesian framework and use JAGS (Just Another Gibbs Sampler) to calculate Markov Chain Monte Carlo (MCMC) simulation to obtain estimates of unknown parameters. The user has the ability to alter the number of iterations, the number of burnin, the number of chains and the thinning. These options relate to the amount of MCMC simulations required and should be reviewed by the user to ensure model convergence is achieved without excessively long run times.
 #' The user chooses their 'model_type' and as a range of models to choose from.
 #'
 #' @param input_data Input data from the \code{reslr_load} function

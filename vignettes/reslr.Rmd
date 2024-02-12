@@ -39,16 +39,24 @@ The `reslr` package is specifically developed for Bayesian modeling of relative 
 
 There are a number of modelling options available to the user:
 
-| Statistical Model | Model Information | `model_type` code |
+| Statistical Model | Model Complexity and Information | `model_type` code |
 | ---- | ------- | -- |
 | Errors in variables simple linear regression | A straight line of best fit taking account of any age and measurement errors in the RSL values using the method of Cahill et al (2015) | **"eiv_slr_t"** |
 | Errors in variables change point model | An extension of the linear regression modelling process. It uses piece-wise linear sections and estimates where/when trend changes occur in the data (Cahill et al. 2015). | **"eiv_cp_t"** |
 | Errors in variables integrated Gaussian Process | A non linear fit that utilities a Gaussian process prior on the rate of sea-level change that is then integrated (Cahill et al. 2015). | **"eiv_igp_t"** |
-| Noisy Input spline in time | A non-linear fit using regression splines using the method of Upton et al (2023). | **"ni_spline_t"** |
+| Noisy Input spline in time | High: A non-linear fit using regression splines using the method of Upton et al (2023). | **"ni_spline_t"** |
 | Noisy Input spline in space and time | A non-linear fit for a set of sites across a region using the method of Upton et al (2023). | **"ni_spline_st"**|
 | Noisy Input Generalised Additive model for the decomposition of the RSL signal | A non-linear fit for a set of sites across a region and provides a decomposition of the signal into regional, local-linear (commonly GIA) and local non-linear components. Again this full model is as described in Upton et al (2023). | **"ni_gam_decomp"** |
 
-For all of the above models the user is able to quantify and visualise changes of RSL and rates of change with associated uncertainties. Indeed a full posterior distribution ensemble of values is available in the output of the functions. For the decomposed full model, **"ni_gam_decomp"**, the user is able to access the posterior probability distributions of the individual components. 
+
+As presented in this table, users can choose from seven statistical models with varying complexities. The simplest is the errors-in-variables simple linear regression, suitable for examining linear trends in sea level data but limited to linear trends and a single location. The errors-in-variables change point model requires users to specify 1, 2, or 3 change points, making it effective for identifying abrupt changes and estimating change rates but limited to a few change points and a single location.
+
+Moving to higher complexity, the errors-in-variables integrated Gaussian Process offers advantages over previous models. It is flexible in time, providing sea level trends and associated rates of change, though confined to a single location with long computational run times. For improved computational efficiency, the noisy input spline in time maintains advantages of the errors-in-variables integrated Gaussian process but is restricted to a single location.
+
+To explore multiple locations in time and space, the noisy input spline in space and time captures sea level trends and rates for many locations simultaneously. The final approach, the noisy input generalised additive model for decomposing the RSL signal. Users need to provide additional information on the physical processes driving RSL changes in space and time, offering insights into these underlying mechanisms.
+
+For all of the above models the user is able to quantify and visualise changes of RSL and rates of change with associated uncertainties. Indeed a full posterior distribution ensemble of values is available in the output of the functions. For the decomposed full model, **"ni_gam_decomp"**, the user is able to access the posterior probability distributions of the individual components.
+
 
 # Installation of the `reslr` package
 
