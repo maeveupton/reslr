@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">reslr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -149,10 +149,517 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">NAACproxydata</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Site</span> <span class="op">==</span> <span class="st">"Cedar Island"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">cross_val_check</span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, model_type <span class="op">=</span> <span class="st">"ni_spline_t"</span>,n_fold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> module glm loaded</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 915</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 5494</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> No convergence issues detected. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 915</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 5528</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> No convergence issues detected. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ME_MAE_RSME_fold_site</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   SiteName                         CV_fold_number   RSME    MAE       ME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 1              0.050<span style="text-decoration: underline;">6</span> 0.031<span style="text-decoration: underline;">9</span>  0.007<span style="text-decoration: underline;">02</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 2              0.052<span style="text-decoration: underline;">3</span> 0.034<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">25</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ME_MAE_RSME_site</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   SiteName                            RSME    MAE        ME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span> 0.001<span style="text-decoration: underline;">18</span> 0.033<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">0.000</span><span style="color: #BB0000; text-decoration: underline;">115</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ME_MAE_RSME_overall</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          RSME        MAE            ME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.001177013 0.03315785 -0.0001154156</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ME_MAE_RSME_fold</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   CV_fold_number   RSME    MAE       ME</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1              0.050<span style="text-decoration: underline;">6</span> 0.031<span style="text-decoration: underline;">9</span>  0.007<span style="text-decoration: underline;">02</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2              0.052<span style="text-decoration: underline;">3</span> 0.034<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">25</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $true_pred_plot</span>
+<span class="r-plt img"><img src="cross_val_check-1.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $CV_model_df</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Longitude Latitude                       SiteName data_type_id  Age</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -211</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord   46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord   73</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  605</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  745</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  825</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  883</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1038</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1322</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1340</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1543</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1570</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1669</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1725</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1885</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1918</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1937</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1951</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1979</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1996</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -525</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord -270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  -50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord   15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  346</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  381</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  434</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  568</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  659</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  725</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  763</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  860</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord  983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1267</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1408</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1436</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1460</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1490</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1525</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1736</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1874</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1923</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99     -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1934</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 1988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104    -76.38   34.971 Cedar Island,\n North Carolina  ProxyRecord 2005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     true_RSL Age_err RSL_err CV_fold test_set NI_var_grid_term   pred_RSL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      -2.36   65.25    0.06       1 test_set     0.0002664112 -2.2856579</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      -2.28   47.75    0.06       1 test_set     0.0002123298 -2.2963784</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      -2.16   40.25    0.06       1 test_set     0.0013410751 -2.1419665</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      -2.14   46.00    0.06       1 test_set     0.0014009482 -2.1196809</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      -2.12   44.00    0.06       1 test_set     0.0014472592 -2.1002065</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      -2.10   42.50    0.06       1 test_set     0.0014900571 -2.0800558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      -1.98   33.00    0.06       1 test_set     0.0016536074 -1.9687642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      -1.94   35.50    0.06       1 test_set     0.0016724261 -1.9486248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      -1.86   55.50    0.06       1 test_set     0.0017125393 -1.8876939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     -1.82   74.50    0.06       1 test_set     0.0017322396 -1.8286768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     -1.66   64.75    0.06       1 test_set     0.0017597641 -1.6103789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     -1.54   18.50    0.06       1 test_set     0.0017543568 -1.5318847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     -1.44   62.25    0.06       1 test_set     0.0017542610 -1.5310943</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14     -1.50   15.25    0.06       1 test_set     0.0017523963 -1.5168782</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15     -1.42   62.25    0.06       1 test_set     0.0017521726 -1.5153001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16     -1.46   36.75    0.06       1 test_set     0.0017459687 -1.4783074</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17     -1.34   60.75    0.06       1 test_set     0.0017327274 -1.4212917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18     -1.35   45.00    0.06       1 test_set     0.0017150994 -1.3649745</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19     -1.31   65.50    0.06       1 test_set     0.0017131786 -1.3596177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     -1.29   65.75    0.06       1 test_set     0.0016957113 -1.3155662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21     -1.31   49.00    0.06       1 test_set     0.0016917517 -1.3065316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22     -1.24   61.00    0.06       1 test_set     0.0016354430 -1.2013365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23     -1.21   56.75    0.06       1 test_set     0.0016266946 -1.1877445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24     -1.19   53.75    0.06       1 test_set     0.0016214939 -1.1799212</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25     -1.16   45.50    0.06       1 test_set     0.0016093036 -1.1622697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26     -1.14   38.75    0.06       1 test_set     0.0015983909 -1.1427042</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27     -1.11   36.50    0.06       1 test_set     0.0015937657 -1.1253632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28     -1.09   36.50    0.06       1 test_set     0.0015932688 -1.1163731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29     -1.06   36.00    0.06       1 test_set     0.0015948911 -1.1032454</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30     -0.97   42.00    0.06       1 test_set     0.0016663466 -1.0212158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31     -1.04   17.75    0.06       1 test_set     0.0016978550 -1.0015953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32     -0.94   39.75    0.06       1 test_set     0.0017219895 -0.9882882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33     -0.79   25.25    0.06       1 test_set     0.0021674702 -0.8186421</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34     -0.76   24.25    0.06       1 test_set     0.0022507094 -0.7923977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35     -0.73   23.50    0.06       1 test_set     0.0023600946 -0.7588191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36     -0.69   29.00    0.06       1 test_set     0.0025077173 -0.7146054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37     -0.66   30.50    0.06       1 test_set     0.0026041047 -0.6861860</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38     -0.64   26.25    0.06       1 test_set     0.0027177911 -0.6529552</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39     -0.62   24.75    0.06       1 test_set     0.0028375344 -0.6181641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40     -0.58   19.50    0.06       1 test_set     0.0030332190 -0.5615060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41     -0.48   14.00    0.06       1 test_set     0.0035216418 -0.4194954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42     -0.44   10.25    0.06       1 test_set     0.0036379752 -0.3853253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43     -0.42    6.75    0.06       1 test_set     0.0037116985 -0.3635775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44     -0.39    5.25    0.06       1 test_set     0.0037809096 -0.3430901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45     -0.38    5.75    0.06       1 test_set     0.0037983863 -0.3379056</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46     -0.36    7.00    0.06       1 test_set     0.0038276684 -0.3292085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47     -0.28    8.00    0.06       1 test_set     0.0039407022 -0.2955112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48     -0.23    7.75    0.06       1 test_set     0.0040257749 -0.2700135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49     -0.22    7.00    0.06       1 test_set     0.0040626981 -0.2589094</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50     -0.21    5.50    0.06       1 test_set     0.0040998995 -0.2476983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51     -0.18    5.75    0.06       1 test_set     0.0042004629 -0.2172721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52     -0.14    2.00    0.06       1 test_set     0.0043094785 -0.1840864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53     -2.32   36.25    0.06       2 test_set     0.0001060044 -2.3350919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54     -2.24   65.00    0.06       2 test_set     0.0006067928 -2.3152639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55     -2.20   35.00    0.06       2 test_set     0.0011009929 -2.2336263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56     -2.18   26.25    0.06       2 test_set     0.0012273805 -2.1966163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57     -2.06   41.00    0.06       2 test_set     0.0015301008 -2.0399566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58     -2.02   27.50    0.06       2 test_set     0.0015782915 -1.9881719</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59     -1.90   37.25    0.06       2 test_set     0.0016129198 -1.9186147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60     -1.79   78.50    0.06       2 test_set     0.0016216551 -1.7714480</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61     -1.77   79.75    0.06       2 test_set     0.0016205838 -1.7434129</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62     -1.75   79.50    0.06       2 test_set     0.0016187528 -1.7154385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63     -1.73   78.50    0.06       2 test_set     0.0016160743 -1.6867202</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64     -1.70   75.25    0.06       2 test_set     0.0016104858 -1.6434205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65     -1.62   32.25    0.06       2 test_set     0.0015881221 -1.5353054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66     -1.47   61.00    0.06       2 test_set     0.0015872732 -1.5321147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67     -1.58   26.25    0.06       2 test_set     0.0015842190 -1.5209661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68     -1.39   60.25    0.06       2 test_set     0.0015662067 -1.4633520</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69     -1.42   41.25    0.06       2 test_set     0.0015469071 -1.4120982</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70     -1.39   43.75    0.06       2 test_set     0.0015344965 -1.3829922</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71     -1.37   44.75    0.06       2 test_set     0.0015254583 -1.3632613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72     -1.33   44.75    0.06       2 test_set     0.0014985139 -1.3101989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73     -1.28   51.50    0.06       2 test_set     0.0014637287 -1.2512633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74     -1.26   62.25    0.06       2 test_set     0.0014439944 -1.2214385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75     -1.24   50.50    0.06       2 test_set     0.0014346861 -1.2081215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76     -1.20   40.25    0.06       2 test_set     0.0013940388 -1.1533123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77     -1.16   43.75    0.06       2 test_set     0.0013804213 -1.1047092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78     -1.12   39.50    0.06       2 test_set     0.0013966657 -1.0621668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79     -0.99   44.25    0.06       2 test_set     0.0014261291 -1.0296994</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80     -1.08   19.75    0.06       2 test_set     0.0014427770 -1.0159208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81     -1.00   20.25    0.06       2 test_set     0.0015172834 -0.9682118</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82     -0.91   31.00    0.06       2 test_set     0.0015676798 -0.9420757</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83     -0.96   85.75    0.06       2 test_set     0.0015983357 -0.9274635</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84     -0.88   30.50    0.06       2 test_set     0.0016477428 -0.9053205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85     -0.86   27.25    0.06       2 test_set     0.0016941032 -0.8857094</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86     -0.92  120.50    0.06       2 test_set     0.0017103796 -0.8790335</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87     -0.84   25.50    0.06       2 test_set     0.0017572609 -0.8602954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88     -0.81   26.00    0.06       2 test_set     0.0018382574 -0.8292590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89     -0.74   23.25    0.06       2 test_set     0.0020095724 -0.7671462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90     -0.71   26.00    0.06       2 test_set     0.0021161418 -0.7299430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91     -0.68   29.50    0.06       2 test_set     0.0022015363 -0.7005977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92     -0.61   23.75    0.06       2 test_set     0.0024933921 -0.6018361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93     -0.56   16.50    0.06       2 test_set     0.0027070535 -0.5299169</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94     -0.52   14.00    0.06       2 test_set     0.0029216025 -0.4573484</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95     -0.51   14.75    0.06       2 test_set     0.0029484284 -0.4482317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96     -0.46   12.75    0.06       2 test_set     0.0030766759 -0.4044806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97     -0.34    7.50    0.06       2 test_set     0.0033132366 -0.3229465</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98     -0.32    8.00    0.06       2 test_set     0.0033332291 -0.3160010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99     -0.31    8.25    0.06       2 test_set     0.0033482910 -0.3107625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100    -0.29    8.00    0.06       2 test_set     0.0033684635 -0.3037384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101    -0.26    7.75    0.06       2 test_set     0.0034040129 -0.2913373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102    -0.19    5.50    0.06       2 test_set     0.0035758458 -0.2309715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103    -0.16    5.00    0.06       2 test_set     0.0036508596 -0.2043914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104    -0.12    2.25    0.06       2 test_set     0.0037428564 -0.1713197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            upr        lwr y_post_pred     upr_PI      lwr_PI  CI CV_fold_number</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   -2.4283142 -2.1483019  -2.2797988 -2.4785261 -2.09245947 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   -2.3808364 -2.2214143  -2.2977979 -2.4330108 -2.16019222 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   -2.1979738 -2.0789908  -2.1418220 -2.2650360 -2.01448402 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   -2.1709416 -2.0588144  -2.1215579 -2.2438031 -1.99627975 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   -2.1491010 -2.0431262  -2.1055287 -2.2426949 -1.98232398 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   -2.1271938 -2.0258634  -2.0842733 -2.2102602 -1.96121787 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   -2.0086463 -1.9244124  -1.9695807 -2.1009932 -1.84584266 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   -1.9880824 -1.9068777  -1.9416948 -2.0672737 -1.82186262 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   -1.9281550 -1.8485800  -1.8897181 -2.0089237 -1.76896937 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  -1.8699324 -1.7889046  -1.8300531 -1.9556005 -1.72140306 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  -1.6452776 -1.5742759  -1.6087471 -1.7476377 -1.48694045 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  -1.5614121 -1.4986325  -1.5292745 -1.6606959 -1.38569755 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  -1.5605416 -1.4978680  -1.5295132 -1.6371530 -1.40979360 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  -1.5448708 -1.4841517  -1.5170571 -1.6382993 -1.38808547 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  -1.5431297 -1.4826349  -1.5137607 -1.6427838 -1.40592995 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  -1.5069640 -1.4476130  -1.4846194 -1.6161565 -1.36969039 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  -1.4506311 -1.3885051  -1.4192808 -1.5239216 -1.29324706 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  -1.3953825 -1.3306756  -1.3626960 -1.4813565 -1.24365015 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  -1.3902682 -1.3251989  -1.3583724 -1.4806696 -1.23823848 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  -1.3479906 -1.2790238  -1.3159777 -1.4510487 -1.19161758 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  -1.3392626 -1.2692666  -1.3103072 -1.4379024 -1.17369975 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  -1.2358152 -1.1622869  -1.1975018 -1.3070852 -1.06874717 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  -1.2214917 -1.1490354  -1.1894340 -1.3151427 -1.05971432 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  -1.2141266 -1.1413816  -1.1785389 -1.2841374 -1.06188182 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  -1.1966003 -1.1245205  -1.1563330 -1.2894864 -1.03141798 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  -1.1770134 -1.1059402  -1.1314358 -1.2699267 -0.99068363 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  -1.1585522 -1.0891613  -1.1255640 -1.2373866 -1.00531134 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  -1.1496497 -1.0807595  -1.1139321 -1.2355108 -0.99509253 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  -1.1365486 -1.0685735  -1.1062343 -1.2342632 -0.97957096 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  -1.0521554 -0.9914664  -1.0201060 -1.1350788 -0.89994841 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  -1.0323778 -0.9719655  -1.0052137 -1.1287264 -0.87197255 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  -1.0187094 -0.9585761  -0.9869708 -1.1065937 -0.86854746 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  -0.8524938 -0.7822651  -0.8179860 -0.9372616 -0.69204953 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  -0.8270588 -0.7554579  -0.7878969 -0.9204092 -0.65890214 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  -0.7947574 -0.7228214  -0.7565458 -0.8754626 -0.63171850 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  -0.7508267 -0.6761712  -0.7125473 -0.8252930 -0.58975256 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37  -0.7218433 -0.6498383  -0.6849612 -0.8121796 -0.55997037 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38  -0.6881620 -0.6193923  -0.6534168 -0.7842210 -0.52553337 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39  -0.6522496 -0.5859020  -0.6148834 -0.7328592 -0.50417689 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40  -0.5923569 -0.5308249  -0.5625586 -0.6814137 -0.43578305 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41  -0.4524356 -0.3889268  -0.4162769 -0.5546928 -0.28994867 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42  -0.4186784 -0.3543505  -0.3841807 -0.5085813 -0.25592995 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43  -0.3971078 -0.3309381  -0.3670550 -0.4935481 -0.24529200 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44  -0.3775717 -0.3102056  -0.3375489 -0.4554580 -0.20576025 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45  -0.3724837 -0.3053847  -0.3407897 -0.4547090 -0.22060697 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46  -0.3639253 -0.2966261  -0.3260779 -0.4513503 -0.20102195 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47  -0.3337779 -0.2589461  -0.2945871 -0.4249321 -0.17808429 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48  -0.3099844 -0.2294585  -0.2759450 -0.3969794 -0.15036593 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49  -0.2992599 -0.2177598  -0.2600771 -0.3797516 -0.14055266 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50  -0.2887745 -0.2065306  -0.2466578 -0.3697795 -0.13129445 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51  -0.2618381 -0.1699548  -0.2172641 -0.3371447 -0.08729375 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52  -0.2331903 -0.1292661  -0.1846488 -0.3155831 -0.06702231 95%              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53  -2.4155362 -2.2583273  -2.3397026 -2.4754324 -2.20054972 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54  -2.3881829 -2.2408044  -2.3154661 -2.4679459 -2.17428611 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55  -2.3060943 -2.1594188  -2.2294061 -2.3596620 -2.10381176 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56  -2.2570162 -2.1300915  -2.1938377 -2.3330153 -2.04573336 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57  -2.0807893 -2.0002950  -2.0423850 -2.1643610 -1.91472309 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58  -2.0294058 -1.9491720  -1.9894045 -2.1199860 -1.85551822 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59  -1.9624685 -1.8772980  -1.9221931 -2.0547214 -1.81175594 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60  -1.8189211 -1.7238507  -1.7715651 -1.8908369 -1.63031560 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61  -1.7918753 -1.6945765  -1.7446515 -1.8812123 -1.59951663 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62  -1.7637136 -1.6673340  -1.7170069 -1.8333751 -1.60011649 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63  -1.7330981 -1.6397351  -1.6866036 -1.8059810 -1.56358298 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64  -1.6883020 -1.6011910  -1.6453554 -1.7718637 -1.52258545 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65  -1.5733474 -1.4967342  -1.5373426 -1.6541597 -1.41950514 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66  -1.5699001 -1.4938791  -1.5317597 -1.6475531 -1.40739548 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67  -1.5576385 -1.4832317  -1.5207636 -1.6413945 -1.38975456 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68  -1.4980075 -1.4298398  -1.4633125 -1.5779218 -1.35320408 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69  -1.4429051 -1.3821791  -1.4085396 -1.5230137 -1.28511990 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70  -1.4131381 -1.3535800  -1.3863371 -1.5215584 -1.27148295 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71  -1.3931761 -1.3352593  -1.3644309 -1.4863305 -1.24419419 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72  -1.3394967 -1.2806449  -1.3100290 -1.4276475 -1.18419562 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73  -1.2816146 -1.2209335  -1.2546802 -1.3720127 -1.13494631 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74  -1.2513853 -1.1900675  -1.2241846 -1.3576761 -1.10736504 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75  -1.2376372 -1.1771222  -1.2058431 -1.3210026 -1.08288075 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76  -1.1824532 -1.1236450  -1.1578512 -1.2828018 -1.03328579 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77  -1.1330234 -1.0756336  -1.1073691 -1.2205459 -0.99327797 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78  -1.0896545 -1.0353369  -1.0689560 -1.1978701 -0.96017385 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79  -1.0572465 -1.0008205  -1.0332706 -1.1519408 -0.89683658 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80  -1.0438112 -0.9869930  -1.0131130 -1.1269478 -0.88426872 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81  -0.9970434 -0.9382332  -0.9709189 -1.0888438 -0.85228891 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82  -0.9722449 -0.9104462  -0.9396673 -1.0550348 -0.82505214 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83  -0.9580163 -0.8958625  -0.9280362 -1.0568191 -0.80388182 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84  -0.9362889 -0.8745002  -0.9021218 -1.0274464 -0.76298915 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85  -0.9189656 -0.8535709  -0.8854645 -1.0132677 -0.76151822 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86  -0.9121445 -0.8464642  -0.8718560 -0.9780185 -0.74750848 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87  -0.8932290 -0.8275372  -0.8646013 -0.9959441 -0.73259313 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88  -0.8636901 -0.7949169  -0.8366272 -0.9719163 -0.71446934 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89  -0.8037334 -0.7313926  -0.7655351 -0.8814098 -0.64495190 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90  -0.7664926 -0.6938545  -0.7277391 -0.8510811 -0.59908621 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91  -0.7370883 -0.6644054  -0.7032804 -0.8220619 -0.57276921 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92  -0.6356413 -0.5678724  -0.6068494 -0.7218539 -0.47536150 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93  -0.5599281 -0.4994988  -0.5328693 -0.6652010 -0.39319381 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94  -0.4851453 -0.4302439  -0.4600436 -0.5818036 -0.34801785 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95  -0.4760349 -0.4211628  -0.4496785 -0.5727492 -0.31782544 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96  -0.4333463 -0.3780571  -0.4066025 -0.5315724 -0.27348945 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97  -0.3560061 -0.2930784  -0.3174384 -0.4402447 -0.17955722 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98  -0.3494827 -0.2854363  -0.3202292 -0.4404928 -0.19744415 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99  -0.3445630 -0.2800004  -0.3116684 -0.4437994 -0.19177961 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100 -0.3379667 -0.2726283  -0.3020679 -0.4143194 -0.17884990 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101 -0.3289917 -0.2591347  -0.2906891 -0.4110876 -0.17196820 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102 -0.2767580 -0.1909829  -0.2364904 -0.3470988 -0.11711007 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103 -0.2531401 -0.1585742  -0.2036956 -0.3358682 -0.08122514 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104 -0.2260159 -0.1177119  -0.1720438 -0.2950304 -0.05462769 95%              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     obs_in_PI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99       TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100      TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101      TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102      TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103      TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104      TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $total_coverage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $prediction_interval_size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   SiteName                         PI_width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>   -<span style="color: #BB0000;">0.250</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $coverage_by_site</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   SiteName                         coverage_by_site</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">"</span>Cedar Island,\n North Carolina<span style="color: #949494;">"</span>                1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>

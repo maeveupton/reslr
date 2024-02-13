@@ -836,7 +836,7 @@ Also, we recommend using tide gauge data averaged over a decade to match the acc
 This model needs an adequate number of proxy sites to perform the decomposition and the minimum sites required will depend on the signal of the data. We found that in general we need a minimum of five proxy sites and at least five associated tide gauge sites. Also, we strongly recommend using tide gauge data for this model to obtain insight into recent changes in RSL. 
 
 As an example, we will filter the example dataset `NAACproxydata` to select nine random sites to demonstrate the process:
-```{r,data2sitesmore, eval = TRUE}
+```{r,data2sitesmore, eval = FALSE}
 # For 9 site
 multi_9_sites <- reslr::NAACproxydata %>%
   dplyr::filter(Site %in% c(
@@ -847,8 +847,8 @@ multi_9_sites <- reslr::NAACproxydata %>%
 ```
 
 **Step 1:** Load in the data using the `reslr_load` function: 
-```{r,loadnigam, eval = TRUE}
-multi_9_sites_input <- reslr_load(
+```{r,loadnigam, eval = FALSE}
+multi_9_sites_input <- reslr::reslr_load(
   data = multi_9_sites,
   include_tide_gauge = TRUE,
   include_linear_rate = TRUE,
@@ -874,12 +874,12 @@ data_grid <- multi_9_sites_input$data_grid
 ```
 
 **Step 1a:** A brief insight into the outputs of the `reslr_input` function can be obtained using:
-```{r,printnigam, eval=TRUE}
+```{r,printnigam, eval=FALSE}
 print(multi_9_sites_input)
 ```
 
 **Step 2:** Plotting the data the raw data with:
-```{r, plotnigam,fig.align = 'center',fig.width = 7,fig.height = 10,eval = TRUE}
+```{r, plotnigam,fig.align = 'center',fig.width = 7,fig.height = 10,eval = FALSE}
 plot(
   x = multi_9_sites_input,
   title = "Plot of the raw data",
@@ -889,11 +889,15 @@ plot(
   plot_tide_gauges = TRUE
 )
 ```
+```{r,plotnigamdata, eval = TRUE,echo=FALSE, fig.align = 'center',out.width="100%"}
+url <- "https://raw.githubusercontent.com/maeveupton/reslr/main/reslrvigplots/plotnigam-1.png"
+knitr::include_graphics(url)
+```
 This will produce a plot of Age on the x-axis and Relative Sea Level on the y-axis in meters. Grey boxes represent the uncertainty associated with the vertical and horizontal uncertainty. The black data points are the midpoints of these uncertainty boxes. The separate sites will appear in separate windows on the plot. The extra arguments can be used which allows the user to updated the titles and axis labels. The caption `plot_caption`, included by default, provides the number of proxy sites and tide gauge sites that will be used in the model and can be removed if required `plot_caption = FALSE`. In addition, the user can select to plot the additional tide gauge data, `plot_tide_gauge = TRUE`.
 
 **Step 3:** Run the model
 ```{r,runnigam,eval = FALSE,results='hide',message=FALSE}
-res_ni_gam_decomp <- reslr_mcmc(
+res_ni_gam_decomp <- reslr::reslr_mcmc(
   input_data = multi_9_sites_input,
   model_type = "ni_gam_decomp",
   CI = 0.95

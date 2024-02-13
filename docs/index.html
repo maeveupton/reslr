@@ -23,7 +23,7 @@
     spatio-temporal splines (Upton et al 2023) &lt;arXiv:2301.09556&gt; and
     generalised additive models (Upton et al 2023) &lt;arXiv:2301.09556&gt;.
     This package facilitates data loading, 
-    model fitting and result summarization.
+    model fitting and result summarisation.
     Notably, it accommodates the inherent measurement errors
     found in relative sea-level data across multiple dimensions,
     allowing for their inclusion in the statistical models.">
@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">reslr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -112,11 +112,17 @@
 <div class="section level1">
 <h1 id="installing-the-reslr-package">Installing the reslr package<a class="anchor" aria-label="anchor" href="#installing-the-reslr-package"></a>
 </h1>
-<p>To use the <code>reslr</code> package install it using the following method as the package is not yet on CRAN:</p>
-<pre class="{r}"><code><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"maeveupton/reslr"</span><span class="op">)</span></span></code></pre>
+<p>To install from CRAN</p>
+<p><code>{r} install.packages("reslr")</code></p>
+<p>To install from Github</p>
+<p><code>{r} # install.packages("devtools") devtools::install_github("maeveupton/reslr")</code></p>
 <p>Next, load the package with</p>
-<pre class="{r}"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/maeveupton/reslr" class="external-link">reslr</a></span><span class="op">)</span></span></code></pre>
+<p><code>{r} library(reslr)</code></p>
+</div>
+<div class="section level1">
+<h1 id="citation-for-the-reslr-package">Citation for the reslr package<a class="anchor" aria-label="anchor" href="#citation-for-the-reslr-package"></a>
+</h1>
+<p>Check out our corresponding paper for the reslr package here: <a href="https://arxiv.org/abs/2306.10847" class="external-link uri">https://arxiv.org/abs/2306.10847</a></p>
 </div>
 
   </div>
@@ -125,6 +131,7 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=reslr" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/maeveupton/reslr/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/maeveupton/reslr/issues" class="external-link">Report a bug</a></li>
 </ul>
