@@ -529,7 +529,7 @@ clean_tidal_gauge_data <- function(data,
   dist_TG_proxy_df_new <- dplyr::left_join(dist_TG_proxy_df_no_sitename,
                                     long_lat_name_match, by = "LongLat",
                                     relationship = "many-to-many") %>%
-    rename(nearest_TG = SiteName)
+    dplyr::rename(nearest_TG = SiteName)
 
   # Criteria 1: User provides a list of TGs------------------------
   if (is.null(list_preferred_TGs) == FALSE) {
