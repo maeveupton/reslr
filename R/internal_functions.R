@@ -273,7 +273,6 @@ clean_tidal_gauge_data <- function(data,
   utils::unzip(temp_file, exdir = temp_dir)
 
 
-
   ### ------------Loop to open all RSL & Age data files------------
   read_plus <- function(flnm) {
     # fread quicker way to read in & allows for ; to be used
@@ -464,9 +463,12 @@ clean_tidal_gauge_data <- function(data,
     unique() %>%
     as.data.frame()
   SL_tide_unique <- SL_tide_site_df %>%
-    dplyr::select(SiteName, Longitude, Latitude, data_type_id, n_obs_by_site) %>%
+    dplyr::select(SiteName, Longitude, Latitude, data_type_id,
+                  n_obs_by_site,
+                  LongLat) %>%
     unique() %>%
     as.data.frame()
+
 
   #---Distance Matrix for each site to each other---
   mat.distance <- geosphere::distm(SL_proxy_unique[, 2:3], SL_tide_unique[, 2:3])

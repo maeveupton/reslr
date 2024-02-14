@@ -94,6 +94,7 @@ reslr_load <- function(data,
     # }
     # else{
     data <- data %>% dplyr::mutate(data_type_id = "ProxyRecord")
+
     data <- clean_tidal_gauge_data(
       data = data,
       list_preferred_TGs = list_preferred_TGs,
