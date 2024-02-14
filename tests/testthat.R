@@ -8,7 +8,7 @@
 
 library(testthat)
 library(reslr)
-#library(vdiffr)
+library(vdiffr)
 
 co <- function(expr) capture.output(expr, file = "NUL")
 

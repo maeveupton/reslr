@@ -535,6 +535,7 @@ clean_tidal_gauge_data <- function(data,
 
   # Criteria 1: User provides a list of TGs------------------------
   if (is.null(list_preferred_TGs) == FALSE) {
+    browser()
     # Check if TG exists in the list
     check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
     if (check_TG == FALSE) {
