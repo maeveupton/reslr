@@ -535,11 +535,13 @@ clean_tidal_gauge_data <- function(data,
 
   # Criteria 1: User provides a list of TGs------------------------
   if (is.null(list_preferred_TGs) == FALSE) {
-    browser()
     # Check if TG exists in the list
     check_TG <- all(list_preferred_TGs %in% unique(decadal_TG_df$SiteName))
     if (check_TG == FALSE) {
+      #display all tide gauges from list_preffered not available to user
+      tg_no_list <- list_preferred_TGs[!(list_preferred_TGs %in%  unique(decadal_TG_df$SiteName))]
       message("Warning: Tide Gauge provided does not exist or may contain a misprint in the name.\n")
+      cat("Tide Gauges not found: ",paste(tg_no_list))
       stop()
     }
 
