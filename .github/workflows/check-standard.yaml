@@ -1,9 +1,10 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples - not exactly the same
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
     branches: [main, master]
   pull_request:
+    branches: [main, master]
 
 name: R-CMD-check.yaml
 
@@ -34,6 +35,18 @@ jobs:
       - uses: actions/checkout@v6
 
       - uses: r-lib/actions/setup-pandoc@v2
+
+       - name: Install jags Linux
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install jags
+
+      - name: Install jags Mac OS
+        if: runner.os == 'macOS'
+        run: |
+          brew link --overwrite gcc
+          brew install jags
 
       - uses: r-lib/actions/setup-r@v2
         with:
