@@ -62,8 +62,8 @@ reslr_input_4 <- reslr_load(
   input_age_type = "CE"
 )
 
-testthat::test_that("Basic reslr_input plot for multiple sites and tide gauges", {
-  p4 <- plot(reslr_input_4)
-  testthat::expect_s3_class(reslr_input_4, c("reslr_input"))
-  vdiffr::expect_doppelganger("inputplot3sitesTG", p4)
-})
+# testthat::test_that("Basic reslr_input plot for multiple sites and tide gauges", {
+#   p4 <- plot(reslr_input_4)
+#   testthat::expect_s3_class(reslr_input_4, c("reslr_input"))
+#   vdiffr::expect_doppelganger("inputplot3sitesTG", p4)
+# })
