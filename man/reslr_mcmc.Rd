@@ -38,17 +38,17 @@ reslr_mcmc(
 
 \item{CI}{Size of the credible interval required by the user. The default is 0.95 corresponding to 95\%.}
 
-\item{spline_nseg}{This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions.}
+\item{spline_nseg}{This setting is focused on the Noisy Input Spline model. It provides the number of segments used to create basis functions. See Advanced vignette for more details.}
 
-\item{spline_nseg_t}{This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.}
+\item{spline_nseg_t}{This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions. See Advanced vignette for more details.}
 
-\item{spline_nseg_st}{This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions.}
+\item{spline_nseg_st}{This setting is focused on the Noisy Input Generalised Additive Model. It provides the number of segments used to create basis functions. See Advanced vignette for more details.}
 }
 \value{
 A list containing the input data, the JAGS output and output dataframes used for final plots.
 }
 \description{
-In this function, a variety of statistical models can be run depending on the requirements of the user. All models are written within a Bayesian framework and use JAGS (Just Another Gibbs Sampler) to calculate Markov Chain Monte Carlo (MCMC) simulation to obtain estimates of unknown parameters. The user has the ability to alter the number of iterations, the number of burnin, the number of chains and the thinning. These options relate to the amount of MCMC simulations required and should be reviewed by the user to ensure model convergence is achieved without excessively long run times.
+In this function, a variety of statistical models can be run depending on the requirements of the user (see reslr vignette for extension list of options). All models are written within a Bayesian framework and use JAGS (Just Another Gibbs Sampler) to calculate Markov Chain Monte Carlo (MCMC) simulation to obtain estimates of unknown parameters. The user has the ability to alter the number of iterations, the number of burnin, the number of chains and the thinning. These options relate to the amount of MCMC simulations required and should be reviewed by the user to ensure model convergence is achieved without excessively long run times.
 The user chooses their 'model_type' and as a range of models to choose from.
 }
 \examples{

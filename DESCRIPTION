@@ -16,9 +16,9 @@ Description: The Bayesian modelling of relative sea-level data
     linear regression (Ashe et al 2019) <doi:10.1016/j.quascirev.2018.10.032>, 
     change point models (Cahill et al 2015) <doi:10.1088/1748-9326/10/8/084002>, 
     integrated Gaussian process models (Cahill et al 2015) <doi:10.1214/15-AOAS824>, 
-    temporal splines (Upton et al 2023) <arXiv:2301.09556>, 
-    spatio-temporal splines (Upton et al 2023) <arXiv:2301.09556> and
-    generalised additive models (Upton et al 2023) <arXiv:2301.09556>.
+    temporal splines (Upton et al 2025) <doi:10.32614/RJ-2024-018>, 
+    spatio-temporal splines (Upton et al 2025) <doi:10.32614/RJ-2024-018> and
+    generalised additive models (Upton et al 2025) <doi:10.1093/jrsssc/qlae044>.
     This package facilitates data loading, 
     model fitting and result summarisation.
     Notably, it accommodates the inherent measurement errors
@@ -27,7 +27,7 @@ Description: The Bayesian modelling of relative sea-level data
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Depends: 
     R (>= 2.10)
 LazyData: true
