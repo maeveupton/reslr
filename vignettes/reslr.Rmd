@@ -5,10 +5,9 @@ date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
   toc: true
-
 vignette: >
-  %\VignetteIndexEntry{reslr: Statistical Models for examining Relative Sea Level Change in R}
   %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{reslr: Statistical Models for examining Relative Sea Level Change in R}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console

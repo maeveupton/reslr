@@ -6,8 +6,8 @@ output:
   rmarkdown::html_vignette:
        toc: true
 vignette: >
-  %\VignetteIndexEntry{reslr: quick start guide}
   %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{reslr: quick start guide}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -24,7 +24,6 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 Use:
 ```{r, eval = FALSE, results='hide',message=FALSE}
-# Not on CRAN yet
 #install.packages("reslr")
 #devtools::install_github("maeveupton/reslr")
 install_github("maeveupton/reslr")
