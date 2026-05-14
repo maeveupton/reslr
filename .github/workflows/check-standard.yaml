@@ -36,7 +36,7 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
-       - name: Install jags Linux
+      - name: Install jags Linux
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
