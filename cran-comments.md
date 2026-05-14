@@ -4,7 +4,8 @@ I replace all cat with message when writing text to the console.
 The vignettes were updated to reduce the run time. 
 The description title was updated to remove "An R package".
 I updated the description to include references to the models in the literature.
-I updated DESCRIPTION file with correct doi for papers.
+I updated DESCRIPTION file with updated doi for papers.
+I updated test-coverage following depreciation notice: v3 of the artifact actions
 
 ## Test environments
 * local OS X install, R 4.2.3
