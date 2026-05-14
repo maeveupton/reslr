@@ -1,4 +1,4 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples -- not exactly the same as new update
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
@@ -12,7 +12,8 @@ jobs:
   test-coverage:
     runs-on: ubuntu-latest
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      _R_CHECK_SYSTEM_CLOCK_: 0
+      #GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v6

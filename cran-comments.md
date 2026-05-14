@@ -7,6 +7,7 @@ I updated the description to include references to the models in the literature.
 I updated DESCRIPTION file with updated doi for papers.
 I updated test-coverage following depreciation notice: v3 of the artifact actions
 
+
 ## Test environments
 * local OS X install, R 4.5.0
 * This is a new release.
