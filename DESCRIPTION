@@ -44,7 +44,6 @@ Imports:
     posterior,
     purrr,
     R2jags,
-    rjags,
     stringr,
     tidybayes,
     tidyr
