@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 <a href = "https://maeveupton.github.io/reslr/"><img src="https://raw.githubusercontent.com/maeveupton/reslr/master/badge/reslr_badge.png" width="240" height="276" align="right" />
+[![R-CMD-check](https://github.com/maeveupton/reslr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/maeveupton/reslr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
  
