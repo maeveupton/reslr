@@ -10,7 +10,6 @@ I updated test-coverage following depreciation notice: v3 of the artifact action
 
 ## Test environments
 * local OS X install, R 4.5.0
-* This is a new release.
 
 ## R CMD check results
 There were no notes, errors or warnings.
