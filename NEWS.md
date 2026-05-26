@@ -1,3 +1,5 @@
+# reslr 0.2.0
+
 # reslr 0.1.2
 
 * CRAN required a number of fixes
